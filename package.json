@@ -1,15 +1,17 @@
 {
   "name": "urge-to-start",
-  "version": "0.0.1",
+  "version": "1.1",
   "type": "module",
   "private": true,
+  "author": {"name":"amit chanchal"},
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "dbtypes": "npx supabase gen types typescript --project-id evkkxeuiszjpzjpcmkwe --schema public > /types/supabase.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
