@@ -213,3 +213,32 @@ export { ThemeProvider }
 
 
 ```
+
+
+## Onboarding step
+
+We want onboarding step to be basically kyc sort of step and should inclulde questions such as (basically tell us bit more about you)
+- age group
+- gender
+- description
+- user name (this has to be unique so we might need this to be a client side supabase call)
+- city
+- country
+
+we might have to update the table to reflect the changes. After onboarding is successful we will have to take them to payment, or should be first do the payment and then ask them more about themselves?
+
+current profile table schema -> create table public.profiles (
+  id uuid not null,
+  updated_at timestamp with time zone not null default timezone ('utc'::text, now()),
+  full_name text null,
+  biz_name text null,
+  role public.user_platform_role not null default 'lead'::user_platform_role,
+  onboarding_step integer not null default 1,
+  constraint profiles_pkey primary key (id),
+  constraint profiles_id_fkey foreign KEY (id) references auth.users (id) on delete CASCADE
+) TABLESPACE pg_default;
+
+create trigger on_profile_role_updated
+after
+update OF role on profiles for EACH row
+execute FUNCTION handle_profile_role_sync_to_user_jwt ();
