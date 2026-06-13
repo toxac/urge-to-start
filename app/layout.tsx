@@ -1,13 +1,20 @@
 import { Geist, Geist_Mono, Roboto } from "next/font/google"
 
 import "./globals.css"
-import { ThemeProvider } from "@/components/providers/theme-provider";
-import { AuthStoreProvider } from "@/components/providers/auth-store-provider";
-import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/components/providers/theme-provider"
+import { AuthStoreProvider } from "@/components/providers/auth-store-provider"
+import { cn } from "@/lib/utils"
 
-const robotoHeading = Roboto({ subsets: ['latin'], variable: '--font-heading' });
+const robotoHeading = Roboto({ 
+  subsets: ['latin'], 
+  weight: ['400', '700', '900'],
+  variable: '--font-heading' 
+})
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
+const geist = Geist({ 
+  subsets: ['latin'], 
+  variable: '--font-sans' 
+})
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
@@ -23,9 +30,9 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", geist.variable, robotoHeading.variable)}
+      className={cn("dark", fontMono.variable, geist.variable, robotoHeading.variable)}
     >
-      <body>
+      <body className="font-sans antialiased bg-background text-foreground selection:bg-primary/30">
         <ThemeProvider>
           <AuthStoreProvider>
             {children}

@@ -1,125 +1,101 @@
 import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
-import { redirect } from 'next/navigation';
-import { UsernameInput } from '@/components/auth/UsernameInput';
+import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 
-export default async function OnboardingKYCPage() {
-  async function submitKYCAction(formData: FormData) {
-    'use server';
-    const cookieStore = await cookies();
-    const supabase = createClient(cookieStore);
-    
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return redirect('/login');
+export default async function ProfileSettingsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
 
-    const username = (formData.get('username') as string).toLowerCase().trim();
-    const ageGroup = formData.get('ageGroup') as string;
-    const gender = formData.get('gender') as string;
-    const city = formData.get('city') as string;
-    const country = formData.get('country') as string;
-    const description = formData.get('description') as string;
-
-    // Direct mutation to the updated profiles row
-    const { error } = await supabase
-      .from('profiles')
-      .update({
-        username,
-        age_group: ageGroup as any,
-        gender,
-        city,
-        country,
-        description,
-        onboarding_step: 2 // Successfully completed step 1 profile parameters
-      })
-      .eq('id', user.id);
-
-    if (error) {
-      // If server side constraint fails (e.g. race condition on unique username)
-      return redirect('/setup?error=' + encodeURIComponent('Username taken or data input invalid.'));
-    }
-
-    // Advance directly to the Paywall Gate
-    redirect('/paywall');
-  }
+  const { data: profile } = await supabase.from('profiles').select('*').eq('id', id).single();
+  if (!profile) notFound();
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-6 bg-muted/30 text-foreground">
-      <Card className="w-full max-w-2xl shadow-xl border bg-card">
-        <CardHeader>
-          <CardTitle className="text-3xl font-bold tracking-tight">Claim Your Profile</CardTitle>
-          <CardDescription>
-            Tell us a bit more about who you are. This lets us drop you into groups facing similar regional or personal constraints.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form action={submitKYCAction} className="space-y-6">
-            
-            {/* Unique Username Async Validator Hook */}
-            <UsernameInput />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Age Group Enum Select */}
-              <div className="space-y-2">
-                <Label htmlFor="ageGroup">Age Group</Label>
-                <Select name="ageGroup" required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select age bracket" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="under_18">Under 18</SelectItem>
-                    <SelectItem value="18_24">18 - 24</SelectItem>
-                    <SelectItem value="25_34">25 - 34</SelectItem>
-                    <SelectItem value="35_44">35 - 44</SelectItem>
-                    <SelectItem value="45_54">45 - 54</SelectItem>
-                    <SelectItem value="55_plus">55+</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Gender Text Input */}
-              <div className="space-y-2">
-                <Label htmlFor="gender">Gender (Optional)</Label>
-                <Input id="gender" name="gender" placeholder="e.g., Female, Male, Non-binary" />
-              </div>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8 text-foreground selection:bg-primary/30">
+        
+      {/* LEFT FIELD: LEDGER ACCOUNT STATS CARD */}
+      <div className="space-y-6">
+        <Card className="bg-card p-6 rounded-xl border border-border text-center space-y-4 shadow-xl">
+          <div className="w-16 h-16 bg-background border-2 border-primary rounded-full flex items-center justify-center text-xl font-black font-mono tracking-tighter shadow-inner">
+            {profile.full_name?.substring(0, 2).toUpperCase() || 'FN'}
+          </div>
+          <div>
+            <h2 className="text-lg font-bold tracking-tight text-foreground">{profile.full_name}</h2>
+            <p className="text-xs text-muted-foreground font-mono uppercase tracking-wider mt-0.5">FOUNDER_NODE: #{profile.id.substring(0, 4).toUpperCase()}</p>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border font-mono text-xs">
+            <div className="bg-background p-2 rounded border border-border/50">
+              <span className="text-muted-foreground block text-[9px] font-bold tracking-widest uppercase">Classification</span>
+              <span className="text-primary font-bold text-[11px] capitalize">{profile.role.replace('_', ' ')}</span>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* City */}
-              <div className="space-y-2">
-                <Label htmlFor="city">City</Label>
-                <Input id="city" name="city" placeholder="e.g., Austin" required />
-              </div>
-
-              {/* Country */}
-              <div className="space-y-2">
-                <Label htmlFor="country">Country</Label>
-                <Input id="country" name="country" placeholder="e.g., United States" required />
-              </div>
+            <div className="bg-background p-2 rounded border border-border/50">
+              <span className="text-muted-foreground block text-[9px] font-bold tracking-widest uppercase">Onboarding</span>
+              <span className="text-foreground font-bold text-[11px]">Step 0{profile.onboarding_step}</span>
             </div>
+          </div>
+        </Card>
+      </div>
 
-            {/* Founder Description Bio */}
-            <div className="space-y-2">
-              <Label htmlFor="description">Introduce Yourself to the Network</Label>
-              <Textarea 
-                id="description" 
-                name="description" 
-                placeholder="What sort of practical industry experience do you have? Knowing what you already know helps us strip out standard incubation theater." 
-                className="min-h-[100px]"
-                required 
-              />
+      {/* RIGHT FIELD: SECURE DATABASE SYSTEM PREFERENCES */}
+      <Card className="md:col-span-2 bg-card p-6 rounded-xl border border-border space-y-6 shadow-xl">
+        <div className="border-b border-border pb-3 flex items-center justify-between">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground font-mono">Identity Configuration</h2>
+          <Badge variant="outline" className="text-[10px] font-mono border-primary/30 text-primary bg-primary/5">CORE_REGISTRY</Badge>
+        </div>
+        
+        <form className="space-y-4 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label className="text-muted-foreground font-bold font-mono uppercase tracking-wider text-[10px]">Founder Alias</Label>
+              <Input type="text" className="w-full bg-background border border-border font-mono text-foreground focus-visible:ring-primary" defaultValue={profile.full_name || ''} />
             </div>
+            <div className="space-y-1.5">
+              <Label className="text-muted-foreground font-bold font-mono uppercase tracking-wider text-[10px]">Unique Network Handle</Label>
+              <Input type="text" className="w-full bg-background border border-border font-mono text-foreground focus-visible:ring-primary" defaultValue={`@${profile.username || ''}`} disabled />
+            </div>
+          </div>
 
-            <Button type="submit" className="w-full text-base font-bold h-11">
-              Continue to Safe Checkout
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label className="text-muted-foreground font-bold font-mono uppercase tracking-wider text-[10px]">Operational City</Label>
+              <Input type="text" className="w-full bg-background border border-border font-mono text-foreground focus-visible:ring-primary" defaultValue={profile.city || ''} />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-muted-foreground font-bold font-mono uppercase tracking-wider text-[10px]">Country Region</Label>
+              <Input type="text" className="w-full bg-background border border-border font-mono text-foreground focus-visible:ring-primary" defaultValue={profile.country || ''} />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label className="text-muted-foreground font-bold font-mono uppercase tracking-wider text-[10px]">Ecosystem Biography Matrix</Label>
+            <Textarea className="w-full bg-background border border-border font-mono text-foreground focus-visible:ring-primary min-h-[80px]" defaultValue={profile.description || ''} />
+          </div>
+
+          {/* TELEMETRY SETTINGS SECTIONS */}
+          <div className="pt-4 border-t border-border space-y-3">
+            <h3 className="text-[10px] font-bold font-mono uppercase tracking-widest text-muted-foreground">Ecosystem Diagnostics</h3>
+            <div className="flex items-center justify-between bg-background p-3 rounded border border-border">
+              <div className="space-y-0.5">
+                <span className="text-foreground font-bold block text-xs">Active Accountability Subscriptions</span>
+                <span className="text-muted-foreground text-[10px] font-mono">Allows background routing logic to track event deadlines.</span>
+              </div>
+              <input type="checkbox" defaultChecked className="accent-primary h-4 w-4 cursor-pointer" />
+            </div>
+          </div>
+
+          <div className="pt-4 flex justify-end">
+            <Button type="submit" className="px-6 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded transition font-mono text-xs uppercase tracking-wider shadow-md shadow-primary/10">
+              Save Node Matrix
             </Button>
-          </form>
-        </CardContent>
+          </div>
+        </form>
       </Card>
     </div>
   );

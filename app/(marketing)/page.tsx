@@ -1,189 +1,113 @@
-// app/(marketing)/page.tsx
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
-import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Switch } from "@/components/ui/switch";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { 
-  KeyRound, 
-  Search, 
-  ShieldAlert, 
-  Sparkles, 
-  Terminal, 
-  UserPlus 
-} from "lucide-react";
+import Link from 'next/link';
+import { NavigationHeader } from '@/components/layout/NavBar';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { Compass, Radio, Target, Zap } from 'lucide-react';
 
-export default function AdvancedDemo() {
+export default function PragmaticHomepage() {
   return (
-    <TooltipProvider>
-      <div className="flex flex-col min-h-screen bg-background text-foreground p-6 md:p-10 space-y-8 max-w-4xl mx-auto">
+    <div className="min-h-screen bg-background text-foreground antialiased selection:bg-primary/30 flex flex-col font-sans">
+      
+      {/* Mounted Custom Core Navigation Header */}
+      <NavigationHeader />
+
+      {/* Hero Sector Operational Specifications */}
+      <header className="max-w-4xl mx-auto px-4 sm:px-6 pt-20 pb-16 text-center space-y-6">
+        <div className="inline-flex items-center gap-2 bg-card px-3 py-1 rounded-full border border-border text-[10px] sm:text-xs font-mono text-primary font-bold tracking-widest uppercase">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-sm shadow-primary"></span>
+          SYSTEM_PROTOCOL // ANTI_INERTIA_ACTIVE
+        </div>
         
-        {/* Header Block */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <h1 className="text-3xl font-bold tracking-tight">System Controls</h1>
-            <Badge variant="secondary" className="gap-1">
-              <Sparkles className="h-3 w-3" /> Advanced Demo
-            </Badge>
-          </div>
-          <p className="text-muted-foreground">
-            Interact with Shadcn's deep-tier keyboard, modal, and secure input structures.
-          </p>
+        <h1 className="text-4xl sm:text-6xl font-extrabold text-foreground tracking-tight max-w-3xl mx-auto leading-tight sm:leading-none font-heading">
+          Stop planning your startup. <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">
+            Execute the quests.
+          </span>
+        </h1>
+        
+        <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-normal">
+          A gamified sandbox that breaks business creation down into interactive, timed executions. We swap abstract pitch decks for immediate customer interactions.
+        </p>
+        
+        <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Button className="px-8 py-6 font-mono text-xs font-bold tracking-wider uppercase bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/10">
+            <Link href="/signup">INITIALIZE_FIRST_QUEST</Link>
+          </Button>
+          <Button variant="outline" className="px-6 py-6 font-mono text-xs font-bold tracking-wider uppercase border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground">
+            <Link href="/login">ACCESS_NODE</Link>
+          </Button>
         </div>
+      </header>
 
-        <Separator />
-
-        <div className="grid gap-6 md:grid-cols-2">
-          
-          {/* 1. THE COMMAND COMPONENT (Embedded In-Line Search) */}
-          <Card className="flex flex-col">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Search className="h-4 w-4 text-muted-foreground" /> Quick Command Menu
-              </CardTitle>
-              <CardDescription>
-                An inline workspace search engine. Click items or try typing to filter.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex-1">
-              <Command className="rounded-lg border shadow-sm">
-                <CommandInput placeholder="Type a command or search team..." />
-                <CommandList className="max-h-[160px]">
-                  <CommandEmpty>No results found.</CommandEmpty>
-                  <CommandGroup heading="Suggestions">
-                    <CommandItem className="cursor-pointer">
-                      <UserPlus className="mr-2 h-4 w-4" />
-                      <span>Invite Team Member</span>
-                    </CommandItem>
-                    <CommandItem className="cursor-pointer">
-                      <Terminal className="mr-2 h-4 w-4" />
-                      <span>Open API Terminal</span>
-                    </CommandItem>
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </CardContent>
-          </Card>
-
-          {/* 2. SECURITY CARD (Featuring Input OTP & Dialog) */}
-          <Card className="flex flex-col justify-between">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <KeyRound className="h-4 w-4 text-muted-foreground" /> Identity Verification
-              </CardTitle>
-              <CardDescription>
-                Confirm critical access using standard 2-Factor Authentication layouts.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Input OTP Component */}
-              <div className="flex flex-col items-center justify-center p-4 bg-muted/30 border border-dashed rounded-lg space-y-2">
-                <span className="text-xs font-medium text-muted-foreground">Enter Verification Code</span>
-                <InputOTP maxLength={6}>
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                  </InputOTPGroup>
-                  <InputOTPSeparator />
-                  <InputOTPGroup>
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
-              </div>
-
-              {/* Action Triggering a Dialog Modality */}
-              <Dialog>
-                <DialogTrigger>
-                  <Button variant="destructive" className="w-full gap-2">
-                    <ShieldAlert className="h-4 w-4" /> Revoke All Security Tokens
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
-                    <DialogDescription>
-                      This action cannot be undone. This will permanently log out all active user sessions and terminate immediate API authentications.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="flex justify-end gap-3 mt-4">
-                    <Button variant="outline">Cancel</Button>
-                    <Button variant="destructive">Confirm Revocation</Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </CardContent>
-          </Card>
-
-        </div>
-
-        {/* 3. SETTINGS MATRIX BLOCK (Featuring Switch, Tooltip, and Sheet) */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Workspace Preferences</CardTitle>
-            <CardDescription>
-              Toggle granular environmental operations and overlay dynamic flyouts.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            
-            {/* Interactive Switch with Tooltip */}
-            <div className="flex items-center justify-between rounded-lg border p-4 shadow-sm bg-card">
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">Strict Production Environment</span>
-                  <Tooltip>
-                    <TooltipTrigger className="text-muted-foreground hover:text-foreground text-xs border rounded-full h-4 w-4 inline-flex items-center justify-center font-serif">
-                      ?
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="max-w-xs text-xs">Forces rigorous verification workflows across all live deployment clusters.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Prevent experimental builds from running inside main execution branches.
-                </p>
-              </div>
-              <Switch defaultChecked />
-            </div>
-
-            {/* Slide-out Sheet Trigger */}
-            <Sheet>
-              <SheetTrigger>
-                <Button variant="outline" className="w-full">
-                  Open Advanced Audit Log Sheet
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[400px] sm:w-[540px]">
-                <SheetHeader>
-                  <SheetTitle>Workspace Audit Logs</SheetTitle>
-                  <SheetDescription>
-                    Review tracking entries detailing chronological events across system primitives.
-                  </SheetDescription>
-                </SheetHeader>
-                <div className="py-6 space-y-4">
-                  <div className="rounded-md bg-muted p-4 text-xs font-mono text-muted-foreground">
-                    [2026-06-08 09:29:41] - User modified configuration variables via preset template rules.
-                  </div>
-                  <div className="rounded-md bg-muted p-4 text-xs font-mono text-muted-foreground">
-                    [2026-06-08 09:25:12] - Security token handshake completed smoothly over TLS.
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-
-          </CardContent>
-        </Card>
-
+      <div className="max-w-5xl mx-auto w-full px-4 sm:px-6">
+        <Separator className="bg-border/60" />
       </div>
-    </TooltipProvider>
+
+      {/* Program Mission Framework Progression Cards Matrix */}
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-16 space-y-8 w-full">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground font-mono">
+            Operational Curriculum
+          </h2>
+          <span className="text-[10px] text-muted-foreground font-mono">3_MISSIONS // VERIFIED_EXECUTION</span>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* Mission Block 1 */}
+          <Card className="bg-card p-6 rounded-xl border border-border space-y-4 shadow-xl relative overflow-hidden group">
+            <div className="text-xs font-mono text-primary font-bold tracking-wider">MISSION_01</div>
+            <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+              <Target className="h-4 w-4" /> Friction Matrix Allocation
+            </h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Isolate high-yield commercial problems. Strip away fluid emotional ideas and catalog concrete, structural marketplace deficits.
+            </p>
+            <div className="text-[10px] text-muted-foreground font-mono pt-2 border-t border-border/40">
+              3 Quests • 450 XP Available
+            </div>
+          </Card>
+
+          {/* Mission Block 2 */}
+          <Card className="bg-card p-6 rounded-xl border border-border space-y-4 shadow-xl relative overflow-hidden group">
+            <div className="text-xs font-mono text-primary font-bold tracking-wider">MISSION_02</div>
+            <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+              <Radio className="h-4 w-4" /> Target Demand Validation
+            </h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Mine niche core groups. Run structured client outreach configurations and capture real interest signatures directly from active consumers.
+            </p>
+            <div className="text-[10px] text-muted-foreground font-mono pt-2 border-t border-border/40">
+              5 Quests • 1,200 XP Available
+            </div>
+          </Card>
+
+          {/* Mission Block 3 */}
+          <Card className="bg-card p-6 rounded-xl border border-border space-y-4 shadow-xl relative overflow-hidden group">
+            <div className="text-xs font-mono text-primary font-bold tracking-wider">MISSION_03</div>
+            <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+              <Compass className="h-4 w-4" /> The Minimum Sellable Product
+            </h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Deploy a high-signal landing mechanism. Integrate functional transaction layers and exchange genuine utility for real capital validation.
+            </p>
+            <div className="text-[10px] text-muted-foreground font-mono pt-2 border-t border-border/40">
+              4 Quests • 900 XP Available
+            </div>
+          </Card>
+
+        </div>
+      </main>
+
+      {/* Structural Minimalist Footer */}
+      <footer className="w-full max-w-5xl mx-auto border-t border-border/40 px-4 sm:px-6 py-8 mt-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] text-muted-foreground font-mono tracking-widest uppercase">
+        <span>PRAGMATIC_OS_V1.6 // DISRUPT_THE_THEATER</span>
+        <span className="flex items-center gap-1.5">
+          <Zap className="h-3 w-3 text-primary" /> CLUSTER_STATUS: ONLINE
+        </span>
+      </footer>
+
+    </div>
   );
 }

@@ -3,19 +3,18 @@
 import * as React from "react"
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes"
 
-function ThemeProvider({
+export function ThemeProvider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      defaultTheme="dark"      // Default value
+      enableSystem={false}     // Ignores light-mode OS systems to ensure default dark initialization
       disableTransitionOnChange
       {...props}
     >
-      <ThemeHotkey />
       {children}
     </NextThemesProvider>
   )
@@ -47,7 +46,8 @@ function ThemeHotkey() {
         return
       }
 
-      if (event.key.toLowerCase() !== "d") {
+      // Safe Check: Guard against undefined event.key before calling downcase methods
+      if (event.key?.toLowerCase() !== "d") {
         return
       }
 
@@ -68,4 +68,3 @@ function ThemeHotkey() {
   return null
 }
 
-export { ThemeProvider }
