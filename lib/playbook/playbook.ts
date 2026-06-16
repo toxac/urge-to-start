@@ -659,194 +659,397 @@ export const UrgePlaybook: PlaybookConfig = {
     }
   },
   mission6: {
-  title: "Building Your Solution & Gathering Traction",
-  sequence: 6,
-  video_url: "https://urgetostart.com/videos/m6-overview.mp4",
-  briefing_text: "Strip your product vision down to its raw essentials, build your digital footprint alongside your asset, recruit your testing crew early, and put your working version to the test.",
-  quests: {
-    quest1: {
-      slug: "shredding-the-extra-features",
-      title: "Shredding the Extra Features",
-      subtitle: "Strip away your massive software or service wishlist to protect your speed to market.",
-      sequence: 1,
-      content_path: "playbook/m6-product/quests/the-cut-list.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Focused Friend",
-        persona_prompt: "Review the feature list. If the user tries to sneak in non-essential items like admin settings panels or custom themes, tell them to cut it immediately.",
-        required_context: ["projects"],
-        on_success: { grant_points: 50, badge_key: "CORE_FEATURES_ISOLATED" }
-      },
-      tasks: [
-        {
-          id: "m6_q1_t1_feature_shred",
-          title: "List Your Must-Haves vs Nice-to-Haves",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1
-        }
-      ]
-    },
-    quest2: {
-      slug: "sourcing-your-raw-materials",
-      title: "Sourcing Your Raw Materials",
-      subtitle: "Map out your software stacks or your physical gear and identify your bottlenecks.",
-      sequence: 2,
-      content_path: "playbook/m6-product/quests/sourcing-and-supplies.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Practical Builder",
-        persona_prompt: "Look over their tools list. Make sure they aren't using overly complicated setups when an easier, cheaper alternative exists.",
-        required_context: ["projects"],
-        on_success: { grant_points: 50 }
-      },
-      tasks: [
-        {
-          id: "m6_q2_t1_materials_log",
-          title: "Inventory Your Ingredients or Technical Stack",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1,
-          metadata_config: {
-            depends_on_task_id: "m6_q1_t1_feature_shred"
+    title: "Building Your Solution & Gathering Traction",
+    sequence: 6,
+    video_url: "https://urgetostart.com/videos/m6-overview.mp4",
+    briefing_text: "Strip your product vision down to its raw essentials, build your digital footprint alongside your asset, recruit your testing crew early, and put your working version to the test.",
+    quests: {
+      quest1: {
+        slug: "shredding-the-extra-features",
+        title: "Shredding the Extra Features",
+        subtitle: "Strip away your massive software or service wishlist to protect your speed to market.",
+        sequence: 1,
+        content_path: "playbook/m6-product/quests/the-cut-list.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Focused Friend",
+          persona_prompt: "Review the feature list. If the user tries to sneak in non-essential items like admin settings panels or custom themes, tell them to cut it immediately.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "CORE_FEATURES_ISOLATED" }
+        },
+        tasks: [
+          {
+            id: "m6_q1_t1_feature_shred",
+            title: "List Your Must-Haves vs Nice-to-Haves",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1
           }
-        }
-      ]
-    },
-    quest3: {
-      slug: "defining-good-enough",
-      title: "Defining Good Enough",
-      subtitle: "Set your explicit boundaries for a working version 1.0 so you don't get stuck tweaking it forever.",
-      sequence: 3,
-      content_path: "playbook/m6-product/quests/acceptable-outcomes.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Reality Check",
-        persona_prompt: "Ensure the user's definition of success is functional, simple, and can be completed in under two weeks.",
-        required_context: ["projects"],
-        on_success: { grant_points: 50, badge_key: "PERFECTIONISM_DEFEATED" }
+        ]
       },
-      tasks: [
-        {
-          id: "m6_q3_t1_outcome_bounds",
-          title: "Lock In Your Functional Launch Line",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1,
-          metadata_config: {
-            depends_on_task_id: "m6_q2_t1_materials_log"
+      quest2: {
+        slug: "sourcing-your-raw-materials",
+        title: "Sourcing Your Raw Materials",
+        subtitle: "Map out your software stacks or your physical gear and identify your bottlenecks.",
+        sequence: 2,
+        content_path: "playbook/m6-product/quests/sourcing-and-supplies.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Practical Builder",
+          persona_prompt: "Look over their tools list. Make sure they aren't using overly complicated setups when an easier, cheaper alternative exists.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50 }
+        },
+        tasks: [
+          {
+            id: "m6_q2_t1_materials_log",
+            title: "Inventory Your Ingredients or Technical Stack",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m6_q1_t1_feature_shred"
+            }
           }
-        }
-      ]
-    },
-    quest4: {
-      slug: "claiming-your-social-footprint",
-      title: "Claiming Your Social Footprint",
-      subtitle: "Set up your initial zero-dollar social pages and document your build journey in public.",
-      sequence: 4,
-      content_path: "playbook/m6-product/quests/social-footprint.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Traction Catalyst",
-        persona_prompt: "Verify that the user has submitted active links to their new placeholder channels or updates.",
-        required_context: ["projects"],
-        on_success: { grant_points: 50, badge_key: "FOOTPRINT_CLAIMED" }
+        ]
       },
-      tasks: [
-        {
-          id: "m6_q4_t1_social_links",
-          title: "Submit Your Initial Social Profiles or Status Updates",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1,
-          metadata_config: {
-            depends_on_task_id: "m6_q3_t1_outcome_bounds"
+      quest3: {
+        slug: "defining-good-enough",
+        title: "Defining Good Enough",
+        subtitle: "Set your explicit boundaries for a working version 1.0 so you don't get stuck tweaking it forever.",
+        sequence: 3,
+        content_path: "playbook/m6-product/quests/acceptable-outcomes.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Reality Check",
+          persona_prompt: "Ensure the user's definition of success is functional, simple, and can be completed in under two weeks.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "PERFECTIONISM_DEFEATED" }
+        },
+        tasks: [
+          {
+            id: "m6_q3_t1_outcome_bounds",
+            title: "Lock In Your Functional Launch Line",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m6_q2_t1_materials_log"
+            }
           }
-        }
-      ]
-    },
-    quest5: {
-      slug: "the-active-build-block",
-      title: "The Active Build Block",
-      subtitle: "Put your head down, build your core utility, and make the machine work.",
-      sequence: 5,
-      content_path: "playbook/m6-product/quests/actual-building.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Accountability Partner",
-        persona_prompt: "Celebrate their active build updates and prompt them to confirm that it matches their 'Good Enough' line.",
-        required_context: ["projects"],
-        on_success: { grant_points: 100, badge_key: "PRODUCT_ALIVE" }
+        ]
       },
-      tasks: [
-        {
-          id: "m6_q5_t1_build_action",
-          title: "Confirm Your Functional Version is Operational",
-          type: "action",
-          component_key: "ConfirmBuildStatusButton",
-          sequence: 1,
-          metadata_config: {
-            depends_on_task_id: "m6_q4_t1_social_links"
+      quest4: {
+        slug: "claiming-your-social-footprint",
+        title: "Claiming Your Social Footprint",
+        subtitle: "Set up your initial zero-dollar social pages and document your build journey in public.",
+        sequence: 4,
+        content_path: "playbook/m6-product/quests/social-footprint.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Traction Catalyst",
+          persona_prompt: "Verify that the user has submitted active links to their new placeholder channels or updates.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "FOOTPRINT_CLAIMED" }
+        },
+        tasks: [
+          {
+            id: "m6_q4_t1_social_links",
+            title: "Submit Your Initial Social Profiles or Status Updates",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m6_q3_t1_outcome_bounds"
+            }
           }
-        }
-      ]
-    },
-    quest6: {
-      slug: "recruiting-your-first-testers",
-      title: "Recruiting Your First Testers",
-      subtitle: "Secure 3 low-pressure commitments from early adopters who will test your rough initial version.",
-      sequence: 6,
-      content_path: "playbook/m6-product/quests/recruiting-testers.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Crew Recruiter",
-        persona_prompt: "Review the logged tester entries. Reassure the founder that feedback from 3 focused targets is better than 100 random looky-loos.",
-        required_context: ["projects"],
-        on_success: { grant_points: 50, badge_key: "CREW_RECRUITED" }
+        ]
       },
-      tasks: [
-        {
-          id: "m6_q6_t1_tester_log",
-          title: "Log the Details for Your 3 Core Beta Testers",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1,
-          metadata_config: {
-            depends_on_task_id: "m6_q5_t1_build_action"
+      quest5: {
+        slug: "the-active-build-block",
+        title: "The Active Build Block",
+        subtitle: "Put your head down, build your core utility, and make the machine work.",
+        sequence: 5,
+        content_path: "playbook/m6-product/quests/actual-building.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Accountability Partner",
+          persona_prompt: "Celebrate their active build updates and prompt them to confirm that it matches their 'Good Enough' line.",
+          required_context: ["projects"],
+          on_success: { grant_points: 100, badge_key: "PRODUCT_ALIVE" }
+        },
+        tasks: [
+          {
+            id: "m6_q5_t1_build_action",
+            title: "Confirm Your Functional Version is Operational",
+            type: "action",
+            component_key: "ConfirmBuildStatusButton",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m6_q4_t1_social_links"
+            }
           }
-        }
-      ]
-    },
-    quest7: {
-      slug: "the-early-user-demo",
-      title: "The Early User Demo",
-      subtitle: "Show a quick recording or drop a sample in front of your recruited testers to catch early friction.",
-      sequence: 7,
-      content_path: "playbook/m6-product/quests/showcase-and-demo.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Feedback Analyzer",
-        persona_prompt: "Analyze user test observations. Help separate constructive layout feedback from random feature suggestions.",
-        required_context: ["projects"],
-        on_success: { grant_points: 100, badge_key: "DEMO_COMPLETED" }
+        ]
       },
-      tasks: [
-        {
-          id: "m6_q7_t1_demo_submit",
-          title: "Submit Your Demo Overview or Feedback Notes",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1,
-          metadata_config: {
-            depends_on_task_id: "m6_q6_t1_tester_log",
-            potential_resources: [
-              { name: "Loom", type: "Video Tool", desc: "A great, free way to record a quick 2-minute screen video showing off your tool." },
-              { name: "YouTube Unlisted", type: "Hosting Alternative", desc: "An easy way to host video links privately for your testers." }
-            ]
+      quest6: {
+        slug: "recruiting-your-first-testers",
+        title: "Recruiting Your First Testers",
+        subtitle: "Secure 3 low-pressure commitments from early adopters who will test your rough initial version.",
+        sequence: 6,
+        content_path: "playbook/m6-product/quests/recruiting-testers.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Crew Recruiter",
+          persona_prompt: "Review the logged tester entries. Reassure the founder that feedback from 3 focused targets is better than 100 random looky-loos.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "CREW_RECRUITED" }
+        },
+        tasks: [
+          {
+            id: "m6_q6_t1_tester_log",
+            title: "Log the Details for Your 3 Core Beta Testers",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m6_q5_t1_build_action"
+            }
           }
-        }
-      ]
+        ]
+      },
+      quest7: {
+        slug: "the-early-user-demo",
+        title: "The Early User Demo",
+        subtitle: "Show a quick recording or drop a sample in front of your recruited testers to catch early friction.",
+        sequence: 7,
+        content_path: "playbook/m6-product/quests/showcase-and-demo.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Feedback Analyzer",
+          persona_prompt: "Analyze user test observations. Help separate constructive layout feedback from random feature suggestions.",
+          required_context: ["projects"],
+          on_success: { grant_points: 100, badge_key: "DEMO_COMPLETED" }
+        },
+        tasks: [
+          {
+            id: "m6_q7_t1_demo_submit",
+            title: "Submit Your Demo Overview or Feedback Notes",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m6_q6_t1_tester_log",
+              potential_resources: [
+                { name: "Loom", type: "Video Tool", desc: "A great, free way to record a quick 2-minute screen video showing off your tool." },
+                { name: "YouTube Unlisted", type: "Hosting Alternative", desc: "An easy way to host video links privately for your testers." }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  // Add this entry inside your UrgePlaybook configuration map in src/lib/playbook/playbook.ts
+
+  mission7: {
+    title: "The Public Launch & Market Engine",
+    sequence: 7,
+    video_url: "https://urgetostart.com/videos/m7-overview.mp4",
+    briefing_text: "Put your working version out into the wild open market. Launch through your inside circles, capture early builder upvotes, configure your modern social media content hooks, lock down your peer branding voice, read the market's signals, execute your outbound ledger, and deploy optional micro ad experiments.",
+    quests: {
+      quest1: {
+        slug: "the-inside-circle-launch",
+        title: "The Inside Circle Launch",
+        subtitle: "Drop your link to your beta testers and close allies to verify your payments and secure your first 2 reviews.",
+        sequence: 1,
+        content_path: "playbook/m7-marketing/quests/inside-circle.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Launch Check",
+          persona_prompt: "Verify the user has recorded early feedback data and confirmed that their live checkout links successfully process currency without crashing.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "FIRST_REVIEWS_SECURED" }
+        },
+        tasks: [
+          {
+            id: "m7_q1_t1_circle_log",
+            title: "Log Your Payments Verification and Early Review Notes",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1
+          }
+        ]
+      },
+      quest2: {
+        slug: "the-internal-sandbox-launch",
+        title: "The Internal Sandbox Launch",
+        subtitle: "Complete your pre-launch checklist and post your offer to our builder community board for early momentum.",
+        sequence: 2,
+        content_path: "playbook/m7-marketing/quests/internal-sandbox.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Sandbox Conductor",
+          persona_prompt: "Check their pre-launch variables. Ensure their landing page text and pricing options match their previously logged system parameters before authorizing the community board blast.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "SANDBOX_LIVE" }
+        },
+        tasks: [
+          {
+            id: "m7_q2_t1_sandbox_publish",
+            title: "Publish Your Promotional Card to the Internal Marketplace Board",
+            type: "action",
+            component_key: "PublishToInternalMarketplaceButton",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m7_q1_t1_circle_log"
+            }
+          }
+        ]
+      },
+      quest3: {
+        slug: "exploring-your-launch-tracks",
+        title: "Exploring Your Launch Tracks",
+        subtitle: "Configure your modern social media content hooks and plan your physical real-world street hustle.",
+        sequence: 3,
+        content_path: "playbook/m7-marketing/quests/launch-tracks.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Strategy Assessor",
+          persona_prompt: "Evaluate their chosen launch tracks. If they select a local service, verify they have configured an explicit real-world IRL walk-in or distribution route.",
+          required_context: ["projects"],
+          on_success: { grant_points: 100, badge_key: "LAUNCH_TRACKS_CONFIGURED" }
+        },
+        tasks: [
+          {
+            id: "m7_q3_t1_track_selection",
+            title: "Select and Configure Your Two Target Launch Tracks",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m7_q2_t1_sandbox_publish",
+              potential_resources: [
+                { name: "CapCut", type: "Video Editing", desc: "A powerful, free mobile and desktop tool to clip together highly engaging short-form video hooks for TikTok and Instagram Reels." },
+                { name: "Buffer", type: "Social Scheduler", desc: "A simple, free tool to queue up your authority text logs and value posts across LinkedIn and Twitter/X simultaneously." },
+                { name: "QR Code Generator", type: "Utility", desc: "Create high-resolution unbranded QR codes to apply directly to physical flyers or offline walk-in pitch templates." }
+              ]
+            }
+          }
+        ]
+      },
+      quest4: {
+        slug: "your-voice-and-look",
+        title: "Your Voice and Look",
+        subtitle: "Establish a clean, readable visual theme and remove the corporate talk from your messages.",
+        sequence: 4,
+        content_path: "playbook/m7-marketing/quests/branding-and-comm.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Voice Police",
+          persona_prompt: "Review the communication rules. If they use robotic jargon or try to sound like a giant corporate company, flag it and push them back to peer-to-peer phrasing.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "COMMUNICATION_ALIGNED" }
+        },
+        tasks: [
+          {
+            id: "m7_q4_t1_branding_canvas",
+            title: "Establish Your Simple Visual Theme and Clear Voice Guidelines",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m7_q3_t1_track_selection",
+              potential_resources: [
+                { name: "Coolors.co", type: "Color Tool", desc: "A free, lightning-fast color palette utility to lock down your contrast parameters." },
+                { name: "Google Fonts", type: "Typography Catalog", desc: " timeless, web-safe typographic sheets like Inter or Roboto to enforce high interface readability." }
+              ]
+            }
+          }
+        ]
+      },
+      quest5: {
+        slug: "running-ads-and-campaigns",
+        title: "Optional Adventure: Scrappy Paid Campaigns",
+        subtitle: "Learn the $5-a-day rule to test small, targeted online experiments without gambling your runway.",
+        sequence: 5,
+        content_path: "playbook/m7-marketing/quests/running-ads.md",
+        is_optional: true,
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Campaign Strategist",
+          persona_prompt: "Audit ad targeting properties. Ensure their target group is tiny and razor-focused to protect their cash capital balances.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50 }
+        },
+        tasks: [
+          {
+            id: "m7_q5_t1_campaign_experiment",
+            title: "Configure a Highly-Targeted Micro Ad Experiment Layout",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m7_q4_t1_branding_canvas",
+              potential_resources: [
+                { name: "Meta Ads Manager", type: "Ad Network", desc: "Best interface for hyper-localized geographic services targeting across Instagram feeds." },
+                { name: "Google Ads Manager", type: "Ad Network", desc: "Best channel for intent-match keyword search campaign configurations." }
+              ]
+            }
+          }
+        ]
+      },
+      quest6: {
+        slug: "listening-to-the-market",
+        title: "Listening to the Market",
+        subtitle: "Decode your initial traffic metrics, conversion parameters, and qualitative user friction.",
+        sequence: 6,
+        content_path: "playbook/m7-marketing/quests/market-feedback.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Feedback Analyzer",
+          persona_prompt: "Review logged conversion ratios and customer objections. Help the founder identify if their bottleneck lives in traffic acquisition or checkout page layout copy.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "MARKET_DATA_ANALYZED" }
+        },
+        tasks: [
+          {
+            id: "m7_q6_t1_metrics_audit",
+            title: "Log Your Traffic Stats, Sales Tally, and User Objections",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m7_q4_t1_branding_canvas" // Tied to branding step completion, bypassing optional ads step
+            }
+          }
+        ]
+      },
+      quest7: {
+        slug: "the-outbound-direct-tally",
+        title: "The Outbound Direct Tally",
+        subtitle: "Step out of your comfort zone and manually present your solution directly to 10 distinct strangers.",
+        sequence: 7,
+        content_path: "playbook/m7-marketing/quests/outbound-tally.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Discipline Coach",
+          persona_prompt: "Review their 10 logged outbound contacts. Celebrate this unscalable hustle milestone and highlight that proactive outreach is what separates builders from wishful thinkers.",
+          required_context: ["projects"],
+          on_success: { grant_points: 100, badge_key: "LAUNCHED_LIVE" }
+        },
+        tasks: [
+          {
+            id: "m7_q7_t1_outbound_ledger",
+            title: "Log the Details for Your First 10 Outbound Market Interactions",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m7_q6_t1_metrics_audit"
+            }
+          }
+        ]
+      }
     }
   }
-}
 };
