@@ -106,6 +106,7 @@ export const UrgePlaybook: PlaybookConfig = {
       }
     }
   },
+
   mission2: {
     title: "Find Problems Worth Solving",
     sequence: 2,
@@ -250,6 +251,7 @@ export const UrgePlaybook: PlaybookConfig = {
       }
     }
   },
+
   mission3: {
     title: "Check Your Project's Viability",
     sequence: 3,
@@ -379,6 +381,7 @@ export const UrgePlaybook: PlaybookConfig = {
       }
     }
   },
+
   mission4: {
     title: "Designing Your Money System",
     sequence: 4,
@@ -537,6 +540,7 @@ export const UrgePlaybook: PlaybookConfig = {
       }
     }
   },
+
   mission5: {
     title: "The Legal Reality Check & Ways to Get Paid",
     sequence: 5,
@@ -658,6 +662,7 @@ export const UrgePlaybook: PlaybookConfig = {
       }
     }
   },
+
   mission6: {
     title: "Building Your Solution & Gathering Traction",
     sequence: 6,
@@ -849,7 +854,6 @@ export const UrgePlaybook: PlaybookConfig = {
       }
     }
   },
-  // Add this entry inside your UrgePlaybook configuration map in src/lib/playbook/playbook.ts
 
   mission7: {
     title: "The Public Launch & Market Engine",
@@ -1052,115 +1056,114 @@ export const UrgePlaybook: PlaybookConfig = {
       }
     }
   },
-  // Add this entry inside your UrgePlaybook configuration map in src/lib/playbook/playbook.ts
 
-mission8: {
-  title: "True Review & The Reality Crossroads",
-  sequence: 8,
-  video_url: "https://urgetostart.com/videos/m8-overview.mp4",
-  briefing_text: "Audit your core business health vital signs, cross-reference your income metrics with your personal freedom line, automate repetitive delivery bottlenecks, and make your final strategic launch choice.",
-  quests: {
-    quest1: {
-      slug: "the-freedom-math-and-vital-signs",
-      title: "The Freedom Math & Vital Signs",
-      subtitle: "Calculate your take-home margins, time efficiency variables, and your true day-job replacement line.",
-      sequence: 1,
-      content_path: "playbook/m8-crossroads/quests/freedom-math.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Financial Peer",
-        persona_prompt: "Review the logged take-home margin properties and salary goals. Help the founder confirm if their target transaction volume aligns realistically with their organic launch traffic.",
-        required_context: ["projects"],
-        on_success: { grant_points: 50, badge_key: "VITAL_SIGNS_AUDITED" }
-      },
-      tasks: [
-        {
-          id: "m8_q1_t1_metrics_calc",
-          title: "Log Your Core Income Margins and Salary Replacement Target",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1
-        }
-      ]
-    },
-    quest2: {
-      slug: "the-lifestyle-audit",
-      title: "The Lifestyle Audit",
-      subtitle: "Check your personal energy margins to make sure you are building a lifestyle asset, not a new cage.",
-      sequence: 2,
-      content_path: "playbook/m8-crossroads/quests/lifestyle-audit.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Energy Coach",
-        persona_prompt: "Assess their workflow frustration scores. Emphasize that resolving operational stress early is vital to prevent long-term founder burnout.",
-        required_context: ["projects"],
-        on_success: { grant_points: 50, badge_key: "LIFESTYLE_AUDITED" }
-      },
-      tasks: [
-        {
-          id: "m8_q2_t1_lifestyle_log",
-          title: "Complete Your Operational Workflow and Energy Alignment Scorecard",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1,
-          metadata_config: {
-            depends_on_task_id: "m8_q1_t1_metrics_calc"
+  mission8: {
+    title: "True Review & The Reality Crossroads",
+    sequence: 8,
+    video_url: "https://urgetostart.com/videos/m8-overview.mp4",
+    briefing_text: "Audit your core business health vital signs, cross-reference your income metrics with your personal freedom line, automate repetitive delivery bottlenecks, and make your final strategic launch choice.",
+    quests: {
+      quest1: {
+        slug: "the-freedom-math-and-vital-signs",
+        title: "The Freedom Math & Vital Signs",
+        subtitle: "Calculate your take-home margins, time efficiency variables, and your true day-job replacement line.",
+        sequence: 1,
+        content_path: "playbook/m8-crossroads/quests/freedom-math.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Financial Peer",
+          persona_prompt: "Review the logged take-home margin properties and salary goals. Help the founder confirm if their target transaction volume aligns realistically with their organic launch traffic.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "VITAL_SIGNS_AUDITED" }
+        },
+        tasks: [
+          {
+            id: "m8_q1_t1_metrics_calc",
+            title: "Log Your Core Income Margins and Salary Replacement Target",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1
           }
-        }
-      ]
-    },
-    quest3: {
-      slug: "automating-the-repeat-work",
-      title: "Automating the Repeat Work",
-      subtitle: "Connect your core tool systems together to wipe out boring admin tasks and reclaim your free time.",
-      sequence: 3,
-      content_path: "playbook/m8-crossroads/quests/system-streamlining.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Automation Wizard",
-        persona_prompt: "Verify that the user has identified specific repetitive tasks and logged a plan to deploy zero-code link triggers.",
-        required_context: ["projects"],
-        on_success: { grant_points: 100, badge_key: "ENGINE_AUTOMATED" }
+        ]
       },
-      tasks: [
-        {
-          id: "m8_q3_t1_automation_plan",
-          title: "Map Out Your Background Automation Workflow Links",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1,
-          metadata_config: {
-            depends_on_task_id: "m8_q2_t1_lifestyle_log"
+      quest2: {
+        slug: "the-lifestyle-audit",
+        title: "The Lifestyle Audit",
+        subtitle: "Check your personal energy margins to make sure you are building a lifestyle asset, not a new cage.",
+        sequence: 2,
+        content_path: "playbook/m8-crossroads/quests/lifestyle-audit.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Energy Coach",
+          persona_prompt: "Assess their workflow frustration scores. Emphasize that resolving operational stress early is vital to prevent long-term founder burnout.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "LIFESTYLE_AUDITED" }
+        },
+        tasks: [
+          {
+            id: "m8_q2_t1_lifestyle_log",
+            title: "Complete Your Operational Workflow and Energy Alignment Scorecard",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m8_q1_t1_metrics_calc"
+            }
           }
-        }
-      ]
-    },
-    quest4: {
-      slug: "the-crossroads-decision",
-      title: "The Crossroads (Scale, Tweak, or Pivot)",
-      subtitle: "Commit to your final strategic path: double down on growth, tweak your variables, or run a smart pivot.",
-      sequence: 4,
-      content_path: "playbook/m8-crossroads/quests/the-crossroads.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Master Strategist",
-        persona_prompt: "Honor their final path selection. If scaling, offer immediate confidence parameters. If pivoting, reassure them that walking away with pristine market data is an expert operational victory.",
-        required_context: ["projects"],
-        on_success: { grant_points: 150, badge_key: "PLAYBOOK_COMPLETED" }
+        ]
       },
-      tasks: [
-        {
-          id: "m8_q4_t1_final_choice",
-          title: "Select Your Next Strategic Path Block and Log Your Monthly Milestones",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1,
-          metadata_config: {
-            depends_on_task_id: "m8_q3_t1_automation_plan"
+      quest3: {
+        slug: "automating-the-repeat-work",
+        title: "Automating the Repeat Work",
+        subtitle: "Connect your core tool systems together to wipe out boring admin tasks and reclaim your free time.",
+        sequence: 3,
+        content_path: "playbook/m8-crossroads/quests/system-streamlining.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Automation Wizard",
+          persona_prompt: "Verify that the user has identified specific repetitive tasks and logged a plan to deploy zero-code link triggers.",
+          required_context: ["projects"],
+          on_success: { grant_points: 100, badge_key: "ENGINE_AUTOMATED" }
+        },
+        tasks: [
+          {
+            id: "m8_q3_t1_automation_plan",
+            title: "Map Out Your Background Automation Workflow Links",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m8_q2_t1_lifestyle_log"
+            }
           }
-        }
-      ]
+        ]
+      },
+      quest4: {
+        slug: "the-crossroads-decision",
+        title: "The Crossroads (Scale, Tweak, or Pivot)",
+        subtitle: "Commit to your final strategic path: double down on growth, tweak your variables, or run a smart pivot.",
+        sequence: 4,
+        content_path: "playbook/m8-crossroads/quests/the-crossroads.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Master Strategist",
+          persona_prompt: "Honor their final path selection. If scaling, offer immediate confidence parameters. If pivoting, reassure them that walking away with pristine market data is an expert operational victory.",
+          required_context: ["projects"],
+          on_success: { grant_points: 150, badge_key: "PLAYBOOK_COMPLETED" }
+        },
+        tasks: [
+          {
+            id: "m8_q4_t1_final_choice",
+            title: "Select Your Next Strategic Path Block and Log Your Monthly Milestones",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m8_q3_t1_automation_plan"
+            }
+          }
+        ]
+      }
     }
   }
-}
 };
