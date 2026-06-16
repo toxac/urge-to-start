@@ -659,142 +659,194 @@ export const UrgePlaybook: PlaybookConfig = {
     }
   },
   mission6: {
-    title: "Building Your Solution",
-    sequence: 6,
-    video_url: "https://urgetostart.com/videos/m6-overview.mp4",
-    briefing_text: "Strip your product vision down to its raw essentials. Map out your materials or tech stacks, define what 'good enough' means, complete your build block, and test it with real users.",
-    quests: {
-      quest1: {
-        slug: "shredding-the-extra-features",
-        title: "Shredding the Extra Features",
-        subtitle: "Strip away your massive software or service wishlist to protect your speed to market.",
-        sequence: 1,
-        content_path: "playbook/m6-product/quests/the-cut-list.md",
-        ai_config: {
-          role: "SYSTEM_CONDUCTOR",
-          persona_name: "The Focused Friend",
-          persona_prompt: "Review the feature list. If the user tries to sneak in non-essential items like admin settings panels or custom themes, tell them to cut it immediately.",
-          required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "CORE_FEATURES_ISOLATED" }
-        },
-        tasks: [
-          {
-            id: "m6_q1_t1_feature_shred",
-            title: "List Your Must-Haves vs Nice-to-Haves",
-            type: "form",
-            component_key: "STANDARD_FORM",
-            sequence: 1
-          }
-        ]
+  title: "Building Your Solution & Gathering Traction",
+  sequence: 6,
+  video_url: "https://urgetostart.com/videos/m6-overview.mp4",
+  briefing_text: "Strip your product vision down to its raw essentials, build your digital footprint alongside your asset, recruit your testing crew early, and put your working version to the test.",
+  quests: {
+    quest1: {
+      slug: "shredding-the-extra-features",
+      title: "Shredding the Extra Features",
+      subtitle: "Strip away your massive software or service wishlist to protect your speed to market.",
+      sequence: 1,
+      content_path: "playbook/m6-product/quests/the-cut-list.md",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Focused Friend",
+        persona_prompt: "Review the feature list. If the user tries to sneak in non-essential items like admin settings panels or custom themes, tell them to cut it immediately.",
+        required_context: ["projects"],
+        on_success: { grant_points: 50, badge_key: "CORE_FEATURES_ISOLATED" }
       },
-      quest2: {
-        slug: "sourcing-your-raw-materials",
-        title: "Sourcing Your Raw Materials",
-        subtitle: "Map out your software stacks or your physical gear and identify your bottlenecks.",
-        sequence: 2,
-        content_path: "playbook/m6-product/quests/sourcing-and-supplies.md",
-        ai_config: {
-          role: "SYSTEM_CONDUCTOR",
-          persona_name: "The Practical Builder",
-          persona_prompt: "Look over their tools list. Make sure they aren't using overly complicated setups when an easier, cheaper alternative exists.",
-          required_context: ["projects"],
-          on_success: { grant_points: 50 }
-        },
-        tasks: [
-          {
-            id: "m6_q2_t1_materials_log",
-            title: "Inventory Your Ingredients or Technical Stack",
-            type: "form",
-            component_key: "STANDARD_FORM",
-            sequence: 1,
-            metadata_config: {
-              depends_on_task_id: "m6_q1_t1_feature_shred"
-            }
-          }
-        ]
+      tasks: [
+        {
+          id: "m6_q1_t1_feature_shred",
+          title: "List Your Must-Haves vs Nice-to-Haves",
+          type: "form",
+          component_key: "STANDARD_FORM",
+          sequence: 1
+        }
+      ]
+    },
+    quest2: {
+      slug: "sourcing-your-raw-materials",
+      title: "Sourcing Your Raw Materials",
+      subtitle: "Map out your software stacks or your physical gear and identify your bottlenecks.",
+      sequence: 2,
+      content_path: "playbook/m6-product/quests/sourcing-and-supplies.md",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Practical Builder",
+        persona_prompt: "Look over their tools list. Make sure they aren't using overly complicated setups when an easier, cheaper alternative exists.",
+        required_context: ["projects"],
+        on_success: { grant_points: 50 }
       },
-      quest3: {
-        slug: "defining-good-enough",
-        title: "Defining Good Enough",
-        subtitle: "Set your explicit boundaries for a working version 1.0 so you don't get stuck tweaking it forever.",
-        sequence: 3,
-        content_path: "playbook/m6-product/quests/acceptable-outcomes.md",
-        ai_config: {
-          role: "SYSTEM_CONDUCTOR",
-          persona_name: "The Reality Check",
-          persona_prompt: "Ensure the user's definition of success is functional, simple, and can be completed in under two weeks.",
-          required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "PERFECTIONISM_DEFEATED" }
-        },
-        tasks: [
-          {
-            id: "m6_q3_t1_outcome_bounds",
-            title: "Lock In Your Functional Launch Line",
-            type: "form",
-            component_key: "STANDARD_FORM",
-            sequence: 1,
-            metadata_config: {
-              depends_on_task_id: "m6_q2_t1_materials_log"
-            }
+      tasks: [
+        {
+          id: "m6_q2_t1_materials_log",
+          title: "Inventory Your Ingredients or Technical Stack",
+          type: "form",
+          component_key: "STANDARD_FORM",
+          sequence: 1,
+          metadata_config: {
+            depends_on_task_id: "m6_q1_t1_feature_shred"
           }
-        ]
+        }
+      ]
+    },
+    quest3: {
+      slug: "defining-good-enough",
+      title: "Defining Good Enough",
+      subtitle: "Set your explicit boundaries for a working version 1.0 so you don't get stuck tweaking it forever.",
+      sequence: 3,
+      content_path: "playbook/m6-product/quests/acceptable-outcomes.md",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Reality Check",
+        persona_prompt: "Ensure the user's definition of success is functional, simple, and can be completed in under two weeks.",
+        required_context: ["projects"],
+        on_success: { grant_points: 50, badge_key: "PERFECTIONISM_DEFEATED" }
       },
-      quest4: {
-        slug: "the-active-build-block",
-        title: "The Active Build Block",
-        subtitle: "Put your head down, build your core utility, and make the machine work.",
-        sequence: 4,
-        content_path: "playbook/m6-product/quests/actual-building.md",
-        ai_config: {
-          role: "SYSTEM_CONDUCTOR",
-          persona_name: "The Accountability Partner",
-          persona_prompt: "Celebrate their active build updates and prompt them to confirm that it matches their 'Good Enough' line.",
-          required_context: ["projects"],
-          on_success: { grant_points: 100, badge_key: "PRODUCT_ALIVE" }
-        },
-        tasks: [
-          {
-            id: "m6_q4_t1_build_action",
-            title: "Confirm Your Functional Version is Operational",
-            type: "action",
-            component_key: "ConfirmBuildStatusButton",
-            sequence: 1,
-            metadata_config: {
-              depends_on_task_id: "m6_q3_t1_outcome_bounds"
-            }
+      tasks: [
+        {
+          id: "m6_q3_t1_outcome_bounds",
+          title: "Lock In Your Functional Launch Line",
+          type: "form",
+          component_key: "STANDARD_FORM",
+          sequence: 1,
+          metadata_config: {
+            depends_on_task_id: "m6_q2_t1_materials_log"
           }
-        ]
+        }
+      ]
+    },
+    quest4: {
+      slug: "claiming-your-social-footprint",
+      title: "Claiming Your Social Footprint",
+      subtitle: "Set up your initial zero-dollar social pages and document your build journey in public.",
+      sequence: 4,
+      content_path: "playbook/m6-product/quests/social-footprint.md",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Traction Catalyst",
+        persona_prompt: "Verify that the user has submitted active links to their new placeholder channels or updates.",
+        required_context: ["projects"],
+        on_success: { grant_points: 50, badge_key: "FOOTPRINT_CLAIMED" }
       },
-      quest5: {
-        slug: "the-early-user-demo",
-        title: "The Early User Demo",
-        subtitle: "Show a quick recording or drop a sample in front of early testers to catch early friction.",
-        sequence: 5,
-        content_path: "playbook/m6-product/quests/showcase-and-demo.md",
-        ai_config: {
-          role: "SYSTEM_CONDUCTOR",
-          persona_name: "The Feedback Analyzer",
-          persona_prompt: "Analyze user test observations. Help separate constructive layout feedback from random feature suggestions.",
-          required_context: ["projects"],
-          on_success: { grant_points: 100, badge_key: "DEMO_COMPLETED" }
-        },
-        tasks: [
-          {
-            id: "m6_q5_t1_demo_submit",
-            title: "Submit Your Demo Overview or Feedback Notes",
-            type: "form",
-            component_key: "STANDARD_FORM",
-            sequence: 1,
-            metadata_config: {
-              depends_on_task_id: "m6_q4_t1_build_action",
-              potential_resources: [
-                { name: "Loom", type: "Video Tool", desc: "A great, free way to record a quick 2-minute screen video showing off your tool." },
-                { name: "YouTube Unlisted", type: "Hosting Alternative", desc: "An easy way to host video links privately for your testers." }
-              ]
-            }
+      tasks: [
+        {
+          id: "m6_q4_t1_social_links",
+          title: "Submit Your Initial Social Profiles or Status Updates",
+          type: "form",
+          component_key: "STANDARD_FORM",
+          sequence: 1,
+          metadata_config: {
+            depends_on_task_id: "m6_q3_t1_outcome_bounds"
           }
-        ]
-      }
+        }
+      ]
+    },
+    quest5: {
+      slug: "the-active-build-block",
+      title: "The Active Build Block",
+      subtitle: "Put your head down, build your core utility, and make the machine work.",
+      sequence: 5,
+      content_path: "playbook/m6-product/quests/actual-building.md",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Accountability Partner",
+        persona_prompt: "Celebrate their active build updates and prompt them to confirm that it matches their 'Good Enough' line.",
+        required_context: ["projects"],
+        on_success: { grant_points: 100, badge_key: "PRODUCT_ALIVE" }
+      },
+      tasks: [
+        {
+          id: "m6_q5_t1_build_action",
+          title: "Confirm Your Functional Version is Operational",
+          type: "action",
+          component_key: "ConfirmBuildStatusButton",
+          sequence: 1,
+          metadata_config: {
+            depends_on_task_id: "m6_q4_t1_social_links"
+          }
+        }
+      ]
+    },
+    quest6: {
+      slug: "recruiting-your-first-testers",
+      title: "Recruiting Your First Testers",
+      subtitle: "Secure 3 low-pressure commitments from early adopters who will test your rough initial version.",
+      sequence: 6,
+      content_path: "playbook/m6-product/quests/recruiting-testers.md",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Crew Recruiter",
+        persona_prompt: "Review the logged tester entries. Reassure the founder that feedback from 3 focused targets is better than 100 random looky-loos.",
+        required_context: ["projects"],
+        on_success: { grant_points: 50, badge_key: "CREW_RECRUITED" }
+      },
+      tasks: [
+        {
+          id: "m6_q6_t1_tester_log",
+          title: "Log the Details for Your 3 Core Beta Testers",
+          type: "form",
+          component_key: "STANDARD_FORM",
+          sequence: 1,
+          metadata_config: {
+            depends_on_task_id: "m6_q5_t1_build_action"
+          }
+        }
+      ]
+    },
+    quest7: {
+      slug: "the-early-user-demo",
+      title: "The Early User Demo",
+      subtitle: "Show a quick recording or drop a sample in front of your recruited testers to catch early friction.",
+      sequence: 7,
+      content_path: "playbook/m6-product/quests/showcase-and-demo.md",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Feedback Analyzer",
+        persona_prompt: "Analyze user test observations. Help separate constructive layout feedback from random feature suggestions.",
+        required_context: ["projects"],
+        on_success: { grant_points: 100, badge_key: "DEMO_COMPLETED" }
+      },
+      tasks: [
+        {
+          id: "m6_q7_t1_demo_submit",
+          title: "Submit Your Demo Overview or Feedback Notes",
+          type: "form",
+          component_key: "STANDARD_FORM",
+          sequence: 1,
+          metadata_config: {
+            depends_on_task_id: "m6_q6_t1_tester_log",
+            potential_resources: [
+              { name: "Loom", type: "Video Tool", desc: "A great, free way to record a quick 2-minute screen video showing off your tool." },
+              { name: "YouTube Unlisted", type: "Hosting Alternative", desc: "An easy way to host video links privately for your testers." }
+            ]
+          }
+        }
+      ]
     }
   }
+}
 };
