@@ -536,5 +536,126 @@ export const UrgePlaybook: PlaybookConfig = {
         ]
       }
     }
+  },
+  mission5: {
+  title: "The Legal Reality Check & Ways to Get Paid",
+  sequence: 5,
+  video_url: "https://urgetostart.com/videos/m5-overview.mp4",
+  briefing_text: "Clear away the paperwork anxiety. See if you actually have any legal risks, open your digital cash register, and map out what you might need down the road without slowing down your launch.",
+  quests: {
+    quest1: {
+      slug: "your-safety-rules",
+      title: "Your Safety Rules",
+      subtitle: "Decide if paperwork is a real shield or just a way to delay making your first dollar.",
+      sequence: 1,
+      content_path: "playbook/m5-legal/quests/personal-safety-check.md",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Friendly Auditor",
+        persona_prompt: "Look at the user's answers. If their risk is low, reassure them that they can skip formal company registration for now and focus entirely on selling.",
+        required_context: ["projects"],
+        on_success: { grant_points: 50, badge_key: "RISK_CLEARED" }
+      },
+      tasks: [
+        {
+          id: "m5_q1_t1_risk_survey",
+          title: "Take the Quick Risk Survey",
+          type: "form",
+          component_key: "STANDARD_FORM",
+          sequence: 1
+        }
+      ]
+    },
+    quest2: {
+      slug: "setting-up-the-cash-register",
+      title: "Setting Up the Cash Register",
+      subtitle: "Link a clean payment channel so a customer can buy right now without friction.",
+      sequence: 2,
+      content_path: "playbook/m5-legal/quests/open-your-payment-pipes.md",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Setup Assistant",
+        persona_prompt: "Check the submitted payment URL to verify it looks like a valid, working checkout page link.",
+        required_context: ["projects"],
+        on_success: { grant_points: 100, badge_key: "CASH_REGISTER_OPEN" }
+      },
+      tasks: [
+        {
+          id: "m5_q2_t1_stripe_action",
+          title: "Connect Your Payment Processor Account",
+          type: "action",
+          component_key: "StripeConnectButton",
+          sequence: 1,
+          metadata_config: {
+            depends_on_task_id: "m5_q1_t1_risk_survey" // Cannot connect payment until they finish the risk check
+          }
+        },
+        {
+          id: "m5_q2_t2_url_verify",
+          title: "Submit Your Live Test Checkout Link",
+          type: "form",
+          component_key: "STANDARD_FORM",
+          sequence: 2,
+          metadata_config: {
+            depends_on_task_id: "m5_q2_t1_stripe_action" // Cannot verify the link until the account is connected
+          }
+        }
+      ]
+    },
+    quest3: {
+      slug: "setting-up-a-business",
+      title: "Optional Adventure: Future Business Structure",
+      subtitle: "Look over helpful accounting tools and legal registration options for your future growth.",
+      sequence: 3,
+      content_path: "playbook/m5-legal/quests/setting-up-a-business.md",
+      is_optional: true,
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Helpful Guide",
+        persona_prompt: "Save the user's preferred future setups to their profile notes without blocking their current progress.",
+        required_context: ["projects"],
+        on_success: { grant_points: 25 }
+      },
+      tasks: [
+        {
+          id: "m5_q3_t1_partner_log",
+          title: "Pick Your Preferred Future Tools",
+          type: "form",
+          component_key: "STANDARD_FORM",
+          sequence: 1,
+          metadata_config: {
+            potential_resources: [
+              { name: "Clerky", type: "Legal Setup Tool", desc: "An easy online service that handles company paperwork when you're ready to grow." },
+              { name: "Bench Accounting", type: "Online Bookkeeping", desc: "A simple service that automatically balances your business expenses for you." }
+            ]
+          }
+        }
+      ]
+    },
+    quest4: {
+      slug: "licenses",
+      title: "Optional Adventure: Local Permit Check",
+      subtitle: "See if your city or state requires any local permits or registrations long-term.",
+      sequence: 4,
+      content_path: "playbook/m5-legal/quests/licenses.md",
+      is_optional: true,
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Local Scanner",
+        persona_prompt: "Read the user's location and business type, then print out a clear, simple list of common local permits they might eventually need.",
+        required_context: ["user_profiles", "projects"],
+        on_success: { grant_points: 25 }
+      },
+      tasks: [
+        {
+          id: "m5_q4_t1_permit_compile",
+          title: "Generate Your Local Permit Report",
+          type: "action",
+          component_key: "AiLicenseReportNode",
+          sequence: 1
+        }
+      ]
+    }
   }
+}
 };
