@@ -1,0 +1,7 @@
+Spending hundreds of dollars registering a company name or hiring an accountant before you have made a single dollar from a real customer is a trap. It feels like you're making progress because filling out government paperwork makes you feel important, but it's usually just a comfortable way to avoid talking to buyers.
+
+Your absolute priority right now is to build a rough, simple version of the solution we picked back in Mission 2. You need to get it in front of your first set of users and prove that people actually want what you're making and are willing to pay for it. Until you have that proof, a registered company is just an empty folder on your desktop.
+
+In this section, we are going to quiet your anxiety about the legal stuff so you can focus entirely on making your first sale. First, you'll take a quick look at your actual real-world risks to prove you don't need a fancy corporate shield just to get started. Second, you will set up a clean, simple way to accept money online so a customer can buy from you right now without any clunky back-and-forth emails. Finally, if you're still curious, you can check out what kinds of permissions or bank accounts you might want to look into down the road once the money actually starts coming in.
+
+We are handling this now so you can stop worrying about it, but we are keeping it completely basic so you can focus 100% on your first sale.
