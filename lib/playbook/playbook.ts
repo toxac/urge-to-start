@@ -538,124 +538,263 @@ export const UrgePlaybook: PlaybookConfig = {
     }
   },
   mission5: {
-  title: "The Legal Reality Check & Ways to Get Paid",
-  sequence: 5,
-  video_url: "https://urgetostart.com/videos/m5-overview.mp4",
-  briefing_text: "Clear away the paperwork anxiety. See if you actually have any legal risks, open your digital cash register, and map out what you might need down the road without slowing down your launch.",
-  quests: {
-    quest1: {
-      slug: "your-safety-rules",
-      title: "Your Safety Rules",
-      subtitle: "Decide if paperwork is a real shield or just a way to delay making your first dollar.",
-      sequence: 1,
-      content_path: "playbook/m5-legal/quests/personal-safety-check.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Friendly Auditor",
-        persona_prompt: "Look at the user's answers. If their risk is low, reassure them that they can skip formal company registration for now and focus entirely on selling.",
-        required_context: ["projects"],
-        on_success: { grant_points: 50, badge_key: "RISK_CLEARED" }
-      },
-      tasks: [
-        {
-          id: "m5_q1_t1_risk_survey",
-          title: "Take the Quick Risk Survey",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1
-        }
-      ]
-    },
-    quest2: {
-      slug: "setting-up-the-cash-register",
-      title: "Setting Up the Cash Register",
-      subtitle: "Link a clean payment channel so a customer can buy right now without friction.",
-      sequence: 2,
-      content_path: "playbook/m5-legal/quests/open-your-payment-pipes.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Setup Assistant",
-        persona_prompt: "Check the submitted payment URL to verify it looks like a valid, working checkout page link.",
-        required_context: ["projects"],
-        on_success: { grant_points: 100, badge_key: "CASH_REGISTER_OPEN" }
-      },
-      tasks: [
-        {
-          id: "m5_q2_t1_stripe_action",
-          title: "Connect Your Payment Processor Account",
-          type: "action",
-          component_key: "StripeConnectButton",
-          sequence: 1,
-          metadata_config: {
-            depends_on_task_id: "m5_q1_t1_risk_survey" // Cannot connect payment until they finish the risk check
-          }
+    title: "The Legal Reality Check & Ways to Get Paid",
+    sequence: 5,
+    video_url: "https://urgetostart.com/videos/m5-overview.mp4",
+    briefing_text: "Clear away the paperwork anxiety. See if you actually have any legal risks, open your digital cash register, and map out what you might need down the road without slowing down your launch.",
+    quests: {
+      quest1: {
+        slug: "your-safety-rules",
+        title: "Your Safety Rules",
+        subtitle: "Decide if paperwork is a real shield or just a way to delay making your first dollar.",
+        sequence: 1,
+        content_path: "playbook/m5-legal/quests/personal-safety-check.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Friendly Auditor",
+          persona_prompt: "Look at the user's answers. If their risk is low, reassure them that they can skip formal company registration for now and focus entirely on selling.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "RISK_CLEARED" }
         },
-        {
-          id: "m5_q2_t2_url_verify",
-          title: "Submit Your Live Test Checkout Link",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 2,
-          metadata_config: {
-            depends_on_task_id: "m5_q2_t1_stripe_action" // Cannot verify the link until the account is connected
+        tasks: [
+          {
+            id: "m5_q1_t1_risk_survey",
+            title: "Take the Quick Risk Survey",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1
           }
-        }
-      ]
-    },
-    quest3: {
-      slug: "setting-up-a-business",
-      title: "Optional Adventure: Future Business Structure",
-      subtitle: "Look over helpful accounting tools and legal registration options for your future growth.",
-      sequence: 3,
-      content_path: "playbook/m5-legal/quests/setting-up-a-business.md",
-      is_optional: true,
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Helpful Guide",
-        persona_prompt: "Save the user's preferred future setups to their profile notes without blocking their current progress.",
-        required_context: ["projects"],
-        on_success: { grant_points: 25 }
+        ]
       },
-      tasks: [
-        {
-          id: "m5_q3_t1_partner_log",
-          title: "Pick Your Preferred Future Tools",
-          type: "form",
-          component_key: "STANDARD_FORM",
-          sequence: 1,
-          metadata_config: {
-            potential_resources: [
-              { name: "Clerky", type: "Legal Setup Tool", desc: "An easy online service that handles company paperwork when you're ready to grow." },
-              { name: "Bench Accounting", type: "Online Bookkeeping", desc: "A simple service that automatically balances your business expenses for you." }
-            ]
+      quest2: {
+        slug: "setting-up-the-cash-register",
+        title: "Setting Up the Cash Register",
+        subtitle: "Link a clean payment channel so a customer can buy right now without friction.",
+        sequence: 2,
+        content_path: "playbook/m5-legal/quests/open-your-payment-pipes.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Setup Assistant",
+          persona_prompt: "Check the submitted payment URL to verify it looks like a valid, working checkout page link.",
+          required_context: ["projects"],
+          on_success: { grant_points: 100, badge_key: "CASH_REGISTER_OPEN" }
+        },
+        tasks: [
+          {
+            id: "m5_q2_t1_stripe_action",
+            title: "Connect Your Payment Processor Account",
+            type: "action",
+            component_key: "StripeConnectButton",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m5_q1_t1_risk_survey" // Cannot connect payment until they finish the risk check
+            }
+          },
+          {
+            id: "m5_q2_t2_url_verify",
+            title: "Submit Your Live Test Checkout Link",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 2,
+            metadata_config: {
+              depends_on_task_id: "m5_q2_t1_stripe_action" // Cannot verify the link until the account is connected
+            }
           }
-        }
-      ]
-    },
-    quest4: {
-      slug: "licenses",
-      title: "Optional Adventure: Local Permit Check",
-      subtitle: "See if your city or state requires any local permits or registrations long-term.",
-      sequence: 4,
-      content_path: "playbook/m5-legal/quests/licenses.md",
-      is_optional: true,
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Local Scanner",
-        persona_prompt: "Read the user's location and business type, then print out a clear, simple list of common local permits they might eventually need.",
-        required_context: ["user_profiles", "projects"],
-        on_success: { grant_points: 25 }
+        ]
       },
-      tasks: [
-        {
-          id: "m5_q4_t1_permit_compile",
-          title: "Generate Your Local Permit Report",
-          type: "action",
-          component_key: "AiLicenseReportNode",
-          sequence: 1
-        }
-      ]
+      quest3: {
+        slug: "setting-up-a-business",
+        title: "Optional Adventure: Future Business Structure",
+        subtitle: "Look over helpful accounting tools and legal registration options for your future growth.",
+        sequence: 3,
+        content_path: "playbook/m5-legal/quests/setting-up-a-business.md",
+        is_optional: true,
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Helpful Guide",
+          persona_prompt: "Save the user's preferred future setups to their profile notes without blocking their current progress.",
+          required_context: ["projects"],
+          on_success: { grant_points: 25 }
+        },
+        tasks: [
+          {
+            id: "m5_q3_t1_partner_log",
+            title: "Pick Your Preferred Future Tools",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              potential_resources: [
+                { name: "Clerky", type: "Legal Setup Tool", desc: "An easy online service that handles company paperwork when you're ready to grow." },
+                { name: "Bench Accounting", type: "Online Bookkeeping", desc: "A simple service that automatically balances your business expenses for you." }
+              ]
+            }
+          }
+        ]
+      },
+      quest4: {
+        slug: "licenses",
+        title: "Optional Adventure: Local Permit Check",
+        subtitle: "See if your city or state requires any local permits or registrations long-term.",
+        sequence: 4,
+        content_path: "playbook/m5-legal/quests/licenses.md",
+        is_optional: true,
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Local Scanner",
+          persona_prompt: "Read the user's location and business type, then print out a clear, simple list of common local permits they might eventually need.",
+          required_context: ["user_profiles", "projects"],
+          on_success: { grant_points: 25 }
+        },
+        tasks: [
+          {
+            id: "m5_q4_t1_permit_compile",
+            title: "Generate Your Local Permit Report",
+            type: "action",
+            component_key: "AiLicenseReportNode",
+            sequence: 1
+          }
+        ]
+      }
+    }
+  },
+  mission6: {
+    title: "Building Your Solution",
+    sequence: 6,
+    video_url: "https://urgetostart.com/videos/m6-overview.mp4",
+    briefing_text: "Strip your product vision down to its raw essentials. Map out your materials or tech stacks, define what 'good enough' means, complete your build block, and test it with real users.",
+    quests: {
+      quest1: {
+        slug: "shredding-the-extra-features",
+        title: "Shredding the Extra Features",
+        subtitle: "Strip away your massive software or service wishlist to protect your speed to market.",
+        sequence: 1,
+        content_path: "playbook/m6-product/quests/the-cut-list.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Focused Friend",
+          persona_prompt: "Review the feature list. If the user tries to sneak in non-essential items like admin settings panels or custom themes, tell them to cut it immediately.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "CORE_FEATURES_ISOLATED" }
+        },
+        tasks: [
+          {
+            id: "m6_q1_t1_feature_shred",
+            title: "List Your Must-Haves vs Nice-to-Haves",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1
+          }
+        ]
+      },
+      quest2: {
+        slug: "sourcing-your-raw-materials",
+        title: "Sourcing Your Raw Materials",
+        subtitle: "Map out your software stacks or your physical gear and identify your bottlenecks.",
+        sequence: 2,
+        content_path: "playbook/m6-product/quests/sourcing-and-supplies.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Practical Builder",
+          persona_prompt: "Look over their tools list. Make sure they aren't using overly complicated setups when an easier, cheaper alternative exists.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50 }
+        },
+        tasks: [
+          {
+            id: "m6_q2_t1_materials_log",
+            title: "Inventory Your Ingredients or Technical Stack",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m6_q1_t1_feature_shred"
+            }
+          }
+        ]
+      },
+      quest3: {
+        slug: "defining-good-enough",
+        title: "Defining Good Enough",
+        subtitle: "Set your explicit boundaries for a working version 1.0 so you don't get stuck tweaking it forever.",
+        sequence: 3,
+        content_path: "playbook/m6-product/quests/acceptable-outcomes.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Reality Check",
+          persona_prompt: "Ensure the user's definition of success is functional, simple, and can be completed in under two weeks.",
+          required_context: ["projects"],
+          on_success: { grant_points: 50, badge_key: "PERFECTIONISM_DEFEATED" }
+        },
+        tasks: [
+          {
+            id: "m6_q3_t1_outcome_bounds",
+            title: "Lock In Your Functional Launch Line",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m6_q2_t1_materials_log"
+            }
+          }
+        ]
+      },
+      quest4: {
+        slug: "the-active-build-block",
+        title: "The Active Build Block",
+        subtitle: "Put your head down, build your core utility, and make the machine work.",
+        sequence: 4,
+        content_path: "playbook/m6-product/quests/actual-building.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Accountability Partner",
+          persona_prompt: "Celebrate their active build updates and prompt them to confirm that it matches their 'Good Enough' line.",
+          required_context: ["projects"],
+          on_success: { grant_points: 100, badge_key: "PRODUCT_ALIVE" }
+        },
+        tasks: [
+          {
+            id: "m6_q4_t1_build_action",
+            title: "Confirm Your Functional Version is Operational",
+            type: "action",
+            component_key: "ConfirmBuildStatusButton",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m6_q3_t1_outcome_bounds"
+            }
+          }
+        ]
+      },
+      quest5: {
+        slug: "the-early-user-demo",
+        title: "The Early User Demo",
+        subtitle: "Show a quick recording or drop a sample in front of early testers to catch early friction.",
+        sequence: 5,
+        content_path: "playbook/m6-product/quests/showcase-and-demo.md",
+        ai_config: {
+          role: "SYSTEM_CONDUCTOR",
+          persona_name: "The Feedback Analyzer",
+          persona_prompt: "Analyze user test observations. Help separate constructive layout feedback from random feature suggestions.",
+          required_context: ["projects"],
+          on_success: { grant_points: 100, badge_key: "DEMO_COMPLETED" }
+        },
+        tasks: [
+          {
+            id: "m6_q5_t1_demo_submit",
+            title: "Submit Your Demo Overview or Feedback Notes",
+            type: "form",
+            component_key: "STANDARD_FORM",
+            sequence: 1,
+            metadata_config: {
+              depends_on_task_id: "m6_q4_t1_build_action",
+              potential_resources: [
+                { name: "Loom", type: "Video Tool", desc: "A great, free way to record a quick 2-minute screen video showing off your tool." },
+                { name: "YouTube Unlisted", type: "Hosting Alternative", desc: "An easy way to host video links privately for your testers." }
+              ]
+            }
+          }
+        ]
+      }
     }
   }
-}
 };
