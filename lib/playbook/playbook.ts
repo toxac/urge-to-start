@@ -18,7 +18,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Mirror",
           persona_prompt: "You are a grounded advisor. Review user profiles and constraints. If they give abstract answers like 'I want to be rich', challenge them to define what concrete personal freedom looks like.",
           required_context: ["user_profiles"],
-          on_success: { grant_points: 50, badge_key: "GOALS_SET" }
+          on_success: {
+            grant_points: 50, // Milestone bonus points for passing AI review
+            badge_key: "PATHFINDER" // Unlocks "Pathfinder" badge identity
+          }
         },
         tasks: [
           {
@@ -26,21 +29,24 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Claim Your Public Username",
             type: "form",
             component_key: "ProfileSetupForm",
-            sequence: 1
+            sequence: 1,
+            grant_points: 10 // Awarded instantly when form is saved
           },
           {
             id: "m1_q1_t2_drivers",
             title: "What is Driving You to Start?",
             type: "form",
             component_key: "MotivationForm",
-            sequence: 2
+            sequence: 2,
+            grant_points: 20
           },
           {
             id: "m1_q1_t3_constraints",
             title: "Set Your Realistic Weekly Limits",
             type: "form",
             component_key: "ConstraintForm",
-            sequence: 3
+            sequence: 3,
+            grant_points: 20
           }
         ]
       },
@@ -55,7 +61,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Editor",
           persona_prompt: "You are an expert copywriter. Review message drafts. Flag vague phrases like 'pick your brain' or apologetic filler copy, and provide a direct alternative.",
           required_context: ["user_profiles"],
-          on_success: { grant_points: 50, badge_key: "ASK_MUSCLE" }
+          on_success: {
+            grant_points: 50,
+            badge_key: "COMMUNICATOR" // Unlocks "Communicator" badge identity
+          }
         },
         tasks: [
           {
@@ -63,14 +72,16 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "The Messaging Simulator",
             type: "simulator",
             component_key: "AskSimulator",
-            sequence: 1
+            sequence: 1,
+            grant_points: 30
           },
           {
             id: "m1_q2_t2_public_intent",
             title: "Share Your Commitment Publicly",
             type: "action",
             component_key: "SocialShareWidget",
-            sequence: 2
+            sequence: 2,
+            grant_points: 20
           }
         ]
       },
@@ -85,7 +96,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Hype-Man",
           persona_prompt: "You are an encouraging coach. The user is logging rejections. Reframe their entries as clean customer data point upgrades.",
           required_context: ["user_profiles"],
-          on_success: { grant_points: 100, badge_key: "REJECTION_PROOF" }
+          on_success: {
+            grant_points: 100,
+            badge_key: "FORTRESS" // Unlocks "Fortress" badge identity
+          }
         },
         tasks: [
           {
@@ -93,20 +107,21 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Log 3 Real-World Rejections",
             type: "log_counter",
             component_key: "RejectionCounterForm",
-            sequence: 1
+            sequence: 1,
+            grant_points: 80
           },
           {
             id: "m1_q3_t2_club_unlock",
             title: "Open the Rejection Club Feed",
             type: "community",
             component_key: "CommunityFeedTeaser",
-            sequence: 2
+            sequence: 2,
+            grant_points: 20
           }
         ]
       }
     }
   },
-
   mission2: {
     title: "Find Problems Worth Solving",
     sequence: 2,
@@ -132,14 +147,16 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Log 3 Inconveniences From Your Week",
             type: "form",
             component_key: "PersonalPainLogForm",
-            sequence: 1
+            sequence: 1,
+            grant_points: 25
           },
           {
             id: "m2_q1_t2_skills_inventory",
             title: "List Things You Do Better Than Average",
             type: "form",
             component_key: "SkillTagBuilder",
-            sequence: 2
+            sequence: 2,
+            grant_points: 25
           }
         ]
       },
@@ -162,14 +179,16 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Select the Groups You Spend Time With",
             type: "form",
             component_key: "CircleTagMatrix",
-            sequence: 1
+            sequence: 1,
+            grant_points: 20
           },
           {
             id: "m2_q2_t2_friction_log",
             title: "Log 2 Clumsy Shortcuts You Saw Someone Use",
             type: "form",
             component_key: "CircleObservationForm",
-            sequence: 2
+            sequence: 2,
+            grant_points: 30
           }
         ]
       },
@@ -184,7 +203,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Signal Filter",
           persona_prompt: "Evaluate online data logs. Help the user avoid short fads and focus on long macro waves.",
           required_context: ["user_profiles"],
-          on_success: { grant_points: 50 }
+          on_success: {
+            grant_points: 50,
+            badge_key: "SCOUT" // Unlocks "Scout" badge identity for clearing hunting phase
+          }
         },
         tasks: [
           {
@@ -192,7 +214,8 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Find 2 Complaints Posted Natively Online",
             type: "form",
             component_key: "DigitalSafariLogForm",
-            sequence: 1
+            sequence: 1,
+            grant_points: 50
           }
         ]
       },
@@ -207,7 +230,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "Alex the Busy Creative",
           persona_prompt: "Simulate a highly skeptical buyer named Alex. Act short and defensive unless the user asks open, historical questions about your past workflows.",
           required_context: ["user_profiles"],
-          on_success: { grant_points: 100, badge_key: "SIM_PASSED" }
+          on_success: {
+            grant_points: 100,
+            badge_key: "DETECTIVE" // Unlocks "Detective" badge identity
+          }
         },
         tasks: [
           {
@@ -215,7 +241,8 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Uncover Alex's True Past Problems Without Pitching",
             type: "simulator",
             component_key: "LiveChatRoleplayWidget",
-            sequence: 1
+            sequence: 1,
+            grant_points: 100 // Substantial reward for clearing simulation stages
           }
         ]
       },
@@ -230,7 +257,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Ruthless Judge",
           persona_prompt: "Review logged ideas side-by-side. Rank them on alignment with user profile constraints and pain level metrics.",
           required_context: ["user_profiles", "opportunities"],
-          on_success: { grant_points: 100, badge_key: "OPPORTUNITY_LOCKED" }
+          on_success: {
+            grant_points: 150, // Massive culmination payout for completing Mission 2
+            badge_key: "ALCHEMIST" // Unlocks "Alchemist" badge identity
+          }
         },
         tasks: [
           {
@@ -238,14 +268,16 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Log 3 Real Validation Conversations",
             type: "form",
             component_key: "PainIndexTrackerForm",
-            sequence: 1
+            sequence: 1,
+            grant_points: 100 // High-friction real-world action reward
           },
           {
             id: "m2_q5_t2_synthesize_cut",
             title: "Pick the One Idea You Will Commit To",
             type: "action",
             component_key: "OpportunityDecisionBoard",
-            sequence: 2
+            sequence: 2,
+            grant_points: 50 // Closing execution block payout
           }
         ]
       }
@@ -277,14 +309,16 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Summarize Your Buyer in 5 Words or Less",
             type: "form",
             component_key: "StringValidationInput",
-            sequence: 1
+            sequence: 1,
+            grant_points: 30 // Critical execution focus
           },
           {
             id: "m3_q1_t2_psychographics",
             title: "Identify Their Daily Fears & Online Hangouts",
             type: "form",
             component_key: "PsychographicMapForm",
-            sequence: 2
+            sequence: 2,
+            grant_points: 20
           }
         ]
       },
@@ -299,7 +333,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Architect",
           persona_prompt: "Map the validated problem text cleanly across alternative models: service, app, directory, or guidebook.",
           required_context: ["user_profiles", "opportunities"],
-          on_success: { grant_points: 50 }
+          on_success: {
+            grant_points: 50,
+            badge_key: "ARCHITECT" // Unlocks "Architect" badge identity for structural choices
+          }
         },
         tasks: [
           {
@@ -307,14 +344,16 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Compare Alternative Business Options",
             type: "simulator",
             component_key: "SolutionScaffoldViewer",
-            sequence: 1
+            sequence: 1,
+            grant_points: 30
           },
           {
             id: "m3_q2_t2_lock_vehicle",
             title: "Select Your Starting Offer Style",
             type: "action",
             component_key: "ModelSelectionNode",
-            sequence: 2
+            sequence: 2,
+            grant_points: 20
           }
         ]
       },
@@ -338,7 +377,8 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Calculate Your Category & Segment Ceiling",
             type: "form",
             component_key: "TopDownSizingCalculator",
-            sequence: 1
+            sequence: 1,
+            grant_points: 25 // Optional bonus points
           }
         ]
       },
@@ -353,7 +393,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Reality Engine",
           persona_prompt: "Review outreach projections. Evaluate if the pricing floor vs outreach goals matches the income targets in their profile. If it drops into a heavy deficit, trigger a pivot validation pathway.",
           required_context: ["user_profiles", "opportunities"],
-          on_success: { grant_points: 100, badge_key: "PROJECT_MINTED" }
+          on_success: {
+            grant_points: 100,
+            badge_key: "STRATEGIST" // Unlocks "Strategist" workspace identity badge
+          }
         },
         tasks: [
           {
@@ -361,21 +404,24 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "List 3 Specific Groups or Channels Where Your Buyers Gather",
             type: "form",
             component_key: "WateringHoleForm",
-            sequence: 1
+            sequence: 1,
+            grant_points: 30
           },
           {
             id: "m3_q4_t2_urge_equation",
             title: "Calculate Your Realistic Year 1 Sales Goal",
             type: "form",
             component_key: "RealityEquationCalculator",
-            sequence: 2
+            sequence: 2,
+            grant_points: 30
           },
           {
             id: "m3_q4_t3_mint_project",
             title: "Confirm and Officially Open Your Workspace",
             type: "action",
             component_key: "ProjectMintingButton",
-            sequence: 3
+            sequence: 3,
+            grant_points: 40 // Opening execution click payout
           }
         ]
       }
@@ -407,14 +453,16 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Draft Your Core Pain Reliever Wording",
             type: "form",
             component_key: "ValuePropInputForm",
-            sequence: 1
+            sequence: 1,
+            grant_points: 30
           },
           {
             id: "m4_q1_t2_relationship_style",
             title: "Select Your Interaction Style",
             type: "form",
             component_key: "RelationshipSelectorCard",
-            sequence: 2
+            sequence: 2,
+            grant_points: 20
           }
         ]
       },
@@ -437,14 +485,16 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Identify Your Highest-Pain Early Adopters",
             type: "form",
             component_key: "EarlyAdopterForm",
-            sequence: 1
+            sequence: 1,
+            grant_points: 25
           },
           {
             id: "m4_q2_t2_delivery_channels",
             title: "Lock In Your Direct Delivery Routes",
             type: "form",
             component_key: "ChannelSelectionGrid",
-            sequence: 2
+            sequence: 2,
+            grant_points: 25
           }
         ]
       },
@@ -459,7 +509,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Runway Manager",
           persona_prompt: "Evaluate operational actions. Cross-examine the user's daily activities list against their logged weekly hour limits.",
           required_context: ["user_profiles", "projects"],
-          on_success: { grant_points: 50 }
+          on_success: {
+            grant_points: 50,
+            badge_key: "ANALYST" // Unlocks "Analyst" capability badge
+          }
         },
         tasks: [
           {
@@ -467,14 +520,16 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Inventory Your Core Assets & Availability",
             type: "form",
             component_key: "ResourceInventoryForm",
-            sequence: 1
+            sequence: 1,
+            grant_points: 25
           },
           {
             id: "m4_q3_t2_activities_log",
             title: "Outline Your Primary Daily Action Steps",
             type: "form",
             component_key: "CoreActivitiesLogForm",
-            sequence: 2
+            sequence: 2,
+            grant_points: 25
           }
         ]
       },
@@ -489,7 +544,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Economics Auditor",
           persona_prompt: "Verify profit margins. Check tool costs vs pricing tiers and output clear break-even lines.",
           required_context: ["user_profiles", "projects"],
-          on_success: { grant_points: 100 }
+          on_success: {
+            grant_points: 100,
+            badge_key: "ECONOMIST" // Unlocks "Economist" validation badge
+          }
         },
         tasks: [
           {
@@ -497,21 +555,24 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Establish Your Core Pricing Tiers",
             type: "form",
             component_key: "PricingTierCardForm",
-            sequence: 1
+            sequence: 1,
+            grant_points: 30
           },
           {
             id: "m4_q4_t2_expenses_spend",
             title: "List Your Absolute Minimum Software Expenses",
             type: "form",
             component_key: "ToolExpenseLogForm",
-            sequence: 2
+            sequence: 2,
+            grant_points: 30
           },
           {
             id: "m4_q4_t3_economics_dashboard",
             title: "See Your Real-World Break-Even Goal",
             type: "action",
             component_key: "MarginDashboardCalculator",
-            sequence: 3
+            sequence: 3,
+            grant_points: 40
           }
         ]
       },
@@ -526,7 +587,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Booster Conductor",
           persona_prompt: "Validate core third-party integrations. Ensure the user is leveraging infrastructure platforms to maximize launch speed.",
           required_context: ["user_profiles", "projects"],
-          on_success: { grant_points: 100, badge_key: "MONEY_SYSTEM_LOCKED" }
+          on_success: {
+            grant_points: 100,
+            badge_key: "ENGINEER" // Unlocks "Engineer" culmination badge identity
+          }
         },
         tasks: [
           {
@@ -534,7 +598,8 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Map Your Infrastructure Allies",
             type: "form",
             component_key: "PartnershipBoosterForm",
-            sequence: 1
+            sequence: 1,
+            grant_points: 100
           }
         ]
       }
@@ -558,7 +623,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Friendly Auditor",
           persona_prompt: "Look at the user's answers. If their risk is low, reassure them that they can skip formal company registration for now and focus entirely on selling.",
           required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "RISK_CLEARED" }
+          on_success: {
+            grant_points: 50,
+            badge_key: "PROTECTOR" // Unlocks "Protector" risk management capability badge
+          }
         },
         tasks: [
           {
@@ -566,7 +634,8 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Take the Quick Risk Survey",
             type: "form",
             component_key: "STANDARD_FORM",
-            sequence: 1
+            sequence: 1,
+            grant_points: 50 // High psychological threshold value
           }
         ]
       },
@@ -581,7 +650,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Setup Assistant",
           persona_prompt: "Check the submitted payment URL to verify it looks like a valid, working checkout page link.",
           required_context: ["projects"],
-          on_success: { grant_points: 100, badge_key: "CASH_REGISTER_OPEN" }
+          on_success: {
+            grant_points: 100,
+            badge_key: "MERCHANT" // Unlocks "Merchant" identity badge
+          }
         },
         tasks: [
           {
@@ -590,8 +662,9 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "action",
             component_key: "StripeConnectButton",
             sequence: 1,
+            grant_points: 50,
             metadata_config: {
-              depends_on_task_id: "m5_q1_t1_risk_survey" // Cannot connect payment until they finish the risk check
+              depends_on_task_id: "m5_q1_t1_risk_survey"
             }
           },
           {
@@ -600,8 +673,9 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 2,
+            grant_points: 50,
             metadata_config: {
-              depends_on_task_id: "m5_q2_t1_stripe_action" // Cannot verify the link until the account is connected
+              depends_on_task_id: "m5_q2_t1_stripe_action"
             }
           }
         ]
@@ -627,6 +701,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 25, // Optional bonus points
             metadata_config: {
               potential_resources: [
                 { name: "Clerky", type: "Legal Setup Tool", desc: "An easy online service that handles company paperwork when you're ready to grow." },
@@ -656,7 +731,8 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Generate Your Local Permit Report",
             type: "action",
             component_key: "AiLicenseReportNode",
-            sequence: 1
+            sequence: 1,
+            grant_points: 25 // Optional bonus points
           }
         ]
       }
@@ -680,7 +756,7 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Focused Friend",
           persona_prompt: "Review the feature list. If the user tries to sneak in non-essential items like admin settings panels or custom themes, tell them to cut it immediately.",
           required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "CORE_FEATURES_ISOLATED" }
+          on_success: { grant_points: 50 }
         },
         tasks: [
           {
@@ -688,7 +764,8 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "List Your Must-Haves vs Nice-to-Haves",
             type: "form",
             component_key: "STANDARD_FORM",
-            sequence: 1
+            sequence: 1,
+            grant_points: 50 // High mental barrier entry
           }
         ]
       },
@@ -712,6 +789,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 50,
             metadata_config: {
               depends_on_task_id: "m6_q1_t1_feature_shred"
             }
@@ -729,7 +807,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Reality Check",
           persona_prompt: "Ensure the user's definition of success is functional, simple, and can be completed in under two weeks.",
           required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "PERFECTIONISM_DEFEATED" }
+          on_success: {
+            grant_points: 50,
+            badge_key: "MINIMALIST" // Unlocks "Minimalist" scope capability badge
+          }
         },
         tasks: [
           {
@@ -738,6 +819,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 50,
             metadata_config: {
               depends_on_task_id: "m6_q2_t1_materials_log"
             }
@@ -755,7 +837,7 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Traction Catalyst",
           persona_prompt: "Verify that the user has submitted active links to their new placeholder channels or updates.",
           required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "FOOTPRINT_CLAIMED" }
+          on_success: { grant_points: 50 }
         },
         tasks: [
           {
@@ -764,6 +846,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 50,
             metadata_config: {
               depends_on_task_id: "m6_q3_t1_outcome_bounds"
             }
@@ -781,7 +864,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Accountability Partner",
           persona_prompt: "Celebrate their active build updates and prompt them to confirm that it matches their 'Good Enough' line.",
           required_context: ["projects"],
-          on_success: { grant_points: 100, badge_key: "PRODUCT_ALIVE" }
+          on_success: {
+            grant_points: 100,
+            badge_key: "BUILDER" // Unlocks "Builder" execution capability badge
+          }
         },
         tasks: [
           {
@@ -790,6 +876,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "action",
             component_key: "ConfirmBuildStatusButton",
             sequence: 1,
+            grant_points: 100, // Large payout for hitting operational execution status
             metadata_config: {
               depends_on_task_id: "m6_q4_t1_social_links"
             }
@@ -807,7 +894,7 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Crew Recruiter",
           persona_prompt: "Review the logged tester entries. Reassure the founder that feedback from 3 focused targets is better than 100 random looky-loos.",
           required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "CREW_RECRUITED" }
+          on_success: { grant_points: 50 }
         },
         tasks: [
           {
@@ -816,6 +903,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 50,
             metadata_config: {
               depends_on_task_id: "m6_q5_t1_build_action"
             }
@@ -833,7 +921,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Feedback Analyzer",
           persona_prompt: "Analyze user test observations. Help separate constructive layout feedback from random feature suggestions.",
           required_context: ["projects"],
-          on_success: { grant_points: 100, badge_key: "DEMO_COMPLETED" }
+          on_success: {
+            grant_points: 100,
+            badge_key: "CAPTAIN" // Unlocks "Captain" early traction culmination badge
+          }
         },
         tasks: [
           {
@@ -842,6 +933,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 100, // Outbound user observation interaction reward
             metadata_config: {
               depends_on_task_id: "m6_q6_t1_tester_log",
               potential_resources: [
@@ -872,7 +964,7 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Launch Check",
           persona_prompt: "Verify the user has recorded early feedback data and confirmed that their live checkout links successfully process currency without crashing.",
           required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "FIRST_REVIEWS_SECURED" }
+          on_success: { grant_points: 50 }
         },
         tasks: [
           {
@@ -880,7 +972,8 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Log Your Payments Verification and Early Review Notes",
             type: "form",
             component_key: "STANDARD_FORM",
-            sequence: 1
+            sequence: 1,
+            grant_points: 50 // High operational friction value
           }
         ]
       },
@@ -895,7 +988,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Sandbox Conductor",
           persona_prompt: "Check their pre-launch variables. Ensure their landing page text and pricing options match their previously logged system parameters before authorizing the community board blast.",
           required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "SANDBOX_LIVE" }
+          on_success: {
+            grant_points: 50,
+            badge_key: "INITIATE" // Unlocks "Initiate" operational validation badge
+          }
         },
         tasks: [
           {
@@ -904,6 +1000,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "action",
             component_key: "PublishToInternalMarketplaceButton",
             sequence: 1,
+            grant_points: 50,
             metadata_config: {
               depends_on_task_id: "m7_q1_t1_circle_log"
             }
@@ -921,7 +1018,7 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Strategy Assessor",
           persona_prompt: "Evaluate their chosen launch tracks. If they select a local service, verify they have configured an explicit real-world IRL walk-in or distribution route.",
           required_context: ["projects"],
-          on_success: { grant_points: 100, badge_key: "LAUNCH_TRACKS_CONFIGURED" }
+          on_success: { grant_points: 100 }
         },
         tasks: [
           {
@@ -930,6 +1027,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 100, // Strategic preparation reward
             metadata_config: {
               depends_on_task_id: "m7_q2_t1_sandbox_publish",
               potential_resources: [
@@ -952,7 +1050,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Voice Police",
           persona_prompt: "Review the communication rules. If they use robotic jargon or try to sound like a giant corporate company, flag it and push them back to peer-to-peer phrasing.",
           required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "COMMUNICATION_ALIGNED" }
+          on_success: {
+            grant_points: 50,
+            badge_key: "HUSTLER" // Unlocks "Hustler" channel asset readiness badge
+          }
         },
         tasks: [
           {
@@ -961,11 +1062,12 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 50,
             metadata_config: {
               depends_on_task_id: "m7_q3_t1_track_selection",
               potential_resources: [
                 { name: "Coolors.co", type: "Color Tool", desc: "A free, lightning-fast color palette utility to lock down your contrast parameters." },
-                { name: "Google Fonts", type: "Typography Catalog", desc: " timeless, web-safe typographic sheets like Inter or Roboto to enforce high interface readability." }
+                { name: "Google Fonts", type: "Typography Catalog", desc: "Timeless, web-safe typographic sheets like Inter or Roboto to enforce high interface readability." }
               ]
             }
           }
@@ -992,6 +1094,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 50, // Optional bonus points
             metadata_config: {
               depends_on_task_id: "m7_q4_t1_branding_canvas",
               potential_resources: [
@@ -1013,7 +1116,7 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Feedback Analyzer",
           persona_prompt: "Review logged conversion ratios and customer objections. Help the founder identify if their bottleneck lives in traffic acquisition or checkout page layout copy.",
           required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "MARKET_DATA_ANALYZED" }
+          on_success: { grant_points: 50 }
         },
         tasks: [
           {
@@ -1022,8 +1125,9 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 50,
             metadata_config: {
-              depends_on_task_id: "m7_q4_t1_branding_canvas" // Tied to branding step completion, bypassing optional ads step
+              depends_on_task_id: "m7_q4_t1_branding_canvas"
             }
           }
         ]
@@ -1039,7 +1143,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Discipline Coach",
           persona_prompt: "Review their 10 logged outbound contacts. Celebrate this unscalable hustle milestone and highlight that proactive outreach is what separates builders from wishful thinkers.",
           required_context: ["projects"],
-          on_success: { grant_points: 100, badge_key: "LAUNCHED_LIVE" }
+          on_success: {
+            grant_points: 100,
+            badge_key: "VANGUARD" // Unlocks "Vanguard" open market launch culmination badge
+          }
         },
         tasks: [
           {
@@ -1048,6 +1155,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 100, // Maximum value for direct manual outbound market execution
             metadata_config: {
               depends_on_task_id: "m7_q6_t1_metrics_audit"
             }
@@ -1074,7 +1182,7 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Financial Peer",
           persona_prompt: "Review the logged take-home margin properties and salary goals. Help the founder confirm if their target transaction volume aligns realistically with their organic launch traffic.",
           required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "VITAL_SIGNS_AUDITED" }
+          on_success: { grant_points: 50 }
         },
         tasks: [
           {
@@ -1082,7 +1190,8 @@ export const UrgePlaybook: PlaybookConfig = {
             title: "Log Your Core Income Margins and Salary Replacement Target",
             type: "form",
             component_key: "STANDARD_FORM",
-            sequence: 1
+            sequence: 1,
+            grant_points: 50 // High analytical introspective value
           }
         ]
       },
@@ -1097,7 +1206,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Energy Coach",
           persona_prompt: "Assess their workflow frustration scores. Emphasize that resolving operational stress early is vital to prevent long-term founder burnout.",
           required_context: ["projects"],
-          on_success: { grant_points: 50, badge_key: "LIFESTYLE_AUDITED" }
+          on_success: {
+            grant_points: 50,
+            badge_key: "AUDITOR" // Unlocks "Auditor" strategic baseline identity badge
+          }
         },
         tasks: [
           {
@@ -1106,6 +1218,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 50,
             metadata_config: {
               depends_on_task_id: "m8_q1_t1_metrics_calc"
             }
@@ -1123,7 +1236,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Automation Wizard",
           persona_prompt: "Verify that the user has identified specific repetitive tasks and logged a plan to deploy zero-code link triggers.",
           required_context: ["projects"],
-          on_success: { grant_points: 100, badge_key: "ENGINE_AUTOMATED" }
+          on_success: {
+            grant_points: 100,
+            badge_key: "AUTOMATOR" // Unlocks "Automator" efficiency capability badge
+          }
         },
         tasks: [
           {
@@ -1132,6 +1248,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 100, // Significant reward for structural systems building
             metadata_config: {
               depends_on_task_id: "m8_q2_t1_lifestyle_log"
             }
@@ -1149,7 +1266,10 @@ export const UrgePlaybook: PlaybookConfig = {
           persona_name: "The Master Strategist",
           persona_prompt: "Honor their final path selection. If scaling, offer immediate confidence parameters. If pivoting, reassure them that walking away with pristine market data is an expert operational victory.",
           required_context: ["projects"],
-          on_success: { grant_points: 150, badge_key: "PLAYBOOK_COMPLETED" }
+          on_success: {
+            grant_points: 150, // Major completion milestone bonus 
+            badge_key: "SOVEREIGN" // Unlocks final master "Sovereign" capstone badge identity
+          }
         },
         tasks: [
           {
@@ -1158,6 +1278,7 @@ export const UrgePlaybook: PlaybookConfig = {
             type: "form",
             component_key: "STANDARD_FORM",
             sequence: 1,
+            grant_points: 150, // Massive terminal execution payout
             metadata_config: {
               depends_on_task_id: "m8_q3_t1_automation_plan"
             }

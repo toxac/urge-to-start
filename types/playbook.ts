@@ -6,6 +6,7 @@ export interface Task {
   type: TaskType;
   component_key: string; // Ties directly to your frontend React registration list
   sequence: number;
+  grant_points: number; // Explicit, type-safe points awarded instantly on task completion
   metadata_config?: Record<string, any>;
 }
 
@@ -16,7 +17,7 @@ export interface AiConfig {
   required_context: Array<'user_profiles' | 'opportunities' | 'projects'>;
   evaluation_rules?: string;
   on_success: {
-    grant_points: number;
+    grant_points: number; // Big milestone bonus points for passing the AI evaluation
     badge_key?: string;
     unlock_next_quest?: string;
   };
@@ -41,5 +42,4 @@ export interface Mission {
   quests: Record<string, Quest>; // Nested key dictionary for lightning-fast lookups
 }
 
-// The master dictionary layout type engine definition
 export type PlaybookConfig = Record<string, Mission>;
