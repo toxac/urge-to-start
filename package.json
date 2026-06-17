@@ -13,7 +13,8 @@
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
-    "dbtypes": "npx supabase gen types typescript --project-id evkkxeuiszjpzjpcmkwe --schema public > types/supabase.ts"
+    "dbtypes": "npx supabase gen types typescript --project-id evkkxeuiszjpzjpcmkwe --schema public > types/supabase.ts",
+    "sync-playbook": "tsx scripts/sync-playbook.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
