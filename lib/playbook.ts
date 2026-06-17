@@ -1,6 +1,6 @@
 import { PlaybookConfig } from "@/types/playbook";
 
-export const UrgePlaybook: PlaybookConfig = {
+export const urgePlaybook: PlaybookConfig = {
   mission1: {
     title: "Build Your Founder Mindset",
     sequence: 1,

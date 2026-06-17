@@ -3,11 +3,13 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { PlaybookConfig } from '../types/playbook';
+// Import your live local blueprint configuration under its new name and path
+import { urgePlaybook } from '../lib/playbook';
 
 // Initialize env credentials variables
 dotenv.config();
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL|| '';
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.NEXT_SUPABASE_SECRET_KEY || '';
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
@@ -27,10 +29,10 @@ function readMarkdownSafe(filePath: string): string {
     if (fs.existsSync(fullPath)) {
       return fs.readFileSync(fullPath, 'utf8');
     }
-    console.warn(`File trace anomaly: Node file missing at location -> ${filePath}`);
+    console.warn(`⚠️ File trace anomaly: File missing at location -> ${filePath}`);
     return '';
   } catch (error) {
-    console.error(`IO fault encountered reading layout path: ${filePath}`, error);
+    console.error(`❌ IO fault encountered reading layout path: ${filePath}`, error);
     return '';
   }
 }
@@ -38,11 +40,12 @@ function readMarkdownSafe(filePath: string): string {
 /**
  * Core Playbook Sync Engine Execution Block
  */
-export async function syncPlaybookToDatabase(playbookConfig: PlaybookConfig) {
+export async function syncPlaybookToDatabase(config: PlaybookConfig) {
   console.log('🚀 Synchronizing content matrices with application tables...');
 
-  for (const [missionKey, mission] of Object.entries(playbookConfig)) {
-    const missionFolderPath = `content/${missionKey}`;
+  for (const [missionKey, mission] of Object.entries(config)) {
+    // Adjusted mapping coordinates to precisely traverse into the extra /missions/ subfolder
+    const missionFolderPath = `content/missions/${missionKey}`;
     const missionMarkdownPath = `${missionFolderPath}/mission.md`;
     
     // Ingest pure markdown text content from local disk storage coordinates
@@ -137,10 +140,30 @@ export async function syncPlaybookToDatabase(playbookConfig: PlaybookConfig) {
         // Apply updated database primary keys parameters directly back onto runtime objects
         task.db_id = dbTask.id;
       }
-      console.log(`   ✅ Quest synchronized successfully: ${quest.title} with [${quest.tasks.length}] sub-tasks mapping layers.`);
+      console.log(`   ✅ Quest synchronized successfully: ${quest.title} with [${quest.tasks.length}] sub-tasks.`);
     }
   }
 
   console.log('\n🎉 Playbook synchronization script complete. Database tables and runtime configurations are perfectly aligned.');
-  return playbookConfig;
+  return config;
 }
+
+// =========================================================================
+// EXECUTIVE ACTION RUNNER FOR CLI RUNS (`npm run sync-playbook`)
+// =========================================================================
+(async () => {
+  try {
+    // Fires synchronization instantly passing your true imported urgePlaybook map object
+    const updatedConfig = await syncPlaybookToDatabase(urgePlaybook);
+    
+    // Writes a compiled, sync-stamped JSON artifact back into your setup files
+    const targetOutputPath = path.resolve(process.cwd(), 'lib/playbook_synced.json');
+    fs.writeFileSync(targetOutputPath, JSON.stringify(updatedConfig, null, 2), 'utf8');
+    console.log(`💾 Synced layout map cache successfully written to disk at: ${targetOutputPath}`);
+    
+    process.exit(0);
+  } catch (error) {
+    console.error('💥 CRITICAL RUNTIME EXCEPTION: Sync engine aborted unexpectedly:', error);
+    process.exit(1);
+  }
+})();
