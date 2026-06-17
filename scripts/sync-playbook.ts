@@ -3,11 +3,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { PlaybookConfig } from '../types/playbook';
-// Import your live local blueprint configuration under its new name and path
+// Import your live local blueprint configuration
 import { urgePlaybook } from '../lib/playbook';
 
 // Initialize env credentials variables
-dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.NEXT_SUPABASE_SECRET_KEY || '';
@@ -44,7 +44,7 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
   console.log('🚀 Synchronizing content matrices with application tables...');
 
   for (const [missionKey, mission] of Object.entries(config)) {
-    // Adjusted mapping coordinates to precisely traverse into the extra /missions/ subfolder
+    // Maps perfectly to: content/missions/mission1, content/missions/mission2, etc.
     const missionFolderPath = `content/missions/${missionKey}`;
     const missionMarkdownPath = `${missionFolderPath}/mission.md`;
     
@@ -78,7 +78,14 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
     for (const [questKey, quest] of Object.entries(mission.quests)) {
       const questId = `${missionKey}_${questKey}`; // e.g., 'mission1_quest1'
       
-      // Load pure markdown strings cleanly from designated asset directory
+      // FIX: Dynamically construct the correct physical disk path using your real content tree structural mapping
+      // This forces the script to look into 'content/missions/mission1/quests/your-goals-and-free-time.md'
+      const correctedPhysicalPath = `content/missions/${missionKey}/quests/${quest.slug}.md`;
+      
+      // Update the object properties so the database receives the correct structured file reference string
+      quest.content_path = correctedPhysicalPath;
+
+      // Load pure markdown strings cleanly from the dynamically calculated coordinate
       quest.content_markdown = readMarkdownSafe(quest.content_path);
 
       // Verify if an alignment badge reference is bound to this quest execution block
@@ -93,6 +100,7 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
           title: quest.title,
           subtitle: quest.subtitle,
           sequence: quest.sequence,
+          // Push the full markdown body text directly into the DB content slot!
           content_path: quest.content_markdown || quest.subtitle,
           is_optional: quest.is_optional || false,
           persona_name: quest.ai_config.persona_name,

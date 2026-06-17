@@ -613,7 +613,7 @@ export const urgePlaybook: PlaybookConfig = {
     briefing_text: "Clear away the paperwork anxiety. See if you actually have any legal risks, open your digital cash register, and map out what you might need down the road without slowing down your launch.",
     quests: {
       quest1: {
-        slug: "your-safety-rules",
+        slug: "personal-safety-check",
         title: "Your Safety Rules",
         subtitle: "Decide if paperwork is a real shield or just a way to delay making your first dollar.",
         sequence: 1,
@@ -640,7 +640,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest2: {
-        slug: "setting-up-the-cash-register",
+        slug: "open-your-payment-pipes",
         title: "Setting Up the Cash Register",
         subtitle: "Link a clean payment channel so a customer can buy right now without friction.",
         sequence: 2,
@@ -746,7 +746,7 @@ export const urgePlaybook: PlaybookConfig = {
     briefing_text: "Strip your product vision down to its raw essentials, build your digital footprint alongside your asset, recruit your testing crew early, and put your working version to the test.",
     quests: {
       quest1: {
-        slug: "shredding-the-extra-features",
+        slug: "the-cut-list",
         title: "Shredding the Extra Features",
         subtitle: "Strip away your massive software or service wishlist to protect your speed to market.",
         sequence: 1,
@@ -770,7 +770,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest2: {
-        slug: "sourcing-your-raw-materials",
+        slug: "sourcing-and-supplies",
         title: "Sourcing Your Raw Materials",
         subtitle: "Map out your software stacks or your physical gear and identify your bottlenecks.",
         sequence: 2,
@@ -797,7 +797,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest3: {
-        slug: "defining-good-enough",
+        slug: "acceptable-outcomes",
         title: "Defining Good Enough",
         subtitle: "Set your explicit boundaries for a working version 1.0 so you don't get stuck tweaking it forever.",
         sequence: 3,
@@ -827,7 +827,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest4: {
-        slug: "claiming-your-social-footprint",
+        slug: "social-footprint",
         title: "Claiming Your Social Footprint",
         subtitle: "Set up your initial zero-dollar social pages and document your build journey in public.",
         sequence: 4,
@@ -854,7 +854,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest5: {
-        slug: "the-active-build-block",
+        slug: "actual-building",
         title: "The Active Build Block",
         subtitle: "Put your head down, build your core utility, and make the machine work.",
         sequence: 5,
@@ -884,7 +884,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest6: {
-        slug: "recruiting-your-first-testers",
+        slug: "recruiting-testers",
         title: "Recruiting Your First Testers",
         subtitle: "Secure 3 low-pressure commitments from early adopters who will test your rough initial version.",
         sequence: 6,
@@ -911,7 +911,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest7: {
-        slug: "the-early-user-demo",
+        slug: "showcase-and-demo",
         title: "The Early User Demo",
         subtitle: "Show a quick recording or drop a sample in front of your recruited testers to catch early friction.",
         sequence: 7,
@@ -954,7 +954,7 @@ export const urgePlaybook: PlaybookConfig = {
     briefing_text: "Put your working version out into the wild open market. Launch through your inside circles, capture early builder upvotes, configure your modern social media content hooks, lock down your peer branding voice, read the market's signals, execute your outbound ledger, and deploy optional micro ad experiments.",
     quests: {
       quest1: {
-        slug: "the-inside-circle-launch",
+        slug: "inside-circle",
         title: "The Inside Circle Launch",
         subtitle: "Drop your link to your beta testers and close allies to verify your payments and secure your first 2 reviews.",
         sequence: 1,
@@ -978,7 +978,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest2: {
-        slug: "the-internal-sandbox-launch",
+        slug: "internal-sandbox",
         title: "The Internal Sandbox Launch",
         subtitle: "Complete your pre-launch checklist and post your offer to our builder community board for early momentum.",
         sequence: 2,
@@ -1008,7 +1008,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest3: {
-        slug: "exploring-your-launch-tracks",
+        slug: "launch-tracks",
         title: "Exploring Your Launch Tracks",
         subtitle: "Configure your modern social media content hooks and plan your physical real-world street hustle.",
         sequence: 3,
@@ -1040,7 +1040,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest4: {
-        slug: "your-voice-and-look",
+        slug: "branding-and-comm",
         title: "Your Voice and Look",
         subtitle: "Establish a clean, readable visual theme and remove the corporate talk from your messages.",
         sequence: 4,
@@ -1074,7 +1074,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest5: {
-        slug: "running-ads-and-campaigns",
+        slug: "running-ads",
         title: "Optional Adventure: Scrappy Paid Campaigns",
         subtitle: "Learn the $5-a-day rule to test small, targeted online experiments without gambling your runway.",
         sequence: 5,
@@ -1106,7 +1106,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest6: {
-        slug: "listening-to-the-market",
+        slug: "market-feedback",
         title: "Listening to the Market",
         subtitle: "Decode your initial traffic metrics, conversion parameters, and qualitative user friction.",
         sequence: 6,
@@ -1133,7 +1133,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest7: {
-        slug: "the-outbound-direct-tally",
+        slug: "outbound-tally",
         title: "The Outbound Direct Tally",
         subtitle: "Step out of your comfort zone and manually present your solution directly to 10 distinct strangers.",
         sequence: 7,
@@ -1172,7 +1172,7 @@ export const urgePlaybook: PlaybookConfig = {
     briefing_text: "Audit your core business health vital signs, cross-reference your income metrics with your personal freedom line, automate repetitive delivery bottlenecks, and make your final strategic launch choice.",
     quests: {
       quest1: {
-        slug: "the-freedom-math-and-vital-signs",
+        slug: "freedom-math",
         title: "The Freedom Math & Vital Signs",
         subtitle: "Calculate your take-home margins, time efficiency variables, and your true day-job replacement line.",
         sequence: 1,
@@ -1196,7 +1196,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest2: {
-        slug: "the-lifestyle-audit",
+        slug: "lifestyle-audit",
         title: "The Lifestyle Audit",
         subtitle: "Check your personal energy margins to make sure you are building a lifestyle asset, not a new cage.",
         sequence: 2,
@@ -1226,7 +1226,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest3: {
-        slug: "automating-the-repeat-work",
+        slug: "system-streamlining",
         title: "Automating the Repeat Work",
         subtitle: "Connect your core tool systems together to wipe out boring admin tasks and reclaim your free time.",
         sequence: 3,
@@ -1256,7 +1256,7 @@ export const urgePlaybook: PlaybookConfig = {
         ]
       },
       quest4: {
-        slug: "the-crossroads-decision",
+        slug: "the-crossroads",
         title: "The Crossroads (Scale, Tweak, or Pivot)",
         subtitle: "Commit to your final strategic path: double down on growth, tweak your variables, or run a smart pivot.",
         sequence: 4,
