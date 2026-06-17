@@ -3,10 +3,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { PlaybookConfig } from '../types/playbook';
-// Import your live local blueprint configuration
 import { urgePlaybook } from '../lib/playbook';
 
-// Initialize env credentials variables
+// Initialize env variables from Next.js local setup
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -17,7 +16,6 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   process.exit(1);
 }
 
-// Instantiate database engine wrapper using elevated Service Role privileges to bypass RLS for configuration updates
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 /**
@@ -44,7 +42,6 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
   console.log('🚀 Synchronizing content matrices with application tables...');
 
   for (const [missionKey, mission] of Object.entries(config)) {
-    // Maps perfectly to: content/missions/mission1, content/missions/mission2, etc.
     const missionFolderPath = `content/missions/${missionKey}`;
     const missionMarkdownPath = `${missionFolderPath}/mission.md`;
     
@@ -61,7 +58,8 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
         title: mission.title,
         sequence: mission.sequence,
         video_url: mission.video_url,
-        briefing_text: mission.briefing_markdown || mission.briefing_text
+        // Pushes the full mission markdown to the unified 'content' column (falling back to the brief description text)
+        content: mission.briefing_markdown || mission.briefing_text 
       })
       .select('id')
       .single();
@@ -71,24 +69,16 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
       continue;
     }
 
-    // Assign reference parameter back to memory footprint structure
     mission.db_id = dbMission.id;
 
     // 2. Loop Through Nested Quest Dictionary Elements
     for (const [questKey, quest] of Object.entries(mission.quests)) {
-      const questId = `${missionKey}_${questKey}`; // e.g., 'mission1_quest1'
+      const questId = `${missionKey}_${questKey}`;
+      const strictPhysicalPath = `content/missions/${missionKey}/quests/${quest.slug}.md`;
       
-      // FIX: Dynamically construct the correct physical disk path using your real content tree structural mapping
-      // This forces the script to look into 'content/missions/mission1/quests/your-goals-and-free-time.md'
-      const correctedPhysicalPath = `content/missions/${missionKey}/quests/${quest.slug}.md`;
-      
-      // Update the object properties so the database receives the correct structured file reference string
-      quest.content_path = correctedPhysicalPath;
-
-      // Load pure markdown strings cleanly from the dynamically calculated coordinate
+      quest.content_path = strictPhysicalPath;
       quest.content_markdown = readMarkdownSafe(quest.content_path);
 
-      // Verify if an alignment badge reference is bound to this quest execution block
       let badgeRewardKey: string | undefined = quest.ai_config.on_success.badge_key;
 
       const { data: dbQuest, error: questError } = await supabase
@@ -100,8 +90,8 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
           title: quest.title,
           subtitle: quest.subtitle,
           sequence: quest.sequence,
-          // Push the full markdown body text directly into the DB content slot!
-          content_path: quest.content_markdown || quest.subtitle,
+          // Pushes the full quest markdown to the unified 'content' column
+          content: quest.content_markdown || quest.subtitle, 
           is_optional: quest.is_optional || false,
           persona_name: quest.ai_config.persona_name,
           persona_prompt: quest.ai_config.persona_prompt,
@@ -145,7 +135,6 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
           continue;
         }
 
-        // Apply updated database primary keys parameters directly back onto runtime objects
         task.db_id = dbTask.id;
       }
       console.log(`   ✅ Quest synchronized successfully: ${quest.title} with [${quest.tasks.length}] sub-tasks.`);
@@ -161,14 +150,10 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
 // =========================================================================
 (async () => {
   try {
-    // Fires synchronization instantly passing your true imported urgePlaybook map object
     const updatedConfig = await syncPlaybookToDatabase(urgePlaybook);
-    
-    // Writes a compiled, sync-stamped JSON artifact back into your setup files
     const targetOutputPath = path.resolve(process.cwd(), 'lib/playbook_synced.json');
     fs.writeFileSync(targetOutputPath, JSON.stringify(updatedConfig, null, 2), 'utf8');
     console.log(`💾 Synced layout map cache successfully written to disk at: ${targetOutputPath}`);
-    
     process.exit(0);
   } catch (error) {
     console.error('💥 CRITICAL RUNTIME EXCEPTION: Sync engine aborted unexpectedly:', error);
