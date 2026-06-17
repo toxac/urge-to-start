@@ -230,6 +230,13 @@ export type Database = {
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "fk_launches_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       leads: {
@@ -316,6 +323,13 @@ export type Database = {
             referencedRelation: "marketplace_listings"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "fk_flags_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       marketplace_listings: {
@@ -391,7 +405,15 @@ export type Database = {
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_marketplace_listings_creator"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       marketplace_reviews: {
         Row: {
@@ -427,6 +449,13 @@ export type Database = {
             columns: ["listing_id"]
             isOneToOne: false
             referencedRelation: "marketplace_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_reviews_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -550,7 +579,9 @@ export type Database = {
             | Database["public"]["Enums"]["education_tier"]
             | null
           id: string
+          mentor_metadata: Json
           onboarding_step: number
+          provider_metadata: Json
           role: Database["public"]["Enums"]["user_platform_role"]
           social_profiles: Json
           updated_at: string
@@ -569,7 +600,9 @@ export type Database = {
             | Database["public"]["Enums"]["education_tier"]
             | null
           id: string
+          mentor_metadata?: Json
           onboarding_step?: number
+          provider_metadata?: Json
           role?: Database["public"]["Enums"]["user_platform_role"]
           social_profiles?: Json
           updated_at?: string
@@ -588,7 +621,9 @@ export type Database = {
             | Database["public"]["Enums"]["education_tier"]
             | null
           id?: string
+          mentor_metadata?: Json
           onboarding_step?: number
+          provider_metadata?: Json
           role?: Database["public"]["Enums"]["user_platform_role"]
           social_profiles?: Json
           updated_at?: string
