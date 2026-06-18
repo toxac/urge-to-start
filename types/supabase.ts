@@ -89,6 +89,36 @@ export type Database = {
         }
         Relationships: []
       }
+      email_queue: {
+        Row: {
+          created_at: string | null
+          error: string | null
+          id: number
+          options: Json
+          scheduled_for: string | null
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string | null
+          error?: string | null
+          id?: number
+          options: Json
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string | null
+          error?: string | null
+          id?: number
+          options?: Json
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           contact_email: string
