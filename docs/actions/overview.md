@@ -1,0 +1,2 @@
+# Backend Server Actions Architecture Documentation
+This document specifies the architecture, security guards, data contracts, and functional specs for the application's Next.js Server Actions layer. All actions use the zero-argument asynchronous client initializer (createClient()) to isolate environment states and satisfy rigorous database tenancy policies.
