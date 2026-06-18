@@ -46,6 +46,7 @@ export type Database = {
       }
       discounts: {
         Row: {
+          applicable_currencies: string[]
           code: string
           created_at: string
           expires_at: string | null
@@ -60,6 +61,7 @@ export type Database = {
           value: number
         }
         Insert: {
+          applicable_currencies?: string[]
           code: string
           created_at?: string
           expires_at?: string | null
@@ -74,6 +76,7 @@ export type Database = {
           value: number
         }
         Update: {
+          applicable_currencies?: string[]
           code?: string
           created_at?: string
           expires_at?: string | null
@@ -560,8 +563,7 @@ export type Database = {
           id: string
           is_active: boolean
           metadata_config: Json
-          price_inr: number
-          price_usd: number
+          prices: Json
           slug: string
           title: string
           type: Database["public"]["Enums"]["offering_type"]
@@ -573,8 +575,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           metadata_config?: Json
-          price_inr?: number
-          price_usd?: number
+          prices?: Json
           slug: string
           title: string
           type: Database["public"]["Enums"]["offering_type"]
@@ -586,8 +587,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           metadata_config?: Json
-          price_inr?: number
-          price_usd?: number
+          prices?: Json
           slug?: string
           title?: string
           type?: Database["public"]["Enums"]["offering_type"]
