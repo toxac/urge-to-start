@@ -4,19 +4,8 @@ import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { PlaybookConfig } from '../types/playbook';
 import { urgePlaybook } from '../lib/playbook';
+import { createAdminClient } from '@/lib/supabase/admin';
 
-// Initialize env variables from Next.js local setup
-dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
-
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const SUPABASE_SERVICE_ROLE_KEY = process.env.NEXT_SUPABASE_SECRET_KEY || '';
-
-if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-  console.error('CRITICAL ERROR: Missing Supabase environment credentials in your variables ledger.');
-  process.exit(1);
-}
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 /**
  * Helper function to safely read pure content markdown text from file tree locations without throwing execution faults
@@ -44,6 +33,8 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
   for (const [missionKey, mission] of Object.entries(config)) {
     const missionFolderPath = `content/missions/${missionKey}`;
     const missionMarkdownPath = `${missionFolderPath}/mission.md`;
+
+    const supabase = await createAdminClient(); // Use admin client for elevated permissions during sync operations
     
     // Ingest pure markdown text content from local disk storage coordinates
     mission.briefing_markdown = readMarkdownSafe(missionMarkdownPath);
