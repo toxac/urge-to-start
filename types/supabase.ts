@@ -605,6 +605,66 @@ export type Database = {
         }
         Relationships: []
       }
+      opportunities: {
+        Row: {
+          capture_metadata: Json
+          created_at: string
+          description: string
+          id: string
+          pain_score_grade: number | null
+          project_id: string | null
+          source_type: string
+          status: Database["public"]["Enums"]["opportunity_status"]
+          title: string
+          updated_at: string
+          user_id: string
+          validation_interviews: Json
+        }
+        Insert: {
+          capture_metadata?: Json
+          created_at?: string
+          description: string
+          id?: string
+          pain_score_grade?: number | null
+          project_id?: string | null
+          source_type: string
+          status?: Database["public"]["Enums"]["opportunity_status"]
+          title: string
+          updated_at?: string
+          user_id: string
+          validation_interviews?: Json
+        }
+        Update: {
+          capture_metadata?: Json
+          created_at?: string
+          description?: string
+          id?: string
+          pain_score_grade?: number | null
+          project_id?: string | null
+          source_type?: string
+          status?: Database["public"]["Enums"]["opportunity_status"]
+          title?: string
+          updated_at?: string
+          user_id?: string
+          validation_interviews?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opportunities_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "opportunities_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           accumulated_xp: number
@@ -1159,6 +1219,7 @@ export type Database = {
         | "merch"
         | "digital_asset"
         | "service"
+      opportunity_status: "raw_seed" | "validated" | "committed" | "archived"
       post_category:
         | "build_journal"
         | "marketing_win"
@@ -1370,6 +1431,7 @@ export const Constants = {
         "digital_asset",
         "service",
       ],
+      opportunity_status: ["raw_seed", "validated", "committed", "archived"],
       post_category: [
         "build_journal",
         "marketing_win",
