@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers';
+
 import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -10,8 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 
 export default async function ProfileSettingsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', id).single();
   if (!profile) notFound();

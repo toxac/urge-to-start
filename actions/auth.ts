@@ -2,12 +2,11 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 
 export async function login(formData: FormData) {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+
+  const supabase = await createClient();
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -23,8 +22,8 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+
+  const supabase = await createClient();
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
@@ -47,8 +46,7 @@ export async function signup(formData: FormData) {
 }
 
 export async function forgotPassword(formData: FormData) {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
   const email = formData.get('email') as string;
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -63,8 +61,8 @@ export async function forgotPassword(formData: FormData) {
 }
 
 export async function changePassword(formData: FormData) {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+
+  const supabase = await createClient();
   const password = formData.get('password') as string;
 
   const { error } = await supabase.auth.updateUser({ password });
@@ -77,8 +75,8 @@ export async function changePassword(formData: FormData) {
 }
 
 export async function logout() {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+
+  const supabase = await createClient();
   await supabase.auth.signOut();
   
   revalidatePath('/', 'layout');

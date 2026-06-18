@@ -598,12 +598,15 @@ export type Database = {
       profiles: {
         Row: {
           accumulated_xp: number
+          address: string | null
           age_group: Database["public"]["Enums"]["user_age_group"] | null
           avatar_url: string | null
           capital_available_local: number
+          city: string | null
           core_driver: string | null
           country: string
           currency: string
+          description: string | null
           full_name: string | null
           highest_education:
             | Database["public"]["Enums"]["education_tier"]
@@ -619,12 +622,15 @@ export type Database = {
         }
         Insert: {
           accumulated_xp?: number
+          address?: string | null
           age_group?: Database["public"]["Enums"]["user_age_group"] | null
           avatar_url?: string | null
           capital_available_local?: number
+          city?: string | null
           core_driver?: string | null
           country: string
           currency?: string
+          description?: string | null
           full_name?: string | null
           highest_education?:
             | Database["public"]["Enums"]["education_tier"]
@@ -640,12 +646,15 @@ export type Database = {
         }
         Update: {
           accumulated_xp?: number
+          address?: string | null
           age_group?: Database["public"]["Enums"]["user_age_group"] | null
           avatar_url?: string | null
           capital_available_local?: number
+          city?: string | null
           core_driver?: string | null
           country?: string
           currency?: string
+          description?: string | null
           full_name?: string | null
           highest_education?:
             | Database["public"]["Enums"]["education_tier"]

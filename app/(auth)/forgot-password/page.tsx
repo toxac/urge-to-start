@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { forgotPassword } from '@/app/actions/auth';
+import { forgotPassword } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

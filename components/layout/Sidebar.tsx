@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@nanostores/react';
 import { $userProfile } from '@/lib/stores/profile-store';
-import { logout } from '@/app/actions/auth';
+import { logout } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';

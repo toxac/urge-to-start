@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { signup } from '@/app/actions/auth';
+import { signup } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
