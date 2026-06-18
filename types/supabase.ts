@@ -200,6 +200,7 @@ export type Database = {
           launched_at: string | null
           location: string
           media_assets: string[]
+          post_id: string | null
           pricing_hint: string
           project_id: string
           sector: string
@@ -222,6 +223,7 @@ export type Database = {
           launched_at?: string | null
           location: string
           media_assets?: string[]
+          post_id?: string | null
           pricing_hint?: string
           project_id: string
           sector: string
@@ -244,6 +246,7 @@ export type Database = {
           launched_at?: string | null
           location?: string
           media_assets?: string[]
+          post_id?: string | null
           pricing_hint?: string
           project_id?: string
           sector?: string
@@ -268,6 +271,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "launches_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: true
+            referencedRelation: "user_posts"
             referencedColumns: ["id"]
           },
         ]
@@ -1155,6 +1165,7 @@ export type Database = {
         | "traction_milestone"
         | "ask_for_help"
         | "resource_share"
+        | "project_launch"
       program_item_type: "mission" | "quest" | "task"
       progress_status: "not_started" | "in_progress" | "completed"
       task_execution_type:
@@ -1365,6 +1376,7 @@ export const Constants = {
         "traction_milestone",
         "ask_for_help",
         "resource_share",
+        "project_launch",
       ],
       program_item_type: ["mission", "quest", "task"],
       progress_status: ["not_started", "in_progress", "completed"],
