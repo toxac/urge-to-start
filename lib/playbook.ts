@@ -45,10 +45,11 @@ export const urgePlaybook: PlaybookConfig = {
           {
             id: "m1_q1_t3_constraints",
             title: "Set Your Realistic Weekly Limits",
+            sequence: 3,
             type: "form",
             component_key: "ConstraintForm",
-            sequence: 3,
-            grant_points: 20
+            grant_points: 20,
+            description: "Excitement is great, but let's be totally honest about the hours you actually have. Building something on the side is a marathon, not a sprint. It's 100% fine if you only have a few hours a week—what matters is picking a number you can stick to without burning out."
           }
         ]
       },
