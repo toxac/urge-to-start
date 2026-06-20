@@ -673,7 +673,7 @@ export type Database = {
           avatar_url: string | null
           capital_available_local: number
           city: string | null
-          core_driver: string | null
+          core_driver: Json | null
           country: string
           currency: string
           description: string | null
@@ -697,7 +697,7 @@ export type Database = {
           avatar_url?: string | null
           capital_available_local?: number
           city?: string | null
-          core_driver?: string | null
+          core_driver?: Json | null
           country: string
           currency?: string
           description?: string | null
@@ -721,7 +721,7 @@ export type Database = {
           avatar_url?: string | null
           capital_available_local?: number
           city?: string | null
-          core_driver?: string | null
+          core_driver?: Json | null
           country?: string
           currency?: string
           description?: string | null
@@ -853,6 +853,7 @@ export type Database = {
         Row: {
           component_key: string
           created_at: string
+          description: string
           grant_points: number
           id: string
           metadata_config: Json
@@ -866,6 +867,7 @@ export type Database = {
         Insert: {
           component_key: string
           created_at?: string
+          description?: string
           grant_points?: number
           id: string
           metadata_config?: Json
@@ -879,6 +881,7 @@ export type Database = {
         Update: {
           component_key?: string
           created_at?: string
+          description?: string
           grant_points?: number
           id?: string
           metadata_config?: Json

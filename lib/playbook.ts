@@ -26,19 +26,21 @@ export const urgePlaybook: PlaybookConfig = {
         tasks: [
           {
             id: "m1_q1_t1_profile",
-            title: "Claim Your Public Username",
+            title: "Introduce Yourself",
             type: "form",
             component_key: "ProfileSetupForm",
+            description: "Everything good in life begins with a conversation. Share a bit about who you are, where you're building from, and what your background looks like. It helps us connect you with the right opportunities, local event circles, and peer partnerships down the road.",
             sequence: 1,
             grant_points: 10 // Awarded instantly when form is saved
           },
           {
             id: "m1_q1_t2_drivers",
-            title: "What is Driving You to Start?",
+            title: "What's Driving You to Start?",
+            sequence: 2,
             type: "form",
             component_key: "MotivationForm",
-            sequence: 2,
-            grant_points: 20
+            grant_points: 20,
+            description: "Let's get real for a second. Building a business takes serious grit, and generic goals like 'I want to be rich' burn out fast when things get tough. Be completely honest with yourself here—what is the actual fuel behind your engine?"
           },
           {
             id: "m1_q1_t3_constraints",

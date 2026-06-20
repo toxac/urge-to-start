@@ -9,6 +9,7 @@ export interface Task {
   component_key: string;
   sequence: number;
   grant_points: number;
+  description?: string;
   metadata_config?: Record<string, any>;
 }
 
