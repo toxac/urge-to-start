@@ -673,6 +673,7 @@ export type Database = {
           avatar_url: string | null
           capital_available_local: number
           city: string | null
+          constraints: Json
           core_driver: Json | null
           country: string
           currency: string
@@ -697,6 +698,7 @@ export type Database = {
           avatar_url?: string | null
           capital_available_local?: number
           city?: string | null
+          constraints?: Json
           core_driver?: Json | null
           country: string
           currency?: string
@@ -721,6 +723,7 @@ export type Database = {
           avatar_url?: string | null
           capital_available_local?: number
           city?: string | null
+          constraints?: Json
           core_driver?: Json | null
           country?: string
           currency?: string
