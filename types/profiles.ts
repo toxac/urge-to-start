@@ -21,8 +21,15 @@ export interface ProviderMetadata {
   industry_sector?: string;
 }
 
+interface ConstraintFormInputs {
+    weekly_hours: '2_5_hours' | '5_10_hours' | '10_20_hours' | '20_plus';
+    time_slot: 'evenings' | 'weekends' | 'scraps';
+    money_budget: number;
+}
+
 // 3. Intersect the BaseProfile and override the generic JSONB types with your strict interfaces
 export type Profile = Omit<BaseProfile, 'mentor_metadata' | 'provider_metadata'> & {
   mentor_metadata: MentorMetadata;
   provider_metadata: ProviderMetadata;
+  constraints: ConstraintFormInputs;
 };
