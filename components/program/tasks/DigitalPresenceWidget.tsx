@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { updateTaskPayloadLocal } from '@/lib/stores/progressStore';
+import { setProgressStoreRow } from '@/lib/stores/progressStore';
 import { Button } from '@/components/ui/button';
 import { completeTaskExecution } from '@/actions/progress';
-import { Send, Globe, MessageCircle } from 'lucide-react';
+import { Globe, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface DigitalPresenceWidgetProps {
@@ -28,7 +28,10 @@ export function DigitalPresenceWidget({ taskId, existingProgress, onSuccess }: D
       });
 
       if (sync.success) {
-        updateTaskPayloadLocal(taskId, { hasClaimedVoice: true });
+        // Feed raw returning row metadata straight into global store maps on success
+        if (sync.data) {
+          setProgressStoreRow(sync.data as any);
+        }
         if (onSuccess) onSuccess();
       } else {
         toast.error(sync.error || "Something went wrong recording your progress status.");

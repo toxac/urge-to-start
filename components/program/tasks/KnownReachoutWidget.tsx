@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { useStore } from '@nanostores/react';
-import { m1q2ProgressAtom, updateTaskPayloadLocal } from '@/lib/stores/progressStore';
+import { $progressStore, setProgressStoreRow } from '@/lib/stores/progressStore';
 import { Button } from '@/components/ui/button';
 import { completeTaskExecution } from '@/actions/progress';
-import { Copy, Check, Send, Sparkles } from 'lucide-react';
+import { Copy, Check, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface KnownReachoutWidgetProps {
@@ -20,12 +20,12 @@ export function KnownReachoutWidget({ taskId, existingProgress, onSuccess }: Kno
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
   
-  // Connect reactively to the global Nano Store
-  const progressCache = useStore(m1q2ProgressAtom);
+  // Reactively track the unified global progress store map
+  const progressCache = useStore($progressStore);
   const isCompleted = existingProgress?.status === 'completed';
 
-  // Extract the text draft originally generated during Task 1 simulation
-  const task1Data = progressCache['m1_q2_t1_ask_sim'] || {};
+  // Extract the saved payload from Task 1 (AskSimulator) reactively from the store cache
+  const task1Data = progressCache['m1_q2_t1_ask_sim']?.saved_payload || {};
   const pulledDraftText = task1Data.userDraft || '';
 
   const handleCopyToClipboard = () => {
@@ -48,8 +48,10 @@ export function KnownReachoutWidget({ taskId, existingProgress, onSuccess }: Kno
       });
 
       if (sync.success) {
-        // Sync state back to our atomic cache layer
-        updateTaskPayloadLocal(taskId, { hasSharedWithCircle: true });
+        // Feed the raw returning row data straight into the store helper on success
+        if (sync.data) {
+          setProgressStoreRow(sync.data as any);
+        }
         if (onSuccess) onSuccess();
       } else {
         toast.error(sync.error || "Something went wrong marking this milestone.");
