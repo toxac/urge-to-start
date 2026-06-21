@@ -2,24 +2,27 @@ import { deepseek } from './deepseekClient';
 import { z } from 'zod';
 
 interface KipExecutionParams {
-  skills: string[];              // e.g., ["Human Behavior Expert", "Persuasion Strategist"]
-  userContext?: Record<string, any>; // Pass down profiles data, constraints, or current mission info
-  prompt: string;                // The specific core task instructions or user input draft
-  responseSchema?: z.ZodSchema<any>; // Optional Zod structure if we need strict JSON outputs
+  skills: string[];
+  userContext?: Record<string, any>;
+  prompt: string;
+  responseSchema?: z.ZodSchema<any>;
+  // Dynamic Model Configuration Options
+  model?: 'deepseek-chat' | 'deepseek-v4-pro'; 
+  reasoningEffort?: 'low' | 'medium' | 'high';
 }
 
 /**
- * Core AI Orchestrator Wrapper. 
- * Assembles system rules, structures background context, and enforces Kip's tone.
+ * Core AI Orchestrator Wrapper with Dynamic Cost-Optimized Routing.
  */
 export async function executeKipConductor({
   skills,
   userContext = {},
   prompt,
-  responseSchema
+  responseSchema,
+  model = 'deepseek-chat', // Default to the ultra-cheap, fast standard chat engine
+  reasoningEffort = 'medium'
 }: KipExecutionParams) {
   
-  // 1. Core Language & Persona Blueprint Guideline
   const baseSystemDirective = `
     You are Kip, a grounded mentor, collaborative friend, and advisor assisting an entrepreneur who is building a new business through the Urge program.
     
@@ -28,55 +31,58 @@ export async function executeKipConductor({
     CRITICAL LANGUAGE RULES:
     - Address the user as a trusted friend and peer. 
     - Speak directly, warmly, and authentically.
-    - ABSOLUTELY PROHIBITED: No corporate jargon, no Silicon Valley optimization speak, and no defensive/hustle fluff ("synergy", "pivoting", "fail fast", "unpacking"). 
+    - ABSOLUTELY PROHIBITED: No corporate jargon, no Silicon Valley optimization speak, and no defensive/hustle fluff.
     - Be real. Give practical, honest advice that works in the real world.
   `;
 
-  // 2. Structuring context safely so DeepSeek parses background facts clearly
   const formattedContext = `
     BACKGROUND USER PARAMETERS:
     ${JSON.stringify(userContext, null, 2)}
   `;
 
   try {
-    // If a Zod validation schema is provided, we tell DeepSeek to lock into strict JSON mode
     const runInJsonMode = !!responseSchema;
 
-    const response = await deepseek.chat.completions.create({
-      model: 'deepseek-chat',
+    // Build out the dynamic request body properties based on model type
+    const requestPayload: Record<string, any> = {
+      model: model,
       messages: [
         { role: 'system', content: baseSystemDirective },
         { role: 'user', content: `CONTEXT LOGS:\n${formattedContext}\n\nCORE PROMPT ACTION:\n${prompt}` }
       ],
       response_format: runInJsonMode ? { type: 'json_object' } : undefined,
-      temperature: 0.6,
-    });
+      temperature: model === 'deepseek-v4-pro' ? undefined : 0.6, // DeepSeek deep reasoning usually prefers default or strict temp maps
+    };
+
+    // Inject deep thinking chain-of-thought rules only if routing to the pro model
+    if (model === 'deepseek-v4-pro') {
+      requestPayload.thinking = { type: 'enabled' };
+      requestPayload.reasoning_effort = reasoningEffort;
+    }
+
+    const response = await deepseek.chat.completions.create(requestPayload as any);
 
     const outputContent = response.choices[0]?.message?.content;
     if (!outputContent) throw new Error("Empty response token returned from AI engine.");
 
-    // 3. Optional Schema Validation Shield Layer
     if (responseSchema) {
       const parsedJson = JSON.parse(outputContent);
       const validated = responseSchema.safeParse(parsedJson);
       
       if (!validated.success) {
         console.error("Kip Structural Output Mismatch:", validated.error);
-        return { success: false, error: "Kip returned data in a format the app couldn't read. Give it another shot!" };
+        return { success: false, error: "Kip returned data in an invalid format. Let's try again!" };
       }
       return { success: true, data: validated.data };
     }
 
-    // Default return for raw text streaming or simple prompt evaluations
     return { success: true, data: outputContent };
 
   } catch (error: any) {
-    console.error("🚨 Conductor execution block encountered an error:", error);
+    console.error("🚨 Conductor execution block error:", error);
     return { 
       success: false, 
-      error: "Kip is currently chewing on some ideas and went offline for a second. Try hitting submit once more." 
+      error: "Kip is deep in thought right now and timed out for a second. Try hitting submit once more!" 
     };
   }
 }
-
-
