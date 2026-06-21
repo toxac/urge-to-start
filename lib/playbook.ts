@@ -72,19 +72,21 @@ export const urgePlaybook: PlaybookConfig = {
         tasks: [
           {
             id: "m1_q2_t1_ask_sim",
-            title: "The Messaging Simulator",
+            title: "Test Drive Your Message",
             type: "simulator",
             component_key: "AskSimulator",
             sequence: 1,
-            grant_points: 30
+            grant_points: 30,
+            description: "Asking for help is one of the most valuable skills you can build as a founder. To practice getting it right, jump into this safe sandbox with Kip. We will keep the stakes low: draft a quick message asking your friends and family for early support. Kip will give you feedback on the underlying psychology, show you how to cut out conversational filler, and help you lock down a confident, natural voice."
           },
           {
             id: "m1_q2_t2_public_intent",
-            title: "Share Your Commitment Publicly",
+            title: "Send It to Your Circle",
             type: "action",
             component_key: "SocialShareWidget",
             sequence: 2,
-            grant_points: 20
+            grant_points: 20,
+            description: "Now that you have practiced the skill and seen how to structure an ask cleanly, let's bring it into the real world. Grab that polished message you just built and share it with the people who have your back. Breaking the ice with friends and family anchors your commitment and gets you your first real momentum."
           }
         ]
       },
