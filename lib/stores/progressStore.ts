@@ -1,6 +1,6 @@
+import { atom } from 'nanostores';
 import { Database } from '@/types/supabase';
 
-// 1. Keep this custom type strictly focused on mapping the *internal content* of the jsonb column
 export interface TaskProgressPayload {
   userDraft?: string;
   selectedScenario?: string;
@@ -12,12 +12,55 @@ export interface TaskProgressPayload {
     suggestedRewrite: string;
     realWorldExecutionAdvice: string[];
   };
+  hasSharedWithCircle?: boolean;
+  hasClaimedVoice?: boolean;
 }
 
-// 2. Pull the authentic raw Row type straight from your Supabase definitions
-export type SupabaseProgressRow = Database['public']['Tables']['user_progress']['Row'];
+// Intersect the raw database Row with our explicit payload definition
+export type ProgressRow = Database['public']['Tables']['user_progress']['Row'] & {
+  saved_payload: TaskProgressPayload;
+};
 
-// 3. Combine them so your store is fully backed by your real database structure
-export interface StronglyTypedProgressStore extends Omit<SupabaseProgressRow, 'saved_payload'> {
-  saved_payload: TaskProgressPayload; // Overrides the loose 'Json' type with your clean interface!
+// The progress map store dictionary [task_id]: ProgressRow
+export const $progressStore = atom<Record<string, ProgressRow>>({});
+
+/**
+ * 1. Hydrates the progress map store from a raw list array
+ */
+export function hydrateProgressStore(rows: ProgressRow[]) {
+  const initialMap = rows.reduce((acc, row) => {
+    // Check if task_id exists and cast it to a string to satisfy object key constraints
+    if (row.task_id) {
+      acc[row.task_id as string] = row;
+    }
+    return acc;
+  }, {} as Record<string, ProgressRow>);
+  
+  $progressStore.set(initialMap);
+}
+
+/**
+ * 2. Simple, generic upsert helper that handles both updates and inserts automatically
+ */
+export function setProgressStoreRow(row: ProgressRow) {
+  if (!row.task_id) {
+    console.warn("⚠️ Cannot update progress store: row is missing a valid task_id.");
+    return;
+  }
+
+  const current = $progressStore.get();
+  $progressStore.set({
+    ...current,
+    [row.task_id as string]: row
+  });
+}
+
+/**
+ * 3. Simple generic deletion helper
+ */
+export function removeProgressStoreRow(taskId: string) {
+  const current = $progressStore.get();
+  const updated = { ...current };
+  delete updated[taskId];
+  $progressStore.set(updated);
 }

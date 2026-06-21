@@ -1,25 +1,37 @@
 import { atom } from 'nanostores';
+import { Database } from '@/types/supabase';
 
-export interface UserProfile {
-  id: string;
-  email: string;
-  fullName: string;
-  bizName: string;
-  role: 'lead' | 'member_full' | 'member_network' | 'mentor' | 'provider';
-  onboardingStep: number;
+export interface ProfileConstraintsPayload {
+  weekly_hours?: '2_5_hours' | '5_10_hours' | '10_20_hours' | '20_plus';
+  time_slot?: 'evenings' | 'weekends' | 'scraps';
+  money_budget?: number;
 }
 
-// Initialize the store as null until populated by hydration or auth events
-export const $userProfile = atom<UserProfile | null>(null);
+// Tie directly to your database types, explicitly defining the JSON columns
+export type ProfileRow = Database['public']['Tables']['profiles']['Row'] & {
+  constraints?: ProfileConstraintsPayload;
+  core_driver?: Record<string, any>;
+};
 
-// Actions to interact cleanly with the profile state
-export function setProfile(profile: UserProfile | null) {
-  $userProfile.set(profile);
+// Initialize the store as null until populated by layout hydration
+export const $profileStore = atom<ProfileRow | null>(null);
+
+/**
+ * Replaces the profile instance completely (Hydration or Reset)
+ */
+export function setProfileStore(profile: ProfileRow | null) {
+  $profileStore.set(profile);
 }
 
-export function updateProfileFields(fields: Partial<UserProfile>) {
-  const current = $userProfile.get();
+/**
+ * Optimistically merges fields into the profile state
+ */
+export function updateProfileStoreFields(fields: Partial<ProfileRow>) {
+  const current = $profileStore.get();
   if (current) {
-    $userProfile.set({ ...current, ...fields });
+    $profileStore.set({
+      ...current,
+      ...fields
+    });
   }
 }

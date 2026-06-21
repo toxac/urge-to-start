@@ -9,6 +9,8 @@ import { Label } from '@/components/ui/label';
 import { createClient } from '@/lib/supabase/client';
 import { updateMyProfile } from '@/actions/profiles';
 import { completeTaskExecution } from '@/actions/progress';
+import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { updateProfileStoreFields } from '@/lib/stores/profileStore';
 
 interface ProfileFormInputs {
   full_name: string;
@@ -35,7 +37,7 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  
+
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
 
@@ -93,12 +95,21 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
         return;
       }
 
+      // 1. Instantly update global profile state with the updated data row returned from action
+      if (profileSync.data) {
+        updateProfileStoreFields(profileSync.data as any);
+      }
+
       const progressSync = await completeTaskExecution({
         taskId,
         savedPayload: formData as Record<string, any>
       });
 
       if (progressSync.success) {
+        // 2. Mirror row data cleanly to the progress cache store map
+        if (progressSync.data) {
+          setProgressStoreRow(progressSync.data as any);
+        }
         setIsEditing(false);
         if (onSuccess) onSuccess();
       } else {
@@ -113,39 +124,39 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
 
   if (!isEditing) {
     return (
-        <div className="w-full space-y-4 border rounded-xl p-5 bg-emerald-50/20 border-emerald-500/10">
-            <div className="w-full flex items-center justify-between pb-2 border-b border-dashed">
-                <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
-                    ✨ Your Crew Introduction Card
-                </span>
-                <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => setIsEditing(true)}
-                    className="h-7 text-xs bg-background"
-                >
-                    Edit Canvas
-                </Button>
-            </div>
-            <div className="w-full flex flex-col sm:flex-row gap-4 items-start sm:items-center text-sm">
-                {preSavedPayload.avatar_url && (
-                    <img 
-                        src={preSavedPayload.avatar_url} 
-                        alt="Avatar" 
-                        className="h-14 w-14 rounded-full object-cover border"
-                    />
-                )}
-                <div className="space-y-1">
-                    <p className="text-base font-bold text-foreground">{preSavedPayload.full_name}</p>
-                    <p className="text-xs text-muted-foreground font-medium">
-                        📍 Based in {preSavedPayload.city}, {preSavedPayload.country}
-                    </p>
-                </div>
-            </div>
-            <div className="text-sm bg-background/50 p-3 rounded-lg border leading-relaxed text-foreground/90 italic">
-                "{preSavedPayload.description}"
-            </div>
+      <div className="w-full space-y-4 border rounded-xl p-5 bg-emerald-50/20 border-emerald-500/10">
+        <div className="w-full flex items-center justify-between pb-2 border-b border-dashed">
+          <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+            ✨ Your Crew Introduction Card
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsEditing(true)}
+            className="h-7 text-xs bg-background"
+          >
+            Edit Canvas
+          </Button>
         </div>
+        <div className="w-full flex flex-col sm:flex-row gap-4 items-start sm:items-center text-sm">
+          {preSavedPayload.avatar_url && (
+            <img
+              src={preSavedPayload.avatar_url}
+              alt="Avatar"
+              className="h-14 w-14 rounded-full object-cover border"
+            />
+          )}
+          <div className="space-y-1">
+            <p className="text-base font-bold text-foreground">{preSavedPayload.full_name}</p>
+            <p className="text-xs text-muted-foreground font-medium">
+              📍 Based in {preSavedPayload.city}, {preSavedPayload.country}
+            </p>
+          </div>
+        </div>
+        <div className="text-sm bg-background/50 p-3 rounded-lg border leading-relaxed text-foreground/90 italic">
+          "{preSavedPayload.description}"
+        </div>
+      </div>
     );
   }
 
@@ -162,9 +173,9 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
           <Label className="text-sm font-semibold block text-foreground">Workspace Portrait *</Label>
           <div className="w-full flex items-center gap-4 p-3 border rounded-xl bg-muted/10">
             {trackedAvatarUrl ? (
-              <img 
-                src={trackedAvatarUrl} 
-                alt="Profile Workspace Canvas Avatar" 
+              <img
+                src={trackedAvatarUrl}
+                alt="Profile Workspace Canvas Avatar"
                 className="h-16 w-16 rounded-full object-cover border-2 border-primary shrink-0"
               />
             ) : (
@@ -173,8 +184,8 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
               </div>
             )}
             <div className="w-full space-y-1">
-              <Input 
-                type="file" 
+              <Input
+                type="file"
                 accept="image/*"
                 disabled={uploadingAvatar}
                 onChange={executeAvatarUpload}
@@ -188,7 +199,7 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
 
         <div className="w-full space-y-2">
           <Label className="text-sm font-semibold block text-foreground">Full Name *</Label>
-          <Input 
+          <Input
             className="w-full"
             placeholder="e.g. Jane Dev"
             {...register('full_name', { required: true })}
@@ -248,7 +259,7 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
 
         <div className="w-full space-y-2">
           <Label className="text-sm font-semibold block text-foreground">Your Story *</Label>
-          <Textarea 
+          <Textarea
             className="w-full min-h-[110px] resize-none"
             placeholder="Tell us about your background, goals, and what you are building in a short paragraph..."
             {...register('description', { required: true, minLength: 20 })}
@@ -257,23 +268,23 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
         </div>
 
         <div className="w-full flex gap-3 mt-4">
-            {isInitiallyCompleted && (
-                <Button 
-                    type="button" 
-                    variant="ghost" 
-                    className="h-11 text-sm font-semibold"
-                    onClick={() => setIsEditing(false)}
-                >
-                    Cancel
-                </Button>
-            )}
-            <Button 
-              type="submit" 
-              className="flex-1 h-11 text-sm font-semibold"
-              disabled={isSubmitting || uploadingAvatar}
+          {isInitiallyCompleted && (
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-11 text-sm font-semibold"
+              onClick={() => setIsEditing(false)}
             >
-              {isSubmitting ? 'Syncing Profile Records...' : isInitiallyCompleted ? 'Update Profile Details' : 'Save Introduction & Earn 10 XP'}
+              Cancel
             </Button>
+          )}
+          <Button
+            type="submit"
+            className="flex-1 h-11 text-sm font-semibold"
+            disabled={isSubmitting || uploadingAvatar}
+          >
+            {isSubmitting ? 'Syncing Profile Records...' : isInitiallyCompleted ? 'Update Profile Details' : 'Save Introduction & Earn 10 XP'}
+          </Button>
         </div>
       </form>
     </div>
