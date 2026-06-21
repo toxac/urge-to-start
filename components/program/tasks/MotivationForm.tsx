@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { updateMyProfile } from '@/actions/profiles';
 import { completeTaskExecution } from '@/actions/progress';
+import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { updateProfileStoreFields } from '@/lib/stores/profileStore';
 
 interface MotivationFormInputs {
   core_focus: string;
@@ -26,7 +28,7 @@ interface MotivationFormProps {
 export function MotivationForm({ taskId, existingProgress, onSuccess }: MotivationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  
+
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
 
@@ -54,12 +56,21 @@ export function MotivationForm({ taskId, existingProgress, onSuccess }: Motivati
         return;
       }
 
+      // 1. Sync updated profile record out to subscribers instantly
+      if (profileSync.data) {
+        updateProfileStoreFields(profileSync.data as any);
+      }
+
       const progressSync = await completeTaskExecution({
         taskId,
         savedPayload: formData as Record<string, any>
       });
 
       if (progressSync.success) {
+        // 2. Sync generic progress row item
+        if (progressSync.data) {
+          setProgressStoreRow(progressSync.data as any);
+        }
         setIsEditing(false);
         if (onSuccess) onSuccess();
       } else {
@@ -74,35 +85,35 @@ export function MotivationForm({ taskId, existingProgress, onSuccess }: Motivati
 
   if (!isEditing) {
     return (
-        <div className="w-full space-y-4 border rounded-xl p-5 bg-emerald-50/20 border-emerald-500/10">
-            <div className="w-full flex items-center justify-between pb-2 border-b border-dashed">
-                <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
-                    ✨ Inside Your Engine
-                </span>
-                <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => setIsEditing(true)}
-                    className="h-7 text-xs bg-background"
-                >
-                    Edit Answers
-                </Button>
-            </div>
-            <div className="space-y-4 text-sm leading-relaxed">
-                <div>
-                    <p className="text-xs font-bold text-muted-foreground mb-0.5">What you focus on if money wasn't an issue:</p>
-                    <p className="text-foreground font-medium italic">"{preSavedPayload.core_focus}"</p>
-                </div>
-                <div>
-                    <p className="text-xs font-bold text-muted-foreground mb-0.5">Your definition of personal freedom:</p>
-                    <p className="text-foreground font-medium italic">"{preSavedPayload.freedom_metric}"</p>
-                </div>
-                <div>
-                    <p className="text-xs font-bold text-muted-foreground mb-0.5">What you are escaping in your current routine:</p>
-                    <p className="text-foreground font-medium italic">"{preSavedPayload.anti_goal}"</p>
-                </div>
-            </div>
+      <div className="w-full space-y-4 border rounded-xl p-5 bg-emerald-50/20 border-emerald-500/10">
+        <div className="w-full flex items-center justify-between pb-2 border-b border-dashed">
+          <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+            ✨ Inside Your Engine
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsEditing(true)}
+            className="h-7 text-xs bg-background"
+          >
+            Edit Answers
+          </Button>
         </div>
+        <div className="space-y-4 text-sm leading-relaxed">
+          <div>
+            <p className="text-xs font-bold text-muted-foreground mb-0.5">What you focus on if money wasn't an issue:</p>
+            <p className="text-foreground font-medium italic">"{preSavedPayload.core_focus}"</p>
+          </div>
+          <div>
+            <p className="text-xs font-bold text-muted-foreground mb-0.5">Your definition of personal freedom:</p>
+            <p className="text-foreground font-medium italic">"{preSavedPayload.freedom_metric}"</p>
+          </div>
+          <div>
+            <p className="text-xs font-bold text-muted-foreground mb-0.5">What you are escaping in your current routine:</p>
+            <p className="text-foreground font-medium italic">"{preSavedPayload.anti_goal}"</p>
+          </div>
+        </div>
+      </div>
     );
   }
 
@@ -152,23 +163,23 @@ export function MotivationForm({ taskId, existingProgress, onSuccess }: Motivati
         </div>
 
         <div className="w-full flex gap-3 mt-4">
-            {isInitiallyCompleted && (
-                <Button 
-                    type="button" 
-                    variant="ghost" 
-                    className="h-11 text-sm font-semibold"
-                    onClick={() => setIsEditing(false)}
-                >
-                    Cancel
-                </Button>
-            )}
-            <Button 
-              type="submit" 
-              className="flex-1 h-11 text-sm font-semibold" 
-              disabled={isSubmitting}
+          {isInitiallyCompleted && (
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-11 text-sm font-semibold"
+              onClick={() => setIsEditing(false)}
             >
-              {isSubmitting ? 'Saving Drivers...' : isInitiallyCompleted ? 'Update Core Drivers' : 'Lock in Your Drivers & Earn 20 XP'}
+              Cancel
             </Button>
+          )}
+          <Button
+            type="submit"
+            className="flex-1 h-11 text-sm font-semibold"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Saving Drivers...' : isInitiallyCompleted ? 'Update Core Drivers' : 'Lock in Your Drivers & Earn 20 XP'}
+          </Button>
         </div>
       </form>
     </div>
