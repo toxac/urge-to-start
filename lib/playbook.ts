@@ -80,13 +80,22 @@ export const urgePlaybook: PlaybookConfig = {
             description: "Asking for help is one of the most valuable skills you can build as a founder. To practice getting it right, jump into this safe sandbox with Kip. We will keep the stakes low: draft a quick message asking your friends and family for early support. Kip will give you feedback on the underlying psychology, show you how to cut out conversational filler, and help you lock down a confident, natural voice."
           },
           {
-            id: "m1_q2_t2_public_intent",
-            title: "Send It to Your Circle",
+            id: "m1_q2_t2_known_reachout",
+            title: "Reach Out to Your Circle",
             type: "action",
-            component_key: "SocialShareWidget",
+            component_key: "KnownReachoutWidget",
             sequence: 2,
             grant_points: 20,
-            description: "Now that you have practiced the skill and seen how to structure an ask cleanly, let's bring it into the real world. Grab that polished message you just built and share it with the people who have your back. Breaking the ice with friends and family anchors your commitment and gets you your first real momentum."
+            description: "Now that you have practiced the skill, let's execute it. We've pulled the polished message you built with Kip in the last step so you can easily copy and send it to the friends and family who have your back. Check in with the Kip companion on the side if you want to know how to handle follow-ups or manage the real-world conversation from here."
+          },
+          {
+            id: "m1_q2_t3_digital_presence",
+            title: "Claim Your Digital Voice",
+            type: "action",
+            component_key: "DigitalPresenceWidget",
+            sequence: 3,
+            grant_points: 25,
+            description: "Building in public isn't about pretending to be a guru; it's just about documenting your learning journey out loud. Pick a platform where you're already comfortable, update your bio cleanly, and share your first honest update. Open up the Kip companion to get a personalized, zero-jargon posting template based on what you've learned this week."
           }
         ]
       },
