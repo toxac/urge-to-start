@@ -23,11 +23,27 @@ interface ConstraintFormProps {
     onSuccess?: () => void;
 }
 
+const hoursLabels = {
+    '2_5_hours': '2 to 5 hours a week',
+    '5_10_hours': '5 to 10 hours a week',
+    '10_20_hours': '10 to 20 hours a week',
+    '20_plus': 'More than 20 hours a week',
+};
+
+const slotLabels = {
+    evenings: 'In the evenings after my normal routine is done',
+    weekends: 'Saving it for heavy, quiet blocks on my days off',
+    scraps: 'Scrapping for bits of time whenever a gap opens up',
+};
+
 export function ConstraintForm({ taskId, existingProgress, onSuccess }: ConstraintFormProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    
+    // Light switch state to handle dynamic edit overrides seamlessly
+    const isInitiallyCompleted = existingProgress?.status === 'completed';
+    const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
 
-    const isCompleted = existingProgress?.status === 'completed';
     const preSavedPayload = existingProgress?.saved_payload || {};
 
     const { register, handleSubmit, formState: { errors } } = useForm<ConstraintFormInputs>({
@@ -42,7 +58,6 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
         setIsSubmitting(true);
         setErrorMessage(null);
         try {
-            // 1. Save the whole conversational object directly into your new profile constraint column
             const profileSync = await updateMyProfile({
                 constraints: formData as any
             } as any);
@@ -53,13 +68,13 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
                 return;
             }
 
-            // 2. Clear out the task row tracking state and give them their points
             const progressSync = await completeTaskExecution({
                 taskId,
                 savedPayload: formData as Record<string, any>
             });
 
             if (progressSync.success) {
+                setIsEditing(false); // Flip back to the read-only dashboard layout view on success
                 if (onSuccess) onSuccess();
             } else {
                 setErrorMessage(progressSync.error);
@@ -71,6 +86,42 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
         }
     };
 
+    // VIEW NODE: READ-ONLY CANVAS DISPLAY IF SUBMITTED AND NOT EDITING
+    if (!isEditing) {
+        return (
+            <div className="w-full space-y-4 border rounded-xl p-5 bg-emerald-50/20 border-emerald-500/10">
+                <div className="w-full flex items-center justify-between pb-2 border-b border-dashed">
+                    <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                        ✨ Your locked schedule strategies
+                    </span>
+                    <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setIsEditing(true)}
+                        className="h-7 text-xs bg-background"
+                    >
+                        Edit Answers
+                    </Button>
+                </div>
+                <div className="space-y-3 text-sm">
+                    <div>
+                        <p className="text-xs font-bold text-muted-foreground">Weekly Target Time:</p>
+                        <p className="font-medium text-foreground">{hoursLabels[preSavedPayload.weekly_hours as keyof typeof hoursLabels] || preSavedPayload.weekly_hours}</p>
+                    </div>
+                    <div>
+                        <p className="text-xs font-bold text-muted-foreground">Planned Execution Slot:</p>
+                        <p className="font-medium text-foreground">{slotLabels[preSavedPayload.time_slot as keyof typeof slotLabels] || preSavedPayload.time_slot}</p>
+                    </div>
+                    <div>
+                        <p className="text-xs font-bold text-muted-foreground">Scrap Money Runway Allocated:</p>
+                        <p className="font-medium text-foreground">{preSavedPayload.money_budget} (Your local currency)</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // FORM INPUT NODE
     return (
         <div className="w-full space-y-5">
             {errorMessage && (
@@ -80,8 +131,6 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
             )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
-
-                {/* QUESTION 1: WEEKLY HOURS */}
                 <div className="w-full space-y-2">
                     <Label className="text-sm font-semibold block text-foreground leading-snug">
                         1. How many hours can you honestly carve out for this project every week? *
@@ -97,7 +146,6 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
                                 <input
                                     type="radio"
                                     value={opt.value}
-                                    disabled={isCompleted}
                                     className="h-4 w-4 mt-0.5 text-primary border-input focus:ring-primary"
                                     {...register('weekly_hours', { required: true })}
                                 />
@@ -111,14 +159,12 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
                     {errors.weekly_hours && <p className="text-xs font-semibold text-destructive">Pick an option that fits your current life balance.</p>}
                 </div>
 
-                {/* QUESTION 2: TIME STRATEGY */}
                 <div className="w-full space-y-2">
                     <Label className="text-sm font-semibold block text-foreground leading-snug">
                         2. When are you actually planning to do this work? *
                     </Label>
                     <select
                         className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        disabled={isCompleted}
                         {...register('time_slot', { required: true })}
                     >
                         <option value="">Choose how you work best...</option>
@@ -129,13 +175,12 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
                     {errors.time_slot && <p className="text-xs font-semibold text-destructive">Tell us how you want to slice up your time.</p>}
                 </div>
 
-                {/* QUESTION 3: FINANCIAL RUNWAY */}
                 <div className="w-full space-y-2">
                     <Label className="text-sm font-semibold block text-foreground leading-snug">
                         3. What is your total budget for this project right now? *
                     </Label>
                     <p className="text-xs text-muted-foreground leading-normal mb-1">
-                        Think about extra cash you are genuinely comfortable spending over the next 6 months on things like basic software tools or web registries. It is totally fine if your answer is 0.
+                        Think about extra cash you are genuinely comfortable spending over the next 6 months on early experiments. It is totally fine if your answer is 0.
                     </p>
                     <div className="relative w-full flex items-center">
                         <Input
@@ -143,7 +188,6 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
                             min="0"
                             className="w-full pl-3 pr-24"
                             placeholder="0"
-                            disabled={isCompleted}
                             {...register('money_budget', { required: true, min: 0 })}
                         />
                         <div className="absolute right-3 text-xs font-bold bg-muted px-2 py-1 rounded border pointer-events-none text-muted-foreground">
@@ -153,16 +197,25 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
                     {errors.money_budget && <p className="text-xs font-semibold text-destructive">Please enter a valid amount (even if it's 0).</p>}
                 </div>
 
-                {/* SUBMIT */}
-                {!isCompleted && (
+                <div className="w-full flex gap-3 mt-4">
+                    {isInitiallyCompleted && (
+                        <Button 
+                            type="button" 
+                            variant="ghost" 
+                            className="h-11 text-sm font-semibold"
+                            onClick={() => setIsEditing(false)}
+                        >
+                            Cancel
+                        </Button>
+                    )}
                     <Button
                         type="submit"
-                        className="w-full h-11 text-sm font-semibold mt-4"
+                        className="flex-1 h-11 text-sm font-semibold"
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? 'Saving your choices...' : 'Lock in limits & earn 20 XP'}
+                        {isSubmitting ? 'Saving changes...' : isInitiallyCompleted ? 'Update My Choices' : 'Lock in limits & earn 20 XP'}
                     </Button>
-                )}
+                </div>
             </form>
         </div>
     );

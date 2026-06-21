@@ -26,8 +26,10 @@ interface MotivationFormProps {
 export function MotivationForm({ taskId, existingProgress, onSuccess }: MotivationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  const isInitiallyCompleted = existingProgress?.status === 'completed';
+  const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
 
-  const isCompleted = existingProgress?.status === 'completed';
   const preSavedPayload = existingProgress?.saved_payload || {};
 
   const { register, handleSubmit, formState: { errors } } = useForm<MotivationFormInputs>({
@@ -42,7 +44,6 @@ export function MotivationForm({ taskId, existingProgress, onSuccess }: Motivati
     setIsSubmitting(true);
     setErrorMessage(null);
     try {
-      // 1. Send the clean object directly to your updated jsonb column—no stringify needed anymore!
       const profileSync = await updateMyProfile({
         core_driver: formData as any
       });
@@ -53,13 +54,13 @@ export function MotivationForm({ taskId, existingProgress, onSuccess }: Motivati
         return;
       }
 
-      // 2. Clear progress tracking logs and credit user experience points
       const progressSync = await completeTaskExecution({
         taskId,
         savedPayload: formData as Record<string, any>
       });
 
       if (progressSync.success) {
+        setIsEditing(false);
         if (onSuccess) onSuccess();
       } else {
         setErrorMessage(progressSync.error);
@@ -71,6 +72,40 @@ export function MotivationForm({ taskId, existingProgress, onSuccess }: Motivati
     }
   };
 
+  if (!isEditing) {
+    return (
+        <div className="w-full space-y-4 border rounded-xl p-5 bg-emerald-50/20 border-emerald-500/10">
+            <div className="w-full flex items-center justify-between pb-2 border-b border-dashed">
+                <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                    ✨ Inside Your Engine
+                </span>
+                <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => setIsEditing(true)}
+                    className="h-7 text-xs bg-background"
+                >
+                    Edit Answers
+                </Button>
+            </div>
+            <div className="space-y-4 text-sm leading-relaxed">
+                <div>
+                    <p className="text-xs font-bold text-muted-foreground mb-0.5">What you focus on if money wasn't an issue:</p>
+                    <p className="text-foreground font-medium italic">"{preSavedPayload.core_focus}"</p>
+                </div>
+                <div>
+                    <p className="text-xs font-bold text-muted-foreground mb-0.5">Your definition of personal freedom:</p>
+                    <p className="text-foreground font-medium italic">"{preSavedPayload.freedom_metric}"</p>
+                </div>
+                <div>
+                    <p className="text-xs font-bold text-muted-foreground mb-0.5">What you are escaping in your current routine:</p>
+                    <p className="text-foreground font-medium italic">"{preSavedPayload.anti_goal}"</p>
+                </div>
+            </div>
+        </div>
+    );
+  }
+
   return (
     <div className="w-full space-y-5">
       {errorMessage && (
@@ -80,36 +115,30 @@ export function MotivationForm({ taskId, existingProgress, onSuccess }: Motivati
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
-        
-        {/* QUESTION 1: THE CORE FOCUS */}
         <div className="w-full space-y-2">
           <Label className="text-sm font-semibold block text-foreground leading-snug">
             1. Imagine money was completely taken care of forever. Your bills are paid, your family is secure, and you never have to worry about cash again. What kind of projects or problems would you still actively want to wake up and work on? *
           </Label>
           <Textarea
             className="w-full min-h-[90px] resize-none text-sm"
-            placeholder="What type of work or field genuinely interests you when you remove the pressure of making a quick living?"
-            disabled={isCompleted}
+            placeholder="What type of work genuinely interests you when you remove the pressure of making a quick living?"
             {...register('core_focus', { required: true, minLength: 10 })}
           />
-          {errors.core_focus && <p className="text-xs font-semibold text-destructive">Give us at least a short sentence here—tell us what excites you.</p>}
+          {errors.core_focus && <p className="text-xs font-semibold text-destructive">Tell us what excites you.</p>}
         </div>
 
-        {/* QUESTION 2: THE FREEDOM METRIC */}
         <div className="w-full space-y-2">
           <Label className="text-sm font-semibold block text-foreground leading-snug">
             2. What does personal freedom actually mean to you? *
           </Label>
           <Textarea
             className="w-full min-h-[90px] resize-none text-sm"
-            placeholder="Be honest. Is it being able to work from anywhere, choosing your own daily schedule, or simply building something you completely own?"
-            disabled={isCompleted}
+            placeholder="Be honest. Is it being able to work from anywhere, choosing your schedule, or building an asset you completely own?"
             {...register('freedom_metric', { required: true, minLength: 10 })}
           />
           {errors.freedom_metric && <p className="text-xs font-semibold text-destructive">Tell us what freedom looks like for you.</p>}
         </div>
 
-        {/* QUESTION 3: THE ANTI-GOAL */}
         <div className="w-full space-y-2">
           <Label className="text-sm font-semibold block text-foreground leading-snug">
             3. What is the single biggest thing you dislike about your current work routine that you are trying to change? *
@@ -117,22 +146,30 @@ export function MotivationForm({ taskId, existingProgress, onSuccess }: Motivati
           <Textarea
             className="w-full min-h-[90px] resize-none text-sm"
             placeholder="Is it a painful daily commute, endless pointless meetings, or just feeling like your time isn't actually your own?"
-            disabled={isCompleted}
             {...register('anti_goal', { required: true, minLength: 10 })}
           />
-          {errors.anti_goal && <p className="text-xs font-semibold text-destructive">Knowing exactly what you are escaping is powerful fuel. Don't leave this blank.</p>}
+          {errors.anti_goal && <p className="text-xs font-semibold text-destructive">Knowing exactly what you are escaping is powerful fuel.</p>}
         </div>
 
-        {/* ACTION TRIGGER */}
-        {!isCompleted && (
-          <Button 
-            type="submit" 
-            className="w-full h-11 text-sm font-semibold mt-4" 
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Saving Drivers...' : 'Lock in Your Drivers & Earn 20 XP'}
-          </Button>
-        )}
+        <div className="w-full flex gap-3 mt-4">
+            {isInitiallyCompleted && (
+                <Button 
+                    type="button" 
+                    variant="ghost" 
+                    className="h-11 text-sm font-semibold"
+                    onClick={() => setIsEditing(false)}
+                >
+                    Cancel
+                </Button>
+            )}
+            <Button 
+              type="submit" 
+              className="flex-1 h-11 text-sm font-semibold" 
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Saving Drivers...' : isInitiallyCompleted ? 'Update Core Drivers' : 'Lock in Your Drivers & Earn 20 XP'}
+            </Button>
+        </div>
       </form>
     </div>
   );

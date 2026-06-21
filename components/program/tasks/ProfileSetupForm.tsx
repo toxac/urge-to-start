@@ -23,7 +23,7 @@ interface ProfileFormInputs {
 
 interface ProfileSetupFormProps {
   taskId: string;
-  userId: string; // Fed down from global parent session hooks to lock bucket tenancy paths
+  userId: string;
   existingProgress?: {
     status: 'pending' | 'completed';
     saved_payload?: any;
@@ -35,8 +35,10 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  const isInitiallyCompleted = existingProgress?.status === 'completed';
+  const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
 
-  const isCompleted = existingProgress?.status === 'completed';
   const preSavedPayload = existingProgress?.saved_payload || {};
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<ProfileFormInputs>({
@@ -54,7 +56,6 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
 
   const trackedAvatarUrl = watch('avatar_url');
 
-  // Multi-Tenant Binary Asset Transfer Loop
   const executeAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -64,7 +65,6 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
     try {
       const supabase = createClient();
       const fileExt = file.name.split('.').pop();
-      // Lock everything cleanly into user-isolated tracking folders
       const targetStoragePath = `${userId}/avatar_${Date.now()}.${fileExt}`;
 
       const { data, error: uploadError } = await supabase.storage
@@ -86,7 +86,6 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
     setIsSubmitting(true);
     setErrorMessage(null);
     try {
-      // 1. Transactionally map and write properties directly onto profiles columns
       const profileSync = await updateMyProfile(formData);
       if (!profileSync.success) {
         setErrorMessage(profileSync.error);
@@ -94,13 +93,13 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
         return;
       }
 
-      // 2. Clear progress checkpoints ledger and increment profile XP logs
       const progressSync = await completeTaskExecution({
         taskId,
         savedPayload: formData as Record<string, any>
       });
 
       if (progressSync.success) {
+        setIsEditing(false);
         if (onSuccess) onSuccess();
       } else {
         setErrorMessage(progressSync.error);
@@ -112,6 +111,44 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
     }
   };
 
+  if (!isEditing) {
+    return (
+        <div className="w-full space-y-4 border rounded-xl p-5 bg-emerald-50/20 border-emerald-500/10">
+            <div className="w-full flex items-center justify-between pb-2 border-b border-dashed">
+                <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                    ✨ Your Crew Introduction Card
+                </span>
+                <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => setIsEditing(true)}
+                    className="h-7 text-xs bg-background"
+                >
+                    Edit Canvas
+                </Button>
+            </div>
+            <div className="w-full flex flex-col sm:flex-row gap-4 items-start sm:items-center text-sm">
+                {preSavedPayload.avatar_url && (
+                    <img 
+                        src={preSavedPayload.avatar_url} 
+                        alt="Avatar" 
+                        className="h-14 w-14 rounded-full object-cover border"
+                    />
+                )}
+                <div className="space-y-1">
+                    <p className="text-base font-bold text-foreground">{preSavedPayload.full_name}</p>
+                    <p className="text-xs text-muted-foreground font-medium">
+                        📍 Based in {preSavedPayload.city}, {preSavedPayload.country}
+                    </p>
+                </div>
+            </div>
+            <div className="text-sm bg-background/50 p-3 rounded-lg border leading-relaxed text-foreground/90 italic">
+                "{preSavedPayload.description}"
+            </div>
+        </div>
+    );
+  }
+
   return (
     <div className="w-full space-y-6">
       {errorMessage && (
@@ -121,8 +158,6 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
       )}
 
       <form onSubmit={handleSubmit(processFormSubmission)} className="w-full space-y-5">
-        
-        {/* AVATAR BINARY UPLOAD COMPONENT TRACK */}
         <div className="w-full space-y-2">
           <Label className="text-sm font-semibold block text-foreground">Workspace Portrait *</Label>
           <div className="w-full flex items-center gap-4 p-3 border rounded-xl bg-muted/10">
@@ -141,7 +176,7 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
               <Input 
                 type="file" 
                 accept="image/*"
-                disabled={isCompleted || uploadingAvatar}
+                disabled={uploadingAvatar}
                 onChange={executeAvatarUpload}
                 className="w-full cursor-pointer file:font-bold"
               />
@@ -151,24 +186,20 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
           {errors.avatar_url && <p className="text-xs font-semibold text-destructive">An image avatar node is mandatory.</p>}
         </div>
 
-        {/* FULL NAME */}
         <div className="w-full space-y-2">
           <Label className="text-sm font-semibold block text-foreground">Full Name *</Label>
           <Input 
             className="w-full"
             placeholder="e.g. Jane Dev"
-            disabled={isCompleted}
             {...register('full_name', { required: true })}
           />
-          {errors.full_name && <p className="text-xs font-semibold text-destructive">This criteria parameter must be filled.</p>}
+          {errors.full_name && <p className="text-xs font-semibold text-destructive">This field must be filled.</p>}
         </div>
 
-        {/* AGE GROUP SELECT */}
         <div className="w-full space-y-2">
           <Label className="text-sm font-semibold block text-foreground">Age Bracket *</Label>
           <select
             className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={isCompleted}
             {...register('age_group', { required: true })}
           >
             <option value="">Select current bracket...</option>
@@ -182,12 +213,10 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
           {errors.age_group && <p className="text-xs font-semibold text-destructive">Selection mandatory.</p>}
         </div>
 
-        {/* EDUCATION TIER SELECT */}
         <div className="w-full space-y-2">
           <Label className="text-sm font-semibold block text-foreground">Background Tier *</Label>
           <select
             className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={isCompleted}
             {...register('highest_education', { required: true })}
           >
             <option value="">Select education map...</option>
@@ -196,66 +225,56 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
             <option value="postgraduate_degree">Postgraduate Degree</option>
             <option value="self_taught">Self Taught Operator</option>
           </select>
-          {errors.highest_education && <p className="text-xs font-semibold text-destructive">Background layer validation parameter is mandatory.</p>}
+          {errors.highest_education && <p className="text-xs font-semibold text-destructive">This choice is mandatory.</p>}
         </div>
 
-        {/* REGIONAL GEO MATRIX: COUNTRY & CITY */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="w-full space-y-2">
             <Label className="text-sm font-semibold block text-foreground">Country *</Label>
-            <Input 
-              className="w-full" 
-              placeholder="e.g. India"
-              disabled={isCompleted}
-              {...register('country', { required: true })}
-            />
+            <Input className="w-full" placeholder="e.g. India" {...register('country', { required: true })} />
             {errors.country && <p className="text-xs font-semibold text-destructive">Required.</p>}
           </div>
           <div className="w-full space-y-2">
             <Label className="text-sm font-semibold block text-foreground">City *</Label>
-            <Input 
-              className="w-full" 
-              placeholder="e.g. Mysuru"
-              disabled={isCompleted}
-              {...register('city', { required: true })}
-            />
+            <Input className="w-full" placeholder="e.g. Mysuru" {...register('city', { required: true })} />
             {errors.city && <p className="text-xs font-semibold text-destructive">Required.</p>}
           </div>
         </div>
 
-        {/* ADDRESS CHANNELS (OPTIONAL) */}
         <div className="w-full space-y-2">
           <Label className="text-sm font-semibold block text-foreground">Mailing Address (Optional)</Label>
-          <Input 
-            className="w-full"
-            placeholder="Billing or corporate logistics coordinates"
-            disabled={isCompleted}
-            {...register('address')}
-          />
+          <Input className="w-full" placeholder="Billing or corporate logistics coordinates" {...register('address')} />
         </div>
 
-        {/* CORE BIO PROFESSIONAL DESCRIPTION */}
         <div className="w-full space-y-2">
-          <Label className="text-sm font-semibold block text-foreground">Your Professional Blueprint *</Label>
+          <Label className="text-sm font-semibold block text-foreground">Your Story *</Label>
           <Textarea 
             className="w-full min-h-[110px] resize-none"
-            placeholder="Describe your operational focus, expertise domains, and targets in a strong paragraph..."
-            disabled={isCompleted}
+            placeholder="Tell us about your background, goals, and what you are building in a short paragraph..."
             {...register('description', { required: true, minLength: 20 })}
           />
-          {errors.description && <p className="text-xs font-semibold text-destructive">Provide a comprehensive bio node (min 20 characters).</p>}
+          {errors.description && <p className="text-xs font-semibold text-destructive">Provide a comprehensive intro statement (min 20 characters).</p>}
         </div>
 
-        {/* EMPOWERMENT ACTION SUBMIT TRIGGER */}
-        {!isCompleted && (
-          <Button 
-            type="submit" 
-            className="w-full h-11 text-sm font-semibold mt-6"
-            disabled={isSubmitting || uploadingAvatar}
-          >
-            {isSubmitting ? 'Syncing Profile Records Across Clusters...' : 'Save Canvas Parameters & Earn 10 XP'}
-          </Button>
-        )}
+        <div className="w-full flex gap-3 mt-4">
+            {isInitiallyCompleted && (
+                <Button 
+                    type="button" 
+                    variant="ghost" 
+                    className="h-11 text-sm font-semibold"
+                    onClick={() => setIsEditing(false)}
+                >
+                    Cancel
+                </Button>
+            )}
+            <Button 
+              type="submit" 
+              className="flex-1 h-11 text-sm font-semibold"
+              disabled={isSubmitting || uploadingAvatar}
+            >
+              {isSubmitting ? 'Syncing Profile Records...' : isInitiallyCompleted ? 'Update Profile Details' : 'Save Introduction & Earn 10 XP'}
+            </Button>
+        </div>
       </form>
     </div>
   );
