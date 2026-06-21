@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { analyzeUserMessageDraft } from "@/actions/ai"; 
+import { analyzeUserMessageDraft } from "@/actions/ai";
 import { completeTaskExecution } from "@/actions/progress";
 import { Loader2, Sparkles, RefreshCw, CheckCircle2, AlertTriangle, ArrowLeft, Copy } from "lucide-react";
 import { toast } from "sonner";
+import { setProgressStoreRow } from '@/lib/stores/progressStore';
 
 const SCENARIOS = [
   { id: "friends_family", label: "✨ [Required] Asking friends and family for early support", context: "Talking to the people closest to you about your new journey. The goal is to get genuine encouragement, early sounding boards, or simple word-of-mouth help without making Sunday dinner awkward." },
@@ -30,7 +31,7 @@ export function AskSimulator({ taskId, existingProgress, onSuccess }: AskSimulat
   const [draft, setDraft] = useState(existingProgress?.saved_payload?.userDraft || "");
   const [isPending, setIsPending] = useState(false);
   const [feedback, setFeedback] = useState<any>(existingProgress?.saved_payload?.aiFeedback || null);
-  
+
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
 
@@ -72,6 +73,9 @@ export function AskSimulator({ taskId, existingProgress, onSuccess }: AskSimulat
       });
 
       if (sync.success) {
+        if (sync.data) {
+          setProgressStoreRow(sync.data as any); // Pass row directly
+        }
         setIsEditing(false);
         if (onSuccess) onSuccess();
       }
@@ -119,9 +123,8 @@ export function AskSimulator({ taskId, existingProgress, onSuccess }: AskSimulat
 
         {/* Score & Hook Banner */}
         <div className="w-full p-4 rounded-xl border bg-muted/30 flex flex-col sm:flex-row items-center gap-4">
-          <div className={`w-14 h-14 rounded-full border-2 bg-background flex items-center justify-center text-xl font-black shrink-0 ${
-            feedback.score >= 8 ? 'text-emerald-500 border-emerald-500' : 'text-amber-500 border-amber-500'
-          }`}>
+          <div className={`w-14 h-14 rounded-full border-2 bg-background flex items-center justify-center text-xl font-black shrink-0 ${feedback.score >= 8 ? 'text-emerald-500 border-emerald-500' : 'text-amber-500 border-amber-500'
+            }`}>
             {feedback.score}/10
           </div>
           <p className="text-sm font-medium text-foreground/80 leading-relaxed text-center sm:text-left">{feedback.summary}</p>
@@ -192,8 +195,8 @@ export function AskSimulator({ taskId, existingProgress, onSuccess }: AskSimulat
     <div className="w-full space-y-5 animate-in fade-in">
       <div className="w-full space-y-2">
         <Label className="text-sm font-semibold block">Choose a communication scenario *</Label>
-        <select 
-          value={scenarioId} 
+        <select
+          value={scenarioId}
           onChange={(e) => setScenarioId(e.target.value)}
           className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
         >
@@ -208,7 +211,7 @@ export function AskSimulator({ taskId, existingProgress, onSuccess }: AskSimulat
 
       <div className="w-full space-y-2">
         <Label className="text-sm font-semibold block">Your raw draft message *</Label>
-        <Textarea 
+        <Textarea
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder="Hey! I wanted to let you know that I'm finally working on a project to solve..."
@@ -224,9 +227,9 @@ export function AskSimulator({ taskId, existingProgress, onSuccess }: AskSimulat
         {isInitiallyCompleted && (
           <Button variant="ghost" onClick={() => setIsEditing(false)} className="text-sm font-semibold">Cancel</Button>
         )}
-        <Button 
-          onClick={handleRunCritique} 
-          disabled={isPending || draft.length < 10} 
+        <Button
+          onClick={handleRunCritique}
+          disabled={isPending || draft.length < 10}
           className="flex-1 h-11 text-sm font-semibold"
         >
           {isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />}
