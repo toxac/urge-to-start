@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { setProfile } from '@/lib/stores/profile-store';
+import { setProfile } from '@/lib/stores/profileStore';
 
 export function AuthStoreProvider({ children }: { children: React.ReactNode }) {
   const supabase = createClient();

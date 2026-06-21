@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@nanostores/react';
-import { $userProfile } from '@/lib/stores/profile-store';
+import { $userProfile } from '@/lib/stores/profileStore';
 import { logout } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
