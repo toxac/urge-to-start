@@ -1,9 +1,10 @@
-import { Geist, Geist_Mono, Roboto } from "next/font/google"
+// app/layout.tsx
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { AuthStoreProvider } from "@/components/providers/auth-store-provider"
 import { cn } from "@/lib/utils"
+import { Geist, Geist_Mono, Roboto } from "next/font/google"
 
 const robotoHeading = Roboto({ 
   subsets: ['latin'], 
