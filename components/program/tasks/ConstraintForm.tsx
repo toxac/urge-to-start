@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { updateMyProfile } from '@/actions/profiles';
 import { completeTaskExecution } from '@/actions/progress';
+import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { updateProfileStoreFields } from '@/lib/stores/profileStore';
 
 interface ConstraintFormInputs {
     weekly_hours: '2_5_hours' | '5_10_hours' | '10_20_hours' | '20_plus';
@@ -39,7 +41,7 @@ const slotLabels = {
 export function ConstraintForm({ taskId, existingProgress, onSuccess }: ConstraintFormProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    
+
     // Light switch state to handle dynamic edit overrides seamlessly
     const isInitiallyCompleted = existingProgress?.status === 'completed';
     const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
@@ -67,6 +69,10 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
                 setIsSubmitting(false);
                 return;
             }
+            // 1. Cache profile timeline limitations locally for the ambient companion
+            if (profileSync.data) {
+                updateProfileStoreFields(profileSync.data as any);
+            }
 
             const progressSync = await completeTaskExecution({
                 taskId,
@@ -74,7 +80,11 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
             });
 
             if (progressSync.success) {
-                setIsEditing(false); // Flip back to the read-only dashboard layout view on success
+                // 2. Drop raw completed data node into state dictionary map
+                if (progressSync.data) {
+                    setProgressStoreRow(progressSync.data as any);
+                }
+                setIsEditing(false);
                 if (onSuccess) onSuccess();
             } else {
                 setErrorMessage(progressSync.error);
@@ -94,9 +104,9 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
                     <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
                         ✨ Your locked schedule strategies
                     </span>
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
+                    <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => setIsEditing(true)}
                         className="h-7 text-xs bg-background"
                     >
@@ -199,9 +209,9 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
 
                 <div className="w-full flex gap-3 mt-4">
                     {isInitiallyCompleted && (
-                        <Button 
-                            type="button" 
-                            variant="ghost" 
+                        <Button
+                            type="button"
+                            variant="ghost"
                             className="h-11 text-sm font-semibold"
                             onClick={() => setIsEditing(false)}
                         >
