@@ -1,6 +1,19 @@
 export type TaskType = 'form' | 'simulator' | 'log_counter' | 'action' | 'community';
 export type AccomplishmentType = 'program_milestone' | 'contribution' | 'engagement' | 'launch_tier';
 
+// ⚡ Dynamic Resource Schema for Task AI config links
+export interface TaskResourceConfig {
+  title: string;
+  url: string;
+}
+
+// ⚡ Lighter Task-Level configuration mapping
+export interface TaskAiConfig {
+  resources?: TaskResourceConfig[];
+  alternative_approach?: string;
+  reflection_prompt?: string;
+}
+
 export interface Task {
   db_id?: string; // Appended dynamically by sync script
   id: string; // Global static ID (e.g., 'm1_q1_t1_profile')
@@ -11,6 +24,7 @@ export interface Task {
   grant_points: number;
   description?: string;
   metadata_config?: Record<string, any>;
+  ai_config?: TaskAiConfig; // ⚡ Attached directly to Task tier
 }
 
 export interface AiConfig {
@@ -40,6 +54,12 @@ export interface Quest {
   tasks: Task[];
 }
 
+// ⚡ Macro Prerequisite structure mapping
+export interface MissionPrerequisite {
+  item: string;
+  promptKey: string | null;
+}
+
 export interface Mission {
   db_id?: string; // Appended dynamically by sync script
   title: string;
@@ -47,6 +67,7 @@ export interface Mission {
   video_url: string;
   briefing_text: string;
   briefing_markdown?: string; // Loaded dynamically from mission.md by sync script
+  prerequisites: MissionPrerequisite[]; // ⚡ Added structural prerequisite array block
   quests: Record<string, Quest>;
 }
 
