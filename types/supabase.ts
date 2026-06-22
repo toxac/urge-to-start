@@ -44,6 +44,53 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_logs: {
+        Row: {
+          context_type: string
+          created_at: string
+          generated_output: Json
+          id: string
+          mission_id: string | null
+          quest_id: string | null
+          resource_url: string | null
+          task_id: string | null
+          user_id: string
+          user_input: string | null
+        }
+        Insert: {
+          context_type: string
+          created_at?: string
+          generated_output?: Json
+          id?: string
+          mission_id?: string | null
+          quest_id?: string | null
+          resource_url?: string | null
+          task_id?: string | null
+          user_id: string
+          user_input?: string | null
+        }
+        Update: {
+          context_type?: string
+          created_at?: string
+          generated_output?: Json
+          id?: string
+          mission_id?: string | null
+          quest_id?: string | null
+          resource_url?: string | null
+          task_id?: string | null
+          user_id?: string
+          user_input?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discounts: {
         Row: {
           applicable_currencies: string[]
