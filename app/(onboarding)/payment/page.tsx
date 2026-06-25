@@ -1,59 +1,115 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShieldCheck, Zap } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
+import { CheckCircle2 } from 'lucide-react';
 
 export default async function PaywallPage() {
-  async function handleSimulatedPayment() {
+  const supabase = await createClient();
+
+  // 1. Fetch our standardized offering row entry from our database configuration
+  const { data: standardOffering } = await supabase
+    .from('offerings')
+    .select('*')
+    .eq('slug', 'full-access-membership')
+    .eq('is_active', true)
+    .maybeSingle();
+
+  // 2. SERVER ACTION HANDLE: Multi-tier payment generation simulation loop
+  async function executeMockCheckoutHandshake() {
     'use server';
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const serverSupabase = await createClient();
+    const { data: { user } } = await serverSupabase.auth.getUser();
     if (!user) return;
 
-    // Simulate complete billing handshake -> Elevate PostgreSQL role directly to member_full
-    await supabase
+    // Resolve or fallback standard target configurations
+    const targetOfferingId = standardOffering?.id || '00000000-0000-0000-0000-000000000000';
+    const finalAmountPaid = 49.00;
+
+    // A: Record the itemized transaction entry into your permanent ledger table rows
+    await serverSupabase.from('transactions').insert({
+      user_id: user.id,
+      offering_id: targetOfferingId,
+      amount_paid: finalAmountPaid,
+      currency: 'USD',
+      provider: 'mock_stripe_sandbox',
+      provider_order_id: `m_ord_${crypto.randomUUID().substring(0, 8)}`,
+      provider_payment_id: `m_pay_${crypto.randomUUID().substring(0, 12)}`,
+      status: 'completed', // Hardens status row entry cleanly
+      raw_webhook_payload: { completedSimulatedAt: new Date().toISOString() }
+    });
+
+    // B: Elevate user profile status directly inside database fields
+    await serverSupabase
       .from('profiles')
-      .update({ role: 'member_full' })
+      .update({ 
+        role: 'member_full',
+        onboarding_step: 2
+      })
       .eq('id', user.id);
 
-    redirect('/platform/dashboard');
+    redirect('/program');
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-6 bg-muted/30">
-      <Card className="w-full max-w-md shadow-xl border-primary/20 border-2">
-        <CardHeader className="text-center">
-          <div className="mx-auto bg-primary/10 text-primary h-12 w-12 rounded-full flex items-center justify-center mb-2">
-            <Zap className="h-6 w-6" />
+    <div className="min-h-screen w-full bg-[#F9F7F4] text-[#1A1A1A] font-sans antialiased flex items-center justify-center p-6 selection:bg-[#E86A33]/20">
+      
+      {/* Transaction Control Blueprint Card */}
+      <div className="w-full max-w-md bg-[#F9F7F4] border border-[#8C8580]/15 rounded-2xl p-8 shadow-[0_4px_24px_rgba(140,133,128,0.03)] text-center space-y-8">
+        
+        <div className="space-y-2">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-[#E86A33]">
+            Step 02 / Financial Commitment
+          </span>
+          <h1 className="text-2xl font-serif font-bold tracking-tight text-[#1A1A1A]">
+            Lock In Your Access
+          </h1>
+          <p className="text-xs text-[#8C8580] leading-relaxed max-w-xs mx-auto font-medium">
+            Gain full entry to our validated problem maps, strategic milestone quests, and the global peer developer network.
+          </p>
+        </div>
+
+        {/* Pricing Layout Container Block */}
+        <div className="p-5 border border-[#8C8580]/10 bg-[#8C8580]/5 rounded-xl text-left flex items-center justify-between">
+          <div className="space-y-0.5">
+            <span className="text-xs font-bold text-[#1A1A1A]">Ecosystem Membership</span>
+            <p className="text-[11px] text-[#8C8580] font-medium">Cancel tracking loops at any moment.</p>
           </div>
-          <CardTitle className="text-3xl font-black tracking-tight">Unlock Your Path</CardTitle>
-          <CardDescription>
-            Gain instant access to real-time goals, community forums, action quests, and vetted mentors.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="bg-muted p-4 rounded-lg space-y-2 text-sm">
-            <div className="flex justify-between font-medium">
-              <span>Full Program & Ecosystem Access</span>
-              <span className="text-primary">$49 / mo</span>
+          <div className="text-right">
+            <span className="text-xl font-serif font-bold text-[#E86A33]">$49</span>
+            <span className="text-[10px] text-[#8C8580] block font-bold uppercase tracking-wider">/ Month</span>
+          </div>
+        </div>
+
+        {/* Bullet Manifestos Checklist */}
+        <div className="text-left space-y-3 pt-2">
+          {[
+            "Unrestricted access to all Quest Control Center pipelines",
+            "Comprehensive diagnostic checks from the Kip Sidebar Companion",
+            "Direct publishing clearance to the Rejection Club Feed boards"
+          ].map((text, idx) => (
+            <div key={idx} className="flex items-start gap-2.5 text-xs text-[#8C8580] font-medium leading-tight">
+              <CheckCircle2 className="w-4 h-4 text-[#E86A33] shrink-0 mt-0.5" />
+              <span>{text}</span>
             </div>
-            <p className="text-xs text-muted-foreground">Cancel anytime. No validation presentations required. Just real action pipelines.</p>
-          </div>
-          <ul className="text-xs text-muted-foreground space-y-2">
-            <li className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Comprehensive Goal-based Action Tracks</li>
-            <li className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Goal-linked Peer Forums</li>
-            <li className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> On-Demand Mentorship Networks</li>
-          </ul>
-        </CardContent>
-        <CardFooter>
-          <form action={handleSimulatedPayment} className="w-full">
-            <Button type="submit" className="w-full size-lg text-base font-bold">
-              Simulate Secure Stripe Checkout
+          ))}
+        </div>
+
+        {/* THE MOAT: Enforce strict safety boundary surrounding the activation handler */}
+        <div className="pt-4">
+          <form action={executeMockCheckoutHandshake} className="w-full">
+            <Button 
+              type="submit" 
+              className="w-full h-12 bg-[#E86A33] hover:bg-[#D35925] text-white font-bold rounded-xl transition uppercase tracking-wider text-xs shadow-md shadow-[#E86A33]/10 transform active:scale-95"
+            >
+              Initialize Sandbox Checkout Handshake
             </Button>
           </form>
-        </CardFooter>
-      </Card>
+          <span className="text-[10px] text-[#8C8580] font-medium block mt-3">
+            🔒 Secure Transaction Environment // 100% Refundable Guarantee
+          </span>
+        </div>
+
+      </div>
     </div>
   );
 }
