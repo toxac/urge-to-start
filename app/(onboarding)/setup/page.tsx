@@ -12,9 +12,9 @@ interface PageProps {
 export default async function ProfileSettingsPage({ searchParams }: PageProps) {
   const sParams = await searchParams;
   const id = sParams.id;
-  
+
   if (!id) notFound();
-  
+
   const supabase = await createClient();
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', id).single();
   if (!profile) notFound();
@@ -22,18 +22,15 @@ export default async function ProfileSettingsPage({ searchParams }: PageProps) {
   return (
     <div className="min-h-screen w-full bg-[#F9F7F4] text-[#1A1A1A] font-sans antialiased selection:bg-[#E86A33]/20">
       <main className="max-w-5xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-16 items-start">
-        
+
         {/* LEFT & CENTER INTERACTION CANVAS (70% Screen visual weighting target) */}
         <div className="lg:col-span-2 space-y-8 text-left">
-          <div className="space-y-1.5">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#E86A33]">
-              Step 01 / Profile Alignment
-            </span>
-            <h1 className="text-2xl font-serif font-bold tracking-tight text-[#1A1A1A]">
-              Tell Us Where You're Building From
+          <div className="space-y-1.5 text-left max-w-xl">
+            <h1 className="text-xl font-serif font-bold tracking-tight text-[#1A1A1A]">
+              Let's get you set up.
             </h1>
             <p className="text-xs text-[#8C8580] leading-relaxed max-w-md font-medium">
-              We structure your roadmap around your local reality. Share your honest constraints so the system can serve your trajectory accurately.
+              We’ve kept this simple—just one small step at a time, so you never feel lost. As you move through each one, you’ll get real feedback from our community, share your progress out loud, and hear from people who’ve actually built things before.
             </p>
           </div>
 

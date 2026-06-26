@@ -15,7 +15,7 @@ interface SignupCardProps {
 export function SignupCard({ switchToLogin }: SignupCardProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Real-time username state management
   const [username, setUsername] = useState('');
   const [usernameLoading, setUsernameLoading] = useState(false);
@@ -64,6 +64,15 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
 
   return (
     <div className="bg-[#F9F7F4] border border-[#8C8580]/15 rounded-2xl p-8 shadow-[0_4px_24px_rgba(140,133,128,0.03)] animate-in fade-in duration-200 space-y-6">
+      {/* Header & Contextual Orientation */}
+      <div className="text-center space-y-1 max-w-sm mx-auto mb-6">
+        <h2 className="text-sm font-bold tracking-tight text-[#1A1A1A]">
+          Stop overthinking and just start.
+        </h2>
+        <p className="text-xs text-[#8C8580] leading-relaxed font-medium px-4">
+          You’re joining a group of tinkerers and doers who are tired of waiting for permission. No pitch decks and endless analysis, you will find and solve problems and sell it to real customers.
+        </p>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4 text-xs">
         {error && (
           <div className="p-3 text-[11px] font-medium rounded-xl bg-red-500/5 border border-red-500/25 text-red-600">
@@ -75,14 +84,14 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
           <Label htmlFor="signup-name" className="text-[#8C8580] font-bold text-[10px] uppercase tracking-wider">
             Your Full Name
           </Label>
-          <Input 
-            id="signup-name" 
-            name="fullName" 
-            type="text" 
+          <Input
+            id="signup-name"
+            name="fullName"
+            type="text"
             disabled={loading}
-            className="w-full bg-background border border-[#8C8580]/20 rounded-xl px-3 h-10 text-[#1A1A1A]" 
+            className="w-full bg-background border border-[#8C8580]/20 rounded-xl px-3 h-10 text-[#1A1A1A]"
             placeholder="e.g., Alara K."
-            required 
+            required
           />
         </div>
 
@@ -93,18 +102,18 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
           </Label>
           <div className="relative flex items-center">
             <span className="absolute left-3 text-[#8C8580] font-semibold text-xs select-none">@</span>
-            <Input 
-              id="signup-username" 
-              name="username" 
-              type="text" 
+            <Input
+              id="signup-username"
+              name="username"
+              type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-0_]/g, ''))} // Strips dirty URL characters instantly
               disabled={loading}
-              className="w-full bg-background border border-[#8C8580]/20 rounded-xl pl-7 pr-10 h-10 text-[#1A1A1A]" 
+              className="w-full bg-background border border-[#8C8580]/20 rounded-xl pl-7 pr-10 h-10 text-[#1A1A1A]"
               placeholder="username"
-              required 
+              required
             />
-            
+
             {/* Inline Visual Diagnostics indicators */}
             <div className="absolute right-3 flex items-center">
               {usernameLoading && <Loader2 className="w-3.5 h-3.5 animate-spin text-[#8C8580]" />}
@@ -116,19 +125,19 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
             <p className="text-[10px] text-red-500 font-medium">This handle is currently claimed by another builder.</p>
           )}
         </div>
-        
+
         <div className="space-y-1.5">
           <Label htmlFor="signup-email" className="text-[#8C8580] font-bold text-[10px] uppercase tracking-wider">
             Email Address
           </Label>
-          <Input 
-            id="signup-email" 
-            name="email" 
-            type="email" 
+          <Input
+            id="signup-email"
+            name="email"
+            type="email"
             disabled={loading}
-            className="w-full bg-background border border-[#8C8580]/20 rounded-xl px-3 h-10 text-[#1A1A1A]" 
+            className="w-full bg-background border border-[#8C8580]/20 rounded-xl px-3 h-10 text-[#1A1A1A]"
             placeholder="name@domain.com"
-            required 
+            required
           />
         </div>
 
@@ -136,24 +145,24 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
           <Label htmlFor="signup-password" className="text-[#8C8580] font-bold text-[10px] uppercase tracking-wider">
             Access Password
           </Label>
-          <Input 
-            id="signup-password" 
-            name="password" 
-            type="password" 
+          <Input
+            id="signup-password"
+            name="password"
+            type="password"
             disabled={loading}
-            className="w-full bg-background border border-[#8C8580]/20 rounded-xl px-3 h-10 text-[#1A1A1A]" 
+            className="w-full bg-background border border-[#8C8580]/20 rounded-xl px-3 h-10 text-[#1A1A1A]"
             placeholder="Minimum 8 characters"
-            required 
+            required
           />
         </div>
 
         {/* Newsletter Opt-in */}
         <div className="pt-2 flex items-start gap-2.5">
-          <input 
-            type="checkbox" 
-            id="signup-newsletter" 
-            name="newsletter" 
-            defaultChecked 
+          <input
+            type="checkbox"
+            id="signup-newsletter"
+            name="newsletter"
+            defaultChecked
             disabled={loading}
             className="accent-[#E86A33] h-4 w-4 rounded border-[#8C8580]/30 mt-0.5 cursor-pointer"
           />
@@ -163,8 +172,8 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
         </div>
 
         <div className="pt-4">
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={loading || usernameStatus === 'taken' || usernameLoading}
             className="w-full h-11 bg-[#E86A33] hover:bg-[#D35925] text-white font-bold rounded-xl transition uppercase tracking-wider text-xs shadow-md shadow-[#E86A33]/10 flex items-center justify-center gap-2"
           >
