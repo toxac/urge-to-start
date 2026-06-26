@@ -2,11 +2,11 @@
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { Database } from '@/types/supabase';
 
 // Zero-argument client instantiators matching your exact configuration
 import { createClient } from '@/lib/supabase/server'; 
-import { createAdminClient } from '@/lib/supabase/admin'; 
 
 // Extract strict database interfaces from your schema definition contract
 type OfferingRow = Database['public']['Tables']['offerings']['Row'];
@@ -32,8 +32,12 @@ export const ValidateDiscountSchema = z.object({
 export const InitializeCheckoutSchema = z.object({
   offeringId: z.string().uuid(),
   currency: z.string().min(3).max(5).trim().toUpperCase().default('INR'),
-  provider: z.string().min(1), // e.g., 'razorpay', 'cashfree'
+  provider: z.string().min(1), // e.g., 'razorpay', 'cashfree', 'mock_gateway'
   couponCode: z.string().trim().toUpperCase().optional().nullable(),
+});
+
+export const CompleteCheckoutSchema = z.object({
+  transactionId: z.string().uuid(),
 });
 
 // =========================================================================
@@ -107,10 +111,10 @@ export async function verifyDiscountCode(
     // 4. Compute Deduction Mathematics using the actual schema layout fields
     let deductionAmount = 0;
 
+    // Fixed typo: matching 'fixed' option from your native database schema types enum setup
     if (discount.type === 'percentage') {
       deductionAmount = basePrice * (discount.value / 100);
-    } else if (discount.type === 'fixed_amount') {
-      // Direct deduction subtraction using flat value primitive properties 
+    } else {
       deductionAmount = discount.value;
     }
 
@@ -224,4 +228,90 @@ export async function initializeCheckoutTransaction(
   } catch (err: any) {
     return { success: false, error: err.message || 'Failed to initialize payment trace tokens' };
   }
+}
+
+/**
+ * ⚡ NEW POST Equivalent: Confirms the completion of payment, updates role schemas,
+ * provisions the bonus community bundles, and routes the user directly to the program dashboard.
+ */
+export async function completeMockCheckoutHandshake(
+  rawInput: z.infer<typeof CompleteCheckoutSchema>
+): Promise<ActionResponse<{ success: boolean }>> {
+  try {
+    const validated = CompleteCheckoutSchema.parse(rawInput);
+    const supabase = await createClient();
+
+    // 1. Resolve Auth User
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { success: false, error: 'Authentication signature missing' };
+
+    // 2. Fetch the existing pending transaction tracking record
+    const { data: transaction, error: txErr } = await supabase
+      .from('transactions')
+      .select('*, offerings(*)')
+      .eq('id', validated.transactionId)
+      .eq('user_id', user.id)
+      .single();
+
+    if (txErr || !transaction) {
+      return { success: false, error: 'Target checkout tracking session was not found' };
+    }
+
+    // 3. Prevent repeating operations if transaction is already processed
+    if (transaction.status === 'completed') {
+      redirect('/program');
+    }
+
+    // 4. Update the ledger entry status row to completed
+    await supabase
+      .from('transactions')
+      .update({
+        status: 'completed',
+        provider_payment_id: `mock_pay_${crypto.randomUUID().substring(0, 12)}`,
+        raw_webhook_payload: { handshakedAt: new Date().toISOString() },
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', transaction.id);
+
+    // Increment coupon campaign count usage globally if a voucher was bound
+    if (transaction.discount_id) {
+      const { data: disc } = await supabase.from('discounts').select('uses_count').eq('id', transaction.discount_id).single();
+      if (disc) {
+        await supabase.from('discounts').update({ uses_count: disc.uses_count + 1 }).eq('id', transaction.discount_id);
+      }
+    }
+
+    // 5. Automatic Provisioning checks based on item types
+    const offeringData = transaction.offerings as any;
+    
+    if (offeringData?.type === 'program_enrollment' || offeringData?.slug === 'full-access-membership') {
+      // A: Elevate structural role privilege values directly on profile row
+      await supabase
+        .from('profiles')
+        .update({ 
+          role: 'member_full',
+          onboarding_step: 2
+        })
+        .eq('id', user.id);
+
+      // B: Grant the 1-Year Free Network Membership bundle itemized separately
+      const expirationDate = new Date();
+      expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+
+      await supabase
+        .from('network_memberships')
+        .insert({
+          user_id: user.id,
+          status: 'active',
+          expires_at: expirationDate.toISOString()
+        });
+    }
+
+    revalidatePath('/', 'layout');
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Error occurred finalizing transaction validation keys' };
+  }
+
+  // 6. Redirect user smoothly to their new active platform workspace track dashboard
+  redirect('/program');
 }
