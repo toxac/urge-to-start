@@ -1,11 +1,26 @@
 'use client';
 // app/auth/page.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { LoginCard } from '@/components/auth/LoginCard';
 import { SignupCard } from '@/components/auth/SignupCard';
 
 export default function AuthenticatePage() {
   const [isSignUp, setIsSignUp] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    // ⚡ Catch their intent context parameter (?intent=free or ?intent=paid)
+    const urlIntent = searchParams.get('intent');
+    if (urlIntent) {
+      document.cookie = `urge_signup_intent=${urlIntent}; path=/; max-age=1800; SameSite=Strict`;
+    }
+    
+    // Auto-toggle view if they hit a signup path trigger
+    if (searchParams.get('view') === 'signup') {
+      setIsSignUp(true);
+    }
+  }, [searchParams]);
 
   return (
     <div className="w-full max-w-sm mx-auto space-y-6">
@@ -61,7 +76,7 @@ export default function AuthenticatePage() {
         {!isSignUp ? (
           <LoginCard />
         ) : (
-          <SignupCard switchToLogin={() => setIsSignUp(false)} />
+          <SignupCard />
         )}
       </div>
     </div>

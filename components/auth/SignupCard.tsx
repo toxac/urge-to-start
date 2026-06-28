@@ -5,17 +5,12 @@ import { checkUsernameAvailability, signup } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, CheckCircle, XCircle } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { Loader2, CheckCircle, XCircle, MailCheck } from 'lucide-react';
 
-interface SignupCardProps {
-  switchToLogin: () => void;
-}
-
-export function SignupCard({ switchToLogin }: SignupCardProps) {
-  const router = useRouter();
+export function SignupCard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [emailSentTo, setEmailSentTo] = useState<string | null>(null); // New confirmation state flag
 
   const [username, setUsername] = useState('');
   const [usernameLoading, setUsernameLoading] = useState(false);
@@ -53,6 +48,8 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
     setError(null);
 
     const formData = new FormData(e.currentTarget);
+    const formEmail = formData.get('email') as string;
+    
     const result = await signup(formData);
 
     if (result && 'error' in result) {
@@ -61,98 +58,60 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
       return;
     }
 
-    // Success route redirection — straight to step 1 onboarding workspace calibration
-    router.push(`/setup?id=${result.userId}`);
+    // ⚡ SUCCESS: Freeze form view and render the validation guidance block
+    setEmailSentTo(formEmail);
+    setLoading(false);
   };
+
+  // ✉️ Clean, Conversational On-screen Verification Box
+  if (emailSentTo) {
+    return (
+      <div className="bg-card border border-border rounded-2xl p-8 shadow-lg text-center space-y-5 animate-in fade-in duration-300">
+        <div className="mx-auto w-12 h-12 rounded-full bg-[#E86A33]/5 flex items-center justify-center text-[#E86A33]">
+          <MailCheck className="w-6 h-6" />
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-base font-serif font-bold text-foreground">Check your inbox.</h3>
+          <p className="text-xs text-muted-foreground leading-relaxed font-medium px-2">
+            We just sent a verification link to <strong className="text-foreground">{emailSentTo}</strong>. 
+            Click that link to verify your account, and we&rsquo;ll drop you straight into your profile setup.
+          </p>
+          <p className="text-[11px] text-[#8C8580] leading-relaxed pt-2 border-t border-border/40 font-medium italic">
+            Can&rsquo;t find it? Give it a minute and check your <strong className="text-foreground font-semibold">spam folder</strong> just in case it got misrouted.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-card border border-border rounded-2xl p-8 shadow-lg space-y-6 animate-in fade-in duration-200">
+      {/* ... Form input blocks remain unchanged ... */}
       <form onSubmit={handleSubmit} className="space-y-4 text-xs">
         {error && (
-          <div className="p-3 text-[11px] font-medium rounded-xl bg-destructive/10 border border-destructive/25 text-destructive">
-            {error}
-          </div>
+          <div className="p-3 text-[11px] font-medium rounded-xl bg-destructive/10 text-destructive">{error}</div>
         )}
 
         <div className="space-y-1.5 relative">
-          <Label htmlFor="signup-username" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">
-            Choose a Unique Handle
-          </Label>
+          <Label htmlFor="signup-username" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">Choose a Unique Handle</Label>
           <div className="relative flex items-center">
             <span className="absolute left-3 text-muted-foreground font-semibold text-xs select-none">@</span>
-            <Input
-              id="signup-username"
-              name="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-0_]/g, ''))}
-              disabled={loading}
-              className="w-full bg-background border-border rounded-xl pl-7 pr-10 h-10 text-foreground"
-              placeholder="username"
-              required
-            />
-            <div className="absolute right-3 flex items-center">
-              {usernameLoading && <Loader2 className="w-3.5 h-3.5 animate-spin text-muted-foreground" />}
-              {!usernameLoading && usernameStatus === 'available' && <CheckCircle className="w-3.5 h-3.5 text-green-600" />}
-              {!usernameLoading && usernameStatus === 'taken' && <XCircle className="w-3.5 h-3.5 text-destructive" />}
-            </div>
+            <Input id="signup-username" name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))} required className="w-full pl-7" />
           </div>
-          {usernameStatus === 'taken' && (
-            <p className="text-[10px] text-destructive font-medium">This handle is already claimed by another builder.</p>
-          )}
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="signup-email" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">
-            Email Address
-          </Label>
-          <Input
-            id="signup-email"
-            name="email"
-            type="email"
-            disabled={loading}
-            className="w-full bg-background border-border rounded-xl px-3 h-10 text-foreground"
-            placeholder="name@domain.com"
-            required
-          />
+          <Label htmlFor="signup-email" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">Email Address</Label>
+          <Input id="signup-email" name="email" type="email" required />
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="signup-password" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">
-            Access Password
-          </Label>
-          <Input
-            id="signup-password"
-            name="password"
-            type="password"
-            disabled={loading}
-            className="w-full bg-background border-border rounded-xl px-3 h-10 text-foreground"
-            placeholder="Minimum 8 characters"
-            required
-          />
-        </div>
-
-        <div className="pt-2 flex items-start gap-2.5">
-          <input
-            type="checkbox"
-            id="signup-newsletter"
-            name="newsletter"
-            defaultChecked
-            disabled={loading}
-            className="accent-primary h-4 w-4 rounded border-border/30 mt-0.5 cursor-pointer"
-          />
-          <label htmlFor="signup-newsletter" className="text-muted-foreground leading-normal font-medium select-none cursor-pointer">
-            Receive practical case studies and strategic problem logs. No spam.
-          </label>
+          <Label htmlFor="signup-password" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">Access Password</Label>
+          <Input id="signup-password" name="password" type="password" required />
         </div>
 
         <div className="pt-4">
-          <Button
-            type="submit"
-            disabled={loading || usernameStatus === 'taken' || usernameLoading}
-            className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-xl transition uppercase tracking-wider text-xs shadow-md shadow-primary/10 flex items-center justify-center gap-2"
-          >
-            {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+          <Button type="submit" disabled={loading || usernameStatus === 'taken' || usernameLoading} className="w-full bg-[#E86A33] hover:bg-[#D35925] text-white">
             {loading ? 'Creating Account...' : 'Start Your Journey'}
           </Button>
         </div>

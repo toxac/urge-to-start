@@ -2,20 +2,22 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const next = searchParams.get('next') || '/platform/dashboard';
+  // Handle optional next query fallbacks safely
+  const next = searchParams.get('next') || '/setup';
 
   if (code) {
-    const cookieStore = await cookies();
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     
-    if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+    if (!error && data?.user) {
+      // Append their authenticated ID directly into the parameters contract
+      return NextResponse.redirect(`${origin}${next}?id=${data.user.id}`);
     }
   }
 
-  return NextResponse.redirect(`${origin}/login?error=Verification failed`);
+  // Fallback anchor safety path
+  return NextResponse.redirect(`${origin}/authenticate?error=verification-failed`);
 }
