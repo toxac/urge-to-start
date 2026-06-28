@@ -41,7 +41,6 @@ export async function signup(formData: FormData) {
 
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-  const fullName = formData.get('fullName') as string;
   const username = formData.get('username') as string;
   const isNewsletterChecked = formData.get('newsletter') === 'on';
 
@@ -58,7 +57,6 @@ export async function signup(formData: FormData) {
     options: {
       // Pass our profile variables straight into standard metadata tracking paths
       data: { 
-        full_name: fullName,
         username: username.toLowerCase().trim(),
         // Save the newsletter preference cleanly within provider_metadata
         provider_metadata: { is_subscribed_to_newsletter: isNewsletterChecked }
@@ -75,7 +73,6 @@ export async function signup(formData: FormData) {
     await supabase
       .from('profiles')
       .update({ 
-        full_name: fullName,
         username: username.toLowerCase().trim(),
         provider_metadata: { is_subscribed_to_newsletter: isNewsletterChecked }
       })
