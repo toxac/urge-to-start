@@ -708,6 +708,7 @@ export type Database = {
           country: string | null
           created_at: string | null
           currency: string | null
+          description: string | null
           full_name: string | null
           highest_education:
             | Database["public"]["Enums"]["education_tier"]
@@ -733,6 +734,7 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           currency?: string | null
+          description?: string | null
           full_name?: string | null
           highest_education?:
             | Database["public"]["Enums"]["education_tier"]
@@ -758,6 +760,7 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           currency?: string | null
+          description?: string | null
           full_name?: string | null
           highest_education?:
             | Database["public"]["Enums"]["education_tier"]
