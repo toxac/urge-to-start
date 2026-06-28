@@ -31,7 +31,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("dark", fontMono.variable, geist.variable, robotoHeading.variable)}
+      className={cn(fontMono.variable, geist.variable, robotoHeading.variable)}
     >
       <body className="font-sans antialiased bg-background text-foreground selection:bg-primary/30">
         <ThemeProvider>
