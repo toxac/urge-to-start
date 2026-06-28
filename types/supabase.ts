@@ -1324,6 +1324,7 @@ export type Database = {
         | "45_54"
         | "55_plus"
       user_platform_role:
+        | "user"
         | "lead"
         | "member_full"
         | "member_network"
@@ -1539,6 +1540,7 @@ export const Constants = {
         "55_plus",
       ],
       user_platform_role: [
+        "user",
         "lead",
         "member_full",
         "member_network",

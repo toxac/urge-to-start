@@ -44,32 +44,81 @@ export async function signup(formData: FormData) {
   const username = formData.get('username') as string;
   const isNewsletterChecked = formData.get('newsletter') === 'on';
 
-  // Check availability
   const isAvailable = await checkUsernameAvailability(username);
   if (!isAvailable) {
-    throw new Error("This username handle is already claimed.");
+    return { error: "This username handle is already claimed." };
   }
 
-  const { data: authData, error } = await supabase.auth.signUp({
+  const { data: authData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: {
         username: username.toLowerCase().trim(),
-        full_name: username.toLowerCase().trim(), // or any default
-        country: 'IN', // optional – you can let the trigger set default if not provided
-        provider_metadata: { is_subscribed_to_newsletter: isNewsletterChecked }
+        provider_metadata: { is_subscribed_to_newsletter: isNewsletterChecked },
       },
     },
   });
 
-  if (error) {
-    console.error('Signup error:', error);
-    throw new Error(error.message);
+  if (signUpError) return { error: signUpError.message };
+  
+  // The trigger has already gracefully created the profile row!
+  return { userId: authData.user?.id, profileCreated: true };
+}
+
+// New action: complete the profile (when initial insertion failed)
+export async function completeProfile(userId: string, username: string) {
+  const supabase = await createClient();
+
+  // Verify the authenticated user matches the provided userId
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || user.id !== userId) {
+    throw new Error('Unauthorized: you can only complete your own profile.');
   }
 
+  // Check if profile already exists (might have been created in the meantime)
+  const { data: existing } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (existing) {
+    // Profile exists – just update the username
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({ username: username.toLowerCase().trim() })
+      .eq('id', userId);
+    if (updateError) {
+      throw new Error(updateError.message);
+    }
+  } else {
+    // Insert the missing profile
+    const { error: insertError } = await supabase
+      .from('profiles')
+      .insert({
+        id: userId,
+        username: username.toLowerCase().trim(),
+        full_name: username.toLowerCase().trim(),
+        country: 'IN',
+        role: 'user',
+        onboarding_step: 1,
+        accumulated_xp: 0,
+        currency: 'INR',
+        capital_available_local: 0.00,
+        social_profiles: {},
+        mentor_metadata: {},
+        provider_metadata: {},
+        constraints: {},
+      });
+    if (insertError) {
+      throw new Error(insertError.message);
+    }
+  }
+
+  // Success – trigger a revalidation and return success
   revalidatePath('/', 'layout');
-  redirect(`/setup?id=${authData.user?.id}`);
+  return { success: true };
 }
 
 export async function forgotPassword(formData: FormData) {
