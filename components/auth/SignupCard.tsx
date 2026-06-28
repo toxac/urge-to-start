@@ -1,7 +1,7 @@
-'use client';
 // components/auth/SignupCard.tsx
+'use client';
 import React, { useState, useEffect } from 'react';
-import { checkUsernameAvailability, signup } from '@/actions/auth'; // Assumed simple async lookup action
+import { checkUsernameAvailability, signup } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,7 +20,7 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
   const [usernameLoading, setUsernameLoading] = useState(false);
   const [usernameStatus, setUsernameStatus] = useState<'idle' | 'available' | 'taken'>('idle');
 
-  // Debounce username lookup to avoid hitting your DB on every individual keystroke
+  // Debounce username lookup
   useEffect(() => {
     if (username.trim().length < 3) {
       setUsernameStatus('idle');
@@ -37,7 +37,7 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
       } finally {
         setUsernameLoading(false);
       }
-    }, 400); // 400ms debounce safety window
+    }, 400);
 
     return () => clearTimeout(delayDebounceFn);
   }, [username]);
@@ -63,36 +63,12 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
 
   return (
     <div className="bg-[#F9F7F4] border border-[#8C8580]/15 rounded-2xl p-8 shadow-[0_4px_24px_rgba(140,133,128,0.03)] animate-in fade-in duration-200 space-y-6">
-      {/* Header & Contextual Orientation */}
-      <div className="text-center space-y-1 max-w-sm mx-auto mb-6">
-        <h2 className="text-sm font-bold tracking-tight text-[#1A1A1A]">
-          Stop overthinking and just start.
-        </h2>
-        <p className="text-xs text-[#8C8580] leading-relaxed font-medium px-4">
-          You’re joining a group of tinkerers and doers who are tired of waiting for permission. No pitch decks and endless analysis, you will find and solve problems and sell it to real customers.
-        </p>
-      </div>
       <form onSubmit={handleSubmit} className="space-y-4 text-xs">
         {error && (
           <div className="p-3 text-[11px] font-medium rounded-xl bg-red-500/5 border border-red-500/25 text-red-600">
             {error}
           </div>
         )}
-
-        <div className="space-y-1.5">
-          <Label htmlFor="signup-name" className="text-[#8C8580] font-bold text-[10px] uppercase tracking-wider">
-            Your Full Name
-          </Label>
-          <Input
-            id="signup-name"
-            name="fullName"
-            type="text"
-            disabled={loading}
-            className="w-full bg-background border border-[#8C8580]/20 rounded-xl px-3 h-10 text-[#1A1A1A]"
-            placeholder="e.g., Alara K."
-            required
-          />
-        </div>
 
         {/* ⚡ REAL-TIME USERNAME TRACKING INTERFACE */}
         <div className="space-y-1.5 relative">
@@ -106,14 +82,13 @@ export function SignupCard({ switchToLogin }: SignupCardProps) {
               name="username"
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-0_]/g, ''))} // Strips dirty URL characters instantly
+              onChange={(e) => setUsername(e.target.value.replace(/[^a-zA-Z0-9_]/g, ''))} // fixed typo: 0-9
               disabled={loading}
               className="w-full bg-background border border-[#8C8580]/20 rounded-xl pl-7 pr-10 h-10 text-[#1A1A1A]"
               placeholder="username"
               required
             />
 
-            {/* Inline Visual Diagnostics indicators */}
             <div className="absolute right-3 flex items-center">
               {usernameLoading && <Loader2 className="w-3.5 h-3.5 animate-spin text-[#8C8580]" />}
               {!usernameLoading && usernameStatus === 'available' && <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />}
