@@ -1,8 +1,7 @@
 'use client';
-
+// components/auth/SignupCard.tsx
 import React, { useState, useEffect } from 'react';
-import { signup } from '@/actions/auth';
-import { checkUsernameAvailability } from '@/actions/auth'; // Assumed simple async lookup action
+import { checkUsernameAvailability, signup } from '@/actions/auth'; // Assumed simple async lookup action
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

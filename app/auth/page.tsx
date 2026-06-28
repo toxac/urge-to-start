@@ -1,5 +1,5 @@
 'use client';
-
+// app/auth/page.tsx
 import React, { useState } from 'react';
 import { LoginCard } from '@/components/auth/LoginCard';
 import { SignupCard } from '@/components/auth/SignupCard';

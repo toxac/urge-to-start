@@ -1,3 +1,4 @@
+// app/(marketing)/page.tsx -- homepage
 import Link from 'next/link';
 import { NavigationHeader } from '@/components/layout/NavBar';
 import { Button } from '@/components/ui/button';
