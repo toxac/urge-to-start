@@ -13,19 +13,19 @@ export default function AuthenticatePage() {
       <div className="text-center space-y-1 max-w-sm mx-auto">
         {!isSignUp ? (
           <>
-            <h2 className="text-sm font-bold tracking-tight text-foreground">
+            <h2 className="text-lg font-bold tracking-tight text-foreground">
               Welcome back, builder.
             </h2>
-            <p className="text-xs text-muted-foreground leading-relaxed font-medium px-4">
+            <p className="text-md text-muted-foreground leading-relaxed font-regular px-4">
               Log in to continue your quests and track your progress.
             </p>
           </>
         ) : (
           <>
-            <h2 className="text-sm font-bold tracking-tight text-foreground">
+            <h2 className="text-lg font-bold tracking-tight text-foreground">
               Stop overthinking and just start.
             </h2>
-            <p className="text-xs text-muted-foreground leading-relaxed font-medium px-4">
+            <p className="text-md text-muted-foreground leading-relaxed font-regular px-4">
               You’re joining a group of tinkerers and doers who are tired of waiting for permission. No pitch decks and endless analysis, you will find and solve problems and sell it to real customers.
             </p>
           </>
