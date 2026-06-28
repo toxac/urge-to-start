@@ -1,5 +1,5 @@
-// components/auth/LoginCard.tsx
 'use client';
+// components/auth/LoginCard.tsx
 import React, { useState } from 'react';
 import { login } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
@@ -26,49 +26,49 @@ export function LoginCard() {
   };
 
   return (
-    <div className="bg-[#F9F7F4] border border-[#8C8580]/15 rounded-2xl p-8 shadow-[0_4px_24px_rgba(140,133,128,0.03)] animate-in fade-in duration-200 space-y-6">
+    <div className="bg-card border border-border rounded-2xl p-8 shadow-lg space-y-6">
       <form onSubmit={handleSubmit} className="space-y-4 text-xs">
         {error && (
-          <div className="p-3 text-[11px] font-medium rounded-xl bg-red-500/5 border border-red-500/25 text-red-600 animate-in shake">
+          <div className="p-3 text-[11px] font-medium rounded-xl bg-destructive/10 border border-destructive/25 text-destructive">
             {error}
           </div>
         )}
 
         <div className="space-y-1.5">
-          <Label htmlFor="login-email" className="text-[#8C8580] font-bold text-[10px] uppercase tracking-wider">
+          <Label htmlFor="login-email" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">
             Email Address
           </Label>
-          <Input 
-            id="login-email" 
-            name="email" 
-            type="email" 
+          <Input
+            id="login-email"
+            name="email"
+            type="email"
             disabled={loading}
-            className="w-full bg-background border border-[#8C8580]/20 rounded-xl px-3 h-10 text-[#1A1A1A]" 
+            className="w-full bg-background border-border rounded-xl px-3 h-10 text-foreground"
             placeholder="name@domain.com"
-            required 
+            required
           />
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="login-password" className="text-[#8C8580] font-bold text-[10px] uppercase tracking-wider">
+          <Label htmlFor="login-password" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">
             Access Password
           </Label>
-          <Input 
-            id="login-password" 
-            name="password" 
-            type="password" 
+          <Input
+            id="login-password"
+            name="password"
+            type="password"
             disabled={loading}
-            className="w-full bg-background border border-[#8C8580]/20 rounded-xl px-3 h-10 text-[#1A1A1A]" 
+            className="w-full bg-background border-border rounded-xl px-3 h-10 text-foreground"
             placeholder="••••••••"
-            required 
+            required
           />
         </div>
 
         <div className="pt-4">
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={loading}
-            className="w-full h-11 bg-[#E86A33] hover:bg-[#D35925] text-white font-bold rounded-xl transition uppercase tracking-wider text-xs shadow-md shadow-[#E86A33]/10 flex items-center justify-center gap-2"
+            className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-xl transition uppercase tracking-wider text-xs shadow-md shadow-primary/10 flex items-center justify-center gap-2"
           >
             {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
             {loading ? 'Verifying Identity...' : 'Enter Workspace'}
