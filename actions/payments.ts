@@ -231,21 +231,22 @@ export async function initializeCheckoutTransaction(
 }
 
 /**
- * ⚡ NEW POST Equivalent: Confirms the completion of payment, updates role schemas,
- * provisions the bonus community bundles, and routes the user directly to the program dashboard.
+ * POST Equivalent: Fulfills a transaction, updates permission roles safely, 
+ * provisions database side entitlements, and routes users to the dashboard.
  */
-export async function completeMockCheckoutHandshake(
+export async function completeCheckout(
   rawInput: z.infer<typeof CompleteCheckoutSchema>
 ): Promise<ActionResponse<{ success: boolean }>> {
   try {
+    // ⚡ FIX 1: Parse input to safely expose the validated schema parameters
     const validated = CompleteCheckoutSchema.parse(rawInput);
     const supabase = await createClient();
 
-    // 1. Resolve Auth User
+    // 1. Resolve Auth User Session
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return { success: false, error: 'Authentication signature missing' };
+    if (!user) return { success: false, error: 'Authentication signature missing.' };
 
-    // 2. Fetch the existing pending transaction tracking record
+    // 2. Fetch the target pending transaction record using parsed params
     const { data: transaction, error: txErr } = await supabase
       .from('transactions')
       .select('*, offerings(*)')
@@ -254,64 +255,78 @@ export async function completeMockCheckoutHandshake(
       .single();
 
     if (txErr || !transaction) {
-      return { success: false, error: 'Target checkout tracking session was not found' };
+      return { success: false, error: 'Target checkout tracking session was not found.' };
     }
 
-    // 3. Prevent repeating operations if transaction is already processed
+    // Idempotency: If already completed, just skip gracefully
     if (transaction.status === 'completed') {
       redirect('/program');
     }
 
-    // 4. Update the ledger entry status row to completed
+    // 3. Mark the transaction record itself as completed first
     await supabase
       .from('transactions')
       .update({
         status: 'completed',
-        provider_payment_id: `mock_pay_${crypto.randomUUID().substring(0, 12)}`,
+        provider_payment_id: `pay_${crypto.randomUUID().substring(0, 12)}`,
         raw_webhook_payload: { handshakedAt: new Date().toISOString() },
         updated_at: new Date().toISOString()
       })
       .eq('id', transaction.id);
 
-    // Increment coupon campaign count usage globally if a voucher was bound
-    if (transaction.discount_id) {
-      const { data: disc } = await supabase.from('discounts').select('uses_count').eq('id', transaction.discount_id).single();
-      if (disc) {
-        await supabase.from('discounts').update({ uses_count: disc.uses_count + 1 }).eq('id', transaction.discount_id);
-      }
-    }
-
-    // 5. Automatic Provisioning checks based on item types
+    // 4. Provision Product Entitlements
     const offeringData = transaction.offerings as any;
     
-    if (offeringData?.type === 'program_enrollment' || offeringData?.slug === 'full-access-membership') {
-      // A: Elevate structural role privilege values directly on profile row
-      await supabase
-        .from('profiles')
-        .update({ 
-          role: 'member_full',
-          onboarding_step: 2
-        })
-        .eq('id', user.id);
-
-      // B: Grant the 1-Year Free Network Membership bundle itemized separately
+    if (offeringData?.type === 'program' || offeringData?.slug === 'full-access-membership') {
+      
+      // STEP A: Insert into network_memberships FIRST.
       const expirationDate = new Date();
       expirationDate.setFullYear(expirationDate.getFullYear() + 1);
 
-      await supabase
+      const { error: networkMembershipErr } = await supabase
         .from('network_memberships')
         .insert({
           user_id: user.id,
           status: 'active',
           expires_at: expirationDate.toISOString()
         });
+
+      if (networkMembershipErr) {
+        throw new Error(`Failed to provision network membership access: ${networkMembershipErr.message}`);
+      }
+
+      // STEP B: Fetch and cleanly append roles ONLY after subscription succeeds.
+      const { data: currentProfile } = await supabase
+        .from('profiles')
+        .select('roles')
+        .eq('id', user.id)
+        .single();
+
+      const currentRoles = currentProfile?.roles || ['base'];
+      
+      // ⚡ FIX 2: Cast the compiled unique values array explicitly back to your schema type contract
+      const updatedRoles = Array.from(
+        new Set([...currentRoles, 'enrolled', 'member'])
+      ) as Database["public"]["Enums"]["user_platform_role"][];
+
+      const { error: profileUpdateErr } = await supabase
+        .from('profiles')
+        .update({ 
+          roles: updatedRoles,
+          onboarding_step: 2
+        })
+        .eq('id', user.id);
+
+      if (profileUpdateErr) {
+        throw new Error(`Critical: Membership created but profile sync failed: ${profileUpdateErr.message}`);
+      }
     }
 
     revalidatePath('/', 'layout');
   } catch (err: any) {
-    return { success: false, error: err.message || 'Error occurred finalizing transaction validation keys' };
+    return { success: false, error: err.message || 'Error occurred finalizing checkout.' };
   }
 
-  // 6. Redirect user smoothly to their new active platform workspace track dashboard
+  // 5. Finalize by routing directly to the program dashboard
   redirect('/program');
 }

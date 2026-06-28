@@ -81,15 +81,7 @@ export type Database = {
           user_id?: string
           user_input?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "ai_logs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       discounts: {
         Row: {
@@ -314,13 +306,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fk_launches_user"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "launches_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: true
@@ -413,13 +398,6 @@ export type Database = {
             referencedRelation: "marketplace_listings"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "fk_flags_user"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       marketplace_listings: {
@@ -495,15 +473,7 @@ export type Database = {
           title?: string
           updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_marketplace_listings_creator"
-            columns: ["creator_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       marketplace_reviews: {
         Row: {
@@ -539,13 +509,6 @@ export type Database = {
             columns: ["listing_id"]
             isOneToOne: false
             referencedRelation: "marketplace_listings"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_reviews_user"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -730,13 +693,6 @@ export type Database = {
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "opportunities_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       profiles: {
@@ -745,13 +701,13 @@ export type Database = {
           address: string | null
           age_group: Database["public"]["Enums"]["user_age_group"] | null
           avatar_url: string | null
-          capital_available_local: number
+          capital_available_local: number | null
           city: string | null
           constraints: Json
           core_driver: Json | null
-          country: string
-          currency: string
-          description: string | null
+          country: string | null
+          created_at: string | null
+          currency: string | null
           full_name: string | null
           highest_education:
             | Database["public"]["Enums"]["education_tier"]
@@ -760,9 +716,9 @@ export type Database = {
           mentor_metadata: Json
           onboarding_step: number
           provider_metadata: Json
-          role: Database["public"]["Enums"]["user_platform_role"]
+          roles: Database["public"]["Enums"]["user_platform_role"][]
           social_profiles: Json
-          updated_at: string
+          updated_at: string | null
           username: string
         }
         Insert: {
@@ -770,13 +726,13 @@ export type Database = {
           address?: string | null
           age_group?: Database["public"]["Enums"]["user_age_group"] | null
           avatar_url?: string | null
-          capital_available_local?: number
+          capital_available_local?: number | null
           city?: string | null
           constraints?: Json
           core_driver?: Json | null
-          country: string
-          currency?: string
-          description?: string | null
+          country?: string | null
+          created_at?: string | null
+          currency?: string | null
           full_name?: string | null
           highest_education?:
             | Database["public"]["Enums"]["education_tier"]
@@ -785,9 +741,9 @@ export type Database = {
           mentor_metadata?: Json
           onboarding_step?: number
           provider_metadata?: Json
-          role?: Database["public"]["Enums"]["user_platform_role"]
+          roles?: Database["public"]["Enums"]["user_platform_role"][]
           social_profiles?: Json
-          updated_at?: string
+          updated_at?: string | null
           username: string
         }
         Update: {
@@ -795,13 +751,13 @@ export type Database = {
           address?: string | null
           age_group?: Database["public"]["Enums"]["user_age_group"] | null
           avatar_url?: string | null
-          capital_available_local?: number
+          capital_available_local?: number | null
           city?: string | null
           constraints?: Json
           core_driver?: Json | null
-          country?: string
-          currency?: string
-          description?: string | null
+          country?: string | null
+          created_at?: string | null
+          currency?: string | null
           full_name?: string | null
           highest_education?:
             | Database["public"]["Enums"]["education_tier"]
@@ -810,9 +766,9 @@ export type Database = {
           mentor_metadata?: Json
           onboarding_step?: number
           provider_metadata?: Json
-          role?: Database["public"]["Enums"]["user_platform_role"]
+          roles?: Database["public"]["Enums"]["user_platform_role"][]
           social_profiles?: Json
-          updated_at?: string
+          updated_at?: string | null
           username?: string
         }
         Relationships: []
@@ -1086,13 +1042,6 @@ export type Database = {
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "user_accomplishments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       user_posts: {
@@ -1153,13 +1102,6 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_posts_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1234,13 +1176,6 @@ export type Database = {
             columns: ["task_id"]
             isOneToOne: false
             referencedRelation: "tasks"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_progress_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1324,14 +1259,14 @@ export type Database = {
         | "45_54"
         | "55_plus"
       user_platform_role:
-        | "user"
-        | "lead"
-        | "member_full"
-        | "member_network"
-        | "mentor"
+        | "base"
+        | "enrolled"
+        | "member"
         | "provider"
-        | "admin"
-        | "suspended"
+        | "mentor"
+        | "superadmin"
+        | "admin_marketing"
+        | "admin_accounts"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1540,14 +1475,14 @@ export const Constants = {
         "55_plus",
       ],
       user_platform_role: [
-        "user",
-        "lead",
-        "member_full",
-        "member_network",
-        "mentor",
+        "base",
+        "enrolled",
+        "member",
         "provider",
-        "admin",
-        "suspended",
+        "mentor",
+        "superadmin",
+        "admin_marketing",
+        "admin_accounts",
       ],
     },
   },
