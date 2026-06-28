@@ -44,44 +44,31 @@ export async function signup(formData: FormData) {
   const username = formData.get('username') as string;
   const isNewsletterChecked = formData.get('newsletter') === 'on';
 
-  // 1. Final server-side redundancy check for username availability
+  // Check availability
   const isAvailable = await checkUsernameAvailability(username);
   if (!isAvailable) {
     throw new Error("This username handle is already claimed.");
   }
 
-  // 2. Execute user creation inside Supabase Auth
   const { data: authData, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      // Pass our profile variables straight into standard metadata tracking paths
-      data: { 
+      data: {
         username: username.toLowerCase().trim(),
-        // Save the newsletter preference cleanly within provider_metadata
+        full_name: username.toLowerCase().trim(), // or any default
+        country: 'IN', // optional – you can let the trigger set default if not provided
         provider_metadata: { is_subscribed_to_newsletter: isNewsletterChecked }
       },
     },
   });
 
   if (error) {
+    console.error('Signup error:', error);
     throw new Error(error.message);
   }
 
-  // 3. Fallback sync to ensure profiles row mirrors the username correctly
-  if (authData?.user) {
-    await supabase
-      .from('profiles')
-      .update({ 
-        username: username.toLowerCase().trim(),
-        provider_metadata: { is_subscribed_to_newsletter: isNewsletterChecked }
-      })
-      .eq('id', authData.user.id);
-  }
-
   revalidatePath('/', 'layout');
-  
-  // Send the user directly to the new workbook alignment view step passing down their ID
   redirect(`/setup?id=${authData.user?.id}`);
 }
 
