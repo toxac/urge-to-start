@@ -108,3 +108,13 @@ export async function completeProfile(userId: string, username: string) {
   revalidatePath('/', 'layout');
   return { success: true };
 }
+
+export async function logout() {
+  const supabase = await createClient();
+
+  // Sign out across all active context headers
+  await supabase.auth.signOut();
+
+  // Clear tracking routes and drop them at the entry screen
+  redirect('/login');
+}

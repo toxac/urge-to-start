@@ -1,8 +1,9 @@
+// app/(platform)/layout.tsx
 import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server'; // Assumes you have standard server-side utility helpers
+import { createClient } from '@/lib/supabase/server';
 import { StoreHydrator } from '@/components/providers/StoreHydrator';
-import { SidebarNavigation } from '@/components/program/SidebarNavigation'; // Placeholder for dashboard frame menus
-import { KipSidebarCompanion } from '@/components/program/KipSidebarCompanion'; // Track 1 companion UI location hook
+import { SidebarComponent } from '@/components/layout/Sidebar'; 
+import { KipSidebarCompanion } from '@/components/program/KipSidebarCompanion';
 
 export default async function PlatformLayout({
   children,
@@ -11,37 +12,36 @@ export default async function PlatformLayout({
 }) {
   const supabase = await createClient();
 
-  // 1. Verify credentials instantly on the edge
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     redirect('/login');
   }
 
-  // 2. Fetch both critical datasets in parallel on the server
   const [profileResponse, progressResponse] = await Promise.all([
     supabase.from('profiles').select('*').eq('id', user.id).single(),
     supabase.from('user_progress').select('*').eq('user_id', user.id)
   ]);
 
   return (
-    <div className="w-full h-screen flex overflow-hidden bg-background">
-      {/* Client Bridge Injector: Hydrates atoms instantly with server data */}
+    <div className="w-full h-screen flex bg-background text-foreground antialiased overflow-hidden relative">
       <StoreHydrator 
         initialProgress={(progressResponse.data as any) || []} 
         initialProfile={profileResponse.data as any} 
       />
 
-      {/* Global Application Nav Sidebar Frame */}
-      <SidebarNavigation />
-
-      {/* Primary Workspace Scroll Module */}
-      <div className="flex-1 h-full overflow-y-auto p-6 md:p-8">
-        <div className="max-w-5xl mx-auto w-full pb-20">
-          {children}
-        </div>
+      {/* LEFT AREA: Pinned on desktop, hidden off-screen via standard layout media queries */}
+      <div className="hidden md:block h-full">
+        <SidebarComponent />
       </div>
 
-      {/* Track 1 Ambient Advisor Side Panel Frame */}
+      {/* CENTER AREA: Takes 100% of the screen space on mobile/tablets, then centers out nicely on desktop */}
+      <div className="flex-1 h-full overflow-y-auto flex flex-col min-w-0 pt-14 md:pt-0">
+        <main className="flex-1 p-5 md:p-10 max-w-4xl w-full mx-auto pb-24">
+          {children}
+        </main>
+      </div>
+
+      {/* RIGHT AREA: Handles desktop columns, floating tabs, and bottom sheet triggers automatically */}
       <KipSidebarCompanion />
     </div>
   );

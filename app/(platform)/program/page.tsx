@@ -1,16 +1,18 @@
 // app/(platform)/program/page.tsx
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useStore } from '@nanostores/react';
 import { $playbookStore, setCompanionFocus } from '@/lib/stores/companionStore';
 import { $progressStore } from '@/lib/stores/progressStore';
 import { Button } from '@/components/ui/button';
-import { ShieldAlert, ArrowRight, CheckCircle } from 'lucide-react';
+import { ShieldAlert, ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
 
 export default function ProgramDashboardPage() {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  
   const playbook = useStore($playbookStore);
   const progress = useStore($progressStore);
 
@@ -19,149 +21,152 @@ export default function ProgramDashboardPage() {
     setCompanionFocus({ pageType: 'dashboard' });
   }, []);
 
-  // 2. Transmute the raw playbook mapping into a clean ordered tracking stack
-  const missions = Object.entries(playbook)
+  // 2. Transform the raw playbook mapping into a clean ordered tracking stack
+  const missions = Object.entries(playbook || {})
     .map(([id, data]) => ({ id, ...data }))
     .sort((a, b) => a.sequence - b.sequence);
 
   // 3. Find the exact mission the user is currently working on
   const activeMission = missions.find((mission) => {
     const quests = Object.values(mission.quests || {});
-    // Check if any quest tasks are incomplete
     return quests.some((quest: any) => 
       quest.tasks?.some((task: any) => progress[task.id]?.status !== 'completed')
     );
   }) || missions[0];
 
-  // 4. Calculate overarching program metrics to show subtle progress
-  const totalCompletedTasks = Object.values(progress).filter(p => p.status === 'completed').length;
+  // 4. Calculate overarching program metrics to show progress
+  const totalCompletedTasks = Object.values(progress || {}).filter(p => p.status === 'completed').length;
+
+  // ⚡ PROTECTION LAYER: If state stores are empty, show a loading block instead of a broken page
+  if (missions.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center space-y-3 py-32 animate-in fade-in duration-200">
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+        <span className="text-xs font-sans font-medium text-muted-foreground tracking-wide">
+          Syncing workspace track...
+        </span>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen w-full bg-[#F9F7F4] text-[#1A1A1A] font-sans antialiased flex flex-col selection:bg-[#E86A33]/20">
+    <div className="w-full space-y-10 animate-in fade-in duration-300">
       
-      {/* ─── PROPORTION PRINCIPLE: Low-Contrast System Header ─── */}
-      <header className="w-full h-12 px-6 border-b border-[#8C8580]/10 flex items-center justify-between shrink-0 bg-[#F9F7F4]">
-        <span className="text-xs font-bold text-[#1A1A1A] tracking-tight uppercase">
-          The Urge Workspace
-        </span>
-        <div className="flex items-center gap-4 text-[11px] font-bold text-[#8C8580]">
-          <span>Tasks Mastered: {totalCompletedTasks}</span>
+      {/* Streamlined Workspace Title Section */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
+        <div className="space-y-1">
+          <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-primary">
+            Urge Start Playbook
+          </span>
+          <h1 className="text-2xl md:text-3xl font-serif font-bold tracking-tight text-foreground">
+            Your Building Track
+          </h1>
+          <p className="text-xs text-muted-foreground font-medium max-w-md leading-relaxed">
+            No spreadsheets, no hype. Focus entirely on the immediate task in front of you.
+          </p>
         </div>
-      </header>
-
-      {/* ─── ASYMMETRICAL BUILDER GRID ─── */}
-      <main className="flex-1 w-full max-w-5xl mx-auto px-6 py-12 md:py-16 grid grid-cols-1 lg:grid-cols-3 gap-12 overflow-hidden">
         
-        {/* LEFT COLUMN: The Focus Panel (Takes up 70% of the visual space) */}
-        <div className="lg:col-span-2 space-y-12 overflow-y-auto h-full pr-2">
-          
-          {/* Dashboard Welcome Header */}
-          <div className="space-y-2 text-left">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#8C8580]">
-              Operational Hub
+        {/* Simple Progress Telemetry Component */}
+        <div className="bg-muted/50 border border-border px-3 py-1.5 rounded-xl shrink-0 text-left md:text-right">
+          <span className="text-[10px] font-sans font-bold text-muted-foreground uppercase tracking-wider block">Tasks Mastered</span>
+          <span className="text-sm font-serif font-black text-foreground">{totalCompletedTasks}</span>
+        </div>
+      </div>
+
+      {/* ─── ENHANCED FOCUS AREA: Active Target Card ─── */}
+      {activeMission && (
+        <div className="p-8 border border-primary/20 bg-card rounded-2xl shadow-sm space-y-6 relative overflow-hidden transition hover:border-primary/30">
+          <div className="absolute right-4 top-4 text-primary/5 select-none pointer-events-none">
+            <ShieldAlert className="w-28 h-28 stroke-[1]" />
+          </div>
+
+          <div className="space-y-1.5 relative z-10">
+            <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-md">
+              Current Target — Sequence 0{activeMission.sequence}
+            </span>
+            <h2 className="text-xl font-bold text-foreground tracking-tight pt-2">
+              {activeMission.title}
             </h2>
-            <h1 className="text-2xl md:text-3xl font-serif font-bold tracking-tight text-[#1A1A1A]">
-              Your Building Track
-            </h1>
-            <p className="text-xs text-[#8C8580] font-medium max-w-md leading-relaxed">
-              No spreadsheets, no hype. Focus entirely on the immediate goal in front of you.
+            <p className="text-xs text-muted-foreground leading-relaxed max-w-xl font-medium pt-1">
+              {activeMission.briefing_text}
             </p>
           </div>
 
-          {/* ─── EMPHASIS PRINCIPLE: The Single Active Action Card ─── */}
-          {activeMission && (
-            <div className="p-8 border border-[#E86A33]/30 bg-[#F9F7F4] rounded-2xl shadow-[0_8px_32px_rgba(232,106,51,0.04)] space-y-6 relative overflow-hidden">
-              <div className="absolute right-4 top-4 text-[#E86A33]/10">
-                <ShieldAlert className="w-24 h-24 stroke-[1]" />
-              </div>
+          <div className="pt-2 relative z-10">
+            <Button
+              onClick={() => {
+                startTransition(() => {
+                  router.push(`/program/mission/${activeMission.id}`);
+                });
+              }}
+              disabled={isPending}
+              className="h-10 px-5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-sans text-xs font-bold tracking-wider uppercase transition shadow-md shadow-primary/10 flex items-center"
+            >
+              {isPending ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" />
+              ) : null}
+              Resume Building Flow
+              <ArrowRight className="w-3.5 h-3.5 ml-2" />
+            </Button>
+          </div>
+        </div>
+      )}
 
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#E86A33]">
-                  Current Target Mission — Sequence {activeMission.sequence}
-                </span>
-                <h2 className="text-xl font-bold text-[#1A1A1A] tracking-tight">
-                  {activeMission.title}
-                </h2>
-                <p className="text-xs text-[#8C8580] leading-relaxed max-w-xl font-medium pt-1">
-                  {activeMission.briefing_text}
-                </p>
-              </div>
-
-              {/* THE MOAT: Clean spacing around the primary action button */}
-              <div className="pt-4">
-                <Button
-                  onClick={() => router.push(`/program/mission/${activeMission.id}`)}
-                  className="h-11 px-6 rounded-xl bg-[#E86A33] hover:bg-[#D35925] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-[#E86A33]/10"
-                >
-                  Resume Building Flow
-                  <ArrowRight className="w-3.5 h-3.5 ml-2" />
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* ─── REPETITION PRINCIPLE: Secondary Roadmap Index ─── */}
-          <div className="space-y-4 pt-4">
-            <h3 className="text-[10px] font-bold uppercase tracking-widest text-[#8C8580] pb-2 border-b border-[#8C8580]/10">
-              The Complete Playbook Sequence
-            </h3>
+      {/* ─── THE ROADMAP SEQUENCE STACK ─── */}
+      <div className="space-y-4">
+        <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted-foreground tracking-wider pb-2 border-b border-border/60">
+          The Complete Track Roadmap
+        </h3>
+        
+        <div className="grid grid-cols-1 gap-2.5">
+          {missions.map((m) => {
+            const isCurrent = activeMission?.id === m.id;
             
-            <div className="space-y-3">
-              {missions.map((m) => {
-                const isCurrent = activeMission?.id === m.id;
-                
-                // Determine if all tasks in this mission are complete
-                const totalTasks = Object.values(m.quests || {}).reduce((acc: number, q: any) => acc + (q.tasks?.length || 0), 0);
-                const completedTasks = Object.values(m.quests || {}).reduce((acc: number, q: any) => {
-                  return acc + (q.tasks?.filter((t: any) => progress[t.id]?.status === 'completed').length || 0);
-                }, 0);
-                const isFinished = totalTasks > 0 && completedTasks === totalTasks;
+            // Calculate completions safely across inner collections
+            const totalTasks = Object.values(m.quests || {}).reduce((acc: number, q: any) => acc + (q.tasks?.length || 0), 0);
+            const completedTasks = Object.values(m.quests || {}).reduce((acc: number, q: any) => {
+              return acc + (q.tasks?.filter((t: any) => progress[t.id]?.status === 'completed').length || 0);
+            }, 0);
+            const isFinished = totalTasks > 0 && completedTasks === totalTasks;
 
-                return (
-                  <div
-                    key={m.id}
-                    onClick={() => router.push(`/program/mission/${m.id}`)}
-                    className={`p-4 border rounded-xl flex items-center justify-between transition-all cursor-pointer ${
-                      isCurrent 
-                        ? 'border-[#E86A33]/20 bg-[#E86A33]/5 font-semibold' 
-                        : 'border-[#8C8580]/15 bg-background/50 opacity-70 hover:opacity-100'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <span className="text-xs font-bold text-[#8C8580] shrink-0">0{m.sequence}</span>
-                      <p className="text-xs text-[#1A1A1A] font-bold truncate tracking-tight">{m.title}</p>
-                    </div>
+            return (
+              <div
+                key={m.id}
+                onClick={() => router.push(`/program/mission/${m.id}`)}
+                className={`p-4 border rounded-xl flex items-center justify-between transition group cursor-pointer ${
+                  isCurrent 
+                    ? 'border-primary/30 bg-primary/5 font-semibold shadow-sm' 
+                    : 'border-border bg-card/40 opacity-75 hover:opacity-100 hover:border-border-hover'
+                }`}
+              >
+                <div className="flex items-center gap-4 min-w-0">
+                  <span className={`text-xs font-sans font-bold shrink-0 ${isCurrent ? 'text-primary' : 'text-muted-foreground'}`}>
+                    0{m.sequence}
+                  </span>
+                  <p className="text-xs text-foreground font-bold truncate tracking-tight">
+                    {m.title}
+                  </p>
+                </div>
 
-                    <div className="shrink-0 pl-4">
-                      {isFinished ? (
-                        <CheckCircle className="w-4 h-4 text-emerald-600" />
-                      ) : isCurrent ? (
-                        <span className="text-[10px] font-bold text-[#E86A33] uppercase tracking-wider">Active</span>
-                      ) : (
-                        <span className="text-[10px] font-bold text-[#8C8580] uppercase tracking-wider">View</span>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
+                <div className="shrink-0 pl-4">
+                  {isFinished ? (
+                    <CheckCircle className="w-4 h-4 text-emerald-500 fill-emerald-500/10" />
+                  ) : isCurrent ? (
+                    <span className="text-[9px] font-sans font-bold text-primary bg-primary/10 px-2 py-0.5 rounded uppercase tracking-wider">
+                      Active
+                    </span>
+                  ) : (
+                    <span className="text-[9px] font-sans font-bold text-muted-foreground group-hover:text-foreground transition uppercase tracking-wider">
+                      View Track
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
+      </div>
 
-        {/* RIGHT COLUMN: Manifesto Inspiration Sidebar */}
-        <div className="hidden lg:block lg:col-span-1 border-l border-[#8C8580]/10 pl-8 space-y-6">
-          <div className="p-5 bg-[#8C8580]/5 rounded-2xl border border-[#8C8580]/10 space-y-4">
-            <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A] border-b border-[#8C8580]/10 pb-2">
-              The Urge Creed
-            </h4>
-            <p className="text-xs text-[#8C8580] italic leading-relaxed font-medium">
-              "We believe a business is a simple, beautiful equation: Solve a real problem, for a real person, and get paid for it. Analysis paralysis is the silent killer of dreams. We trade endless spreadsheets for a single, focused experiment."
-            </p>
-          </div>
-        </div>
-
-      </main>
     </div>
   );
 }
