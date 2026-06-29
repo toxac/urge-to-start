@@ -1,9 +1,13 @@
+// app/(onboarding)/setup/page.tsx
 import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
+import { cookies } from 'next/headers';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { submitProfileSetup } from '@/actions/onboarding-setup';
+import { COUNTRY_LABELS } from '@/constants/countries';
+import { USER_AGE_GROUP_OPTIONS, EDUCATION_TIER_OPTIONS } from '@/constants/enums';
 
 interface PageProps {
   searchParams: Promise<{ id?: string }>;
@@ -19,71 +23,113 @@ export default async function ProfileSettingsPage({ searchParams }: PageProps) {
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', id).single();
   if (!profile) notFound();
 
-  return (
-    <div className="min-h-screen w-full bg-[#F9F7F4] text-[#1A1A1A] font-sans antialiased selection:bg-[#E86A33]/20">
-      <main className="max-w-5xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-16 items-start">
+  // Read the user's entry track intent to adapt the messaging
+  const cookieStore = await cookies();
+  const savedIntent = cookieStore.get('urge_signup_intent')?.value;
+  const isFreeTrial = savedIntent === 'free';
 
-        {/* LEFT & CENTER INTERACTION CANVAS (70% Screen visual weighting target) */}
-        <div className="lg:col-span-2 space-y-8 text-left">
-          <div className="space-y-1.5 text-left max-w-xl">
-            <h1 className="text-xl font-serif font-bold tracking-tight text-[#1A1A1A]">
-              Let's get you set up.
-            </h1>
-            <p className="text-xs text-[#8C8580] leading-relaxed max-w-md font-medium">
-              We’ve kept this simple—just one small step at a time, so you never feel lost. As you move through each one, you’ll get real feedback from our community, share your progress out loud, and hear from people who’ve actually built things before.
-            </p>
+  return (
+    <div className="w-full max-w-md mx-auto space-y-6 animate-in fade-in duration-200">
+      
+      {/* Human-centered Form Title Headers */}
+      <div className="text-center space-y-1">
+        <h1 className="text-lg font-bold tracking-tight text-foreground">
+          Let&rsquo;s get you set up.
+        </h1>
+        <p className="text-sm text-muted-foreground leading-relaxed font-normal px-4">
+          Tell us a little bit about yourself so we can tailor your program dashboard.
+        </p>
+      </div>
+
+      {/* The Centralized Setup Card Form */}
+      <div className="bg-card border border-border rounded-2xl p-8 shadow-lg">
+        <form action={submitProfileSetup} className="space-y-4 text-xs">
+          <input type="hidden" name="userId" value={profile.id} />
+
+          {/* 1. Handle Username & Name Block */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider opacity-60">Username</Label>
+              <Input type="text" className="w-full h-10 bg-muted/40 border border-border/40 rounded-xl px-3 opacity-70 text-xs font-medium" defaultValue={`@${profile.username || ''}`} disabled />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="fullName" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">Your Full Name</Label>
+              <Input id="fullName" name="fullName" type="text" required className="w-full h-10 bg-background border border-input rounded-xl px-3 text-xs" defaultValue={profile.full_name || ''} placeholder="Jane Dev" />
+            </div>
           </div>
 
-          <form className="space-y-6 text-xs max-w-xl">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label className="text-[#8C8580] font-bold text-[10px] uppercase tracking-wider">Your Full Name</Label>
-                <Input type="text" className="w-full h-10 bg-background border border-[#8C8580]/20 rounded-xl px-3" defaultValue={profile.full_name || ''} />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-[#8C8580] font-bold text-[10px] uppercase tracking-wider opacity-50">Username Handle</Label>
-                <Input type="text" className="w-full h-10 bg-muted/40 border border-[#8C8580]/10 rounded-xl px-3 opacity-60" defaultValue={`@${profile.username || ''}`} disabled />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label className="text-[#8C8580] font-bold text-[10px] uppercase tracking-wider">Operational City</Label>
-                <Input type="text" className="w-full h-10 bg-background border border-[#8C8580]/20 rounded-xl px-3" defaultValue={profile.city || ''} />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-[#8C8580] font-bold text-[10px] uppercase tracking-wider">Country Region</Label>
-                <Input type="text" className="w-full h-10 bg-background border border-[#8C8580]/20 rounded-xl px-3" defaultValue={profile.country || ''} />
-              </div>
+          {/* 2. Age and Education Background */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="ageGroup" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">Age</Label>
+              <select
+                id="ageGroup"
+                name="ageGroup"
+                required
+                defaultValue={profile.age_group || ''}
+                className="w-full flex h-10 rounded-xl border border-input bg-background px-3 py-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+              >
+                <option value="" disabled>Select age...</option>
+                {USER_AGE_GROUP_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-[#8C8580] font-bold text-[10px] uppercase tracking-wider">What types of software or local services do you interact with most?</Label>
-              <Textarea className="w-full bg-background border border-[#8C8580]/20 rounded-xl p-3 min-h-[100px] resize-none leading-relaxed" placeholder="This helps us seed your observation logs with the right industry categories..." defaultValue={profile.description || ''} />
+              <Label htmlFor="highestEducation" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">Education Background</Label>
+              <select
+                id="highestEducation"
+                name="highestEducation"
+                required
+                defaultValue={profile.highest_education || ''}
+                className="w-full flex h-10 rounded-xl border border-input bg-background px-3 py-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+              >
+                <option value="" disabled>Select education...</option>
+                {EDUCATION_TIER_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
             </div>
-
-            {/* THE MOAT: Perfect space buffer separating operational actions */}
-            <div className="pt-6 flex justify-start">
-              <Button type="submit" className="px-8 h-11 bg-[#E86A33] hover:bg-[#D35925] text-white font-bold rounded-xl transition uppercase tracking-wider text-xs shadow-md shadow-[#E86A33]/10">
-                Lock Alignment & Advance
-              </Button>
-            </div>
-          </form>
-        </div>
-
-        {/* RIGHT COLUMN: Manifesto Quote Frame (Repetition Principle Container) */}
-        <div className="hidden lg:block border-l border-[#8C8580]/10 pl-10 space-y-6">
-          <div className="p-6 bg-[#8C8580]/5 rounded-2xl border border-[#8C8580]/10 space-y-4">
-            <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#1A1A1A]">
-              The Urge Standard
-            </h4>
-            <p className="text-xs text-[#8C8580] leading-relaxed italic font-medium">
-              "We don't fall in love with our ideas; we fall in love with the problems our customers have. We seek friction, frustration, and despair, because within them lie the seeds of the greatest opportunities."
-            </p>
           </div>
-        </div>
 
-      </main>
+          {/* 3. Operational City and Country Region */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="city" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">City</Label>
+              <Input id="city" name="city" type="text" required className="w-full h-10 bg-background border border-input rounded-xl px-3 text-xs" defaultValue={profile.city || ''} placeholder="e.g. Bengaluru" />
+            </div>
+            
+            <div className="space-y-1.5">
+              <Label htmlFor="country" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">Country</Label>
+              <select
+                id="country"
+                name="country"
+                required
+                defaultValue={profile.country || 'IN'}
+                className="w-full flex h-10 rounded-xl border border-input bg-background px-3 py-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+              >
+                {Object.entries(COUNTRY_LABELS).map(([code, name]) => (
+                  <option key={code} value={code.toUpperCase()}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* 4. Intent Aware CTA Submission Row */}
+          <div className="pt-4">
+            <Button type="submit" className="w-full py-5 bg-primary hover:bg-primary/90 text-primary-foreground font-mono text-xs font-bold tracking-wider uppercase rounded-xl transition shadow-md shadow-primary/10">
+              {isFreeTrial 
+                ? 'Finish Setup & Open Dashboard' 
+                : 'Finish Setup & Continue to Payment'
+              }
+            </Button>
+          </div>
+        </form>
+      </div>
+
     </div>
   );
 }

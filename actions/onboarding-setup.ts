@@ -3,27 +3,32 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
-import { Database } from '@/types/supabase'; // Explicitly pull your type contract
+import { Database } from '@/types/supabase';
+import { UserAgeGroup, EducationTier } from '@/constants/enums';
 
 export async function submitProfileSetup(formData: FormData) {
   const supabase = await createClient();
   const cookieStore = await cookies();
 
+  // 1. Authenticate user identity session
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Unauthorized identity validation session.");
 
+  // 2. Safely parse and cast the new clean form parameters
   const fullName = formData.get('fullName') as string;
+  const ageGroup = formData.get('ageGroup') as UserAgeGroup;
+  const highestEducation = formData.get('highestEducation') as EducationTier;
   const city = formData.get('city') as string;
   const country = formData.get('country') as string;
-  const description = formData.get('description') as string;
 
-  // ⚡ FIX: Cast the update payload to the explicitly generated Profile Update type contract
+  // 3. Build a type-safe object payload mapped perfectly to your Database schema
   const updatePayload: Database['public']['Tables']['profiles']['Update'] = {
     full_name: fullName,
+    age_group: ageGroup,
+    highest_education: highestEducation,
     city: city,
     country: country,
-    description: description,
-    onboarding_step: 2
+    onboarding_step: 2 // Complete step milestone sequence
   };
 
   const { error } = await supabase
@@ -31,15 +36,15 @@ export async function submitProfileSetup(formData: FormData) {
     .update(updatePayload)
     .eq('id', user.id);
 
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(`Profile synchronization failed: ${error.message}`);
 
-  // Read the signup intent cookie we saved earlier to determine branching
+  // 4. Retrieve their signup intent flag cookie to determine routing
   const savedIntent = cookieStore.get('urge_signup_intent')?.value;
 
-  // Clear intent cookie to keep things clean
+  // Clear cookie token state cleanly
   cookieStore.delete('urge_signup_intent');
 
-  // Run your conditional intent check loop logic
+  // 5. Intelligent redirection branching loop
   if (savedIntent === 'free') {
     redirect('/program');
   } else {
