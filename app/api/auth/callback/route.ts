@@ -20,4 +20,4 @@ export async function GET(request: Request) {
 
   // Fallback anchor safety path
   return NextResponse.redirect(`${origin}/authenticate?error=verification-failed`);
-}
+} 

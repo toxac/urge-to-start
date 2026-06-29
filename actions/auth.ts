@@ -41,10 +41,14 @@ export async function signup(formData: FormData) {
     return { error: "This username handle is already claimed." };
   }
 
+  // Determine site root origin safely using your environment profile contracts
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+
   const { data: authData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
     options: {
+      emailRedirectTo: `${siteUrl}/api/auth/callback?next=/setup`,
       data: {
         username: username.toLowerCase().trim(),
         provider_metadata: { is_subscribed_to_newsletter: isNewsletterChecked },
