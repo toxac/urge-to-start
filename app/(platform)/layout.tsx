@@ -29,10 +29,7 @@ export default async function PlatformLayout({
         initialProfile={profileResponse.data as any} 
       />
 
-      {/* LEFT AREA: Pinned on desktop, hidden off-screen via standard layout media queries */}
-      <div className="hidden md:block h-full">
-        <SidebarComponent />
-      </div>
+      <SidebarComponent />
 
       {/* CENTER AREA: Takes 100% of the screen space on mobile/tablets, then centers out nicely on desktop */}
       <div className="flex-1 h-full overflow-y-auto flex flex-col min-w-0 pt-14 md:pt-0">

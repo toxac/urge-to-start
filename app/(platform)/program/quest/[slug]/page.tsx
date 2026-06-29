@@ -14,13 +14,13 @@ export default function QuestActionCenterPage() {
   const params = useParams();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  
+
   // Connect Atomic Stores
   const playbook = useStore($playbookStore);
   const progress = useStore($progressStore);
   const profile = useStore($profileStore);
 
-  // Local navigation state override override
+  // Local navigation state override parameters
   const [overrideTaskId, setOverrideTaskId] = useState<string | null>(null);
 
   // 1. Resolve target structures out of static file mappings
@@ -38,28 +38,15 @@ export default function QuestActionCenterPage() {
     });
   });
 
-  if (!currentQuest) {
-    return (
-      <div className="flex flex-col items-center justify-center space-y-3 py-32 animate-in fade-in duration-200">
-        <Loader2 className="w-5 h-5 animate-spin text-primary" />
-        <span className="text-xs font-sans font-medium text-muted-foreground tracking-wide">
-          Loading active workspace parameters...
-        </span>
-      </div>
-    );
-  }
-
-  const tasks = currentQuest.tasks || [];
+  const tasks = currentQuest?.tasks || [];
   const currentUserId = profile?.id || '';
 
-  // 2. Identify chronological active/next task based on actual progression records
+  // Identify chronological active/next task safely
   const nextIncompleteTask = tasks.find((t: any) => progress[t.id]?.status !== 'completed') || tasks[tasks.length - 1];
-  
-  // Core selected item tracking: defaults to next incomplete task, but yields to explicit manual user selection
   const activeTaskId = overrideTaskId || nextIncompleteTask?.id;
   const currentSelectedTask = tasks.find((t: any) => t.id === activeTaskId) || nextIncompleteTask;
 
-  // 3. Synchronize Companion focus layers down to the specific focused card
+  // ⚡ 2. IMMUTABLE HOOK REGISTRATION BOUNDARY — Hooks sit open above conditional execution checks
   useEffect(() => {
     if (currentSelectedTask) {
       setCompanionFocus({
@@ -71,16 +58,27 @@ export default function QuestActionCenterPage() {
     }
   }, [currentSelectedTask?.id, activeMissionId, activeQuestKey]);
 
-  // Calculate overarching quest statistics
+  // ⚡ 3. SAFE RETURN POINT GATES — Handled cleanly down below all hook tracks
+  if (!currentQuest) {
+    return (
+      <div className="flex flex-col items-center justify-center space-y-3 py-32 animate-in fade-in duration-200">
+        <Loader2 className="w-5 h-5 animate-spin text-primary" />
+        <span className="text-xs font-sans font-medium text-muted-foreground tracking-wide">
+          Loading active workspace parameters...
+        </span>
+      </div>
+    );
+  }
+
+  // Overarching quest statistics calculations 
   const completedCount = tasks.filter((t: any) => progress[t.id]?.status === 'completed').length;
   const progressRatioPercentage = Math.min(100, Math.floor((completedCount / tasks.length) * 100));
-
   return (
     <div className="w-full space-y-8 animate-in fade-in duration-300">
-      
+
       {/* Back Navigation Bar Header */}
       <div className="flex items-center justify-between border-b border-border/60 pb-5">
-        <button 
+        <button
           onClick={() => {
             startTransition(() => {
               router.push(`/platform/program/mission/${activeMissionId}`);
@@ -134,15 +132,14 @@ export default function QuestActionCenterPage() {
           const isLocked = index > 0 && progress[tasks[index - 1].id]?.status !== 'completed';
 
           return (
-            <div 
+            <div
               key={task.id}
-              className={`transition-all duration-200 rounded-2xl border ${
-                isTaskFocusedNow 
-                  ? 'border-primary bg-card/100 shadow-md ring-1 ring-primary/20' 
-                  : isLocked 
+              className={`transition-all duration-200 rounded-2xl border ${isTaskFocusedNow
+                  ? 'border-primary bg-card/100 shadow-md ring-1 ring-primary/20'
+                  : isLocked
                     ? 'border-border/40 bg-muted/20 opacity-40 pointer-events-none'
                     : 'border-border bg-card/50 hover:border-border-hover cursor-pointer opacity-85 hover:opacity-100'
-              }`}
+                }`}
               onClick={() => {
                 if (!isLocked && !isTaskFocusedNow) {
                   setOverrideTaskId(task.id);
@@ -152,7 +149,7 @@ export default function QuestActionCenterPage() {
               {/* COMPONENT CASE 1: Active Focused Task — Renders full interactive Form Registry */}
               {isTaskFocusedNow ? (
                 <div className="animate-in fade-in duration-200">
-                  <TaskFormRegistry 
+                  <TaskFormRegistry
                     task={task}
                     userId={currentUserId}
                     existingProgress={taskProgress}
@@ -177,7 +174,7 @@ export default function QuestActionCenterPage() {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="space-y-0.5 truncate">
                       <h4 className="text-sm font-bold text-foreground truncate tracking-tight">
                         {task.title}
