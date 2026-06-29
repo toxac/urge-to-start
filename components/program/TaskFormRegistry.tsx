@@ -1,5 +1,5 @@
 'use client';
-
+// components/program/TaskFormRegistry.tsx
 import React from 'react';
 import { Database } from '@/types/supabase';
 import { TaskComponentMap } from './tasks';
@@ -11,7 +11,7 @@ interface TaskFormRegistryProps {
   userId: string; // Passed down to lock file bucket directory paths securely
   existingProgress?: {
     id: string;
-    status: 'pending' | 'completed';
+    status: 'not_started' | 'in_progress' | 'completed' | string;
     saved_payload?: any;
   };
   onSuccess?: () => void;

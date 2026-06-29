@@ -1,27 +1,34 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef, useTransition } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useStore } from '@nanostores/react';
-import { $playbookStore } from '@/lib/stores/companionStore';
-import { setCompanionFocus } from '@/lib/stores/companionStore';
-import { $progressStore, setProgressStoreRow, ProgressRow, ProgressPayload } from '@/lib/stores/progressStore';
+import { $playbookStore, setCompanionFocus } from '@/lib/stores/companionStore';
+import { $progressStore } from '@/lib/stores/progressStore';
+import { $profileStore } from '@/lib/stores/profileStore'; // Fetch profile metadata id securely
+import { TaskFormRegistry } from '@/components/program/TaskFormRegistry'; // ⚡ Import the actual form registry
+import { ChevronLeft, CheckCircle2, Lock, Eye, Play, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft } from 'lucide-react';
 
 export default function QuestActionCenterPage() {
   const params = useParams();
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  
+  // Connect Atomic Stores
   const playbook = useStore($playbookStore);
   const progress = useStore($progressStore);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const profile = useStore($profileStore);
 
-  // 1. Resolve the active Quest object out of memory using its unique slug parameter
+  // Local navigation state override override
+  const [overrideTaskId, setOverrideTaskId] = useState<string | null>(null);
+
+  // 1. Resolve target structures out of static file mappings
   let activeMissionId = '';
   let activeQuestKey = '';
   let currentQuest: any = null;
 
-  Object.entries(playbook).forEach(([mId, mission]) => {
+  Object.entries(playbook || {}).forEach(([mId, mission]) => {
     Object.entries(mission.quests || {}).forEach(([qKey, quest]) => {
       if (quest.slug === params.slug) {
         activeMissionId = mId;
@@ -31,180 +38,189 @@ export default function QuestActionCenterPage() {
     });
   });
 
-  // 2. Fallback safely if user refreshes or slug is invalid
   if (!currentQuest) {
     return (
-      <div className="h-full w-full flex items-center justify-center bg-[#F9F7F4] text-xs font-medium text-[#8C8580]">
-        Loading your tactical action panel configuration...
+      <div className="flex flex-col items-center justify-center space-y-3 py-32 animate-in fade-in duration-200">
+        <Loader2 className="w-5 h-5 animate-spin text-primary" />
+        <span className="text-xs font-sans font-medium text-muted-foreground tracking-wide">
+          Loading active workspace parameters...
+        </span>
       </div>
     );
   }
 
   const tasks = currentQuest.tasks || [];
-  
-  // Find the first task that doesn't have a 'completed' record status row in progress store
-  const activeTask = tasks.find((t: any) => progress[t.id]?.status !== 'completed') || tasks[tasks.length - 1];
+  const currentUserId = profile?.id || '';
 
-  // 3. Keep Kip's Focus synchronized to the active task layout dynamically
+  // 2. Identify chronological active/next task based on actual progression records
+  const nextIncompleteTask = tasks.find((t: any) => progress[t.id]?.status !== 'completed') || tasks[tasks.length - 1];
+  
+  // Core selected item tracking: defaults to next incomplete task, but yields to explicit manual user selection
+  const activeTaskId = overrideTaskId || nextIncompleteTask?.id;
+  const currentSelectedTask = tasks.find((t: any) => t.id === activeTaskId) || nextIncompleteTask;
+
+  // 3. Synchronize Companion focus layers down to the specific focused card
   useEffect(() => {
-    if (activeTask) {
+    if (currentSelectedTask) {
       setCompanionFocus({
         pageType: 'quest',
         activeMissionId,
         activeQuestId: activeQuestKey,
-        activeTaskId: activeTask.id,
+        activeTaskId: currentSelectedTask.id,
       });
     }
-  }, [activeTask?.id, activeMissionId, activeQuestKey]);
+  }, [currentSelectedTask?.id, activeMissionId, activeQuestKey]);
 
-  // --- HANDLER: FAST RECORD SIMULATED PROGRESSION FOR SYSTEM FLOW ---
-  const handleCompleteActiveTask = (taskId: string, grantPoints: number) => {
-    const existingRow = progress[taskId];
-    const existingPayload: ProgressPayload = (existingRow?.saved_payload as ProgressPayload) || {};
-
-    const updatedRow: ProgressRow = {
-      ...(existingRow || {
-        id: crypto.randomUUID(),
-        user_id: '',
-        project_id: null,
-        item_type: 'task',
-        mission_id: activeMissionId,
-        quest_id: activeQuestKey,
-        task_id: taskId,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        completed_at: new Date().toISOString(),
-      }),
-      status: 'completed',
-      saved_payload: {
-        ...existingPayload,
-        formData: { executedAt: new Date().toISOString() },
-      },
-    };
-
-    setProgressStoreRow(updatedRow);
-  };
-
-  // Calculate completed ratio percentage to map the active movement line fill
+  // Calculate overarching quest statistics
   const completedCount = tasks.filter((t: any) => progress[t.id]?.status === 'completed').length;
   const progressRatioPercentage = Math.min(100, Math.floor((completedCount / tasks.length) * 100));
 
   return (
-    <div className="min-h-screen w-full bg-[#F9F7F4] text-[#1A1A1A] font-sans antialiased flex flex-col selection:bg-[#E86A33]/20">
+    <div className="w-full space-y-8 animate-in fade-in duration-300">
       
-      {/* ─── HIbadge TOP STRIP (Thin, low-contrast, pushed to extreme edges) ─── */}
-      <header className="w-full h-12 px-6 border-b border-[#8C8580]/10 flex items-center justify-between shrink-0 bg-[#F9F7F4]">
+      {/* Back Navigation Bar Header */}
+      <div className="flex items-center justify-between border-b border-border/60 pb-5">
         <button 
-          onClick={() => router.push(`/program/mission/${activeMissionId}`)}
-          className="flex items-center gap-1.5 text-xs font-semibold text-[#8C8580] hover:text-[#1A1A1A] opacity-70 transition-opacity"
+          onClick={() => {
+            startTransition(() => {
+              router.push(`/platform/program/mission/${activeMissionId}`);
+            });
+          }}
+          disabled={isPending}
+          className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition flex-row"
         >
-          <ChevronLeft className="h-3.5 w-3.5" />
+          <ChevronLeft className="h-4 w-4" />
           Back to Roadmap
         </button>
-        <span className="text-[11px] font-bold uppercase tracking-wider text-[#8C8580] opacity-60">
-          Quest Stack: {currentQuest.title}
+        <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted-foreground/60">
+          Quest Focus Center
         </span>
-      </header>
+      </div>
 
-      {/* ─── MAIN APP CONTENT CANVAS ─── */}
-      <main className="flex-1 w-full flex relative px-8 py-12 gap-12 max-w-5xl mx-auto overflow-hidden">
-        
-        {/* MOVEMENT INDICATOR: The Downward Gradient line wrapper container */}
-        <div className="w-0.5 absolute top-12 bottom-12 left-12 bg-[#8C8580]/10 rounded-full overflow-hidden hidden md:block">
-          <div 
-            className="w-full bg-[#E86A33] transition-all duration-500 ease-out"
-            style={{ height: `${progressRatioPercentage}%` }}
-          />
+      {/* Quest Context Meta Frame Header Banner */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 bg-muted/30 border border-border p-6 rounded-2xl">
+        <div className="space-y-1 text-left">
+          <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-md">
+            Active Exploration Track
+          </span>
+          <h1 className="text-xl font-bold tracking-tight text-foreground pt-1.5">
+            {currentQuest.title}
+          </h1>
+          <p className="text-xs text-muted-foreground font-medium leading-relaxed max-w-xl">
+            {currentQuest.subtitle}
+          </p>
         </div>
 
-        {/* WORKSPACE LAYOUT CONTAINER */}
-        <div ref={containerRef} className="flex-1 space-y-16 pl-0 md:pl-10 overflow-y-auto h-full pr-2">
-          
-          {/* Quest Metadata Frame Header */}
-          <div className="space-y-1.5 text-left max-w-xl">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#8C8580]">
-              Active Exploration Module
-            </h2>
-            <h1 className="text-xl font-bold tracking-tight text-[#1A1A1A]">
-              {currentQuest.title}
-            </h1>
-            <p className="text-xs text-[#8C8580] font-medium leading-relaxed">
-              {currentQuest.subtitle}
-            </p>
+        {/* Progress bar indicators */}
+        <div className="space-y-1 shrink-0 text-left md:text-right">
+          <span className="text-[10px] font-sans font-bold text-muted-foreground uppercase tracking-wider block">Quest Completion</span>
+          <div className="flex items-center gap-2">
+            <div className="w-24 h-2 bg-muted border border-border rounded-full overflow-hidden">
+              <div className="h-full bg-primary transition-all duration-300" style={{ width: `${progressRatioPercentage}%` }} />
+            </div>
+            <span className="text-xs font-bold text-foreground">{progressRatioPercentage}%</span>
           </div>
+        </div>
+      </div>
 
-          {/* DYNAMIC SCROLL LOOP CARDS */}
-          <div className="space-y-24 pb-32">
-            {tasks.map((task: any) => {
-              const taskProgress = progress[task.id];
-              const isTaskCompleted = taskProgress?.status === 'completed';
-              const isTaskActive = activeTask?.id === task.id;
+      {/* ─── DYNAMIC UNIFIED TIMELINE LOOP ─── */}
+      <div className="space-y-4">
+        {tasks.map((task: any, index: number) => {
+          const taskProgress = progress[task.id];
+          const isTaskCompleted = taskProgress?.status === 'completed';
+          const isTaskFocusedNow = activeTaskId === task.id;
 
-              // If task is neither completed nor active, reduce weight to zero to isolate user eyes
-              if (!isTaskCompleted && !isTaskActive) return null;
+          // Sequential Lock Gate Rules: A task is locked if the previous task is not completed yet
+          const isLocked = index > 0 && progress[tasks[index - 1].id]?.status !== 'completed';
 
-              return (
-                <div 
-                  key={task.id}
-                  className={`transition-all duration-300 transform ${
-                    isTaskActive 
-                      ? 'min-h-[60vh] opacity-100 scale-100 flex flex-col justify-center' 
-                      : 'opacity-40 scale-[0.98] blur-[0.5px]'
-                  }`}
-                >
-                  <div className="bg-[#F9F7F4] border border-[#8C8580]/10 rounded-2xl p-8 shadow-[0_4px_24px_rgba(140,133,128,0.03)] space-y-6">
+          return (
+            <div 
+              key={task.id}
+              className={`transition-all duration-200 rounded-2xl border ${
+                isTaskFocusedNow 
+                  ? 'border-primary bg-card/100 shadow-md ring-1 ring-primary/20' 
+                  : isLocked 
+                    ? 'border-border/40 bg-muted/20 opacity-40 pointer-events-none'
+                    : 'border-border bg-card/50 hover:border-border-hover cursor-pointer opacity-85 hover:opacity-100'
+              }`}
+              onClick={() => {
+                if (!isLocked && !isTaskFocusedNow) {
+                  setOverrideTaskId(task.id);
+                }
+              }}
+            >
+              {/* COMPONENT CASE 1: Active Focused Task — Renders full interactive Form Registry */}
+              {isTaskFocusedNow ? (
+                <div className="animate-in fade-in duration-200">
+                  <TaskFormRegistry 
+                    task={task}
+                    userId={currentUserId}
+                    existingProgress={taskProgress}
+                    onSuccess={() => {
+                      // Automatically advance local view state parameter once input saves successfully
+                      setOverrideTaskId(null);
+                    }}
+                  />
+                </div>
+              ) : (
+                /* COMPONENT CASE 2: Collapsed Summary Row (For Completed or Accessible tasks) */
+                <div className="p-5 flex items-center justify-between gap-4 text-left">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div className="shrink-0">
+                      {isTaskCompleted ? (
+                        <CheckCircle2 className="w-5 h-5 text-emerald-500 fill-emerald-500/10" />
+                      ) : isLocked ? (
+                        <Lock className="w-4 h-4 text-muted-foreground/60 m-0.5" />
+                      ) : (
+                        <div className="w-5 h-5 rounded-full border-2 border-primary/40 flex items-center justify-center text-[10px] font-bold text-primary font-sans">
+                          {index + 1}
+                        </div>
+                      )}
+                    </div>
                     
-                    {/* Card Inner Heading */}
-                    <div className="space-y-2 text-left">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C8580]">
-                          Milestone Focus Action {task.sequence} / {tasks.length}
-                        </span>
-                        {isTaskCompleted && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                            Locked Done
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="text-lg font-bold text-[#1A1A1A] tracking-tight">
+                    <div className="space-y-0.5 truncate">
+                      <h4 className="text-sm font-bold text-foreground truncate tracking-tight">
                         {task.title}
-                      </h3>
-                      <p className="text-xs text-[#8C8580] leading-relaxed max-w-xl">
+                      </h4>
+                      <p className="text-xs text-muted-foreground truncate max-w-md font-medium">
                         {task.description}
                       </p>
                     </div>
+                  </div>
 
-                    {/* INTERACTION AREA: 70% Viewport Focus Affordance Enforcer */}
-                    {isTaskActive && (
-                      <div className="pt-4 animate-in fade-in duration-300 space-y-8">
-                        {/* Placeholder container simulating where Form Component Registry injects your live input widgets */}
-                        <div className="w-full h-40 rounded-xl bg-[#8C8580]/5 border border-dashed border-[#8C8580]/20 flex items-center justify-center p-4">
-                          <span className="text-xs font-semibold text-[#8C8580] uppercase tracking-wider italic">
-                            [ Embedded Interface Block: {task.component_key} ]
-                          </span>
-                        </div>
-
-                        {/* SINGULARITY PRINCIPLE: The Moat Around the Single Urge Orange CTA */}
-                        <div className="pt-6 flex justify-start">
-                          <div className="relative group">
-                            <Button
-                              onClick={() => handleCompleteActiveTask(task.id, task.grant_points)}
-                              className="px-8 h-12 rounded-xl bg-[#E86A33] hover:bg-[#D35925] text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#E86A33]/10 transition-all duration-200 transform active:scale-95"
-                            >
-                              Confirm Task Completion
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
+                  {/* Actions Toggle Status Indicators */}
+                  <div className="shrink-0 pl-2">
+                    {!isLocked && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 rounded-xl font-sans text-xs font-semibold text-primary hover:text-primary hover:bg-primary/5 px-3 flex items-center gap-1"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Avoid triggering double click events on parent box wrapper
+                          setOverrideTaskId(task.id);
+                        }}
+                      >
+                        {isTaskCompleted ? (
+                          <>
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>View Answer</span>
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-3 h-3 fill-primary/10" />
+                            <span>Open Task</span>
+                          </>
+                        )}
+                      </Button>
                     )}
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
 
-        </div>
-      </main>
     </div>
   );
 }
