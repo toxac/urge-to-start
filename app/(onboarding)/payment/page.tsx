@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect, useTransition } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { CheckCircle2, Loader2 } from 'lucide-react';
+import { CheckCircle2, Loader2, Ticket, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { initializeCheckoutTransaction, completeCheckout } from '@/actions/payments';
+import { Input } from '@/components/ui/input';
+import { initializeCheckoutTransaction, completeCheckout, verifyDiscountCode } from '@/actions/payments';
 
 interface OfferingData {
   id: string;
@@ -13,15 +14,28 @@ interface OfferingData {
   prices: any;
 }
 
+interface AppliedDiscount {
+  code: string;
+  id: string;
+  deductionAmount: number;
+  finalPrice: number;
+}
+
 export default function PaywallPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
-  
+
+  // Data State
   const [programOffering, setProgramOffering] = useState<OfferingData | null>(null);
   const [loadingPage, setLoadingPage] = useState(true);
 
-  // 1. Fetch the offering parameters on mount safely from the client side
+  // Discount UI States
+  const [showPromoInput, setShowPromoInput] = useState(false);
+  const [promoCodeInput, setPromoCodeInput] = useState('');
+  const [isVerifyingCode, setIsVerifyingCode] = useState(false);
+  const [promoError, setPromoError] = useState<string | null>(null);
+  const [appliedDiscount, setAppliedDiscount] = useState<AppliedDiscount | null>(null);
+
   useEffect(() => {
     async function fetchProduct() {
       try {
@@ -34,7 +48,6 @@ export default function PaywallPage() {
           .maybeSingle();
 
         if (error || !data) {
-          // If the database row isn't there, fall back gracefully
           console.error("Product setup missing.");
           return;
         }
@@ -48,19 +61,58 @@ export default function PaywallPage() {
     fetchProduct();
   }, []);
 
-  // 2. EXPECTED BEHAVIOR HANDLER
+  // Handle Promo Code Verification Check
+  const handleApplyPromoCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!promoCodeInput.trim() || !programOffering) return;
+
+    setIsVerifyingCode(true);
+    setPromoError(null);
+
+    try {
+      const response = await verifyDiscountCode({
+        code: promoCodeInput.trim(),
+        offeringId: programOffering.id,
+        currency: 'INR'
+      });
+
+      if (response.success) {
+        setAppliedDiscount({
+          code: promoCodeInput.trim().toUpperCase(),
+          id: response.data.discount.id,
+          deductionAmount: response.data.deductionAmount,
+          finalPrice: response.data.finalPrice
+        });
+        setPromoCodeInput('');
+        setShowPromoInput(false);
+      } else {
+        setPromoError(response.error);
+      }
+    } catch (err) {
+      setPromoError("Could not verify code. Please try again.");
+    } finally {
+      setIsVerifyingCode(false);
+    }
+  };
+
+  // Remove Applied Promo Code
+  const handleRemovePromo = () => {
+    setAppliedDiscount(null);
+    setPromoError(null);
+  };
+
+  // Checkout Execution Handler
   const handlePaymentSubmit = () => {
     if (!programOffering) return;
 
-    // useTransition captures the async lifecycle and gives us an active loading state instantly
     startTransition(async () => {
       try {
-        // Step A: Create the tracking transaction entry row
+        // Pass the optional coupon code to your initialization transaction builder
         const initResult = await initializeCheckoutTransaction({
           offeringId: programOffering.id,
           currency: 'INR',
-          provider: 'mock_stripe_sandbox',
-          couponCode: null
+          provider: appliedDiscount?.finalPrice === 0 ? 'internal_free_tier' : 'mock_stripe_sandbox',
+          couponCode: appliedDiscount ? appliedDiscount.code : null
         });
 
         if (!initResult.success) {
@@ -68,7 +120,6 @@ export default function PaywallPage() {
           return;
         }
 
-        // Step B: Fulfill the transaction rules, memberships, and user roles
         const completeResult = await completeCheckout({
           transactionId: initResult.data.transaction.id
         });
@@ -78,12 +129,11 @@ export default function PaywallPage() {
           return;
         }
 
-        // Expected Behavior: Push the user smoothly into their newly initialized workspace dashboard
         router.push('/program');
         router.refresh();
-        
+
       } catch (err) {
-        console.error("Payment routing loop break context: ", err);
+        console.error("Payment routing pipeline failed: ", err);
       }
     });
   };
@@ -100,15 +150,18 @@ export default function PaywallPage() {
   if (!programOffering) {
     return (
       <div className="text-center p-6 text-sm text-muted-foreground font-medium">
-        ⚠️ Offering catalog item not found. Please verify your Supabase database row seeds.
+        ⚠️ Offering catalog item not found. Please verify your database rows.
       </div>
     );
   }
 
+  // Base pricing calculations
+  const basePriceINR = 8000;
+  const standardDisplayPrice = appliedDiscount ? appliedDiscount.finalPrice : basePriceINR;
+
   return (
     <div className="w-full max-w-md mx-auto space-y-6 animate-in fade-in duration-200">
-      
-      {/* Friendly, Simple Headers */}
+
       <div className="text-center space-y-1">
         <h1 className="text-lg font-bold tracking-tight text-foreground">
           Ready to jump in?
@@ -118,22 +171,90 @@ export default function PaywallPage() {
         </p>
       </div>
 
-      {/* Main Payment Card */}
       <div className="bg-card border border-border rounded-2xl p-8 shadow-lg space-y-6">
-        
-        {/* Simple Pricing Layout */}
-        <div className="p-5 border border-border bg-muted/40 rounded-xl flex items-center justify-between text-xs">
+
+        {/* Dynamic Pricing Layout Frame */}
+        <div className="p-5 border border-border bg-muted/40 rounded-xl flex items-center justify-between text-xs relative overflow-hidden">
           <div className="space-y-0.5 text-left">
             <span className="font-bold text-foreground block">Urge Start Enrollment</span>
             <p className="text-[11px] text-muted-foreground font-medium">Includes 1 year of community membership</p>
           </div>
           <div className="text-right shrink-0">
-            <span className="text-2xl font-serif font-black text-primary">₹8,000</span>
-            <span className="text-[10px] text-muted-foreground block font-bold uppercase tracking-wider">One-time payment</span>
+            {appliedDiscount ? (
+              <div className="flex flex-col items-end">
+                <span className="text-xs text-muted-foreground line-through font-medium">₹{basePriceINR}</span>
+                <span className="text-2xl font-serif font-black text-primary">
+                  {standardDisplayPrice === 0 ? 'Free' : `Extra text ₹${standardDisplayPrice}`}
+                </span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-end">
+                <span className="text-2xl font-serif font-black text-primary">₹{basePriceINR}</span>
+                <span className="text-[10px] text-muted-foreground block font-bold uppercase tracking-wider">One-time</span>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Clear, straightforward bullet points */}
+        {/* Promo Code Input  */}
+        <div className="space-y-2 border-t border-b border-border/40 py-4 text-xs">
+          {!appliedDiscount ? (
+            <div className="space-y-1.5">
+              <label htmlFor="promoCode" className="text-muted-foreground font-semibold text-[11px] ml-1">
+                Have a promo or student code?
+              </label>
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <Ticket className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/60" />
+                  <Input
+                    id="promoCode"
+                    type="text"
+                    placeholder="e.g., EARLYTESTER"
+                    value={promoCodeInput}
+                    onChange={(e) => setPromoCodeInput(e.target.value)}
+                    className="h-9 text-xs uppercase font-medium bg-background border-input rounded-xl pl-9"
+                    disabled={isVerifyingCode}
+                  />
+                </div>
+                <Button
+                  type="button"
+                  onClick={handleApplyPromoCode}
+                  disabled={isVerifyingCode || !promoCodeInput.trim()}
+                  className="h-9 px-4 rounded-xl text-xs font-semibold shrink-0 bg-secondary hover:bg-secondary/80 text-secondary-foreground"
+                >
+                  {isVerifyingCode ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Apply'}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            /* Applied Coupon Status Badge */
+            <div className="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 p-2.5 rounded-xl animate-in fade-in duration-150">
+              <div className="flex items-center gap-2 font-medium text-[11px]">
+                <Ticket className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
+                <span>Code <strong>{appliedDiscount.code}</strong> applied</span>
+                <span className="bg-emerald-500/20 px-1.5 py-0.5 rounded text-[10px] font-bold">
+                  -₹{appliedDiscount.deductionAmount} OFF
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleRemovePromo}
+                className="p-1 hover:bg-emerald-500/10 rounded-lg transition"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
+
+          {/* Real-time Inline Error Validation Feedback */}
+          {promoError && (
+            <p className="text-[11px] text-destructive font-medium mt-1 ml-1 animate-in fade-in duration-150">
+              ⚠️ {promoError}
+            </p>
+          )}
+        </div>
+
+        {/* Clear Bullet Points */}
         <div className="text-left space-y-3 pt-1">
           {[
             "Full access to all program sprints and milestones",
@@ -148,10 +269,10 @@ export default function PaywallPage() {
           ))}
         </div>
 
-        {/* Unified Button & Feedback Container */}
+        {/* Unified Submit Row */}
         <div className="pt-2 border-t border-border/40">
-          <Button 
-            type="button" 
+          <Button
+            type="button"
             onClick={handlePaymentSubmit}
             disabled={isPending}
             className="w-full py-5 bg-primary hover:bg-primary/90 text-primary-foreground font-sans text-xs font-bold tracking-wider uppercase rounded-xl transition shadow-md shadow-primary/10 flex items-center justify-center gap-2"
@@ -159,13 +280,15 @@ export default function PaywallPage() {
             {isPending ? (
               <>
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                <span>Initializing secure payment...</span>
+                <span>Initializing secure checkout...</span>
               </>
             ) : (
-              <span>Pay Now & Start Your Journey</span>
+              <span>
+                {standardDisplayPrice === 0 ? 'Claim Free Access & Start Journey' : 'Pay Now & Start Your Journey'}
+              </span>
             )}
           </Button>
-          
+
           <p className="text-[11px] text-muted-foreground text-center mt-3 font-normal leading-normal px-2">
             Payments are safe, encrypted, and processed instantly.
           </p>
