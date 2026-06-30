@@ -1,6 +1,14 @@
 {
   "title": "posts",
-  "slug": "posts",
   "type": "object",
-  "properties": {}
+  "properties": {
+    "category": {
+      "title": "category",
+      "description": "tools",
+      "required": false,
+      "fieldType": "Tags",
+      "dataType": "array",
+      "values": []
+    }
+  }
 }
