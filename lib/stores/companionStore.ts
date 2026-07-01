@@ -1,12 +1,11 @@
 import { atom } from 'nanostores';
 import { PlaybookConfig } from '@/types/playbook';
 
-// 1. FOCUS ATOM (Where is the user looking right now?)
 export interface CompanionFocusContext {
   pageType: 'dashboard' | 'mission' | 'quest';
   activeMissionId?: string;
   activeQuestId?: string;
-  activeTaskId?: string;
+  activeTaskId?: string | null; // ⚡ Explicitly allows null for macro-quest state
 }
 
 export const $companionFocus = atom<CompanionFocusContext>({ pageType: 'dashboard' });
@@ -15,7 +14,28 @@ export function setCompanionFocus(context: CompanionFocusContext) {
   $companionFocus.set(context);
 }
 
-// 2. PLAYBOOK ATOM (Static structural rules cached in memory)
+/**
+ * ⚡ NEW: Activates a specific micro-task execution bubble
+ */
+export function activateTaskFocus(taskId: string) {
+  const current = $companionFocus.get();
+  $companionFocus.set({
+    ...current,
+    activeTaskId: taskId
+  });
+}
+
+/**
+ * ⚡ NEW: Safely drops task context to step back into macro-quest planning mode
+ */
+export function deactivateTaskFocus() {
+  const current = $companionFocus.get();
+  $companionFocus.set({
+    ...current,
+    activeTaskId: null // Clearing activeTaskId re-triggers Quest context suites
+  });
+}
+
 export const $playbookStore = atom<PlaybookConfig>({});
 
 export function hydratePlaybookStore(config: PlaybookConfig) {

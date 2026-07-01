@@ -5,15 +5,13 @@ import { useStore } from '@nanostores/react';
 import { $companionFocus } from '@/lib/stores/companionStore';
 import { $progressStore } from '@/lib/stores/progressStore';
 import { urgePlaybook } from '@/lib/playbook';
-import { Orbit, MessageSquare, ChevronLeft } from 'lucide-react'; // ⚡ Orbit locked in
-import { Button } from '@/components/ui/button';
+import { Orbit } from 'lucide-react';
 
-// Mode sub-panels
+// Unified Mode Layout Containers
 import { KipDashboardConcierge } from './modes/KipDashboardConcierge';
 import { KipMissionInspector } from './modes/KipMissionInspector';
 import { KipQuestCoach } from './modes/KipQuestCoach';
 
-// Base UI structural layout drawers
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
 
@@ -22,8 +20,8 @@ export function KipSidebarCompanion() {
   const progress = useStore($progressStore);
 
   const renderRouterContextContent = () => (
-    <div className="h-full flex flex-col overflow-hidden text-foreground">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+    <div className="h-full flex flex-col overflow-hidden text-foreground bg-card selection:bg-primary/10">
+      <div className="flex-1 overflow-y-auto p-4">
         {focus.pageType === 'dashboard' && (
           <KipDashboardConcierge progress={progress} />
         )}
@@ -39,7 +37,7 @@ export function KipSidebarCompanion() {
           <KipQuestCoach 
             missionId={focus.activeMissionId}
             questId={focus.activeQuestId}
-            activeTaskId={focus.activeTaskId}
+            activeTaskId={focus.activeTaskId} // ⚡ Passed dynamically down to the sub-router
             progress={progress}
           />
         )}
@@ -52,13 +50,16 @@ export function KipSidebarCompanion() {
   return (
     <>
       {/* DESKTOP PANEL LAYER */}
-      <aside className="hidden xl:flex w-80 h-full border-l border-border bg-card flex-col overflow-hidden shrink-0 shadow-sm">
+      <aside className="hidden xl:flex w-80 h-full border-l border-border bg-card flex-col overflow-hidden shrink-0 shadow-sm relative z-20">
         <div className="p-4 border-b border-border bg-muted/20 flex items-center justify-between shrink-0">
           <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-            <Orbit className="w-4 h-4 text-primary animate-spin-[spin_8s_linear_infinite]" style={{ animationDuration: '6s' }} />
-            Kip Co-Pilot — {focus.pageType}
+            <Orbit className="w-4 h-4 text-primary animate-[spin_12s_linear_infinite]" />
+            Kip Co-Pilot — {focus.activeTaskId ? 'Task View' : 'Quest View'}
           </span>
-          <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <div className="flex items-center gap-1.5 text-[10px] font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md font-bold">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            ONLINE
+          </div>
         </div>
         <div className="flex-1 overflow-hidden">
           {renderRouterContextContent()}
@@ -69,7 +70,7 @@ export function KipSidebarCompanion() {
       <div className="hidden md:flex xl:hidden fixed right-5 bottom-5 z-40">
         <Sheet>
           <SheetTrigger className={triggerStyles}>
-            <Orbit className="w-5 h-5" />
+            <Orbit className="w-5 h-5 animate-[spin_20s_linear_infinite]" />
           </SheetTrigger>
           
           <SheetContent side="right" className="w-85 p-0 bg-card border-l border-border flex flex-col">
@@ -89,7 +90,7 @@ export function KipSidebarCompanion() {
       <div className="md:hidden fixed bottom-5 right-5 z-40">
         <Drawer>
           <DrawerTrigger className={triggerStyles}>
-            <Orbit className="w-5 h-5" />
+            <Orbit className="w-5 h-5 animate-[spin_20s_linear_infinite]" />
           </DrawerTrigger>
           
           <DrawerContent className="bg-card border-t border-border max-h-[82vh] flex flex-col">
