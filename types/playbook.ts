@@ -2,14 +2,14 @@ export type TaskType = 'form' | 'simulator' | 'log_counter' | 'action' | 'commun
 
 export interface TaskResourceConfig {
   title: string;
-  content_path: string; // ⚡ FIXED: Paths point directly to local markdown documents
+  content_path: string; 
 }
 
 export interface TaskAiConfig {
   resources?: TaskResourceConfig[];
-  alternative_approach?: string; // ⚡ OPTIONAL
-  challenge?: string;            // ⚡ OPTIONAL: Gives users extra push objectives
-  reflection_prompt?: string;    // ⚡ OPTIONAL
+  alternative_approach?: string; 
+  challenge?: string;            
+  reflection_prompt?: string;    
 }
 
 export interface Task {
@@ -20,9 +20,10 @@ export interface Task {
   component_key: string;
   sequence: number;
   grant_points: number;
+  estimated_minutes: number; // ⚡ NEW: Stored tracking budget per step
   description?: string;
-  execution_environment?: 'on_app' | 'off_app'; // ⚡ NEW: Tracking environments
-  checkback_delay_days?: number;                // ⚡ NEW: Real-world delay thresholds
+  execution_environment?: 'on_app' | 'off_app'; 
+  checkback_delay_days?: number;                
   metadata_config?: Record<string, any>;
   ai_config?: TaskAiConfig; 
 }
@@ -46,9 +47,11 @@ export interface Quest {
   slug: string;
   title: string;
   subtitle: string;
-  description: string; // ⚡ NEW: Elaborate friendly overview context
+  description: string; 
   sequence: number;
   content_path: string; 
+  estimated_in_app_minutes: number;  // ⚡ NEW: Total internal platform effort
+  estimated_off_app_minutes: number; // ⚡ NEW: Total real-world offline effort
   content_markdown?: string; 
   is_optional?: boolean;
   ai_config: AiConfig;
@@ -58,7 +61,7 @@ export interface Quest {
 export interface MissionPrerequisite {
   item: string;
   promptKey: string | null;
-  promptRawText?: string; // ⚡ NEW: Keeps prompt copy self-contained inside config rows
+  promptRawText?: string; 
 }
 
 export interface Mission {

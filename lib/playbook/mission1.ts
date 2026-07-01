@@ -19,7 +19,7 @@ export const mission1: Mission = {
     {
       item: "Willingness to share honest reflections with Kip",
       promptKey: "M1_PRE_PSYCH_SAFETY",
-      promptRawText: "The user feels uncertain about sharing their concepts openly. Remind them that execution velocity wins over secrecy, and keeping an objective hidden isolates them from true feedback loops."
+      promptRawText: "The user feels uncertain about sharing their concepts openly. Remind them that execution velocity wins over secrecy, and keeping an idea hidden isolates them from true feedback loops."
     }
   ],
 
@@ -27,14 +27,16 @@ export const mission1: Mission = {
     quest1: {
       slug: "starting-your-new-chapter",
       title: "Starting Your New Chapter",
-      subtitle: "Set your terms, claim your card, and secure your time blocks.",
-      description: "Every great project marks a turning point. Before opening blank dashboards, let's look at what brought you here, configure your identity card, and lock down your actual weekly schedule.",
+      subtitle: "Map your fuel, set your commitment baseline, and claim your builder card.",
+      description: "Every great project marks a turning point. Let's look at what brought you here, evaluate your practical constraints, and configure your identity card for the network.",
       sequence: 1,
+      estimated_in_app_minutes: 45,  // ⚡ Displayed on the Sprint Header Summary
+      estimated_off_app_minutes: 0,   // Pure setup chapter
       content_path: "content/mission1/quests/starting-your-new-chapter.md",
       ai_config: {
         role: "SYSTEM_CONDUCTOR",
         persona_name: "The Mirror",
-        persona_prompt: "You are a grounded advisor. Review user profiles and constraints. If answers are vague, challenge them to connect abstract ideas to everyday operational terms.",
+        persona_prompt: "You are a grounded advisor. Review user motivations and roadblocks. If answers are vague, challenge them to connect abstract ideas to everyday operational terms.",
         required_context: ["user_profiles"],
         on_success: {
           grant_points: 50,
@@ -49,7 +51,8 @@ export const mission1: Mission = {
           type: "form",
           component_key: "MotivationForm",
           grant_points: 20,
-          description: "Let's be transparent. Building a business requires sustained momentum. Generic ideas fade fast when your schedule gets busy. What is the actual change you are trying to make?",
+          estimated_minutes: 15, // ⚡ Time target metric per form task
+          description: "Let's be transparent. Building something meaningful requires consistent energy. Generic goals fade fast when your schedule gets busy. What is the actual change you are trying to make?",
           ai_config: {
             resources: [
               { title: "Isolating Core Drivers", content_path: "content/blog/finding-your-why.md" }
@@ -57,32 +60,33 @@ export const mission1: Mission = {
           }
         },
         {
-          id: "m1_q1_t2_profile",
-          title: "Claim Your Builder Identity",
+          id: "m1_q1_t2_commitments",
+          title: "Set Your Journey Commitment Baseline",
           sequence: 2,
           type: "form",
-          component_key: "ProfileSetupForm",
-          description: "Every new chapter benefits from a clear point of departure. Introduce yourself to the network feed, upload your workspace portrait, and link your existing channels.",
-          grant_points: 10,
+          component_key: "CommitmentForm", 
+          grant_points: 20,
+          estimated_minutes: 15,
+          description: "Let's establish your target parameters. Be honest about your timeline, capital access, and any roadblocks you anticipate so we can tailor resources to match your pace.",
           ai_config: {
             resources: [
-              { title: "Workspace Network Protocol Guide", content_path: "content/blog/network-identity.md" }
+              { title: "Navigating Roadblocks Framework", content_path: "content/blog/managing-constraints.md" }
             ]
           }
         },
         {
-          id: "m1_q1_t3_constraints",
-          title: "Protect Your Weekly Time",
+          id: "m1_q1_t3_profile",
+          title: "Claim Your Builder Identity",
           sequence: 3,
           type: "form",
-          component_key: "ConstraintForm",
-          grant_points: 20,
-          description: "Excitement gets you started, but routine is what finishes projects. Let's look at your calendar and select a sustainable baseline hour commitment you can protect.",
+          component_key: "ProfileSetupForm",
+          description: "Every new chapter benefits from a clear point of departure. Introduce yourself to the network feed, upload your workspace portrait, and link your existing channels.",
+          grant_points: 10,
+          estimated_minutes: 15,
           ai_config: {
             resources: [
-              { title: "Calendar Fencing Tactics", content_path: "content/blog/calendar-fencing.md" }
-            ],
-            challenge: "Commit to waking up 30 minutes earlier on Tuesdays and Thursdays to build an early momentum loop."
+              { title: "Workspace Network Protocol Guide", content_path: "content/blog/network-identity.md" }
+            ]
           }
         }
       ]
@@ -93,6 +97,8 @@ export const mission1: Mission = {
       subtitle: "Practice direct communication and invite your early circle along.",
       description: "Building entirely in isolation is a tough track. This module focuses on crafting direct, clean requests to your existing network without using apologetic filler copy.",
       sequence: 2,
+      estimated_in_app_minutes: 30,
+      estimated_off_app_minutes: 120, // ⚡ Shows they have real-world outbound tracking to execute
       content_path: "content/mission1/quests/asking-for-allies.md",
       ai_config: {
         role: "SYSTEM_CONDUCTOR",
@@ -112,6 +118,7 @@ export const mission1: Mission = {
           type: "simulator",
           component_key: "AskSimulator",
           grant_points: 30,
+          estimated_minutes: 15,
           description: "Let's test out your outreach copy in a private, low-stakes sandbox. Draft a short message to share your new focus and ask your friends or colleagues for feedback.",
           ai_config: {
             resources: [
@@ -126,6 +133,7 @@ export const mission1: Mission = {
           type: "action",
           component_key: "KnownReachoutWidget",
           grant_points: 20,
+          estimated_minutes: 60,
           execution_environment: "off_app",
           checkback_delay_days: 2,
           description: "Take your polished copy out into the real world. Send it directly to a few trusted contacts to begin assembling your early cheer squad roster.",
@@ -143,6 +151,7 @@ export const mission1: Mission = {
           type: "action",
           component_key: "DigitalPresenceWidget",
           grant_points: 25,
+          estimated_minutes: 15,
           description: "Sharing updates isn't about sounding like a guru—it is simply about documenting your path out loud. Let's adjust your bio to state exactly what you are learning and building.",
           ai_config: {
             resources: [
@@ -158,6 +167,8 @@ export const mission1: Mission = {
       subtitle: "Collect real feedback and normalize everyday setbacks.",
       description: "Friction and unexpected turnbacks are a completely normal part of the building loop. This module re-aligns your perspective on failure by turning rejections into clear data upgrades.",
       sequence: 3,
+      estimated_in_app_minutes: 15,
+      estimated_off_app_minutes: 180, // ⚡ High real-world exposure action step target
       content_path: "content/mission1/quests/building-resilience.md",
       ai_config: {
         role: "SYSTEM_CONDUCTOR",
@@ -167,7 +178,7 @@ export const mission1: Mission = {
         on_success: {
           grant_points: 100,
           badge_key: "FORTRESS"
-        }
+          }
       },
       tasks: [
         {
@@ -177,6 +188,7 @@ export const mission1: Mission = {
           type: "log_counter",
           component_key: "RejectionCounterForm",
           grant_points: 80,
+          estimated_minutes: 120,
           execution_environment: "off_app",
           checkback_delay_days: 3,
           description: "Let's normalize hearing 'no' through a quick, controlled real-world experiment. Go out and pitch a low-stakes request—like asking a local shop for a tiny courtesy discount—just to practice handling the answer calmly.",
@@ -195,6 +207,7 @@ export const mission1: Mission = {
           type: "community",
           component_key: "CommunityFeedTeaser",
           grant_points: 20,
+          estimated_minutes: 15,
           description: "You are not navigating this track alone. Open the collective community feed to see progress logs and strategies shared by other active peers on the same path.",
           ai_config: {
             resources: [
