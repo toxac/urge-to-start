@@ -710,14 +710,17 @@ export type Database = {
           currency: string | null
           description: string | null
           full_name: string | null
+          gender: string | null
           highest_education:
             | Database["public"]["Enums"]["education_tier"]
             | null
           id: string
           mentor_metadata: Json
           onboarding_step: number
+          persona: Json | null
           provider_metadata: Json
           roles: Database["public"]["Enums"]["user_platform_role"][]
+          schedule_config: Json | null
           social_profiles: Json
           updated_at: string | null
           username: string
@@ -736,14 +739,17 @@ export type Database = {
           currency?: string | null
           description?: string | null
           full_name?: string | null
+          gender?: string | null
           highest_education?:
             | Database["public"]["Enums"]["education_tier"]
             | null
           id: string
           mentor_metadata?: Json
           onboarding_step?: number
+          persona?: Json | null
           provider_metadata?: Json
           roles?: Database["public"]["Enums"]["user_platform_role"][]
+          schedule_config?: Json | null
           social_profiles?: Json
           updated_at?: string | null
           username: string
@@ -762,14 +768,17 @@ export type Database = {
           currency?: string | null
           description?: string | null
           full_name?: string | null
+          gender?: string | null
           highest_education?:
             | Database["public"]["Enums"]["education_tier"]
             | null
           id?: string
           mentor_metadata?: Json
           onboarding_step?: number
+          persona?: Json | null
           provider_metadata?: Json
           roles?: Database["public"]["Enums"]["user_platform_role"][]
+          schedule_config?: Json | null
           social_profiles?: Json
           updated_at?: string | null
           username?: string
@@ -885,11 +894,42 @@ export type Database = {
           },
         ]
       }
+      squad: {
+        Row: {
+          created_at: string
+          id: string
+          supporter_email: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          supporter_email: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          supporter_email?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "squad_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
+          checkback_delay_days: number | null
           component_key: string
           created_at: string
           description: string
+          execution_environment: string | null
           grant_points: number
           id: string
           metadata_config: Json
@@ -901,9 +941,11 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          checkback_delay_days?: number | null
           component_key: string
           created_at?: string
           description?: string
+          execution_environment?: string | null
           grant_points?: number
           id: string
           metadata_config?: Json
@@ -915,9 +957,11 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          checkback_delay_days?: number | null
           component_key?: string
           created_at?: string
           description?: string
+          execution_environment?: string | null
           grant_points?: number
           id?: string
           metadata_config?: Json
