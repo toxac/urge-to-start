@@ -33,84 +33,20 @@ Check and streamline Ai conductor
 - types/playbook.ts
 - ask me if you need to refer to anything 
 
-### types
-```ts
-export type TaskType = 'form' | 'simulator' | 'log_counter' | 'action' | 'community';
-export type AccomplishmentType = 'program_milestone' | 'contribution' | 'engagement' | 'launch_tier';
+### Feedback 
+- I have implemented everything, few changes i created playbook folder inside /lib and added mission1.ts and i moved playbook.ts inside playbook folder as index.ts.
+- This is good but language still is a bit off i noticed allies somewhere but don't worry i will fix those myself. 
+### Suggestions: 
+1. we had discussed adding calendar. which we dont have anywhere 
+2. We wanted to work that inside of constraint task but I don't think that's good idea. Constraint form should be global in context to their journey. Even better would be personal program goal setting and constraints addressing the following (which would be saved in profile):
+    - How soon do they want to launch (goal)
+    - How important is launching a business to them (goal)
+    - Do they have access to money
+    - Thing they feel will hold them back skills, time, connections they can list everything they can think of and we can use AI to synthesize as tags.
+- data from constraint form will help us guide users better in the sense of communication and resources
+- back to calendar: we should integrate it with quests as quest is the work center. As they start quest on top we can have the planner which we can save to quests table. So every quest they start they can plan it out. we can have how many hours a quest (including all the tasks would take considering things they have to do off the system)
 
-// ⚡ Dynamic Resource Schema for Task AI config links
-export interface TaskResourceConfig {
-  title: string;
-  url: string;
-}
-
-// ⚡ Lighter Task-Level configuration mapping
-export interface TaskAiConfig {
-  resources?: TaskResourceConfig[];
-  alternative_approach?: string;
-  reflection_prompt?: string;
-}
-
-export interface Task {
-  db_id?: string; // Appended dynamically by sync script
-  id: string; // Global static ID (e.g., 'm1_q1_t1_profile')
-  title: string;
-  type: TaskType;
-  component_key: string;
-  sequence: number;
-  grant_points: number;
-  description?: string;
-  metadata_config?: Record<string, any>;
-  ai_config?: TaskAiConfig; // ⚡ Attached directly to Task tier
-}
-
-export interface AiConfig {
-  role: 'SYSTEM_CONDUCTOR';
-  persona_name: string;
-  persona_prompt: string;
-  required_context: Array<'user_profiles' | 'opportunities' | 'projects'>;
-  evaluation_rules?: string;
-  on_success: {
-    grant_points: number;
-    badge_key?: string;
-    badge_db_id?: string; // Appended dynamically by sync script
-    unlock_next_quest?: string;
-  };
-}
-
-export interface Quest {
-  db_id?: string; // Appended dynamically by sync script
-  slug: string;
-  title: string;
-  subtitle: string;
-  sequence: number;
-  content_path: string; // File path location e.g., "content/mission1/quests/your-goals.md"
-  content_markdown?: string; // Loaded dynamically from physical disk by sync script
-  is_optional?: boolean;
-  ai_config: AiConfig;
-  tasks: Task[];
-}
-
-// ⚡ Macro Prerequisite structure mapping
-export interface MissionPrerequisite {
-  item: string;
-  promptKey: string | null;
-}
-
-export interface Mission {
-  db_id?: string; // Appended dynamically by sync script
-  title: string;
-  sequence: number;
-  video_url: string;
-  briefing_text: string;
-  briefing_markdown?: string; // Loaded dynamically from mission.md by sync script
-  prerequisites: MissionPrerequisite[]; // ⚡ Added structural prerequisite array block
-  quests: Record<string, Quest>;
-}
-
-export type PlaybookConfig = Record<string, Mission>;
-
-```
+tell me your thought? 
 
 ## Sprint 3: WORKSPACE INTERFACE DEVELOPMENTS (Later)
 Build out these components to make the forms and calendar highly interactive:
