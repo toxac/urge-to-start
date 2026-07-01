@@ -1,30 +1,30 @@
 export type TaskType = 'form' | 'simulator' | 'log_counter' | 'action' | 'community';
-export type AccomplishmentType = 'program_milestone' | 'contribution' | 'engagement' | 'launch_tier';
 
-// ⚡ Dynamic Resource Schema for Task AI config links
 export interface TaskResourceConfig {
   title: string;
-  url: string;
+  content_path: string; // ⚡ FIXED: Paths point directly to local markdown documents
 }
 
-// ⚡ Lighter Task-Level configuration mapping
 export interface TaskAiConfig {
   resources?: TaskResourceConfig[];
-  alternative_approach?: string;
-  reflection_prompt?: string;
+  alternative_approach?: string; // ⚡ OPTIONAL
+  challenge?: string;            // ⚡ OPTIONAL: Gives users extra push objectives
+  reflection_prompt?: string;    // ⚡ OPTIONAL
 }
 
 export interface Task {
-  db_id?: string; // Appended dynamically by sync script
-  id: string; // Global static ID (e.g., 'm1_q1_t1_profile')
+  db_id?: string; 
+  id: string; 
   title: string;
   type: TaskType;
   component_key: string;
   sequence: number;
   grant_points: number;
   description?: string;
+  execution_environment?: 'on_app' | 'off_app'; // ⚡ NEW: Tracking environments
+  checkback_delay_days?: number;                // ⚡ NEW: Real-world delay thresholds
   metadata_config?: Record<string, any>;
-  ai_config?: TaskAiConfig; // ⚡ Attached directly to Task tier
+  ai_config?: TaskAiConfig; 
 }
 
 export interface AiConfig {
@@ -36,38 +36,39 @@ export interface AiConfig {
   on_success: {
     grant_points: number;
     badge_key?: string;
-    badge_db_id?: string; // Appended dynamically by sync script
+    badge_db_id?: string; 
     unlock_next_quest?: string;
   };
 }
 
 export interface Quest {
-  db_id?: string; // Appended dynamically by sync script
+  db_id?: string; 
   slug: string;
   title: string;
   subtitle: string;
+  description: string; // ⚡ NEW: Elaborate friendly overview context
   sequence: number;
-  content_path: string; // File path location e.g., "content/mission1/quests/your-goals.md"
-  content_markdown?: string; // Loaded dynamically from physical disk by sync script
+  content_path: string; 
+  content_markdown?: string; 
   is_optional?: boolean;
   ai_config: AiConfig;
   tasks: Task[];
 }
 
-// ⚡ Macro Prerequisite structure mapping
 export interface MissionPrerequisite {
   item: string;
   promptKey: string | null;
+  promptRawText?: string; // ⚡ NEW: Keeps prompt copy self-contained inside config rows
 }
 
 export interface Mission {
-  db_id?: string; // Appended dynamically by sync script
+  db_id?: string; 
   title: string;
   sequence: number;
   video_url: string;
   briefing_text: string;
-  briefing_markdown?: string; // Loaded dynamically from mission.md by sync script
-  prerequisites: MissionPrerequisite[]; // ⚡ Added structural prerequisite array block
+  briefing_markdown?: string; 
+  prerequisites: MissionPrerequisite[]; 
   quests: Record<string, Quest>;
 }
 
