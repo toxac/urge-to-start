@@ -70,6 +70,7 @@ export interface Mission {
   title: string;
   sequence: number;
   video_url: string;
+  content_path: string; 
   briefing_text: string;
   briefing_markdown?: string; 
   prerequisites: MissionPrerequisite[]; 
