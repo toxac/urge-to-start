@@ -9,16 +9,13 @@ export const mission1: Mission = {
   prerequisites: [
     {
       item: "Commit to finding at least 3 hours a week to work on this",
-      promptKey: "M1_PRE_TIME_AUDIT",
       promptRawText: "The user is trying to find 3 hours a week while working full-time. Give them a practical strategy to protect three 60-minute blocks without burning out."
     },
     {
-      item: "A reliable computer and a decent internet connection",
-      promptKey: null
+      item: "A reliable computer and a decent internet connection"
     },
     {
       item: "Willingness to be completely honest with yourself and Kip",
-      promptKey: "M1_PRE_PSYCH_SAFETY",
       promptRawText: "The user is nervous about sharing their ideas. Remind them that starting matters more than keeping secrets, and hiding an idea just keeps them isolated."
     }
   ],
@@ -54,42 +51,42 @@ export const mission1: Mission = {
           estimated_minutes: 15,
           description: "Let's be totally honest. Building a business takes serious energy, and vague goals fade the moment life gets busy. What is the actual change you want to make in your life?",
           ai_config: {
-            resources: [
-              { title: "Finding Your Real Why", content_path: "content/blog/finding-your-why.md" }
+            recommendations: [
+              { title: "Finding Your Real Why", type: "blog", path_or_url: "content/blog/finding-your-why.md", subtitle: "4 min layout read" }
             ]
           }
         },
         {
-          id: "m1_q1_t2_profile",
-          title: "Introduce yourself to the community",
-          sequence: 2,
-          type: "form",
-          component_key: "ProfileSetupForm",
-          description: "You're not in this alone. Put a face to the name, write a brief bio, and share your links so other people here can see what you're up to.",
-          grant_points: 10,
-          estimated_minutes: 15,
-          ai_config: {
-            resources: [
-              { title: "Writing a Clean Bio", content_path: "content/blog/network-identity.md" }
-            ]
-          }
-        },
-        {
-          id: "m1_q1_t3_commitments",
+          id: "m1_q1_t2_commitments",
           title: "Be realistic about your schedule and roadblocks",
-          sequence: 3,
+          sequence: 2,
           type: "form",
           component_key: "CommitmentForm",
           grant_points: 20,
           estimated_minutes: 15,
           description: "Let's map out your baseline. Tell us about your target timeline, money boundaries, and the specific things you worry will hold you back so we can help you handle them.",
           ai_config: {
-            resources: [
-              { title: "Handling Your Roadblocks", content_path: "content/blog/managing-constraints.md" }
+            recommendations: [
+              { title: "The Fresh Start Effect", type: "book", path_or_url: "https://www.amazon.com/How-Change-Science-Getting-Where/dp/0593083745", subtitle: "Katy Milkman's behavior framework" }
+            ]
+         }
+        },
+        {
+          id: "m1_q1_t3_profile",
+          title: "Introduce yourself to the community",
+          sequence: 3,
+          type: "form",
+          component_key: "ProfileSetupForm",
+          description: "You're not in this alone. Put a face to the name, write a brief bio, and share your links so other people here can see what you're up to.",
+          grant_points: 10,
+          estimated_minutes: 15,
+          ai_config: {
+            recommendations: [
+              { title: "Writing a Clean Bio", type: "blog", path_or_url: "content/blog/network-identity.md" },
+              { title: "Explore the Community Board", type: "internal_link", path_or_url: "/platform/program/community", subtitle: "See what others are building" }
             ]
           }
-        },
-        
+        }
       ]
     },
     quest2: {
@@ -122,8 +119,8 @@ export const mission1: Mission = {
           estimated_minutes: 15,
           description: "Let's test out your message in a private space where no one else can see it. Draft a short note sharing your new focus and asking a friend for quick feedback.",
           ai_config: {
-            resources: [
-              { title: "The Rules of a Direct Ask", content_path: "content/blog/asking-without-shame.md" }
+            recommendations: [
+              { title: "The Rules of a Direct Ask", type: "blog", path_or_url: "content/blog/asking-without-shame.md" }
             ]
           }
         },
@@ -139,8 +136,8 @@ export const mission1: Mission = {
           checkback_delay_days: 2,
           description: "Take the script you polished with Kip and send it to real people. This is how you start building a tight circle of supporters who have your back.",
           ai_config: {
-            resources: [
-              { title: "Dealing with Response Anxiety", content_path: "content/blog/managing-responses.md" }
+            recommendations: [
+              { title: "Dealing with Response Anxiety", type: "blog", path_or_url: "content/blog/managing-responses.md" }
             ],
             reflection_prompt: "Now that you've hit send, did the reality of doing it feel lighter than the anxiety you had beforehand?"
           }
@@ -155,8 +152,8 @@ export const mission1: Mission = {
           estimated_minutes: 15,
           description: "You don't need to act like an expert. Just treat it like a regular diary log of what you're learning. Let's update your social bio so people know what you're working on.",
           ai_config: {
-            resources: [
-              { title: "The Honest Bio Framework", content_path: "content/blog/clean-profiles.md" }
+            recommendations: [
+              { title: "The Honest Bio Framework", type: "blog", path_or_url: "content/blog/clean-profiles.md" }
             ]
           }
         }
@@ -194,8 +191,9 @@ export const mission1: Mission = {
           checkback_delay_days: 3,
           description: "Let's make hearing 'no' feel routine with a simple experiment. Go out and make a small request—like asking a local coffee shop for a tiny courtesy discount—just to practice staying calm when they say no.",
           ai_config: {
-            resources: [
-              { title: "The Art of Handling Rejection", content_path: "content/blog/rejection-therapy.md" }
+            recommendations: [
+              { title: "The Art of Handling Rejection", type: "blog", path_or_url: "content/blog/rejection-therapy.md" },
+              { title: "Jia Jiang: 100 Days of Rejection", type: "video", path_or_url: "https://www.youtube.com/watch?v=-vZXgApsPCQ", subtitle: "Famous TED talk experiment" }
             ],
             challenge: "Share your experience on the internal community board so others can see how you handled it.",
             reflection_prompt: "Now that you've gone through it, did the rejection set you back at all, or did you realize it was completely harmless?"
@@ -211,8 +209,8 @@ export const mission1: Mission = {
           estimated_minutes: 15,
           description: "You're not walking this path alone. Open up the collective community feed to see the logs and stories your peers are tracking.",
           ai_config: {
-            resources: [
-              { title: "Using the Power of the Group", content_path: "content/blog/peer-leverage.md" }
+            recommendations: [
+              { title: "Using the Power of the Group", type: "blog", path_or_url: "content/blog/peer-leverage.md" }
             ]
           }
         }

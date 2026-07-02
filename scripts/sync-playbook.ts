@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+
 import { PlaybookConfig } from '../types/playbook';
 import { urgePlaybook } from '../lib/playbook'; // ⚡ FIXED: Resolves from your unified folder setup
 import { createAdminClient } from '@/lib/supabase/admin';

@@ -1,15 +1,17 @@
 export type TaskType = 'form' | 'simulator' | 'log_counter' | 'action' | 'community';
+export type RecommendationType = 'blog' | 'internal_link' | 'video' | 'podcast' | 'book';
 
-export interface TaskResourceConfig {
+export interface TaskRecommendation {
   title: string;
-  content_path: string; 
+  type: RecommendationType;
+  path_or_url: string; 
+  subtitle?: string;   
 }
 
 export interface TaskAiConfig {
-  resources?: TaskResourceConfig[];
-  alternative_approach?: string; 
-  challenge?: string;            
-  reflection_prompt?: string;    
+  recommendations?: TaskRecommendation[]; 
+  challenge?: string;                    
+  reflection_prompt?: string;            
 }
 
 export interface Task {
@@ -19,8 +21,8 @@ export interface Task {
   type: TaskType;
   component_key: string;
   sequence: number;
+  estimated_minutes: number;
   grant_points: number;
-  estimated_minutes: number; // ⚡ NEW: Stored tracking budget per step
   description?: string;
   execution_environment?: 'on_app' | 'off_app'; 
   checkback_delay_days?: number;                
@@ -50,8 +52,8 @@ export interface Quest {
   description: string; 
   sequence: number;
   content_path: string; 
-  estimated_in_app_minutes: number;  // ⚡ NEW: Total internal platform effort
-  estimated_off_app_minutes: number; // ⚡ NEW: Total real-world offline effort
+  estimated_in_app_minutes: number;  
+  estimated_off_app_minutes: number; 
   content_markdown?: string; 
   is_optional?: boolean;
   ai_config: AiConfig;
@@ -60,7 +62,6 @@ export interface Quest {
 
 export interface MissionPrerequisite {
   item: string;
-  promptKey: string | null;
   promptRawText?: string; 
 }
 
@@ -72,7 +73,9 @@ export interface Mission {
   briefing_text: string;
   briefing_markdown?: string; 
   prerequisites: MissionPrerequisite[]; 
-  quests: Record<string, Quest>;
+  // ⚡ FIXED: Explicitly typed as a flexible Record string mapping to match mission1 template keys
+  quests: Record<string, Quest>; 
 }
 
+// ⚡ MASTER TYPE: Maps your overarching mission keys (e.g., 'mission1') smoothly
 export type PlaybookConfig = Record<string, Mission>;

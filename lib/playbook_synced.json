@@ -4,6 +4,20 @@
     "sequence": 1,
     "video_url": "https://urgetostart.com/videos/m1-overview.mp4",
     "briefing_text": "Before we look at business opportunities, we have to look at you. We are going to destroy the overthinking trap and build your real-world resilience.",
+    "prerequisites": [
+      {
+        "item": "Commitment to allocate 3+ hours per week of uninterrupted focus",
+        "promptKey": "M1_PRE_TIME_AUDIT"
+      },
+      {
+        "item": "A reliable laptop or computer with a stable internet connection",
+        "promptKey": null
+      },
+      {
+        "item": "Willingness to share raw personal reflections with the companion system",
+        "promptKey": "M1_PRE_PSYCH_SAFETY"
+      }
+    ],
     "quests": {
       "quest1": {
         "slug": "your-goals-and-free-time",
@@ -27,33 +41,66 @@
         "tasks": [
           {
             "id": "m1_q1_t1_profile",
-            "title": "Claim Your Public Username",
+            "title": "Introduce Yourself",
             "type": "form",
             "component_key": "ProfileSetupForm",
+            "description": "Everything good in life begins with a conversation. Share a bit about who you are, where you're building from, and what your background looks like.",
             "sequence": 1,
             "grant_points": 10,
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "Urge Workspace Dashboard Tour",
+                  "url": "https://urgetostart.com/guides/dashboard-onboarding"
+                }
+              ],
+              "alternative_approach": "If you feel uneasy framing your background, describe yourself from the perspective of a close collaborator highlighting your primary curious interest.",
+              "reflection_prompt": "Now that you've formalized your baseline introduction profile, does starting this path feel like a tangible reality or an abstract idea?"
+            },
             "db_id": "m1_q1_t1_profile"
           },
           {
             "id": "m1_q1_t2_drivers",
-            "title": "What is Driving You to Start?",
+            "title": "What's Driving You to Start?",
+            "sequence": 2,
             "type": "form",
             "component_key": "MotivationForm",
-            "sequence": 2,
             "grant_points": 20,
+            "description": "Let's get real for a second. Building a business takes serious grit, and generic goals burn out fast when things get tough. What is the actual fuel behind your engine?",
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "Isolating Internal Core Drivers",
+                  "url": "https://urgetostart.com/guides/finding-your-why"
+                }
+              ],
+              "alternative_approach": "Instead of writing standard lifestyle benchmarks, focus purely on what single, specific daily operational friction you want to remove from your routine forever.",
+              "reflection_prompt": "When you look at the core driver you typed out, are you doing this to run away from an immediate negative constraint or to chase a positive freedom threshold?"
+            },
             "db_id": "m1_q1_t2_drivers"
           },
           {
             "id": "m1_q1_t3_constraints",
             "title": "Set Your Realistic Weekly Limits",
+            "sequence": 3,
             "type": "form",
             "component_key": "ConstraintForm",
-            "sequence": 3,
             "grant_points": 20,
+            "description": "Excitement is great, but let's be totally honest about the hours you actually have. Side-building is a marathon, not a sprint. Pick a number you can stick to.",
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "Calendar Isolation: The 15-Minute Block Trick",
+                  "url": "https://urgetostart.com/guides/calendar-fencing"
+                }
+              ],
+              "alternative_approach": "If a standard weekly allocation feels too strict right now, target a simple boundary: commit to waking up 30 minutes earlier on Tuesdays and Thursdays.",
+              "reflection_prompt": "You chose your hours. If a sudden operational crisis occurs in your personal schedule this week, what secondary boundary is your defense line to protect this time?"
+            },
             "db_id": "m1_q1_t3_constraints"
           }
         ],
-        "content_markdown": "If your execution goals don't align with the reality of your current schedule, you will abandon your project the moment you hit normal operational friction. Enthusiasm burns out incredibly fast; structured parameters and hard limits are what keep you moving. \n\nThere's no single \"right\" reason to start a business. I have met founders driven entirely by money, others driven by a specific problem that genuinely kept them up at night, some who were simply bored, and others who were just angry. Almost all of them can build something that works. The ones that fail don't have the wrong motivation—they just fail because they never get honest about what their true motivation actually is.\n\nComplete the initialization cards below[cite: 1]. Be aggressively honest with your data. Don't write down the hours or budgets you *hope* to have; write down your true, current boundaries. Your inputs here will permanently configure your background profile context so the AI Conductor can safely guide your business shape decisions downstream.",
+        "content_markdown": "",
         "db_id": "mission1_quest1"
       },
       "quest2": {
@@ -78,24 +125,66 @@
         "tasks": [
           {
             "id": "m1_q2_t1_ask_sim",
-            "title": "The Messaging Simulator",
+            "title": "Test Drive Your Message",
             "type": "simulator",
             "component_key": "AskSimulator",
             "sequence": 1,
             "grant_points": 30,
+            "description": "To practice getting requests right, jump into this safe sandbox with Kip. Draft a quick message asking your friends and family for early support.",
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "The 60-Second Ask Framework Rules",
+                  "url": "https://urgetostart.com/guides/asking-without-shame"
+                }
+              ],
+              "alternative_approach": "If messaging family scripts feels awkward, change the target entirely. Write the prompt as a short note to an old professional colleague or classmate.",
+              "reflection_prompt": "Did crafting that request copy make you feel like you were asking for an annoying favor, or did it feel like you were inviting an ally into your building arc?"
+            },
             "db_id": "m1_q2_t1_ask_sim"
           },
           {
-            "id": "m1_q2_t2_public_intent",
-            "title": "Share Your Commitment Publicly",
+            "id": "m1_q2_t2_known_reachout",
+            "title": "Reach Out to Your Circle",
             "type": "action",
-            "component_key": "SocialShareWidget",
+            "component_key": "KnownReachoutWidget",
             "sequence": 2,
             "grant_points": 20,
-            "db_id": "m1_q2_t2_public_intent"
+            "description": "Now that you have practiced the skill, let's execute it. Copy your polished message from the previous step and send it to the allies who have your back.",
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "Managing Outbound Response Anxiety",
+                  "url": "https://urgetostart.com/guides/managing-responses"
+                }
+              ],
+              "alternative_approach": "If messaging people individually triggers total friction, drop the request into a small group thread where your tightest circles already chat daily.",
+              "reflection_prompt": "You officially hit send. What surprised you more: the immediate speed of their direct responses, or the internal drops in your anxiety once it was gone?"
+            },
+            "db_id": "m1_q2_t2_known_reachout"
+          },
+          {
+            "id": "m1_q2_t3_digital_presence",
+            "title": "Claim Your Digital Voice",
+            "type": "action",
+            "component_key": "DigitalPresenceWidget",
+            "sequence": 3,
+            "grant_points": 25,
+            "description": "Building in public isn't about pretending to be a guru; it's just about documenting your learning journey out loud. Update your bio cleanly, and share your first honest update.",
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "The Perfect Anti-Brag Bio Template",
+                  "url": "https://urgetostart.com/guides/clean-profiles"
+                }
+              ],
+              "alternative_approach": "If updating your primary public network profile feels exposed, use a pseudonym or create a completely blank profile account dedicated strictly to tracking your progress.",
+              "reflection_prompt": "Your first update is officially out in the open. How does stepping away from passive consuming toward active publishing alter your mindset as a builder?"
+            },
+            "db_id": "m1_q2_t3_digital_presence"
           }
         ],
-        "content_markdown": "Every successful project gets built partly because the founder learned how to make direct, clear requests for help, introductions, feedback, or early capital[cite: 2]. The individuals who fail stay stuck behind screen layouts forever because they cannot bring themselves to approach real humans[cite: 2].\n\nMost bad outreach attempts fail before anyone finishes reading them because the language is wrapped in a soft, apologetic, defensive fog[cite: 2]. We approach busy people with vague statements like: *\"I'd love to pick your brain sometime.\"* This places the entire burden of structuring the conversation directly on them, signaling that you haven't prepared your thoughts[cite: 2]. \n\nBefore you approach anyone, you must get specific and clarify three parameters[cite: 2]:\n1.  **What exactly do you need them to do?** (Isolate a singular question or request)[cite: 2].\n2.  **How long will it take?** (If you ask for fifteen minutes, take exactly fifteen minutes)[cite: 2].\n3.  **Why them?** (Explain why their specific experience matters to your current bottleneck)[cite: 2].\n\nWhen you learn to ask well, you aren't just taking value—you are giving the other person a clean chance to show up and help someone build[cite: 2]. Most people actually want to do that; they just need to be asked clearly enough that they know how[cite: 2]. \n\nUse the workspace block below to test your copy directly against our writing simulator before going public[cite: 1, 2].",
+        "content_markdown": "",
         "db_id": "mission1_quest2"
       },
       "quest3": {
@@ -125,6 +214,16 @@
             "component_key": "RejectionCounterForm",
             "sequence": 1,
             "grant_points": 80,
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "The Gamification of Friction (Jia Jiang Rules)",
+                  "url": "https://urgetostart.com/guides/rejection-therapy"
+                }
+              ],
+              "alternative_approach": "If you cannot find direct buyers to pitch today, collect low-stakes rejections: ask a local coffee stand for a 10% discount on your order just to hear the word 'no'.",
+              "reflection_prompt": "Now that you have logged these rejections, did the structural outcome crush your motivation, or did you realize the physical aftermath was entirely harmless?"
+            },
             "db_id": "m1_q3_t1_rejection_log"
           },
           {
@@ -134,14 +233,24 @@
             "component_key": "CommunityFeedTeaser",
             "sequence": 2,
             "grant_points": 20,
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "Leveraging Shared Community Momentum",
+                  "url": "https://urgetostart.com/guides/peer-leverage"
+                }
+              ],
+              "alternative_approach": "If you don't want to post your entry openly to the main board yet, silently review 3 logs submitted by other founders to internalize their metrics.",
+              "reflection_prompt": "Seeing that every active peer around you experiences the identical friction, does failure feel like an individual flaw or a universal system variable?"
+            },
             "db_id": "m1_q3_t2_club_unlock"
           }
         ],
-        "content_markdown": "A good ask does not guarantee a yes. Real social rejection activates the exact same neural path markers in the human brain as physical pain. If a 'No' from a potential customer hits your focus hard and makes you want to stall, you aren't being oversensitive—your brain is doing exactly what it was biologically wired to do.\n\nThe good news is that the mind adapts quickly through direct exposure. The more rejections you actively collect, the less surprising they become, and the less intense your internal response stays. Successful founders move past the awkwardness because they stop treating a rejection as a moral verdict on their character, and start treating it as clean market data to filter their approach. \n\nWhen you receive a 'No', take two minutes to run it through our four diagnostic check categories:\n1.  **Wrong Person:** Your ask was fine, but targeted at someone whose situation doesn't match what you offer.\n2.  **Wrong Framing:** Your ask was too vague, too massive, or confusing to act on.\n3.  **Wrong Moment:** The timing or setting was off. Catch someone on a bad day or mid-rush and even the best message fails.\n4.  **Wrong Delivery:** Your formatting, lack of confidence, or pitch text undermined the request.\n\nYour goal this week is to step away from the computer screen, interact with real humans, and intentionally collect three rejections. Treat it like a game. Walk into a local shop and ask for an impossible discount at the counter, or target an acquaintance for an unscalable favor. Log your results below to advance your account and unlock our exclusive Regional Rejection Feed.",
+        "content_markdown": "",
         "db_id": "mission1_quest3"
       }
     },
-    "briefing_markdown": "Most programs let you watch videos and feel productive without actually doing anything. This isn't that; think of this as a live workspace. Before we get into business shapes, software choices, or talking to customers, we have to look honestly at you. Starting a business will test you in ways that are hard to predict, and the people who make it through aren't always the smartest or the most prepared—they're the ones who kept going when it got tough.\n\n### How this works\n\nYou will move through this mission one focused Quest at a time. \n*   **The Blueprint:** Read the brief introduction at the top of each screen to understand the strategy.\n*   **The Execution:** Fill out the forms, run the simulators, and log your real data directly inside the dashboard cards.\n*   **The Gate:** Future Quests remain locked until your current workspace checklist is fully marked complete by the Conductor.\n\nMessy is fine. A rough, honest, half-formed answer that is true is worth ten times more than a polished non-answer. Don't overthink the input fields. Trust the sequence, skip the logo design or legal registration worries for now, and focus entirely on the single action item directly in front of your face.\n\nWatch the overview video above, and let's unlock your first Quest below.",
+    "briefing_markdown": "",
     "db_id": "mission1"
   },
   "mission2": {
@@ -149,6 +258,20 @@
     "sequence": 2,
     "video_url": "https://urgetostart.com/videos/m2-overview.mp4",
     "briefing_text": "Businesses aren't invented; they are noticed. Stop searching for random ideas and begin tracking structural real-world friction.",
+    "prerequisites": [
+      {
+        "item": "Completion of Mission 1 validation badges and foundational profiles",
+        "promptKey": "M2_PRE_BADGE_AUDIT"
+      },
+      {
+        "item": "Observation notebook or a blank digital memo sheet active on your phone",
+        "promptKey": null
+      },
+      {
+        "item": "Willingness to assume that your initial ideas might be entirely wrong",
+        "promptKey": "M2_PRE_EGO_DETACHMENT"
+      }
+    ],
     "quests": {
       "quest1": {
         "slug": "your-own-pain-and-skills",
@@ -175,6 +298,16 @@
             "component_key": "PersonalPainLogForm",
             "sequence": 1,
             "grant_points": 25,
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "Spotting True Commercial Inconvenience",
+                  "url": "https://urgetostart.com/guides/pain-spotting"
+                }
+              ],
+              "alternative_approach": "If your weekly schedule felt completely smooth, review your monthly bank statement: what transaction or utility bill felt annoying to pay?",
+              "reflection_prompt": "Look closely at your 3 logged issues. Are these temporary personal annoyances, or structural bottlenecks people would pay money to bypass?"
+            },
             "db_id": "m2_q1_t1_personal_frustrations"
           },
           {
@@ -184,10 +317,20 @@
             "component_key": "SkillTagBuilder",
             "sequence": 2,
             "grant_points": 25,
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "Deconstructing Your Hidden Technical Capital",
+                  "url": "https://urgetostart.com/guides/uncovering-skills"
+                }
+              ],
+              "alternative_approach": "If you struggle to list structural skills, think about what tasks your coworkers, friends, or parents constantly ask you to fix or handle for them.",
+              "reflection_prompt": "Are the native skill tags you configured traits you genuinely enjoy executing, or are they historical habits you are trying to move away from?"
+            },
             "db_id": "m2_q1_t2_skills_inventory"
           }
         ],
-        "content_markdown": "The cleanest, lowest-risk business models live inside things you already experience and understand deeply. A tourist has a map, but a local resident knows which alley cuts twenty minutes off the commute, which bus is always late, and which roads to avoid. We want you working with local resident knowledge.\n\nWe begin by looking directly at your own weekly routine. Walk through a typical day and look closely for three distinct indicators:\n*   **The Time Drain:** The repetitive, boring task you dread because it feels like it should have been automated years ago. (The signal: *\"I can't believe I have to do this again.\"*)\n*   **The Clumsy Workaround:** The moments you are bouncing between three different tools or doing manual steps to patch together a single job. (The signal: *\"There has to be a better way.\"*)\n*   **The Stress Point:** The low-level anxiety or nagging worry that doesn't go away. (The signal: *\"I hope I didn't forget...\"*)\n\nJamie Siminoff started Ring because he was tinkering in his garage and kept missing deliveries because he couldn't hear the front doorbell. He didn't build it to disrupt the security industry; he built it to stop his own regular annoyance.\n\nLog your baseline routine inconveniences and inventory your current capabilities below. We will use this data to map your existing practical skills straight against someone else's transactional deficits.",
+        "content_markdown": "",
         "db_id": "mission2_quest1"
       },
       "quest2": {
@@ -215,6 +358,16 @@
             "component_key": "CircleTagMatrix",
             "sequence": 1,
             "grant_points": 20,
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "Mapping Niche Subcultures for Customer Discovery",
+                  "url": "https://urgetostart.com/guides/subculture-mapping"
+                }
+              ],
+              "alternative_approach": "If you work completely isolated or remote, select online sub-communities or forums where you actively read daily interaction logs.",
+              "reflection_prompt": "Which of these user circles do you possess the highest native empathy for, and where do you have the most direct structural access?"
+            },
             "db_id": "m2_q2_t1_identify_circles"
           },
           {
@@ -224,10 +377,21 @@
             "component_key": "CircleObservationForm",
             "sequence": 2,
             "grant_points": 30,
+            "description": "Log 2 clumsy workarounds or shortcuts you saw someone utilize to bypass a bottleneck.",
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "The Clumsy Shortcut Audit Framework",
+                  "url": "https://urgetostart.com/guides/shortcut-hunting"
+                }
+              ],
+              "alternative_approach": "If you didn't catch anyone using a shortcut physically, look up a tutorial video for a common software app: where do users look confused in comment threads?",
+              "reflection_prompt": "Every clumsy shortcut is a hidden validation sign for a product. Is the friction you observed caused by a lack of tools or bad information?"
+            },
             "db_id": "m2_q2_t2_friction_log"
           }
         ],
-        "content_markdown": "The people in your immediate circles—your friends, your classmates, your team members, or your co-workers—are telling you what they would pay to fix every single day. They are just calling it complaining. Strangers will be polite to you, but the people you know well complain honestly. \n\nMost people tune out casual complaints or offer a quick bit of advice to make the conversation comfortable. The habit you need to build instead is intense curiosity. When someone expresses frustration, don't try to resolve it for them—try to understand it. Ask why it's hard. Ask what they've already tried. \n\nWatch your active watering holes closely for these three signals:\n*   **The Sigh:** A sound of tired acceptance about a recurring chore. They have completely stopped expecting the process to get better.\n*   **The Clumsy Hack:** The Post-it note taped to a monitor, the messy group chat pinned to the top, or the manual spreadsheet holding a data loop together. A hack is absolute evidence that a gap exists and that they are already spending daily effort to patch it.\n*   **The \"I Wish\":** When someone explicitly states: *\"I wish someone would just handle this.\"* That isn't a casual comment; that is a direct business request.\n\nSelect the core groups you interact with most frequently and log two explicit moments where you caught someone using a clumsy shortcut to finish a job.",
+        "content_markdown": "",
         "db_id": "mission2_quest2"
       },
       "quest3": {
@@ -257,10 +421,20 @@
             "component_key": "DigitalSafariLogForm",
             "sequence": 1,
             "grant_points": 50,
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "Advanced Search Filters for Reddit and Review Boards",
+                  "url": "https://urgetostart.com/guides/safari-mining"
+                }
+              ],
+              "alternative_approach": "Head directly to a popular service platform's app store listing. Filter reviews strictly by '3-stars' to find users who like the core utility but hate the active friction.",
+              "reflection_prompt": "Look at the raw language the internet user chose to describe their frustration. Are they attacking a missing software feature, or expressing genuine operational anger?"
+            },
             "db_id": "m2_q3_t1_safari_grab"
           }
         ],
-        "content_markdown": "When used incorrectly, the internet is an endless distraction engine. When used as a research workspace, it becomes the largest open database of customer pain in human history. \n\nWe are going to avoid high-level industry hype articles and look explicitly at the spaces where buyers gather to vent. Look at marketplace product reviews—specifically the **three-star ratings**. Five-star reviews are often marketing copy; one-star reviews are raw, emotional anger; three-star reviews contain the precise structural gaps where current products fail. Look for the pattern where a buyer writes: *\"I love this product, BUT...\"* The *but* is where your opening lives.\n\nConsider the story of a founder who read the comments on a highly popular, expensive yoga mat advertisement. Dozens of buyers complained that the mat was too heavy to carry comfortably and the branded strap cut into their shoulder. The company ignored them. She sourced a wide, padded carry strap designed to fit that specific mat and sold it directly to the people complaining in the comments. She didn't build a new product from scratch—she just read what people were already asking for.\n\nSet a strict 15-minute timer. Scan an online community or review channel you naturally use and pull out two verbatim complaint strings. Don't interpret them yet; just capture the raw data.",
+        "content_markdown": "",
         "db_id": "mission2_quest3"
       },
       "quest4": {
@@ -290,10 +464,20 @@
             "component_key": "LiveChatRoleplayWidget",
             "sequence": 1,
             "grant_points": 100,
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "The Mom Test Core Conversation Rules",
+                  "url": "https://urgetostart.com/guides/mom-test-foundations"
+                }
+              ],
+              "alternative_approach": "If Alex completely locks up on you during the script, stop trying to guide the conversation. Ask a purely historical question about the last time he encountered the task.",
+              "reflection_prompt": "You officially navigated the sandbox conversation. What statement triggered Alex to drop his guard: a generic pitch outline, or an invitation to unpack his past workflow history?"
+            },
             "db_id": "m2_q4_t1_chat_roleplay"
           }
         ],
-        "content_markdown": "Before you go out and talk to real buyers in the open market, you must learn to ask questions that don't invite confirmation bias. If you ask someone: *\"I have an idea for an app that fixes this—would you use it?\"*, they will almost always say yes to be polite or encourage you. The founder builds it based on that feedback, but nobody buys it. That fails because you're asking someone to predict their own future behavior, which humans are genuinely terrible at. \n\nWhat they tell you about their **past behavior** is completely reliable. The core rule of running an un-biased interview is simple: don't ask anyone whether your idea is good. Ask them about their life.\n\n*   *\"Would you pay for a dog-walking service?\"* is a future guess. They will guess generously because it sounds nice.\n*   *\"When was the last time you paid someone to walk your dog?\"* is a historical fact. Either they have or they haven't. If they have never looked for it, never paid for it, and never tried to solve it, they are not your customer.\n\nIn the interface below, run a text roleplay loop with our simulated customer, Alex. If you ask leading questions, Alex will give you polite lies. You must ask historical behavioral questions to extract real facts about his last operational workflow failure to pass the simulator.",
+        "content_markdown": "",
         "db_id": "mission2_quest4"
       },
       "quest5": {
@@ -324,6 +508,16 @@
             "component_key": "PainIndexTrackerForm",
             "sequence": 1,
             "grant_points": 100,
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "Navigating Real-World Discovery Interviews Safely",
+                  "url": "https://urgetostart.com/guides/interviewing-humans"
+                }
+              ],
+              "alternative_approach": "If reaching out to new contacts triggers massive friction, interview 3 peers within the internal Urge community feed who match your target persona profile parameters.",
+              "reflection_prompt": "Reviewing the raw data logs from your 3 interviews, did the subjects state that they actively spent real money trying to resolve this bottleneck in the past year?"
+            },
             "db_id": "m2_q5_t1_interview_log"
           },
           {
@@ -333,1289 +527,24 @@
             "component_key": "OpportunityDecisionBoard",
             "sequence": 2,
             "grant_points": 50,
+            "ai_config": {
+              "resources": [
+                {
+                  "title": "The Elimination Framework: Shifting to Mono-Focus",
+                  "url": "https://urgetostart.com/guides/making-the-cut"
+                }
+              ],
+              "alternative_approach": "If you feel paralyzed choosing between two distinct ideas, pick the path that carries the absolute lowest software tool cost to deploy an initial version.",
+              "reflection_prompt": "You have committed to a single workspace direction. How does closing the alternative loops feel to your mindset as a tactical operator?"
+            },
             "db_id": "m2_q5_t2_synthesize_cut"
           }
         ],
-        "content_markdown": "You have observed your routine, tracked your local circles, scanned digital comment channels, and practiced basic interview rules. Your ideas are still raw assumptions until you confirm them against real-world human data points. Staring at someone from a distance doesn't tell you the whole story. You might assume a coworker needs a faster printer because they sigh at it, but when you talk to them, you find out they hate printing entirely and want a way to move completely digital. You have to hear it.\n\nThis week, you cross the validation line and get out of the building. Conduct three brief, casual conversations with real humans experiencing your target problem. Do not pitch a solution; simply measure how much their workaround currently costs them across three markers:\n*   **Scale of Impact:** Does it cost them real time, cash, or repeating stress? You want high impact.\n*   **Presence of a Workaround:** If they haven't cobbled together a clumsy workaround to deal with it, the problem isn't urgent enough for them to pay for a solution.\n*   **Past Spend:** Have they spent money trying to fix it before? Past payment is the clearest signal of market reality.\n\nLog your conversation metrics below. The central Conductor will process your inputs side-by-side against your initial profile constraints, helping you make an objective, final choice.",
+        "content_markdown": "",
         "db_id": "mission2_quest5"
       }
     },
-    "briefing_markdown": "The most common mistake first-time founders make is sitting in a room trying to invent a brilliant, original idea out of thin air. When you try to solve an abstract problem for an audience you don't actually know, you are running on pure guesswork and assumptions. \n\nThe best businesses aren't invented; they are noticed. \n\nIn this mission, you are switching your brain from \"inventor mode\" to \"detective mode.\" You are going to stop looking for moonshots and start training your eyes to spot the everyday friction, messy workarounds, and unvarnished complaints that are happening right around you. A validated problem is the raw target data we need before we write a single line of code or spend a single dollar building a product.\n\nWatch the overview video above, and let's head out on your first discovery hunt.",
+    "briefing_markdown": "",
     "db_id": "mission2"
-  },
-  "mission3": {
-    "title": "Check Your Project's Viability",
-    "sequence": 3,
-    "video_url": "https://urgetostart.com/videos/m3-overview.mp4",
-    "briefing_text": "Transform a vague problem space into an unshakeable profile structure with direct, actionable math.",
-    "quests": {
-      "quest1": {
-        "slug": "describe-your-exact-buyer",
-        "title": "Describe Your Exact Buyer",
-        "subtitle": "Get clear on the specific type of person who experiences this problem.",
-        "sequence": 1,
-        "content_path": "content/missions/mission3/quests/describe-your-exact-buyer.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Profiler",
-          "persona_prompt": "Review customer configurations. Reject broad entries like 'small businesses' and push for specialized target categories.",
-          "required_context": [
-            "user_profiles",
-            "opportunities"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
-        "tasks": [
-          {
-            "id": "m3_q1_t1_five_word_group",
-            "title": "Summarize Your Buyer in 5 Words or Less",
-            "type": "form",
-            "component_key": "StringValidationInput",
-            "sequence": 1,
-            "grant_points": 30,
-            "db_id": "m3_q1_t1_five_word_group"
-          },
-          {
-            "id": "m3_q1_t2_psychographics",
-            "title": "Identify Their Daily Fears & Online Hangouts",
-            "type": "form",
-            "component_key": "PsychographicMapForm",
-            "sequence": 2,
-            "grant_points": 20,
-            "db_id": "m3_q1_t2_psychographics"
-          }
-        ],
-        "content_markdown": "A broad target description leads directly to a failed, generic launch. Stating that your solution is simply for \"busy college students\" or \"small business owners\" is just listing a broad demographic category. It is a census bucket, not an actionable target market. \n\nTo design an offer that instantly commands attention and cuts through the noise, you must get hyper-specific about who your buyer is on paper, and what is happening contextually underneath their daily lives. Demographics explain who your buyer is external to your product, but psychographics explain exactly why they will pull out their wallet to buy it. \n\nConsider two people who are the exact same age, live in the same high-end neighborhood, and earn the exact same annual salary. On a generic demographic spreadsheet, they look like identical data points. However, one spends their weekends volunteering at a local animal shelter and buying organic, sustainably sourced goods. The other spends their free time at high-speed motor racing tracks and purchasing the latest cutting-edge technology. They do not experience pain points the same way, and they do not buy the same products.\n\nTo force total absolute clarity, you must isolate a single, explicit player profile. We enforce a strict five-word constraint limit. If you cannot summarize the core person experiencing your target problem in five words or less, your understanding remains a foggy abstraction. \n\nComplete the tasks below to define your exact buyer and map their underlying emotional drivers.",
-        "db_id": "mission3_quest1"
-      },
-      "quest2": {
-        "slug": "choose-how-you-package-it",
-        "title": "Choose How You Package It",
-        "subtitle": "Look at the different ways to sell your solution before picking one format.",
-        "sequence": 2,
-        "content_path": "content/missions/mission3/quests/choose-how-you-package-it.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Architect",
-          "persona_prompt": "Map the validated problem text cleanly across alternative models: service, app, directory, or guidebook.",
-          "required_context": [
-            "user_profiles",
-            "opportunities"
-          ],
-          "on_success": {
-            "grant_points": 50,
-            "badge_key": "ARCHITECT",
-            "badge_db_id": "ARCHITECT"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m3_q2_t1_model_generator",
-            "title": "Compare Alternative Business Options",
-            "type": "simulator",
-            "component_key": "SolutionScaffoldViewer",
-            "sequence": 1,
-            "grant_points": 30,
-            "db_id": "m3_q2_t1_model_generator"
-          },
-          {
-            "id": "m3_q2_t2_lock_vehicle",
-            "title": "Select Your Starting Offer Style",
-            "type": "action",
-            "component_key": "ModelSelectionNode",
-            "sequence": 2,
-            "grant_points": 20,
-            "db_id": "m3_q2_t2_lock_vehicle"
-          }
-        ],
-        "content_markdown": "When you notice a real market problem, your immediate human instinct is to jump straight to a single product format. If you know how to write software code, you immediately visualize building an app. If you are naturally good at organizing workflows, you immediately visualize selling a guidebook or setting up a course. \n\nThis deep instinct to lock into a vehicle too early blinds you to better alternative pathways that might be much faster and cheaper to test. A single, validated problem can be packaged and delivered across multiple business shapes. \n\nTake a time-strapped local business owner who hates doing basic administrative invoicing work. You could solve that exact problem for them in at least four genuinely different ways:\n*   **Done-For-You Service:** You act as a manual assistant or agency and handle their data entry and invoicing for a flat project fee.\n*   **Handy Digital Tool:** You build a simple app or automation script that handles their invoice data transfers automatically.\n*   **Community Board or Directory:** You build a portal that connects these business owners directly with pre-vetted virtual assistants who do the work.\n*   **Manual or Guidebook:** You sell a clear template manual or instructional guide on how to configure invoicing using tools that already exist in the market.\n\nSame problem. Completely different execution pathways. One requires you to write custom code, one requires you to manage operations, one requires you to match people, and one requires you to teach. \n\nReview how your target project shapes across all four models, evaluate your personal advantages, and lock in the format you will use to make your very first sale.",
-        "db_id": "mission3_quest2"
-      },
-      "quest3": {
-        "slug": "market-sizing",
-        "title": "Optional Adventure: Scale & Ceiling",
-        "subtitle": "Calculate your theoretical long-term market limits if you want to grow big.",
-        "sequence": 3,
-        "content_path": "content/missions/mission3/quests/market-sizing.md",
-        "is_optional": true,
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Category Analyst",
-          "persona_prompt": "You are a top-down market research utility. Help the user find directionally correct baseline categories size metrics using clean logic.",
-          "required_context": [
-            "user_profiles",
-            "opportunities"
-          ],
-          "on_success": {
-            "grant_points": 25
-          }
-        },
-        "tasks": [
-          {
-            "id": "m3_q3_t1_top_down_ceiling",
-            "title": "Calculate Your Category & Segment Ceiling",
-            "type": "form",
-            "component_key": "TopDownSizingCalculator",
-            "sequence": 1,
-            "grant_points": 25,
-            "db_id": "m3_q3_t1_top_down_ceiling"
-          }
-        ],
-        "content_markdown": "If you are building a local service or a small digital tool to cover your basic living expenses, you can skip this section entirely and go straight to mapping out your first customers. However, if you are looking at your project and wondering, \"How massive could this actually get in the future?\", you need a realistic way to calculate your ceiling.\n\nIn the business world, this is called mapping your total market size. The biggest trap is looking at global, generic numbers (like reading that the global software market is worth billions) and assuming you can easily capture a fraction of it. That is fiction. \n\nTo map out a realistic ceiling, we look at the market from the top down across two layers:\n*   **The Global Category Ceiling:** The total amount of money being spent on your entire business category worldwide. If you are building a school scheduling tool, this is the total revenue generated by all school software globally. This is a massive, theoretical pool, but it tells you if you are entering an expanding industry or a shrinking pond.\n*   **Your Serviceable Segment:** The global pool filtered down to the specific boundaries of your business shape. This means filtering by your immediate geography, language, and precise demographic tier. If your tool is only built for English-speaking, secondary-level institutions, your serviceable segment is a fraction of the global pool. This is your real, long-term playground.\n\nMapping these parameters doesn't change how you make your first sale next week. But it prevents you from committing months of your life to a market that is fundamentally too tiny to ever grow past a local hobby.\n\nIf you want to run the big numbers, complete the top-down tool calculations below. If you want to stay focused purely on immediate execution, click the toggle to skip this adventure.",
-        "db_id": "mission3_quest3"
-      },
-      "quest4": {
-        "slug": "finding-your-first-customers",
-        "title": "Finding Your First Customers",
-        "subtitle": "Map out exactly where your first 10 paying customers are hiding.",
-        "sequence": 4,
-        "content_path": "content/missions/mission3/quests/finding-your-first-customers.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Reality Engine",
-          "persona_prompt": "Review outreach projections. Evaluate if the pricing floor vs outreach goals matches the income targets in their profile. If it drops into a heavy deficit, trigger a pivot validation pathway.",
-          "required_context": [
-            "user_profiles",
-            "opportunities"
-          ],
-          "on_success": {
-            "grant_points": 100,
-            "badge_key": "STRATEGIST",
-            "badge_db_id": "STRATEGIST"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m3_q4_t1_locate_cohorts",
-            "title": "List 3 Specific Groups or Channels Where Your Buyers Gather",
-            "type": "form",
-            "component_key": "WateringHoleForm",
-            "sequence": 1,
-            "grant_points": 30,
-            "db_id": "m3_q4_t1_locate_cohorts"
-          },
-          {
-            "id": "m3_q4_t2_urge_equation",
-            "title": "Calculate Your Realistic Year 1 Sales Goal",
-            "type": "form",
-            "component_key": "RealityEquationCalculator",
-            "sequence": 2,
-            "grant_points": 30,
-            "db_id": "m3_q4_t2_urge_equation"
-          },
-          {
-            "id": "m3_q4_t3_mint_project",
-            "title": "Confirm and Officially Open Your Workspace",
-            "type": "action",
-            "component_key": "ProjectMintingButton",
-            "sequence": 3,
-            "grant_points": 40,
-            "db_id": "m3_q4_t3_mint_project"
-          }
-        ],
-        "content_markdown": "Most early-stage projects fail because the founder builds an abstract product inside an isolated room with no practical strategy to find users. Stating that your marketing plan is \"paid social ads\" or \"going viral\" is an aspiration, not an execution step. In the early days, you need something much scrappier: a physical or digital watering hole where your specific audience already congregates.\n\nBefore you spend a single dollar building a solution or writing complex software code, look at the bottom-up math of reality. We multiply your target price by a highly conservative conversion baseline to outline your exact outreach goals. This math tells you exactly what slice of the market you can realistically win in the next 12 months based entirely on the hours and resources you have right now. \n\nIf your target revenue goal requires you to manually message 400 people this year to secure 20 clients, that comes down to just 8 direct, unscalable outreaches a week. That is an actionable, highly realistic roadmap that removes the mystery from customer acquisition. \n\nRun your launch math calculations below. If your projected revenue ceiling matches your personal constraint limits, you will officially mint your active project workspace. If the math reveals a broken model, the Conductor will pause this workspace, help you review your data, and smoothly route you back to pick another archived opportunity log to iterate.",
-        "db_id": "mission3_quest4"
-      }
-    },
-    "briefing_markdown": "Proving that a problem exists in the world is a great start, but it is not the same thing as proving that a viable business model exists. \n\nIn Mission 2, you filtered through your raw observations, rated the severity of real-world pain points, and locked in the single project you want to focus on. Now, it is time to put that chosen problem through a reality check. \n\nIn this mission, you are going to define your exact target buyer, choose a specific format to package and deliver your solution, map out exactly where your early adopters hang out, and run the direct, unvarnished sales math. \n\nWe are not looking for global, multi-billion-dollar market reports here. We are looking for an explicit, realistic roadmap to find your first 10 paying customers. Pay close attention to the math. If the numbers or the customer profiles show that your idea cannot sustain itself within your time and budget limits, do not panic. The platform will safely pause your progress and help you pull your next archived idea back into the workspace to evaluate a pivot. \n\nWatch the overview video above, and let's check your project's viability.",
-    "db_id": "mission3"
-  },
-  "mission4": {
-    "title": "Designing Your Money System",
-    "sequence": 4,
-    "video_url": "https://urgetostart.com/videos/m4-overview.mp4",
-    "briefing_text": "A business is an interconnected system. Map out your messaging, routes, activities, and profit margins across 5 clear, focused steps.",
-    "quests": {
-      "quest1": {
-        "slug": "thinking-about-your-solution",
-        "title": "Thinking About Your Solution",
-        "subtitle": "Frame your value hooks and choose your customer communication style.",
-        "sequence": 1,
-        "content_path": "content/missions/mission4/quests/thinking-about-your-solution.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Value Editor",
-          "persona_prompt": "Review solution configurations. Reject boring feature descriptions and force users to highlight time or stress savings.",
-          "required_context": [
-            "user_profiles",
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
-        "tasks": [
-          {
-            "id": "m4_q1_t1_value_prop",
-            "title": "Draft Your Core Pain Reliever Wording",
-            "type": "form",
-            "component_key": "ValuePropInputForm",
-            "sequence": 1,
-            "grant_points": 30,
-            "db_id": "m4_q1_t1_value_prop"
-          },
-          {
-            "id": "m4_q1_t2_relationship_style",
-            "title": "Select Your Interaction Style",
-            "type": "form",
-            "component_key": "RelationshipSelectorCard",
-            "sequence": 2,
-            "grant_points": 20,
-            "db_id": "m4_q1_t2_relationship_style"
-          }
-        ],
-        "content_markdown": "Your business does not trade in features; it trades in value. The biggest trap early builders fall into is talking endlessly about *what* their product does, rather than *why* it matters to the person buying it. \n\nYour value proposition is the unique blend of speed, convenience, or cost savings that makes your buyer's biggest daily headache disappear. If you are building a tool that cuts a restaurant manager's inventory tracking time from four hours down to thirty minutes, your product isn't an inventory tracker. Your value proposition is handing three and a half hours of personal freedom back to a stressed manager every single week.\n\nYou also need to clarify how you will treat those buyers once they arrive. Your customer relationship style dictates how you build trust and stop people from leaving. Are you offering a highly manual, high-touch personal service via direct message, or are you creating an automated, hands-off setup where users onboard themselves?\n\nComplete the cards below to frame your core value hooks and lock down your communication style.",
-        "db_id": "mission4_quest1"
-      },
-      "quest2": {
-        "slug": "finding-paying-customers",
-        "title": "Finding Paying Customers",
-        "subtitle": "Isolate your early adopter segments and define your outreach lines.",
-        "sequence": 2,
-        "content_path": "content/missions/mission4/quests/finding-paying-customers.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Route Analyst",
-          "persona_prompt": "Audit customer acquisition channels. Flag vague terms like 'organic marketing' and demand specific, direct communication routes.",
-          "required_context": [
-            "user_profiles",
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
-        "tasks": [
-          {
-            "id": "m4_q2_t1_buyer_segments",
-            "title": "Identify Your Highest-Pain Early Adopters",
-            "type": "form",
-            "component_key": "EarlyAdopterForm",
-            "sequence": 1,
-            "grant_points": 25,
-            "db_id": "m4_q2_t1_buyer_segments"
-          },
-          {
-            "id": "m4_q2_t2_delivery_channels",
-            "title": "Lock In Your Direct Delivery Routes",
-            "type": "form",
-            "component_key": "ChannelSelectionGrid",
-            "sequence": 2,
-            "grant_points": 25,
-            "db_id": "m4_q2_t2_delivery_channels"
-          }
-        ],
-        "content_markdown": "You already know who your target five-word customer profile is, but now you need to map out your delivery lines. In business terms, this means locking in your Customer Segments and Channels. \n\nIf you try to market your solution to a broad, generic crowd, your messaging will be ignored by everyone. You must stay focused entirely on your core sub-segment of early adopters—the specific subset of people who are experiencing the highest level of pain right now and are actively looking for a workaround. \n\nOnce you know exactly who they are, you must define your delivery channels. This is the explicit physical or digital pipeline you will use to push your offer directly in front of their eyes. You cannot rely on vague aspirations like \"social media marketing.\" You must choose a direct route. Are you cold messaging targets on a professional network, posting inside a locked digital community group, or physically walking through the front door of local independent shops?\n\nUse the workspace forms below to detail your active target segments and choose your clear outreach pipelines.",
-        "db_id": "mission4_quest2"
-      },
-      "quest3": {
-        "slug": "activities-and-resources",
-        "title": "Activities and Resources",
-        "subtitle": "Audit your available personal constraints against your daily execution work.",
-        "sequence": 3,
-        "content_path": "content/missions/mission4/quests/activities-and-resources.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Runway Manager",
-          "persona_prompt": "Evaluate operational actions. Cross-examine the user's daily activities list against their logged weekly hour limits.",
-          "required_context": [
-            "user_profiles",
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50,
-            "badge_key": "ANALYST",
-            "badge_db_id": "ANALYST"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m4_q3_t1_resources_log",
-            "title": "Inventory Your Core Assets & Availability",
-            "type": "form",
-            "component_key": "ResourceInventoryForm",
-            "sequence": 1,
-            "grant_points": 25,
-            "db_id": "m4_q3_t1_resources_log"
-          },
-          {
-            "id": "m4_q3_t2_activities_log",
-            "title": "Outline Your Primary Daily Action Steps",
-            "type": "form",
-            "component_key": "CoreActivitiesLogForm",
-            "sequence": 2,
-            "grant_points": 25,
-            "db_id": "m4_q3_t2_activities_log"
-          }
-        ],
-        "content_markdown": "Building a business requires a clear view of your operational limits. You must audit your Key Activities and Key Resources to understand exactly what it takes to stay alive and deliver on your promises.\n\nYour resources are the absolute essential assets you must possess right now to run your workspace. For a scrappy project, this isn't high-end factory machinery, corporate real estate, or complex patents. It means looking at your physical laptop, your specific skill sets, your available weekly hours, and your remaining risk capital budget. \n\nYour activities are the primary, repeating tasks you must execute constantly to keep your value engine running. What is your actual daily job going to look like? Is your core activity writing custom software code, manually editing audio assets for clients, curating digital directory listings, or running unscalable customer communication loops?\n\nInventory your baseline resource parameters and map out your core daily actions below to verify your execution runway.",
-        "db_id": "mission4_quest3"
-      },
-      "quest4": {
-        "slug": "finding-profits",
-        "title": "Finding Your Profits",
-        "subtitle": "Run your value-anchored price math and discover your break-even goals.",
-        "sequence": 4,
-        "content_path": "content/missions/mission4/quests/finding-profits.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Economics Auditor",
-          "persona_prompt": "Verify profit margins. Check tool costs vs pricing tiers and output clear break-even lines.",
-          "required_context": [
-            "user_profiles",
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 100,
-            "badge_key": "ECONOMIST",
-            "badge_db_id": "ECONOMIST"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m4_q4_t1_pricing_tiers",
-            "title": "Establish Your Core Pricing Tiers",
-            "type": "form",
-            "component_key": "PricingTierCardForm",
-            "sequence": 1,
-            "grant_points": 30,
-            "db_id": "m4_q4_t1_pricing_tiers"
-          },
-          {
-            "id": "m4_q4_t2_expenses_spend",
-            "title": "List Your Absolute Minimum Software Expenses",
-            "type": "form",
-            "component_key": "ToolExpenseLogForm",
-            "sequence": 2,
-            "grant_points": 30,
-            "db_id": "m4_q4_t2_expenses_spend"
-          },
-          {
-            "id": "m4_q4_t3_economics_dashboard",
-            "title": "See Your Real-World Break-Even Goal",
-            "type": "action",
-            "component_key": "MarginDashboardCalculator",
-            "sequence": 3,
-            "grant_points": 40,
-            "db_id": "m4_q4_t3_economics_dashboard"
-          }
-        ],
-        "content_markdown": "To keep your platform alive and build long-term momentum, you must understand your unit economics. This simply means tracking your pricing tiers, your running software costs, and your take-home margins to prove that your engine is mathematically sound.\n\nWe break this down across three simple task steps:\n1. **Value-Anchored Pricing:** Setting your price tag contextually against the size of the workaround your customer deals with today. Your price should never be based on fear; it must be a direct reflection of the hours or cash you save them.\n2. **Tool Expenses Log:** Inventorying your absolute minimum running software costs. This means tracking your domain registry, page hosting, simple database storage, or payment handling setup.\n3. **The Break-Even Goal:** Subtracting your running expenses from your core price tiers to find your true take-home profit. This gives you a clear line in the sand: the exact number of monthly sales you must execute just to cover your tool bills.\n\nRun your direct cash math below to verify that your business model generates more margin than it burns.",
-        "db_id": "mission4_quest4"
-      },
-      "quest5": {
-        "slug": "boosters",
-        "title": "Boosters",
-        "subtitle": "Identify the software tools and community gatekeepers that accelerate your launch.",
-        "sequence": 5,
-        "content_path": "content/missions/mission4/quests/boosters.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Booster Conductor",
-          "persona_prompt": "Validate core third-party integrations. Ensure the user is leveraging infrastructure platforms to maximize launch speed.",
-          "required_context": [
-            "user_profiles",
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 100,
-            "badge_key": "ENGINEER",
-            "badge_db_id": "ENGINEER"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m4_q5_t1_partnerships_log",
-            "title": "Map Your Infrastructure Allies",
-            "type": "form",
-            "component_key": "PartnershipBoosterForm",
-            "sequence": 1,
-            "grant_points": 100,
-            "db_id": "m4_q5_t1_partnerships_log"
-          }
-        ],
-        "content_markdown": "No business operates in total isolation. To move quickly and save precious time, you must identify your Key Partnerships—the real-world boosters, platforms, and infrastructure helpers that do the heavy lifting for you.\n\nAs a scrappy builder, your partners aren't corporate joint ventures or complex strategic legal alliances. Your partners are the software tools and platform gatekeepers that allow you to skip building everything from scratch. This means leveraging your payment processor to handle global billing transactions, utilizing a reliable authentication system to secure user profiles, or building relationship links with the specific online community managers who run your target watering holes.\n\nWhen you look at your business this way, you realize you don't have to construct a giant infrastructure network on your own. You just need to link existing tools together cleanly.\n\nList your primary operational boosters below to complete your business system blueprint.",
-        "db_id": "mission4_quest5"
-      }
-    },
-    "briefing_markdown": "A business is not an isolated product or a simple list of software features. A business is an interconnected money system where every piece has to support the other. If you write great software but have no clear route to acquire users, your system breaks down. If you find plenty of users but underprice your work out of fear, your engine starves.\n\nBefore you write a single line of code or set up a web layout page, you need to map out the blueprint of this system.\n\nIn this mission, you are going to design your overall business canvas, split across five clear steps. You will map out your exact messaging hooks, lock in your customer relationship styles, inventory your essential daily work, calculate your raw profit margins, and identify your baseline platform allies. By thinking through these steps now, you protect your velocity and guarantee your business model is balanced before you launch.\n\nWatch the overview video above, and let's build your money system.\n\n\n",
-    "db_id": "mission4"
-  },
-  "mission5": {
-    "title": "The Legal Reality Check & Ways to Get Paid",
-    "sequence": 5,
-    "video_url": "https://urgetostart.com/videos/m5-overview.mp4",
-    "briefing_text": "Clear away the paperwork anxiety. See if you actually have any legal risks, open your digital cash register, and map out what you might need down the road without slowing down your launch.",
-    "quests": {
-      "quest1": {
-        "slug": "personal-safety-check",
-        "title": "Your Safety Rules",
-        "subtitle": "Decide if paperwork is a real shield or just a way to delay making your first dollar.",
-        "sequence": 1,
-        "content_path": "content/missions/mission5/quests/personal-safety-check.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Friendly Auditor",
-          "persona_prompt": "Look at the user's answers. If their risk is low, reassure them that they can skip formal company registration for now and focus entirely on selling.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50,
-            "badge_key": "PROTECTOR",
-            "badge_db_id": "PROTECTOR"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m5_q1_t1_risk_survey",
-            "title": "Take the Quick Risk Survey",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "db_id": "m5_q1_t1_risk_survey"
-          }
-        ],
-        "content_markdown": "Unless you are selling food people eat, handling private medical records, or dealing with physical products that could hurt someone, you do not need to register a legal company to make your first thousand dollars. You can safely operate under your own name and use your personal bank account. \n\nA lot of new builders use legal setup to hide from the fear of launching. They tell themselves, \"Once my official paperwork comes back, my business is real.\" But a business only becomes real when a customer hands you money to fix their problem. \n\nWe are going to ask you two straightforward questions to look honestly at what you are building. If your risk is low, the platform will give you a clear green light to skip the formal paperwork for now and keep moving. If your project genuinely touches a high-risk area, we will tell you exactly what kind of corporate setup you'll want to look into later.\n\nAnswer the two questions below to clear your head so we can get back to building.",
-        "db_id": "mission5_quest1"
-      },
-      "quest2": {
-        "slug": "open-your-payment-pipes",
-        "title": "Setting Up the Cash Register",
-        "subtitle": "Link a clean payment channel so a customer can buy right now without friction.",
-        "sequence": 2,
-        "content_path": "content/missions/mission5/quests/open-your-payment-pipes.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Setup Assistant",
-          "persona_prompt": "Check the submitted payment URL to verify it looks like a valid, working checkout page link.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 100,
-            "badge_key": "MERCHANT",
-            "badge_db_id": "MERCHANT"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m5_q2_t1_stripe_action",
-            "title": "Connect Your Payment Processor Account",
-            "type": "action",
-            "component_key": "StripeConnectButton",
-            "sequence": 1,
-            "grant_points": 50,
-            "metadata_config": {
-              "depends_on_task_id": "m5_q1_t1_risk_survey"
-            },
-            "db_id": "m5_q2_t1_stripe_action"
-          },
-          {
-            "id": "m5_q2_t2_url_verify",
-            "title": "Submit Your Live Test Checkout Link",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 2,
-            "grant_points": 50,
-            "metadata_config": {
-              "depends_on_task_id": "m5_q2_t1_stripe_action"
-            },
-            "db_id": "m5_q2_t2_url_verify"
-          }
-        ],
-        "content_markdown": "If a customer has to email you to get your bank details or mail you a check, they are going to change their mind and walk away. To make a sale, you have to make buying from you completely effortless.\n\nYou aren't ready to test your solution with real users until you have a working checkout button. We need your offer to be \"sellable\"—meaning a buyer can click a link, type in their card details, and pay you in less than a minute.\n\nWe are going to use a standard connection link to set up your payment account. Your only task for this step is to hook up your account, generate a single test checkout link for your offer, and paste it here in your workspace. \n\nOnce that link works, your cash register is officially open.",
-        "db_id": "mission5_quest2"
-      },
-      "quest3": {
-        "slug": "setting-up-a-business",
-        "title": "Optional Adventure: Future Business Structure",
-        "subtitle": "Look over helpful accounting tools and legal registration options for your future growth.",
-        "sequence": 3,
-        "content_path": "content/missions/mission5/quests/setting-up-a-business.md",
-        "is_optional": true,
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Helpful Guide",
-          "persona_prompt": "Save the user's preferred future setups to their profile notes without blocking their current progress.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 25
-          }
-        },
-        "tasks": [
-          {
-            "id": "m5_q3_t1_partner_log",
-            "title": "Pick Your Preferred Future Tools",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 25,
-            "metadata_config": {
-              "potential_resources": [
-                {
-                  "name": "Clerky",
-                  "type": "Legal Setup Tool",
-                  "desc": "An easy online service that handles company paperwork when you're ready to grow."
-                },
-                {
-                  "name": "Bench Accounting",
-                  "type": "Online Bookkeeping",
-                  "desc": "A simple service that automatically balances your business expenses for you."
-                }
-              ]
-            },
-            "db_id": "m5_q3_t1_partner_log"
-          }
-        ],
-        "content_markdown": "This step is completely optional. If you are focused entirely on getting your product into user hands this week, skip this page and move straight to Mission 6.\n\nHowever, if you want to know exactly what the road looks like once your solution starts making consistent money, this is where we map out your future steps. When your project clears its first few thousand dollars, setting up a formal business and opening a separate business bank account becomes smart for taxes and keeping your personal finances safe.\n\nBelow, you can look through a simple list of helpful resources. We have put together a guide of founder-friendly accounting platforms, simple tools that handle the legal paperwork for you, and easy bookkeeping software.\n\nYou don't need to sign up for anything or spend a single dollar today. Just look over the options and save the ones you like to your project profile for later.",
-        "db_id": "mission5_quest3"
-      },
-      "quest4": {
-        "slug": "licenses",
-        "title": "Optional Adventure: Local Permit Check",
-        "subtitle": "See if your city or state requires any local permits or registrations long-term.",
-        "sequence": 4,
-        "content_path": "content/missions/mission5/quests/licenses.md",
-        "is_optional": true,
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Local Scanner",
-          "persona_prompt": "Read the user's location and business type, then print out a clear, simple list of common local permits they might eventually need.",
-          "required_context": [
-            "user_profiles",
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 25
-          }
-        },
-        "tasks": [
-          {
-            "id": "m5_q4_t1_permit_compile",
-            "title": "Generate Your Local Permit Report",
-            "type": "action",
-            "component_key": "AiLicenseReportNode",
-            "sequence": 1,
-            "grant_points": 25,
-            "db_id": "m5_q4_t1_permit_compile"
-          }
-        ],
-        "content_markdown": "This step is completely optional. Depending on where you live and the type of business you chose back in Mission 3, your local city or state government might require a basic local permit or registration to operate at scale long-term.\n\nYou could spend hours digging through confusing government websites trying to find this information, or you can let our automated tool scan for you.\n\nBy clicking the button below, our system will look at your current location, check it against your business type, and give you a plain-English list of any local permits or zoning rules that might apply to you in the future.\n\nRun the scanner to see your list, or skip this step entirely to stay focused on building your product.",
-        "db_id": "mission5_quest4"
-      }
-    },
-    "briefing_markdown": "Spending hundreds of dollars registering a company name or hiring an accountant before you have made a single dollar from a real customer is a trap. It feels like you're making progress because filling out government paperwork makes you feel important, but it's usually just a comfortable way to avoid talking to buyers.\n\nYour absolute priority right now is to build a rough, simple version of the solution we picked back in Mission 2. You need to get it in front of your first set of users and prove that people actually want what you're making and are willing to pay for it. Until you have that proof, a registered company is just an empty folder on your desktop.\n\nIn this section, we are going to quiet your anxiety about the legal stuff so you can focus entirely on making your first sale. First, you'll take a quick look at your actual real-world risks to prove you don't need a fancy corporate shield just to get started. Second, you will set up a clean, simple way to accept money online so a customer can buy from you right now without any clunky back-and-forth emails. Finally, if you're still curious, you can check out what kinds of permissions or bank accounts you might want to look into down the road once the money actually starts coming in.\n\nWe are handling this now so you can stop worrying about it, but we are keeping it completely basic so you can focus 100% on your first sale.",
-    "db_id": "mission5"
-  },
-  "mission6": {
-    "title": "Building Your Solution & Gathering Traction",
-    "sequence": 6,
-    "video_url": "https://urgetostart.com/videos/m6-overview.mp4",
-    "briefing_text": "Strip your product vision down to its raw essentials, build your digital footprint alongside your asset, recruit your testing crew early, and put your working version to the test.",
-    "quests": {
-      "quest1": {
-        "slug": "the-cut-list",
-        "title": "Shredding the Extra Features",
-        "subtitle": "Strip away your massive software or service wishlist to protect your speed to market.",
-        "sequence": 1,
-        "content_path": "content/missions/mission6/quests/the-cut-list.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Focused Friend",
-          "persona_prompt": "Review the feature list. If the user tries to sneak in non-essential items like admin settings panels or custom themes, tell them to cut it immediately.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
-        "tasks": [
-          {
-            "id": "m6_q1_t1_feature_shred",
-            "title": "List Your Must-Haves vs Nice-to-Haves",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "db_id": "m6_q1_t1_feature_shred"
-          }
-        ],
-        "content_markdown": "Every single feature, button, or extra option you try to add to your first version adds another week of delay. It drains your energy and keeps you from facing the market. \n\nWe need to make a strict cut list. Look at your solution and ask yourself: *If I could only give my customer one single button or step to make their pain go away, what would it be?* If you are building a food delivery app, it isn't an AI-powered meal recommendation algorithm; it is just a button that lets them order a specific meal. If you are starting an organizing service, it isn't a custom branding kit; it is you showing up with labels and storage boxes.\n\nEverything else—the settings pages, the user profiles, the premium colors—gets crossed off and saved for next year. \n\nComplete your feature list below and explicitly highlight the single core feature that actually makes the pain stop.",
-        "db_id": "mission6_quest1"
-      },
-      "quest2": {
-        "slug": "sourcing-and-supplies",
-        "title": "Sourcing Your Raw Materials",
-        "subtitle": "Map out your software stacks or your physical gear and identify your bottlenecks.",
-        "sequence": 2,
-        "content_path": "content/missions/mission6/quests/sourcing-and-supplies.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Practical Builder",
-          "persona_prompt": "Look over their tools list. Make sure they aren't using overly complicated setups when an easier, cheaper alternative exists.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
-        "tasks": [
-          {
-            "id": "m6_q2_t1_materials_log",
-            "title": "Inventory Your Ingredients or Technical Stack",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "metadata_config": {
-              "depends_on_task_id": "m6_q1_t1_feature_shred"
-            },
-            "db_id": "m6_q2_t1_materials_log"
-          }
-        ],
-        "content_markdown": "Now that you know exactly what your basic version will do, you need to look at what you need to build it and where you are going to get it. \n\nWe need to list your raw ingredients and identify where the machine could get stuck:\n*   **If you are building a digital tool or software:** Your raw materials are your software choices (frontend setup, database) and your hosting layout. Your bottleneck is usually learning a new tool or dealing with broken code components.\n*   **If you are building a service or physical offer:** Your raw materials are your tools, gear, or ingredients. Your bottleneck is delivery times, shipping costs, or tracking down a supplier who won't flake on you.\n\nBy writing down your software setup or your supply list right now, you prevent yourself from getting blindsided by hidden costs or delays mid-build.\n\nList your essential production materials, choose your primary vendors or software stacks, and flag your single biggest bottleneck.",
-        "db_id": "mission6_quest2"
-      },
-      "quest3": {
-        "slug": "acceptable-outcomes",
-        "title": "Defining Good Enough",
-        "subtitle": "Set your explicit boundaries for a working version 1.0 so you don't get stuck tweaking it forever.",
-        "sequence": 3,
-        "content_path": "content/missions/mission6/quests/acceptable-outcomes.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Reality Check",
-          "persona_prompt": "Ensure the user's definition of success is functional, simple, and can be completed in under two weeks.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50,
-            "badge_key": "MINIMALIST",
-            "badge_db_id": "MINIMALIST"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m6_q3_t1_outcome_bounds",
-            "title": "Lock In Your Functional Launch Line",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "metadata_config": {
-              "depends_on_task_id": "m6_q2_t1_materials_log"
-            },
-            "db_id": "m6_q3_t1_outcome_bounds"
-          }
-        ],
-        "content_markdown": "The biggest enemy of a fast launch is perfectionism. Perfectionism is usually just fear wrapped up in a nice word. You keep tweaking the font, rearranging the layout, or adjusting the package because you are terrified of putting it out there and hearing a \"No.\"\n\nTo break this loop, you must define what acceptable looks like before you start building. What is the bare minimum state where this product is safe, works, and can be handed to a customer in exchange for money? \n\nIf it securely records the data, it is good enough. If the service cleans the kitchen properly, it is good enough. A rough, slightly ugly product that solves a massive pain point is worth infinitely more than a gorgeous page that does nothing useful.\n\nWrite down your exact criteria for a functional initial version. Once you hit these baseline lines, you are forbidden from adding anything else before launch.",
-        "db_id": "mission6_quest3"
-      },
-      "quest4": {
-        "slug": "social-footprint",
-        "title": "Claiming Your Social Footprint",
-        "subtitle": "Set up your initial zero-dollar social pages and document your build journey in public.",
-        "sequence": 4,
-        "content_path": "content/missions/mission6/quests/social-footprint.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Traction Catalyst",
-          "persona_prompt": "Verify that the user has submitted active links to their new placeholder channels or updates.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
-        "tasks": [
-          {
-            "id": "m6_q4_t1_social_links",
-            "title": "Submit Your Initial Social Profiles or Status Updates",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "metadata_config": {
-              "depends_on_task_id": "m6_q3_t1_outcome_bounds"
-            },
-            "db_id": "m6_q4_t1_social_links"
-          }
-        ],
-        "content_markdown": "While your head is down working on your product or mapping out your service steps, you need to start claiming your public real estate. Do not wait until you are fully finished to make your social media profiles or launch a simple page. If you launch to zero followers, your launch day will be completely silent.\n\nYou don't need a massive marketing budget, a fancy agency, or paid advertisements to start building momentum. You just need to document your process openly where your target buyers already hang out. \n\nGo to the digital watering holes we identified back in Mission 3 and claim your handles, your page names, or your profile slots. Share a quick post introducing yourself and showing a rough behind-the-scenes look at the problem you are actively working to solve. When you show people the messy, honest process of building a solution from scratch, they don't look at it like corporate advertising—they treat it like a human story and want to root for your success.\n\nClaim your core social handles, post your initial behind-the-scenes update, and drop your public profile links below.",
-        "db_id": "mission6_quest4"
-      },
-      "quest5": {
-        "slug": "actual-building",
-        "title": "The Active Build Block",
-        "subtitle": "Put your head down, build your core utility, and make the machine work.",
-        "sequence": 5,
-        "content_path": "content/missions/mission6/quests/actual-building.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Accountability Partner",
-          "persona_prompt": "Celebrate their active build updates and prompt them to confirm that it matches their 'Good Enough' line.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 100,
-            "badge_key": "BUILDER",
-            "badge_db_id": "BUILDER"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m6_q5_t1_build_action",
-            "title": "Confirm Your Functional Version is Operational",
-            "type": "action",
-            "component_key": "ConfirmBuildStatusButton",
-            "sequence": 1,
-            "grant_points": 100,
-            "metadata_config": {
-              "depends_on_task_id": "m6_q4_t1_social_links"
-            },
-            "db_id": "m6_q5_t1_build_action"
-          }
-        ],
-        "content_markdown": "This is where the rubber meets the road. No more planning, no more spreadsheets, no more sketching layouts on napkins. It is time to roll up your sleeves and assemble your solution.\n\nWhether you are writing the initial codebase, configuring your automated workflows, or physically assembling your service equipment kits, you need an isolated sprint. Treat this like an intense, focused block of time where your phone is turned off and you are purely executing against the acceptable criteria you locked in during Quest 3.\n\nDon't worry about making it scalable right now. If you have to manually copy and paste data behind the scenes to make it work for your first three users, do it manually. Do things that don't scale just to get the engine moving.\n\nLog your active build sprint timeline, track your milestones, and confirm when the initial functional version is fully alive.",
-        "db_id": "mission6_quest5"
-      },
-      "quest6": {
-        "slug": "recruiting-testers",
-        "title": "Recruiting Your First Testers",
-        "subtitle": "Secure 3 low-pressure commitments from early adopters who will test your rough initial version.",
-        "sequence": 6,
-        "content_path": "content/missions/mission6/quests/recruiting-testers.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Crew Recruiter",
-          "persona_prompt": "Review the logged tester entries. Reassure the founder that feedback from 3 focused targets is better than 100 random looky-loos.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
-        "tasks": [
-          {
-            "id": "m6_q6_t1_tester_log",
-            "title": "Log the Details for Your 3 Core Beta Testers",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "metadata_config": {
-              "depends_on_task_id": "m6_q5_t1_build_action"
-            },
-            "db_id": "m6_q6_t1_tester_log"
-          }
-        ],
-        "content_markdown": "You cannot do your final demo showcase in an empty room. You need real, warm human beings who are feeling the exact pain point you are solving to test your rough initial version. \n\nWe need to actively recruit a tiny, dedicated group of 3 to 5 early testers right now while your product is on the work table. Reach back out to the individuals you interviewed in Mission 2, or post a short, helpful message in your community spaces. Do not approach them with a high-pressure sales pitch. Approach them like an ally. \n\nSay something simple: *\"Hey, I noticed you were struggling with tracking your manual inventory steps last month. I'm building a simple tool to automate that this week, and I want to give it to you completely free if you're open to clicking around and pointing out what breaks.\"*\n\nPeople love being insiders, and they love giving feedback on things that actually fix their daily headaches. By securing these testers today, you guarantee you have a line of eager eyes waiting the moment your build block finishes.\n\nLog the names or contact handles of your 3 confirmed early testers below.",
-        "db_id": "mission6_quest6"
-      },
-      "quest7": {
-        "slug": "showcase-and-demo",
-        "title": "The Early User Demo",
-        "subtitle": "Show a quick recording or drop a sample in front of your recruited testers to catch early friction.",
-        "sequence": 7,
-        "content_path": "content/missions/mission6/quests/showcase-and-demo.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Feedback Analyzer",
-          "persona_prompt": "Analyze user test observations. Help separate constructive layout feedback from random feature suggestions.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 100,
-            "badge_key": "CAPTAIN",
-            "badge_db_id": "CAPTAIN"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m6_q7_t1_demo_submit",
-            "title": "Submit Your Demo Overview or Feedback Notes",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 100,
-            "metadata_config": {
-              "depends_on_task_id": "m6_q6_t1_tester_log",
-              "potential_resources": [
-                {
-                  "name": "Loom",
-                  "type": "Video Tool",
-                  "desc": "A great, free way to record a quick 2-minute screen video showing off your tool."
-                },
-                {
-                  "name": "YouTube Unlisted",
-                  "type": "Hosting Alternative",
-                  "desc": "An easy way to host video links privately for your testers."
-                }
-              ]
-            },
-            "db_id": "m6_q7_t1_demo_submit"
-          }
-        ],
-        "content_markdown": "You have a working version in your hands, but before we throw it out to the loud, chaotic public internet, we want to test it in a safe environment. You need to show it to the testers you recruited in the previous step.\n\nThis doesn't mean asking them, \"Do you like it?\" It means recording a dead-simple, 2-minute video sharing your screen showing exactly how it works, or dropping a physical sample in front of them and watching them use it without helping them. \n\nWatch where they get confused. Notice what questions they ask. If they smile when they see a specific step, you have found your hook. If they struggle to figure out how to pay or get started, your layout needs to be simplified.\n\nUpload your raw demo video link or log your first user observation feedback notes below. This is the final validation gate before we go live.",
-        "db_id": "mission6_quest7"
-      }
-    },
-    "briefing_markdown": "Most people think building a business means hiding away in a dark room for six months, spending thousands of dollars, and perfecting a massive list of features. That is the easiest way to build something that nobody actually wants.\n\nIn this section, we are shifting your focus from a dream list to a sellable reality. \n\nYou are going to take your big product vision and strip it down to the absolute minimum needed to solve your customer's core headache. You will inventory your raw materials—whether that means choosing your software tools or sourcing physical gear and mapping out bottlenecks. You will set a clear line for what an acceptable first version looks like, claim your public social media footprint to build early buzz, block out dedicated time to physically assemble it, recruit a tiny group of early adopters, and finally, put a quick demo directly in front of them for honest feedback.\n\nWe aren't building a polished masterpiece today. We are building a basic, working solution that solves a real problem so you can start trading value.",
-    "db_id": "mission6"
-  },
-  "mission7": {
-    "title": "The Public Launch & Market Engine",
-    "sequence": 7,
-    "video_url": "https://urgetostart.com/videos/m7-overview.mp4",
-    "briefing_text": "Put your working version out into the wild open market. Launch through your inside circles, capture early builder upvotes, configure your modern social media content hooks, lock down your peer branding voice, read the market's signals, execute your outbound ledger, and deploy optional micro ad experiments.",
-    "quests": {
-      "quest1": {
-        "slug": "inside-circle",
-        "title": "The Inside Circle Launch",
-        "subtitle": "Drop your link to your beta testers and close allies to verify your payments and secure your first 2 reviews.",
-        "sequence": 1,
-        "content_path": "content/missions/mission7/quests/inside-circle.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Launch Check",
-          "persona_prompt": "Verify the user has recorded early feedback data and confirmed that their live checkout links successfully process currency without crashing.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
-        "tasks": [
-          {
-            "id": "m7_q1_t1_circle_log",
-            "title": "Log Your Payments Verification and Early Review Notes",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "db_id": "m7_q1_t1_circle_log"
-          }
-        ],
-        "content_markdown": "Before you try to convince a total stranger on the internet to trust you, you need to test your checkout flow with the people who are already rooting for your success. We start with your Inside Circle: your 3 to 5 beta testers from Mission 6 and your personal cheer squad of friends, classmates, or trusted allies.\n\nDo not send them a stiff, robotic corporate advertisement. Send them a direct, unpolished personal text or a raw voice note. \n\nSay something honest: *\"Hey, the basic version of that tool I was telling you about is finally live. You watched me pull my hair out building it over the last two weeks. Could you do me a quick favor? Click this link, see if the checkout page loads smoothly on your phone, and let me know if anything looks broken. If it solves a problem you deal with, I'd love your honest feedback to use as a review.\"*\n\nYour goal in this step is simple: make sure your checkout link actually processes currency, ensure your delivery steps don't crash, and secure your very first 2 written reviews or testimonials to build baseline credibility on your page.\n\nLog your initial payment verification results and paste your first two written reviews below.\n\n#### Helpful Resources for This Quest\n*   **WhatsApp / iMessage / Discord:** Keep it native. Use the exact text channels where you already talk to these people every day—no email newsletters yet.\n*   **Google Forms / Typeform (Free Tier):** If you want an easy way for your inner circle to submit their written reviews anonymously, set up a simple two-question form.",
-        "db_id": "mission7_quest1"
-      },
-      "quest2": {
-        "slug": "internal-sandbox",
-        "title": "The Internal Sandbox Launch",
-        "subtitle": "Complete your pre-launch checklist and post your offer to our builder community board for early momentum.",
-        "sequence": 2,
-        "content_path": "content/missions/mission7/quests/internal-sandbox.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Sandbox Conductor",
-          "persona_prompt": "Check their pre-launch variables. Ensure their landing page text and pricing options match their previously logged system parameters before authorizing the community board blast.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50,
-            "badge_key": "INITIATE",
-            "badge_db_id": "INITIATE"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m7_q2_t1_sandbox_publish",
-            "title": "Publish Your Promotional Card to the Internal Marketplace Board",
-            "type": "action",
-            "component_key": "PublishToInternalMarketplaceButton",
-            "sequence": 1,
-            "grant_points": 50,
-            "metadata_config": {
-              "depends_on_task_id": "m7_q1_t1_circle_log"
-            },
-            "db_id": "m7_q2_t1_sandbox_publish"
-          }
-        ],
-        "content_markdown": "Now that your checkout link is verified and your page has a couple of early reviews, you are ready to expand your circle to our internal builder marketplace board. This is a safe, supportive sandbox filled with fellow founders who understand the grind.\n\nBefore you publish, run through your quick Pre-Launch Sanity Checklist:\n1. Is your pricing tier clear, and does it match your profit math from Mission 4?\n2. Does your landing text cleanly state your value proposition using your 5-word audience hook?\n3. Is there a simple, unmissable button for a buyer to complete their purchase?\n\nOnce your checklist is marked off, assemble your internal promotional display card. Include a unique discount code or a special placeholder perk for your fellow platform members to encourage them to click around. Publishing here gives you immediate peer visibility, constructive feedback on your onboarding copy, and early upvotes that make your page look active and trusted.\n\nComplete your pre-launch checklist and trigger your internal marketplace launch card below.\n\n#### Helpful Resources for This Quest\n*   **Stripe Coupon Dashboard:** Go into your payment dashboard and create a clean discount code (e.g., `BUILDER50`) to offer a special perk to your internal community peers.\n*   **Markdown Live Previewer:** Test how your product's pitch text looks formatted cleanly before pushing it onto the internal community board.",
-        "db_id": "mission7_quest2"
-      },
-      "quest3": {
-        "slug": "launch-tracks",
-        "title": "Exploring Your Launch Tracks",
-        "subtitle": "Configure your modern social media content hooks and plan your physical real-world street hustle.",
-        "sequence": 3,
-        "content_path": "content/missions/mission7/quests/launch-tracks.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Strategy Assessor",
-          "persona_prompt": "Evaluate their chosen launch tracks. If they select a local service, verify they have configured an explicit real-world IRL walk-in or distribution route.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 100
-          }
-        },
-        "tasks": [
-          {
-            "id": "m7_q3_t1_track_selection",
-            "title": "Select and Configure Your Two Target Launch Tracks",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 100,
-            "metadata_config": {
-              "depends_on_task_id": "m7_q2_t1_sandbox_publish",
-              "potential_resources": [
-                {
-                  "name": "CapCut",
-                  "type": "Video Editing",
-                  "desc": "A powerful, free mobile and desktop tool to clip together highly engaging short-form video hooks for TikTok and Instagram Reels."
-                },
-                {
-                  "name": "Buffer",
-                  "type": "Social Scheduler",
-                  "desc": "A simple, free tool to queue up your authority text logs and value posts across LinkedIn and Twitter/X simultaneously."
-                },
-                {
-                  "name": "QR Code Generator",
-                  "type": "Utility",
-                  "desc": "Create high-resolution unbranded QR codes to apply directly to physical flyers or offline walk-in pitch templates."
-                }
-              ]
-            },
-            "db_id": "m7_q3_t1_track_selection"
-          }
-        ],
-        "content_markdown": "It's time to take your offer into the wild. To find your first 10 paying customers without spending money on paid advertisements, you must deploy a mix of targeted online content and real-world pavement hustle. \n\nYou must select at least **two channels** from the options below that best match your target audience and your personal style:\n\n#### Track A: Modern Social Platforms (Digital Hooks)\n*   **Instagram Reels & TikTok:** Create rapid \"Problem-to-Resolution\" loops. Show a raw 5-second clip of your customer segment's daily headache happening in real-time, overlay text showing how you solved it, and point them directly to your link.\n*   **LinkedIn & Twitter/X:** Write an \"Unfiltered Build Log.\" Share a clean, zero-fluff text block detailing what you discovered about your audience's broken workflow, the exact time or cash they lose to it, and how your tool fixes the math.\n*   **Reddit & Forums:** Deploy the \"Search-and-Rescue\" method. Search active threads for keywords like \"how do I fix\" or \"does anyone know a tool for.\" Write a detailed, helpful manual solution in the comments for free, and conclude with a link to your tool if they want it done in one click.\n\n#### Track B: In-Real-Life Hustle (IRL Disruption)\n*   **The Back-Door Walk-In:** If your solution targets local businesses (like restaurants, coffee shops, salons, or auto shops), walk straight through their front door during their quietest hours. Ask to speak to the shift manager and hand them a single, clean sheet showing how you save them hours or customers.\n*   **The Public Square Guerilla Route:** Go exactly where the frustration happens. If you built a tool to dispute local parking tickets, place mock notice cards with a QR code on car windshields. If you built an event directory for college students, hand physical invite cards directly to people standing in line outside local campus spots.\n\nChoose your two distribution vectors below, detail your organic hooks, and log the public links or physical locations where you are executing your launch.\n\n#### Helpful Resources for This Quest\n*   **CapCut:** A powerful, free video editor to quickly clip together short-form video hooks for TikTok and Instagram Reels on your phone.\n*   **Buffer / Publer:** Simple social media management tools with great free plans to schedule and drop your build logs across LinkedIn and Twitter/X at the same time.\n*   **QR Code Generator (Unbranded):** Create clean, high-resolution QR codes to paste onto physical flyers or sheets if you are hitting the pavement for Track B.",
-        "db_id": "mission7_quest3"
-      },
-      "quest4": {
-        "slug": "branding-and-comm",
-        "title": "Your Voice and Look",
-        "subtitle": "Establish a clean, readable visual theme and remove the corporate talk from your messages.",
-        "sequence": 4,
-        "content_path": "content/missions/mission7/quests/branding-and-comm.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Voice Police",
-          "persona_prompt": "Review the communication rules. If they use robotic jargon or try to sound like a giant corporate company, flag it and push them back to peer-to-peer phrasing.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50,
-            "badge_key": "HUSTLER",
-            "badge_db_id": "HUSTLER"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m7_q4_t1_branding_canvas",
-            "title": "Establish Your Simple Visual Theme and Clear Voice Guidelines",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "metadata_config": {
-              "depends_on_task_id": "m7_q3_t1_track_selection",
-              "potential_resources": [
-                {
-                  "name": "Coolors.co",
-                  "type": "Color Tool",
-                  "desc": "A free, lightning-fast color palette utility to lock down your contrast parameters."
-                },
-                {
-                  "name": "Google Fonts",
-                  "type": "Typography Catalog",
-                  "desc": "Timeless, web-safe typographic sheets like Inter or Roboto to enforce high interface readability."
-                }
-              ]
-            },
-            "db_id": "m7_q4_t1_branding_canvas"
-          }
-        ],
-        "content_markdown": "Branding isn't about spending $500 on a corporate logo pack, choosing a luxury color palette, or writing a boring \"mission statement.\" Branding is simply how you present yourself and what people say about you when you leave the room. \n\nFor a scrappy founder, your brand is built entirely on clarity and trust. If your website look is messy, hard to read, or uses fuzzy cell phone images, people will assume your product is sloppy too. If your communication copy sounds stiff, clinical, or acts like a giant corporate board, people will tune you out.\n\nWe need to establish your basic communication rules:\n1.  **Speak like a helpful peer:** Drop the buzzwords. Don't say \"leveraging dynamic synergy.\" Say \"we save your team three hours a day.\"\n2.  **Make it look clean:** Use one clear font, pick two simple contrasting colors, and use high-resolution, un-cluttered screenshots or product images.\n\nWhen your look matches your plain-spoken message, strangers relax and feel safe buying from your page.\n\nLock in your simple two-color look, define your standard font, and write out your 3 baseline communication rules below.\n\n#### Helpful Resources for This Quest\n*   **Coolors.co:** A free, lightning-fast color palette generator. Use it to lock in just two clean, highly contrasting colors for your landing page.\n*   **Google Fonts:** Stick to timeless, highly readable sans-serif fonts like *Inter*, *Roboto*, or *Plus Jakarta Sans* to keep your site looking professional and clean.\n*   **Unsplash / Pexels:** Access thousands of completely free, high-resolution lifestyle images if you need placeholder backgrounds that don't look cheap.",
-        "db_id": "mission7_quest4"
-      },
-      "quest5": {
-        "slug": "running-ads",
-        "title": "Optional Adventure: Scrappy Paid Campaigns",
-        "subtitle": "Learn the $5-a-day rule to test small, targeted online experiments without gambling your runway.",
-        "sequence": 5,
-        "content_path": "content/missions/mission7/quests/running-ads.md",
-        "is_optional": true,
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Campaign Strategist",
-          "persona_prompt": "Audit ad targeting properties. Ensure their target group is tiny and razor-focused to protect their cash capital balances.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
-        "tasks": [
-          {
-            "id": "m7_q5_t1_campaign_experiment",
-            "title": "Configure a Highly-Targeted Micro Ad Experiment Layout",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "metadata_config": {
-              "depends_on_task_id": "m7_q4_t1_branding_canvas",
-              "potential_resources": [
-                {
-                  "name": "Meta Ads Manager",
-                  "type": "Ad Network",
-                  "desc": "Best interface for hyper-localized geographic services targeting across Instagram feeds."
-                },
-                {
-                  "name": "Google Ads Manager",
-                  "type": "Ad Network",
-                  "desc": "Best channel for intent-match keyword search campaign configurations."
-                }
-              ]
-            },
-            "db_id": "m7_q5_t1_campaign_experiment"
-          }
-        ],
-        "content_markdown": "This step is completely optional. If you are focused entirely on manual outreach and organic social posts this week, skip this page and keep moving.\n\nHowever, if you have a little bit of risk capital saved up and are wondering how to scale your traffic, this is your safe introduction to running paid ads. Most first-time builders throw $200 at a giant ad campaign, target a massive, generic audience, get zero sales, and assume paid marketing doesn't work. That happens because they are gambling, not testing.\n\nWhen you're scrappy, you run miniature, low-risk ad experiments using our $5 rule:\n*   **Pick a tiny, hyper-focused target audience:** Don't target \"all business owners.\" Target \"independent coffee shop managers in Chicago.\"\n*   **Run a $5-a-day test budget:** Set a strict, hard spending limit for a maximum of 3 days.\n*   **Test a singular variation hook:** Use the exact short-form video loop or text build-log from Quest 3 that naturally performed well organically.\n\nIf those tiny $15 tests yield clicks and trigger an actual sale, you have found a reliable machine where you put $1 in and pull $2 out. If it yields nothing, your budget is completely safe and you cut the test immediately.\n\nReview our automated campaign testing framework below, set up your platform ad accounts, and log your $5 baseline target variables if you want to test the water.\n\n#### Helpful Resources for This Quest\n*   **Meta Ads Manager Dashboard:** The primary interface used to set up micro-targeted ads on Facebook and Instagram. Remember to set a strict \"Lifetime Budget\" cap of $15 so the platform can never overcharge you.\n*   **Google Ads (Search Network):** Great for targeting intent. You can configure your ad to display *only* when someone type a high-pain keyword (like \"emergency plumber near me\") directly into Google.",
-        "db_id": "mission7_quest5"
-      },
-      "quest6": {
-        "slug": "market-feedback",
-        "title": "Listening to the Market",
-        "subtitle": "Decode your initial traffic metrics, conversion parameters, and qualitative user friction.",
-        "sequence": 6,
-        "content_path": "content/missions/mission7/quests/market-feedback.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Feedback Analyzer",
-          "persona_prompt": "Review logged conversion ratios and customer objections. Help the founder identify if their bottleneck lives in traffic acquisition or checkout page layout copy.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
-        "tasks": [
-          {
-            "id": "m7_q6_t1_metrics_audit",
-            "title": "Log Your Traffic Stats, Sales Tally, and User Objections",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "metadata_config": {
-              "depends_on_task_id": "m7_q4_t1_branding_canvas"
-            },
-            "db_id": "m7_q6_t1_metrics_audit"
-          }
-        ],
-        "content_markdown": "Once your link is out in the wild, the market will start talking back to you. The problem is, the market doesn't speak English—it speaks in numbers and behavior. If you don't know how to decode those signals, you will make emotional decisions and panic.\n\nWe need to track two primary indicators to understand exactly how people are reacting to your offer:\n\n*   **The Conversion Metric (The Interest Check):** This is the ratio between the number of unique people who clicked your link and the number of people who actually bought. If your page gets 100 visits and 2 sales, that is a 2% conversion rate, which is completely normal. If you get 200 visits and 0 sales, your product isn't broken—it means your landing text is confusing, your price is scary, or you are sending the wrong type of people to your page.\n*   **Qualitative Friction (The Complaining Matrix):** This means tracking the exact words people say when you reach out or when they click around your solution. Write down every single objection: *\"It's too expensive,\" \"I don't understand how to upload my file,\" \"Does this work on mobile?\"* Those objections are gold. They tell you exactly what you need to fix on your layout page tomorrow to turn the next visitor into a buyer.\n\nLet's look at the data objectively, remove the emotion, and listen to what the market is trying to tell you.\n\nLog your initial traffic estimates, sales numbers, and the top two objections you've heard from your audience below.\n\n#### Helpful Resources for This Quest\n*   **PostHog / Umami:** Privacy-focused, simple analytics tools that let you see exactly how many people landed on your page and where they clicked without dragging down your site's speed.\n*   **Stripe Analytics Tab:** Instantly look at your net volume, successful payments, and abandoned checkout rates without configuring custom tracking code.",
-        "db_id": "mission7_quest6"
-      },
-      "quest7": {
-        "slug": "outbound-tally",
-        "title": "The Outbound Direct Tally",
-        "subtitle": "Step out of your comfort zone and manually present your solution directly to 10 distinct strangers.",
-        "sequence": 7,
-        "content_path": "content/missions/mission7/quests/outbound-tally.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Discipline Coach",
-          "persona_prompt": "Review their 10 logged outbound contacts. Celebrate this unscalable hustle milestone and highlight that proactive outreach is what separates builders from wishful thinkers.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 100,
-            "badge_key": "VANGUARD",
-            "badge_db_id": "VANGUARD"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m7_q7_t1_outbound_ledger",
-            "title": "Log the Details for Your First 10 Outbound Market Interactions",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 100,
-            "metadata_config": {
-              "depends_on_task_id": "m7_q6_t1_metrics_audit"
-            },
-            "db_id": "m7_q7_t1_outbound_ledger"
-          }
-        ],
-        "content_markdown": "The biggest mistake you can make right now is sitting back, staring at an analytics dashboard, and waiting for traffic to magically find your URL. Launching is not a passive event. It is an outbound discipline.\n\nTo wrap up this mission and cement your market entry, you must complete your Outbound Tally: **manually reach out to 10 distinct strangers who match your 5-word customer profile.**\n\nThis means sending 10 direct messages to targets inside your digital watering holes, cold emailing 10 explicit local business leads, or walking into 10 physical storefronts to hand over your offer sheet. No corporate pitch language, no high-pressure sales tricks—just point straight to the headache they deal with, present your simple working solution, and give them a direct link to check it out.\n\nShatter the comfort blanket of passive building. Log the details, usernames, or business locations for your first 10 outbound outreaches below to complete your launch mission.\n\n#### Helpful Resources for This Quest\n*   **Google Sheets / Notion:** Set up a dead-simple tracker table with columns for: *Name/Handle, Connection Channel, Date Contacted, Response Status, and Notes*.\n*   **Hunter.io:** A great tool to hunt down the direct, verified professional email addresses of local managers or decision-makers instead of sending your pitch to a generic `info@` inbox.",
-        "db_id": "mission7_quest7"
-      }
-    },
-    "briefing_markdown": "Launching is not a single, massive explosion on a random Tuesday morning where you sit back, flip a switch, and watch a digital dashboard fill up with sales. That is a myth. Launching a business scrappily is a series of widening ripples, starting with the people who already know you and moving systematically outward into the wild public square.\n\nIn this section, you are going to take your working version and push it into the open market. \n\nFirst, you will drop your link straight to your close beta testers and personal cheer squad to test your payment buttons and secure your first two honest reviews. Second, you will run through a quick operational sanity check and launch inside our internal builder community for peer feedback and early visibility momentum. Then, you will choose your open-market distribution strategy: configuring your organic hooks across modern social media platforms, locking down a clean visual look and peer-to-peer communication voice, and setting up optional, micro-budget ad tests. Finally, you will gather all your data to listen to what the market is trying to tell you and complete a manual outbound ledger to 10 distinct strangers.\n\nLaunching is an active, daily discipline. Let's push your offer out to the world.",
-    "db_id": "mission7"
-  },
-  "mission8": {
-    "title": "True Review & The Reality Crossroads",
-    "sequence": 8,
-    "video_url": "https://urgetostart.com/videos/m8-overview.mp4",
-    "briefing_text": "Audit your core business health vital signs, cross-reference your income metrics with your personal freedom line, automate repetitive delivery bottlenecks, and make your final strategic launch choice.",
-    "quests": {
-      "quest1": {
-        "slug": "freedom-math",
-        "title": "The Freedom Math & Vital Signs",
-        "subtitle": "Calculate your take-home margins, time efficiency variables, and your true day-job replacement line.",
-        "sequence": 1,
-        "content_path": "content/missions/mission8/quests/freedom-math.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Financial Peer",
-          "persona_prompt": "Review the logged take-home margin properties and salary goals. Help the founder confirm if their target transaction volume aligns realistically with their organic launch traffic.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
-        "tasks": [
-          {
-            "id": "m8_q1_t1_metrics_calc",
-            "title": "Log Your Core Income Margins and Salary Replacement Target",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "db_id": "m8_q1_t1_metrics_calc"
-          }
-        ],
-        "content_markdown": "Let's take a look at your numbers without any emotion. To find out if this project is worth walking away from your boss for, we need to calculate your Business Health Vital Signs based on your launch data from Mission 7:\n\n1.  **Your Take-Home Margin:** Look at your average price point and subtract your software subscriptions or supply costs. If you sell a digital guide for $50 and your software fees cost $5 per sale, your take-home margin is 90% ($45). If you spend $40 on supplies to make a $50 product, your margin is 20% ($10). \n2.  **The Freedom Variable:** How many minutes of your manual, physical time does it take to deliver one single order? If you have to spend 4 hours consulting or hand-making every single purchase, your time-to-income ratio is high. We need to know this number so we can fix it before you scale.\n3.  **Your Quit Line:** Look at your personal baseline monthly survival costs (rent, food, insurance) and divide that by your Take-Home Margin per product unit. That gives you your magic number—the exact amount of customers you need every single month to safely replace your day-job salary.\n\nLook at that final target number objectively. Based on the real customer interest and traffic signals you saw during your launch week, does that target look completely realistic over the next 3 to 6 months?\n\nCalculate your vital metrics and log your magic salary-replacement target number below.\n\n#### Helpful Resources for This Quest\n*   **The Blueprint Freedom Spreadsheet:** A simple, pre-formatted calculator tab to plug in your lifestyle costs and instantly see your salary-replacement baseline.\n*   **Stripe Gross vs Net Report:** Check your merchant dashboard backend to see exactly how much cash was left over after payment processing fees.",
-        "db_id": "mission8_quest1"
-      },
-      "quest2": {
-        "slug": "lifestyle-audit",
-        "title": "The Lifestyle Audit",
-        "subtitle": "Check your personal energy margins to make sure you are building a lifestyle asset, not a new cage.",
-        "sequence": 2,
-        "content_path": "content/missions/mission8/quests/lifestyle-audit.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Energy Coach",
-          "persona_prompt": "Assess their workflow frustration scores. Emphasize that resolving operational stress early is vital to prevent long-term founder burnout.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 50,
-            "badge_key": "AUDITOR",
-            "badge_db_id": "AUDITOR"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m8_q2_t1_lifestyle_log",
-            "title": "Complete Your Operational Workflow and Energy Alignment Scorecard",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 50,
-            "metadata_config": {
-              "depends_on_task_id": "m8_q1_t1_metrics_calc"
-            },
-            "db_id": "m8_q2_t1_lifestyle_log"
-          }
-        ],
-        "content_markdown": "A business can make ten thousand dollars a month, but if you spend all day answering angry customer support messages, hate the daily tasks, and feel constantly anxious, the business is failing its true purpose. You didn't start this journey to build a new corporate cage out of your own company. You did it to buy back your personal time and energy.\n\nNow that you've had a real taste of what running this business looks like daily, we need to check your emotional margins.\n\nAsk yourself these honest questions:\n*   Do you actually enjoy talking to this target audience and solving this specific problem every day?\n*   Does the operational workflow match the freedom goals you wrote down all the way back in Mission 1?\n*   Are you building a business that works *for you*, or are you becoming an employee to your own tool?\n\nIf you hate the process, we need to know right now. We can either automate the tasks you despise, adjust your target buyer profile, or change the delivery method before you spend another week growing it.\n\nWrite down your top two operational frustrations and score your overall lifestyle alignment below.\n\n#### Helpful Resources for This Quest\n*   **Your Mission 1 Baseline Sheet:** Open your original profile logs to look back at the exact reasons, values, and lifestyle limits you set on day one.",
-        "db_id": "mission8_quest2"
-      },
-      "quest3": {
-        "slug": "system-streamlining",
-        "title": "Automating the Repeat Work",
-        "subtitle": "Connect your core tool systems together to wipe out boring admin tasks and reclaim your free time.",
-        "sequence": 3,
-        "content_path": "content/missions/mission8/quests/system-streamlining.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Automation Wizard",
-          "persona_prompt": "Verify that the user has identified specific repetitive tasks and logged a plan to deploy zero-code link triggers.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 100,
-            "badge_key": "AUTOMATOR",
-            "badge_db_id": "AUTOMATOR"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m8_q3_t1_automation_plan",
-            "title": "Map Out Your Background Automation Workflow Links",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 100,
-            "metadata_config": {
-              "depends_on_task_id": "m8_q2_t1_lifestyle_log"
-            },
-            "db_id": "m8_q3_t1_automation_plan"
-          }
-        ],
-        "content_markdown": "If your Freedom Variable from Quest 1 showed that you are spending too many hours manually handling basic admin tasks (like copying and pasting data, emailing users to coordinate calendar times, or manually activating accounts), your business engine has an operational bottleneck. If you try to double your traffic right now, the machine will break and destroy your free time.\n\nBefore we talk about scaling up, we need to automate the repeat steps so the business can run smoothly in the background without needing your attention 24/7.\n\nYou don't need to write complex code to do this. You just need to create simple software links between the tools you already use:\n*   **The Instant Delivery Loop:** When a payment clears in Stripe, an automated step instantly sends the customer their access link or welcomes them via email.\n*   **The Calendar Lock:** Instead of emailing back and forth five times to book a service window, your checkout page automatically redirects them to a clean scheduling link to pick an open slot.\n\nBy setting up these simple, zero-dollar background links today, you protect your free time and clean up your delivery pipeline for the next stage of growth.\n\nList the most repetitive manual task in your workspace and confirm your automated workflow link below.\n\n#### Helpful Resources for This Quest\n*   **Make.com / Zapier (Free Tiers):** Simple visual platforms that let you connect completely different web apps together (like sending a Stripe sale notification straight to an automated email queue) without writing a single line of code.\n*   **Cal.com / Calendly:** Great, free scheduling tools that handle booking calendar management completely on autopilot for your buyers.",
-        "db_id": "mission8_quest3"
-      },
-      "quest4": {
-        "slug": "the-crossroads",
-        "title": "The Crossroads (Scale, Tweak, or Pivot)",
-        "subtitle": "Commit to your final strategic path: double down on growth, tweak your variables, or run a smart pivot.",
-        "sequence": 4,
-        "content_path": "content/missions/mission8/quests/the-crossroads.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Master Strategist",
-          "persona_prompt": "Honor their final path selection. If scaling, offer immediate confidence parameters. If pivoting, reassure them that walking away with pristine market data is an expert operational victory.",
-          "required_context": [
-            "projects"
-          ],
-          "on_success": {
-            "grant_points": 150,
-            "badge_key": "SOVEREIGN",
-            "badge_db_id": "SOVEREIGN"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m8_q4_t1_final_choice",
-            "title": "Select Your Next Strategic Path Block and Log Your Monthly Milestones",
-            "type": "form",
-            "component_key": "STANDARD_FORM",
-            "sequence": 1,
-            "grant_points": 150,
-            "metadata_config": {
-              "depends_on_task_id": "m8_q3_t1_automation_plan"
-            },
-            "db_id": "m8_q4_t1_final_choice"
-          }
-        ],
-        "content_markdown": "This is the final gate of the playbook. Look at your business health metrics, your lifestyle audit, and your automation setups. It is time to make a clear, strategic choice using our three-way decision tree:\n\n#### Choice A: The Green Light (Scale Up)\n*   **The Signs:** Your launch data shows real customer purchases, your take-home margins look solid, your salary-replacement line is realistic, and you genuinely enjoy the workflow.\n*   **The Play:** You are cleared to scale. You will double down on the top-performing launch track from Mission 7, systemize your organic social hooks, or safely expand your micro ad budgets.\n\n#### Choice B: The Yellow Light (Tweak the Settings)\n*   **The Signs:** People showed real interest or signed up as testers, but your price feels too high, your landing text is causing confusion, or manual delivery is eating up too many hours.\n*   **The Play:** You don't scrap the idea. You adjust the settings. You rewrite your 5-word core headline, change your package tier, or optimize your automated links to fix the bottleneck.\n\n#### Choice C: The Smart Pivot (Change Direction)\n*   **The Signs:** You executed your launch tracks, sent your outbound messages, ran your tests, and the market responded with complete, freezing silence. Or, you realized you absolutely hate working in this industry space.\n*   **The Play:** You execute a smart pivot. This is not a failure—it is a massive data upgrade. You saved thousands of dollars and months of work by finding out the truth early. You keep your payment processing accounts active, pack up the reusable layout structures you built, and use your platform dashboard to jump back to Mission 2 to attack a new problem with ten times more wisdom than before.\n\nSelect your final strategic choice block below and log your exact implementation goals for the upcoming month.\n\n#### Helpful Resources for This Quest\n*   **The Urge Builder Network:** Connect with our platform's peer network groups to share your scaling milestones, exchange tweak ideas, or get immediate feedback on your brand-new pivot brainstorm parameters.",
-        "db_id": "mission8_quest4"
-      }
-    },
-    "briefing_markdown": "You have built your solution, pushed it into the wild open market, and gathered your very first data points from real-world buyers. Now, you are standing at the ultimate crossroads of your business journey. \n\nMost generic business programs just tell you to keep running blindly, spend more money on ads, or grow at all costs. But in the real world, this is where you need to stop, look at reality with total honesty, and calculate if this machine is actually helping you build the life you want.\n\nIn this final section, we are going to look past the initial excitement of making a sale and audit your core business health metrics. You will calculate your true take-home margin, measure your time-to-income ratio, and look at your replication numbers. \n\nAll of this analysis leads straight to three life-changing answers: Can this business actually replace your day-job salary safely? Does running it every day match your personal energy and lifestyle motivations? And depending on what the market data is telling you, should you double down and scale up, make small tweaks, or execute a smart, completely shame-free pivot to a brand-new problem area?\n\nLet's run the diagnostics and map out your next strategic chess move.",
-    "db_id": "mission8"
   }
 }
