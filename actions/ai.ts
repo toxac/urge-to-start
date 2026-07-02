@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { executeKipConductor } from '@/lib/ai/conductor';
-import { PREREQUISITE_PROMPT_REGISTRY } from '@/lib/ai/prompts';
+import { urgePlaybook } from '@/lib/playbook'; // ⚡ Unified playbook entry point
 import { z } from 'zod';
 
 const CritiqueOutputContract = z.object({
@@ -14,34 +14,28 @@ const CritiqueOutputContract = z.object({
   realWorldExecutionAdvice: z.array(z.string()),
 });
 
-const PrerequisiteOutputSchema = z.object({
-  expandedExplanation: z.string()
-});
-
 interface ActionParams {
   taskId?: string;
   questId?: string;
   missionId?: string;
   contextType: 'prerequisite_expansion' | 'resource_summary' | 'retrospective_synthesis';
-  promptKey?: string;
-  userInputText?: string;
+  userInputText?: string; // Replaces promptKey for cache tracking
 }
 
 export async function analyzeUserMessageDraft(scenario: string, userDraft: string, userProfile: any) {
-  // Routes to the pro reasoning engine to handle human psychology critique perfectly
   return await executeKipConductor({
     model: 'deepseek-v4-pro',
     reasoningEffort: 'high',
     skills: ["Master Communicator", "Persuasion Strategist", "Human Behavior Expert"],
     userContext: {
       user_name: userProfile?.full_name,
-      current_constraints: userProfile?.constraints
+      schedule_config: userProfile?.schedule_config // Aligned with upgraded schema
     },
     prompt: `
       The user is testing out a message draft for this specific scenario: "${scenario}".
       Here is their draft: "${userDraft}"
 
-      Break down the emotional and behavioral dynamics of this text. Give them a highly strategic rewrite, and a 2-step blueprint on how to handle the follow-up loop.
+      Break down the emotional dynamics of this text. Give them a direct rewrite, and a 2-step blueprint on how to handle the follow-up loop.
     `,
     responseSchema: CritiqueOutputContract
   });
@@ -52,15 +46,18 @@ export async function executeSidebarConductorAction(params: ActionParams) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { success: false, error: 'Unauthorized access' };
 
-  // 1. LOOK UP CACHE LAYER: Prevents re-running DeepSeek on same key context
-  if (params.promptKey) {
+  if (!params.missionId) return { success: false, error: 'Mission context required.' };
+  const currentMission = urgePlaybook[params.missionId];
+  if (!currentMission) return { success: false, error: 'Target mission not found in playbook.' };
+
+  // 1. CACHE LAYER CHECK (Queries using context type and unique input strings)
+  if (params.userInputText) {
     const { data: cache } = await supabase
       .from('ai_logs')
       .select('generated_output')
       .eq('user_id', user.id)
       .eq('context_type', params.contextType)
-      // ⚡ Native arrow operator queries directly into the JSON column object properties
-      .eq('generated_output->>promptKey', params.promptKey)
+      .eq('user_input', params.userInputText)
       .maybeSingle();
 
     if (cache?.generated_output) {
@@ -68,31 +65,85 @@ export async function executeSidebarConductorAction(params: ActionParams) {
     }
   }
 
-  // 2. CACHE MISS -> Execute logic flow
-  if (params.contextType === 'prerequisite_expansion' && params.promptKey) {
-    const systemicBlueprint = PREREQUISITE_PROMPT_REGISTRY[params.promptKey];
-    if (!systemicBlueprint) return { success: false, error: "Prompt key missing from Registry." };
+  let dynamicPrompt = '';
+  let activeSkills: string[] = ['Strategic Advisory'];
 
-    const aiResponse = await executeKipConductor({
-      model: 'deepseek-chat', // Fast, optimized standard layout model
-      skills: ["Strategic Advisory", "Friction Reducer"],
-      prompt: `${systemicBlueprint}\nUser Target Objective context: "${params.userInputText}"`,
-      responseSchema: PrerequisiteOutputSchema
-    });
-
-    if (aiResponse.success && aiResponse.data) {
-      // 3. LOG OUTPUT TO CACHE DB TABLE
-      await supabase.from('ai_logs').insert({
-        user_id: user.id,
-        mission_id: params.missionId || null,
-        context_type: params.contextType,
-        user_input: params.userInputText || null,
-        generated_output: { ...aiResponse.data, promptKey: params.promptKey }
-      });
+  // 2. ORCHESTRATE CONTEXT-AWARE SYSTEM DIRECTIONS
+  switch (params.contextType) {
+    
+    case 'prerequisite_expansion': {
+      const targetPrereq = currentMission.prerequisites?.find(p => p.item === params.userInputText);
+      
+      // Pull embedded raw text prompt with fallback
+      dynamicPrompt = targetPrereq?.promptRawText || 
+        `Provide a helpful, casual explanation of why a builder needs: "${params.userInputText}".`;
+      
+      activeSkills = ['MINDSET_COACHING', 'STRATEGIC_ALIGNMENT'];
+      break;
     }
 
-    return aiResponse;
+    case 'resource_summary': {
+      if (!params.questId || !params.taskId || !params.userInputText) {
+        return { success: false, error: 'Incomplete recommendation parameters.' };
+      }
+      
+      const currentQuest = currentMission.quests?.[params.questId];
+      const currentTask = currentQuest?.tasks?.find(t => t.id === params.taskId);
+      const rec = currentTask?.ai_config?.recommendations?.find(r => r.path_or_url === params.userInputText);
+
+      dynamicPrompt = `
+        The user is executing the task: "${currentTask?.title}".
+        Provide a friendly, clean, direct summary of this recommended ${rec?.type || 'material'}: "${rec?.title || params.userInputText}".
+        Keep it under 3 brief paragraphs. Highlight actionable points using clean bullets and bolds.
+      `;
+      
+      activeSkills = ['CONTENT_SYNTHESIS', 'TECHNICAL_TRANSLATION'];
+      break;
+    }
+
+    case 'retrospective_synthesis': {
+      if (!params.questId || !params.taskId || !params.userInputText) {
+        return { success: false, error: 'Incomplete milestone details.' };
+      }
+
+      const currentQuest = currentMission.quests?.[params.questId];
+      const currentTask = currentQuest?.tasks?.find(t => t.id === params.taskId);
+
+      dynamicPrompt = `
+        ACT AS PERSONA: "${currentQuest?.ai_config?.persona_name || 'The Mirror'}".
+        PERSONA DIRECTIVE: "${currentQuest?.ai_config?.persona_prompt}".
+        
+        The user just completed the step: "${currentTask?.title}".
+        They provided this reflection: "${params.userInputText}".
+        
+        Review their response as an encouraging friend. If their reflection is vague, challenge them gently to be more concrete.
+      `;
+
+      activeSkills = ['SYSTEM_CONDUCTOR', 'FOUNDER_REFLECTIONS'];
+      break;
+    }
+
+    default:
+      return { success: false, error: 'Unsupported operation context.' };
   }
 
-  return { success: false, error: "Unsupported operation parameters." };
+  // 3. INVOKE DEEPSEEK CORE INTERFACE
+  const aiResponse = await executeKipConductor({
+    model: 'deepseek-chat',
+    skills: activeSkills,
+    prompt: dynamicPrompt
+  });
+
+  // 4. PERSIST TO LOG TABLE IF SUCCESSFUL
+  if (aiResponse.success && aiResponse.data && params.userInputText) {
+    await supabase.from('ai_logs').insert({
+      user_id: user.id,
+      mission_id: params.missionId,
+      context_type: params.contextType,
+      user_input: params.userInputText,
+      generated_output: aiResponse.data // Pure string response mapped safely
+    });
+  }
+
+  return aiResponse;
 }
