@@ -1,5 +1,5 @@
 export type TaskType = 'form' | 'simulator' | 'log_counter' | 'action' | 'community';
-export type RecommendationType = 'blog' | 'internal_link' | 'video' | 'podcast' | 'book';
+export type RecommendationType = 'blog' | 'internal_link' | 'youtube' | 'podcast' | 'book' | 'challenge';
 
 export interface TaskRecommendation {
   title: string;

@@ -5,10 +5,10 @@ export const mission1: Mission = {
   sequence: 1,
   video_url: "https://urgetostart.com/videos/m1-overview.mp4",
   briefing_text: "Before we look at business ideas, we need to focus on you. We're going to break out of the overthinking loop and build the habits you need to actually stick with this in the real world.",
-
+  content_path: "content/mission1/mission.md",
   prerequisites: [
     {
-      item: "Commit to finding at least 3 hours a week to work on this",
+      item: "Commit to finding at least 3 hours a week.",
       promptRawText: "The user is trying to find 3 hours a week while working full-time. Give them a practical strategy to protect three 60-minute blocks without burning out."
     },
     {
@@ -43,7 +43,7 @@ export const mission1: Mission = {
       tasks: [
         {
           id: "m1_q1_t1_drivers",
-          title: "What's the real reason you're starting?",
+          title: "Why do you want to start a business?",
           sequence: 1,
           type: "form",
           component_key: "MotivationForm",
@@ -52,7 +52,7 @@ export const mission1: Mission = {
           description: "Let's be totally honest. Building a business takes serious energy, and vague goals fade the moment life gets busy. What is the actual change you want to make in your life?",
           ai_config: {
             recommendations: [
-              { title: "Finding Your Real Why", type: "blog", path_or_url: "content/blog/finding-your-why.md", subtitle: "4 min layout read" }
+              { title: "Finding Your Real Why", type: "blog", path_or_url: "content/blog/reasons-to-start.md", subtitle: "4 min layout read" }
             ]
           }
         },
@@ -64,12 +64,13 @@ export const mission1: Mission = {
           component_key: "CommitmentForm",
           grant_points: 20,
           estimated_minutes: 15,
-          description: "Let's map out your baseline. Tell us about your target timeline, money boundaries, and the specific things you worry will hold you back so we can help you handle them.",
+          description: "Let's get real about your schedule and the roadblocks you are working around. This is about being honest with yourself so you can actually make progress.",
           ai_config: {
             recommendations: [
-              { title: "The Fresh Start Effect", type: "book", path_or_url: "https://www.amazon.com/How-Change-Science-Getting-Where/dp/0593083745", subtitle: "Katy Milkman's behavior framework" }
+              { title: "Starting with almost nothing", type: "blog", path_or_url: "content/blog/starting-with-nothing.md", subtitle: "4 min layout read" },
+              { title: "Getting Practical", type: "blog", path_or_url: "content/blog/lets-get-practical.md", subtitle: "4 min layout read" },
             ]
-         }
+          }
         },
         {
           id: "m1_q1_t3_profile",
@@ -82,7 +83,7 @@ export const mission1: Mission = {
           estimated_minutes: 15,
           ai_config: {
             recommendations: [
-              { title: "Writing a Clean Bio", type: "blog", path_or_url: "content/blog/network-identity.md" },
+              { title: "Community Code of Conduct", type: "internal_link", path_or_url: "app/(marketing)/code-of-conduct" },
               { title: "Explore the Community Board", type: "internal_link", path_or_url: "/platform/program/community", subtitle: "See what others are building" }
             ]
           }
@@ -91,13 +92,13 @@ export const mission1: Mission = {
     },
     quest2: {
       slug: "asking-for-allies",
-      title: "Find Your Cheer Squad",
-      subtitle: "Learn to write short, direct messages and find people to back you.",
-      description: "Trying to do this entirely in a cave is a surefire way to quit. This step is all about learning how to make clear, confident requests to your immediate circle without feeling awkward or over-apologizing.",
+      title: "Learn to ask",
+      subtitle: "When you ask you might just get what you want!",
+      description: "The power of asking lies in its ability to unlock new possibilities, break down social barriers, and accelerate personal and professional growth. By overcoming the fear of rejection, you open yourself to feedback, better opportunities, and deeper connections with others",
       sequence: 2,
       estimated_in_app_minutes: 30,
       estimated_off_app_minutes: 120,
-      content_path: "content/mission1/quests/asking-for-allies.md",
+      content_path: "content/mission1/quests/art-of-asking.md",
       ai_config: {
         role: "SYSTEM_CONDUCTOR",
         persona_name: "The Editor",
@@ -111,22 +112,23 @@ export const mission1: Mission = {
       tasks: [
         {
           id: "m1_q2_t1_ask_sim",
-          title: "Practice your outreach message",
+          title: "Element of a good ask",
           sequence: 1,
           type: "simulator",
           component_key: "AskSimulator",
           grant_points: 30,
           estimated_minutes: 15,
-          description: "Let's test out your message in a private space where no one else can see it. Draft a short note sharing your new focus and asking a friend for quick feedback.",
+          description: "Lets practice few asks before you approach people in the real world.",
           ai_config: {
             recommendations: [
-              { title: "The Rules of a Direct Ask", type: "blog", path_or_url: "content/blog/asking-without-shame.md" }
+              { title: "The Art of Asking", type: "blog", path_or_url: "content/blog/art-of-asking.md" },
+              { title: "The Power of Asking", type: "youtube", path_or_url: "https://www.youtube.com/watch?v=xMj_P_6H69g", subtitle: "TED talk by Amanda Palmer" }
             ]
           }
         },
         {
           id: "m1_q2_t2_known_reachout",
-          title: "Send it to a few trusted friends",
+          title: "Get your cheer squad",
           sequence: 2,
           type: "action",
           component_key: "KnownReachoutWidget",
@@ -134,26 +136,28 @@ export const mission1: Mission = {
           estimated_minutes: 60,
           execution_environment: "off_app",
           checkback_delay_days: 2,
-          description: "Take the script you polished with Kip and send it to real people. This is how you start building a tight circle of supporters who have your back.",
+          description: "Ask people you know to be part of your journey. This could be a friend, a mentor, or a family member. Ask them to give you feedback on your idea, or just to be a cheerleader for your progress.",
           ai_config: {
             recommendations: [
-              { title: "Dealing with Response Anxiety", type: "blog", path_or_url: "content/blog/managing-responses.md" }
+              { title: "Dealing with Response Anxiety", type: "blog", path_or_url: "content/blog/managing-responses.md" },
+              { title: "Ask for more", type: "challenge", path_or_url: "content/blog/ask-challenge.md" }
             ],
             reflection_prompt: "Now that you've hit send, did the reality of doing it feel lighter than the anxiety you had beforehand?"
           }
         },
         {
           id: "m1_q2_t3_digital_presence",
-          title: "Share what you're working on out loud",
+          title: "Build your presence",
           sequence: 3,
           type: "action",
           component_key: "DigitalPresenceWidget",
           grant_points: 25,
           estimated_minutes: 15,
-          description: "You don't need to act like an expert. Just treat it like a regular diary log of what you're learning. Let's update your social bio so people know what you're working on.",
+          description: "Having a digital presence is important for building credibility and trust. It also helps you to be found by people who are interested in your work. Let's make sure you have a basic digital presence set up.",
           ai_config: {
             recommendations: [
-              { title: "The Honest Bio Framework", type: "blog", path_or_url: "content/blog/clean-profiles.md" }
+              { title: "Ways to build a digital presence", type: "blog", path_or_url: "content/blog/ways-to-build-digital-presence.md" },
+              { title: "Gain 100 followers in a week", type: "challenge", path_or_url: "content/blog/gain-100-followers-challenge.md" }
             ]
           }
         }
@@ -161,9 +165,9 @@ export const mission1: Mission = {
     },
     quest3: {
       slug: "building-resilience",
-      title: "Get Comfortable Hearing No",
+      title: "Get Used to Hearing No",
       subtitle: "Collect a few real-world rejections and see that they won't kill you.",
-      description: "Setbacks and hearing 'no' are completely normal. This module is designed to help you realize that rejection isn't personal—it's just a normal part of trying something new.",
+      description: "Hearing 'no' stings at first—that's normal. But here's the thing: it's not about you. It's just feedback. This module is a safe space to practice taking small knocks so you can see they don't actually hurt. By the end, you'll have proof that rejection is just information, not a verdict.",
       sequence: 3,
       estimated_in_app_minutes: 15,
       estimated_off_app_minutes: 180,
@@ -189,14 +193,15 @@ export const mission1: Mission = {
           estimated_minutes: 120,
           execution_environment: "off_app",
           checkback_delay_days: 3,
-          description: "Let's make hearing 'no' feel routine with a simple experiment. Go out and make a small request—like asking a local coffee shop for a tiny courtesy discount—just to practice staying calm when they say no.",
+          description: "Here's a small experiment: go ask for something small that you expect to be turned down for. Maybe ask a cafe for a discount, or request a favor from someone you don't know well. The goal isn't to get a 'yes'—it's to collect a 'no' on purpose. When it happens, take a breath. Notice that you're okay. That's the whole point.",
           ai_config: {
             recommendations: [
-              { title: "The Art of Handling Rejection", type: "blog", path_or_url: "content/blog/rejection-therapy.md" },
-              { title: "Jia Jiang: 100 Days of Rejection", type: "video", path_or_url: "https://www.youtube.com/watch?v=-vZXgApsPCQ", subtitle: "Famous TED talk experiment" }
+              { title: "Your First No Is the Hardest", type: "blog", path_or_url: "content/blog/first-no-hardest.md" },
+              { title: "Jia Jiang: 100 Days of Rejection", type: "youtube", path_or_url: "https://www.youtube.com/watch?v=-vZXgApsPCQ", subtitle: "Famous TED talk experiment" },
+              { title: "Post your experience to the community board", type: "challenge", path_or_url: "/user/posts" }
             ],
-            challenge: "Share your experience on the internal community board so others can see how you handled it.",
-            reflection_prompt: "Now that you've gone through it, did the rejection set you back at all, or did you realize it was completely harmless?"
+            
+            reflection_prompt: "Now that you've done it—did the rejection actually hurt? Or did it just feel a little awkward and then pass? Write down what happened, how you felt, and what you noticed. This is your proof that you can handle more than you think."
           }
         },
         {
@@ -207,10 +212,10 @@ export const mission1: Mission = {
           component_key: "CommunityFeedTeaser",
           grant_points: 20,
           estimated_minutes: 15,
-          description: "You're not walking this path alone. Open up the collective community feed to see the logs and stories your peers are tracking.",
+          description: "Open the community feed. Scroll through what others have posted. You'll see the same awkward moments, the same small rejections, the same 'I survived that' energy. This is your reminder that you're in good company.",
           ai_config: {
             recommendations: [
-              { title: "Using the Power of the Group", type: "blog", path_or_url: "content/blog/peer-leverage.md" }
+              { title: "You're Not the Only One", type: "blog", path_or_url: "content/blog/not-alone.md" }
             ]
           }
         }
