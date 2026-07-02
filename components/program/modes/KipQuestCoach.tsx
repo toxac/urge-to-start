@@ -7,12 +7,12 @@ import { $progressStore, setProgressStoreRow, ProgressPayload, ProgressRow } fro
 import { executeSidebarConductorAction } from '@/actions/ai';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar, BookOpen, AlertCircle, Sparkles, CheckCircle2, ChevronRight, MessageSquare } from 'lucide-react';
+import { Calendar, BookOpen, AlertCircle, Sparkles, CheckCircle2, ChevronRight, Link as LinkIcon, Video, Headphones } from 'lucide-react';
 
 interface KipQuestCoachProps {
   missionId: string;
   questId: string;
-  activeTaskId?: string | null; // ⚡ FIXED: Supports clear segregation with explicit null flags
+  activeTaskId?: string | null; 
   progress: Record<string, ProgressRow>;
 }
 
@@ -21,11 +21,8 @@ export function KipQuestCoach({ missionId, questId, activeTaskId, progress }: Ki
   
   const currentMission = playbook[missionId];
   const currentQuest = currentMission?.quests?.[questId];
-  
-  // Isolate the running task if one is explicitly focused by the user
   const currentTask = currentQuest?.tasks?.find((t) => t.id === activeTaskId);
 
-  // If there's an active task ID but it's not found yet, show a clean loading indicator
   if (activeTaskId && !currentTask) {
     return (
       <div className="text-center py-8 text-xs text-muted-foreground animate-pulse">
@@ -37,7 +34,6 @@ export function KipQuestCoach({ missionId, questId, activeTaskId, progress }: Ki
   return (
     <div className="w-full h-full text-xs">
       {currentTask ? (
-        /* TASK EXECUTION BUBBLE SUITE */
         <KipTaskExecutionSuite 
           missionId={missionId}
           questId={questId}
@@ -45,7 +41,6 @@ export function KipQuestCoach({ missionId, questId, activeTaskId, progress }: Ki
           progress={progress}
         />
       ) : (
-        /* MACRO QUEST BLUEPRINT SUITE */
         <KipQuestBlueprintSuite 
           missionId={missionId}
           quest={currentQuest}
@@ -62,14 +57,12 @@ export function KipQuestCoach({ missionId, questId, activeTaskId, progress }: Ki
 function KipQuestBlueprintSuite({ missionId, quest, progress }: { missionId: string; quest: any; progress: Record<string, ProgressRow> }) {
   if (!quest) return <p className="text-muted-foreground italic text-center py-4">Quest not found.</p>;
 
-  // Check how many child tasks are completely locked down
   const questTasks = quest.tasks || [];
   const completedCount = questTasks.filter((t: any) => progress[t.id]?.status === 'completed').length;
   const isQuestFullyCompleted = questTasks.length > 0 && completedCount === questTasks.length;
 
   return (
     <div className="space-y-5 animate-in fade-in duration-200 text-left">
-      {/* Overview Block */}
       <div className="space-y-1">
         <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-primary/10 text-primary uppercase tracking-wider">
           Chapter Overview
@@ -78,7 +71,7 @@ function KipQuestBlueprintSuite({ missionId, quest, progress }: { missionId: str
         <p className="text-muted-foreground leading-relaxed text-[11px] font-medium">{quest.description}</p>
       </div>
 
-      {/* 1. INTERACTIVE QUEST PLANNER CELL */}
+      {/* INTERACTIVE QUEST PLANNER */}
       <div className="border border-border bg-muted/30 rounded-xl p-3.5 space-y-3">
         <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-foreground">
           <Calendar className="w-3.5 h-3.5 text-primary" />
@@ -99,7 +92,7 @@ function KipQuestBlueprintSuite({ missionId, quest, progress }: { missionId: str
         </Button>
       </div>
 
-      {/* 2. PROGRESS CHECKS & REWARD METRICS */}
+      {/* PROGRESS TRACKER */}
       <div className="border border-border bg-card rounded-xl p-3.5 space-y-2.5">
         <div className="flex items-center justify-between text-[11px] font-bold">
           <span className="text-muted-foreground uppercase text-[10px] tracking-wide">Milestone Track</span>
@@ -130,7 +123,7 @@ function KipQuestBlueprintSuite({ missionId, quest, progress }: { missionId: str
         )}
       </div>
 
-      {/* 3. DYNAMIC QUESTION ENGINE (PRE-DEFINED FAQ ASSIST) */}
+      {/* DYNAMIC FAQ ASSIST */}
       <div className="space-y-2">
         <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide block">
           Common Questions for this Chapter
@@ -151,7 +144,7 @@ function KipQuestBlueprintSuite({ missionId, quest, progress }: { missionId: str
 }
 
 // ====================================================================
-// SUB-SUITE B: INDIVIDUAL MICRO-TASK CONTEXT (Execution & Guides)
+// SUB-SUITE B: INDIVIDUAL MICRO-TASK CONTEXT (Execution & Recommendations)
 // ====================================================================
 function KipTaskExecutionSuite({ missionId, questId, task, progress }: { missionId: string; questId: string; task: any; progress: Record<string, ProgressRow> }) {
   const [reflectionText, setReflectionText] = useState('');
@@ -182,7 +175,6 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
       userInputText: path
     });
 
-    // ⚡ FIXED: Explicitly check for property presence to make TypeScript happy
     if (response.success && 'data' in response && response.data) {
       setCachedSummaries((prev) => ({
         ...prev,
@@ -204,7 +196,6 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
       userInputText: reflectionText
     });
 
-    // ⚡ FIXED: Explicitly check for property presence here as well
     if (response.success && 'data' in response && response.data) {
       const existingPayload: ProgressPayload = (taskProgress?.saved_payload as ProgressPayload) || {};
 
@@ -238,66 +229,85 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
     setIsAiLoading(false);
   };
 
+  const getRecommendationIcon = (type: string) => {
+    switch (type) {
+      case 'blog': return <BookOpen className="w-3.5 h-3.5 text-blue-500" />;
+      case 'video': return <Video className="w-3.5 h-3.5 text-red-500" />;
+      case 'podcast': return <Headphones className="w-3.5 h-3.5 text-orange-500" />;
+      case 'internal_link': return <Sparkles className="w-3.5 h-3.5 text-purple-500" />;
+      default: return <LinkIcon className="w-3.5 h-3.5 text-muted-foreground" />;
+    }
+  };
+
   return (
     <div className="space-y-4 text-left animate-in fade-in duration-200">
-      {/* Active Task Summary Card */}
-      <div className="p-3.5 border rounded-xl bg-muted/20 border-border/70 space-y-1">
-        <div className="flex items-center gap-2">
-          <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">
-            Active Task {task.sequence}
-          </span>
-          {task.estimated_minutes && (
-            <span className="text-[10px] font-medium text-muted-foreground font-mono">
-              ⏱ {task.estimated_minutes} min check
-            </span>
-          )}
-        </div>
-        <h4 className="text-xs font-bold text-foreground pt-1">{task.title}</h4>
+      {/* Active Task Frame */}
+      <div className="p-3.5 border rounded-xl bg-muted/20 border-border/70">
+        <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">
+          Active Task {task.sequence}
+        </span>
+        <h4 className="text-xs font-bold text-foreground pt-1.5">{task.title}</h4>
       </div>
 
-      {/* TACTICAL SUMMARY INTERACTION CARD */}
-      {!isCompleted && (
-        <div className="space-y-3">
-          {taskAiConfig.resources?.map((res: any, idx: number) => (
+      {/* DYNAMIC RECOMMENDATIONS SUITE */}
+      {!isCompleted && taskAiConfig.recommendations && taskAiConfig.recommendations.length > 0 && (
+        <div className="space-y-2">
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide block">
+            Suggested Material For This Step
+          </span>
+          
+          {taskAiConfig.recommendations.map((rec: any, idx: number) => (
             <div key={idx} className="p-3.5 border border-border bg-card rounded-xl space-y-2.5 shadow-sm">
-              <div className="flex items-center gap-2 text-[11px] font-bold text-foreground">
-                <BookOpen className="w-3.5 h-3.5 text-primary" />
-                <span>{res.title}</span>
+              <div className="space-y-0.5 text-left">
+                <div className="flex items-center gap-2 font-bold text-foreground">
+                  {getRecommendationIcon(rec.type)}
+                  <span className="truncate max-w-[160px]">{rec.title}</span>
+                </div>
+                {rec.subtitle && <p className="text-[10px] text-muted-foreground font-medium pl-5.5">{rec.subtitle}</p>}
               </div>
-              <Button 
-                size="sm" 
-                variant="secondary" 
-                className="h-6.5 text-[10px] font-bold w-full rounded-lg"
-                disabled={isAiLoading && activeSummaryUrl === res.content_path}
-                onClick={() => handleTriggerSummary(res.content_path)}
-              >
-                {isAiLoading && activeSummaryUrl === res.content_path ? 'Summarizing...' : '⚡ Read Kip Quick Summary'}
-              </Button>
 
-              {activeSummaryUrl === res.content_path && cachedSummaries[res.content_path] && (
+              {rec.type === 'blog' ? (
+                <Button 
+                  size="sm" 
+                  variant="secondary" 
+                  className="h-6.5 text-[10px] font-bold w-full rounded-lg cursor-pointer"
+                  disabled={isAiLoading && activeSummaryUrl === rec.path_or_url}
+                  onClick={() => handleTriggerSummary(rec.path_or_url)}
+                >
+                  {isAiLoading && activeSummaryUrl === rec.path_or_url ? 'Summarizing...' : '⚡ Read Kip Quick Summary'}
+                </Button>
+              ) : (
+                <a href={rec.path_or_url} target={rec.type === 'internal_link' ? '_self' : '_blank'} rel="noreferrer" className="block w-full">
+                  <Button size="sm" variant="outline" className="h-6.5 text-[10px] font-bold w-full rounded-lg bg-background cursor-pointer">
+                    {rec.type === 'internal_link' ? '➜ Open Feature' : '➜ Open Link'}
+                  </Button>
+                </a>
+              )}
+
+              {rec.type === 'blog' && activeSummaryUrl === rec.path_or_url && cachedSummaries[rec.path_or_url] && (
                 <div className="p-3 border rounded-xl bg-muted/40 text-muted-foreground font-medium text-[11px] mt-1 leading-relaxed border-border/50 animate-in slide-in-from-top-1 text-left">
-                  {cachedSummaries[res.content_path]}
+                  {cachedSummaries[rec.path_or_url]}
                 </div>
               )}
             </div>
           ))}
-
-          {/* CHALLENGE BOX INJECTION */}
-          {taskAiConfig.challenge && (
-            <div className="p-3.5 border rounded-xl border-dashed bg-amber-500/5 border-amber-500/20 space-y-1.5">
-              <div className="flex items-center gap-1.5 text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide">
-                <AlertCircle className="w-3.5 h-3.5" />
-                <span>Optional Stretch Challenge</span>
-              </div>
-              <p className="text-muted-foreground leading-relaxed font-medium text-[11px]">
-                {taskAiConfig.challenge}
-              </p>
-            </div>
-          )}
         </div>
       )}
 
-      {/* WORKSPACE REFLECTION ZONE */}
+      {/* EXTRA STRETCH CHALLENGE BOX */}
+      {!isCompleted && taskAiConfig.challenge && (
+        <div className="p-3.5 border rounded-xl border-dashed bg-amber-500/5 border-amber-500/20 space-y-1.5">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide">
+            <AlertCircle className="w-3.5 h-3.5" />
+            <span>Optional Stretch Challenge</span>
+          </div>
+          <p className="text-muted-foreground leading-relaxed font-medium text-[11px]">
+            {taskAiConfig.challenge}
+          </p>
+        </div>
+      )}
+
+      {/* REFLECTION INPUT ZONE */}
       {isCompleted && !retroSaved?.userResponseText && (
         <div className="p-3.5 border border-emerald-500/20 bg-emerald-500/5 rounded-xl space-y-3 animate-in slide-in-from-bottom-2">
           <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold">
@@ -319,7 +329,7 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
 
           <Button 
             size="sm" 
-            className="w-full h-8 font-bold text-xs rounded-lg"
+            className="w-full h-8 font-bold text-xs rounded-lg cursor-pointer"
             disabled={isAiLoading || !reflectionText.trim()}
             onClick={handleSendReflection}
           >
@@ -328,7 +338,7 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
         </div>
       )}
 
-      {/* REFLECTION FEEDBACK FRAME */}
+      {/* COMPLETED REFLECTION FEEDBACK FRAME */}
       {isCompleted && retroSaved?.aiValidationText && (
         <div className="space-y-3 animate-in fade-in">
           <div className="p-3.5 rounded-xl border bg-muted/20 space-y-1.5 leading-relaxed font-medium text-[11px] border-border/70">
@@ -337,14 +347,14 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
           </div>
 
           <div className="flex gap-2">
-            <Button size="sm" variant="outline" className="h-8 font-bold text-[11px] rounded-lg flex-1">
+            <Button size="sm" variant="outline" className="h-8 font-bold text-[11px] rounded-lg flex-1 cursor-pointer bg-background">
               💾 Save to Diary Archive
             </Button>
             <Button 
               size="sm" 
               variant="ghost" 
               className="h-8 font-bold text-[11px] rounded-lg text-primary hover:bg-primary/5 cursor-pointer"
-              onClick={() => deactivateTaskFocus()} // ⚡ Returns them cleanly to Quest Overview context!
+              onClick={() => deactivateTaskFocus()} 
             >
               Back to Overview
             </Button>
