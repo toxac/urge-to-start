@@ -15,7 +15,7 @@ export const mission1: Mission = {
       item: "A reliable computer and a decent internet connection"
     },
     {
-      item: "Willingness to be completely honest with yourself and Kip",
+      item: "Willingness to be completely honest with yourself and the system",
       promptRawText: "The user is nervous about sharing their ideas. Remind them that starting matters more than keeping secrets, and hiding an idea just keeps them isolated."
     }
   ],
@@ -24,8 +24,8 @@ export const mission1: Mission = {
     quest1: {
       slug: "starting-your-new-chapter",
       title: "Your Fresh Start",
-      subtitle: "Why are you doing this, what's your project called, and when will you work?",
-      description: "Every great project starts with a turning point. Let's look at what's driving you, pick a working name for your project, and figure out how to realistically fit this into your week.",
+      subtitle: "Get real about why you are here, face your roadblocks, and introduce yourself.",
+      description: "Every great journey begins exactly where you are standing right now. Before we look at business ideas, let's nail down what is driving you to build, map out the real-world boundaries you are working around, and introduce yourself to your fellow founders.",
       sequence: 1,
       estimated_in_app_minutes: 45,
       estimated_off_app_minutes: 0,
