@@ -60,9 +60,24 @@ export const mission1: Mission = {
           }
         },
         {
-          id: "m1_q1_t2_commitments",
-          title: "Be realistic about your schedule and roadblocks",
+          id: "m1_q1_t2_profile",
+          title: "Introduce yourself to the community",
           sequence: 2,
+          type: "form",
+          component_key: "ProfileSetupForm",
+          description: "You're not in this alone. Put a face to the name, write a brief bio, and share your links so other people here can see what you're up to.",
+          grant_points: 10,
+          estimated_minutes: 15,
+          ai_config: {
+            resources: [
+              { title: "Writing a Clean Bio", content_path: "content/blog/network-identity.md" }
+            ]
+          }
+        },
+        {
+          id: "m1_q1_t3_commitments",
+          title: "Be realistic about your schedule and roadblocks",
+          sequence: 3,
           type: "form",
           component_key: "CommitmentForm",
           grant_points: 20,
@@ -74,21 +89,7 @@ export const mission1: Mission = {
             ]
           }
         },
-        {
-          id: "m1_q1_t3_profile",
-          title: "Introduce yourself to the community",
-          sequence: 3,
-          type: "form",
-          component_key: "ProfileSetupForm",
-          description: "You're not in this alone. Put a face to the name, write a brief bio, and share your links so other people here can see what you're up to.",
-          grant_points: 10,
-          estimated_minutes: 15,
-          ai_config: {
-            resources: [
-              { title: "Writing a Clean Bio", content_path: "content/blog/network-identity.md" }
-            ]
-          }
-        }
+        
       ]
     },
     quest2: {

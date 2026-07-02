@@ -701,10 +701,7 @@ export type Database = {
           address: string | null
           age_group: Database["public"]["Enums"]["user_age_group"] | null
           avatar_url: string | null
-          capital_available_local: number | null
           city: string | null
-          constraints: Json
-          core_driver: Json | null
           country: string | null
           created_at: string | null
           currency: string | null
@@ -730,10 +727,7 @@ export type Database = {
           address?: string | null
           age_group?: Database["public"]["Enums"]["user_age_group"] | null
           avatar_url?: string | null
-          capital_available_local?: number | null
           city?: string | null
-          constraints?: Json
-          core_driver?: Json | null
           country?: string | null
           created_at?: string | null
           currency?: string | null
@@ -759,10 +753,7 @@ export type Database = {
           address?: string | null
           age_group?: Database["public"]["Enums"]["user_age_group"] | null
           avatar_url?: string | null
-          capital_available_local?: number | null
           city?: string | null
-          constraints?: Json
-          core_driver?: Json | null
           country?: string | null
           created_at?: string | null
           currency?: string | null
@@ -837,6 +828,9 @@ export type Database = {
           badge_key_reward: string | null
           content: string
           created_at: string
+          description: string | null
+          estimated_in_app_minutes: number | null
+          estimated_off_app_minutes: number | null
           grant_points_bonus: number
           id: string
           is_optional: boolean
@@ -854,6 +848,9 @@ export type Database = {
           badge_key_reward?: string | null
           content: string
           created_at?: string
+          description?: string | null
+          estimated_in_app_minutes?: number | null
+          estimated_off_app_minutes?: number | null
           grant_points_bonus?: number
           id: string
           is_optional?: boolean
@@ -871,6 +868,9 @@ export type Database = {
           badge_key_reward?: string | null
           content?: string
           created_at?: string
+          description?: string | null
+          estimated_in_app_minutes?: number | null
+          estimated_off_app_minutes?: number | null
           grant_points_bonus?: number
           id?: string
           is_optional?: boolean
@@ -929,6 +929,7 @@ export type Database = {
           component_key: string
           created_at: string
           description: string
+          estimated_minutes: number | null
           execution_environment: string | null
           grant_points: number
           id: string
@@ -945,6 +946,7 @@ export type Database = {
           component_key: string
           created_at?: string
           description?: string
+          estimated_minutes?: number | null
           execution_environment?: string | null
           grant_points?: number
           id: string
@@ -961,6 +963,7 @@ export type Database = {
           component_key?: string
           created_at?: string
           description?: string
+          estimated_minutes?: number | null
           execution_environment?: string | null
           grant_points?: number
           id?: string
