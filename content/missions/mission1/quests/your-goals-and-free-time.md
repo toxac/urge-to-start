@@ -1,0 +1,5 @@
+If your execution goals don't align with the reality of your current schedule, you will abandon your project the moment you hit normal operational friction. Enthusiasm burns out incredibly fast; structured parameters and hard limits are what keep you moving. 
+
+There's no single "right" reason to start a business. I have met founders driven entirely by money, others driven by a specific problem that genuinely kept them up at night, some who were simply bored, and others who were just angry. Almost all of them can build something that works. The ones that fail don't have the wrong motivation—they just fail because they never get honest about what their true motivation actually is.
+
+Complete the initialization cards below[cite: 1]. Be aggressively honest with your data. Don't write down the hours or budgets you *hope* to have; write down your true, current boundaries. Your inputs here will permanently configure your background profile context so the AI Conductor can safely guide your business shape decisions downstream.
