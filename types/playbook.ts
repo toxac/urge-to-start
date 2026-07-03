@@ -62,7 +62,7 @@ export interface Quest {
 
 export interface MissionPrerequisite {
   item: string;
-  promptRawText?: string; 
+  promptRawText?: string | null; 
 }
 
 export interface Mission {

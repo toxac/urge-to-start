@@ -8,19 +8,19 @@ export const mission2: Mission = {
   briefing_text: "Businesses aren't invented; they are noticed. Stop searching for random ideas and start tracking real problems people actually have.",
   briefing_markdown: "",
   prerequisites: [
-    {
-      item: "Completion of Mission 1 validation badges and foundational profiles",
-      promptRawText: "Make sure you've completed Mission 1 before starting this one. You'll need your profiles set up."
-    },
-    {
-      item: "Observation notebook or a blank digital memo sheet active on your phone",
-      promptRawText: "Keep a note-taking tool handy—you'll be logging annoyances and frustrations as you notice them."
-    },
-    {
-      item: "Willingness to assume that your initial ideas might be entirely wrong",
-      promptRawText: "This is about discovery, not validation. Be ready to be wrong. That's how you find the real stuff."
-    }
-  ],
+  {
+    item: "Completion of Mission 1 validation badges and foundational profiles",
+    promptRawText: "Explain why completing Mission 1 is essential before starting Mission 2. Emphasize that the mindset work from Mission 1 (resilience, comfort with rejection) is the foundation for doing customer discovery effectively. Without that groundwork, rejection during interviews will feel personal rather than informational. Keep it encouraging and practical."
+  },
+  {
+    item: "Observation notebook or a blank digital memo sheet active on your phone",
+    promptRawText: null  // No AI explanation needed—self-explanatory
+  },
+  {
+    item: "Willingness to assume that your initial ideas might be entirely wrong",
+    promptRawText: "Explain why being wrong is actually an advantage at this stage. Frame it as: your goal in Mission 2 is discovery, not validation. If you assume you're wrong upfront, you'll ask better questions, listen more carefully, and find the real problems people have. This mindset separates good founders from those who build things nobody wants. Keep it honest and reassuring."
+  }
+],
   quests: {
     quest1: {
       slug: "your-own-pain-and-skills",
