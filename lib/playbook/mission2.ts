@@ -4,23 +4,23 @@ export const mission2: Mission = {
   title: "Find Problems Worth Solving",
   sequence: 2,
   video_url: "https://urgetostart.com/videos/m2-overview.mp4",
-  content_path: "content/mission2/mission2.md",
+  content_path: "content/mission2/mission.md",
   briefing_text: "Businesses aren't invented; they are noticed. Stop searching for random ideas and start tracking real problems people actually have.",
   briefing_markdown: "",
   prerequisites: [
-  {
-    item: "Completion of Mission 1 validation badges and foundational profiles",
-    promptRawText: "Explain why completing Mission 1 is essential before starting Mission 2. Emphasize that the mindset work from Mission 1 (resilience, comfort with rejection) is the foundation for doing customer discovery effectively. Without that groundwork, rejection during interviews will feel personal rather than informational. Keep it encouraging and practical."
-  },
-  {
-    item: "Observation notebook or a blank digital memo sheet active on your phone",
-    promptRawText: null  // No AI explanation needed—self-explanatory
-  },
-  {
-    item: "Willingness to assume that your initial ideas might be entirely wrong",
-    promptRawText: "Explain why being wrong is actually an advantage at this stage. Frame it as: your goal in Mission 2 is discovery, not validation. If you assume you're wrong upfront, you'll ask better questions, listen more carefully, and find the real problems people have. This mindset separates good founders from those who build things nobody wants. Keep it honest and reassuring."
-  }
-],
+    {
+      item: "Completion of Mission 1 validation badges and foundational profiles",
+      promptRawText: "Explain why completing Mission 1 is essential before starting Mission 2. Emphasize that the mindset work from Mission 1 (resilience, comfort with rejection) is the foundation for doing customer discovery effectively. Without that groundwork, rejection during interviews will feel personal rather than informational. Keep it encouraging and practical."
+    },
+    {
+      item: "Observation notebook or a blank digital memo sheet active on your phone",
+      promptRawText: null
+    },
+    {
+      item: "Willingness to assume that your initial ideas might be entirely wrong",
+      promptRawText: "Explain why being wrong is actually an advantage at this stage. Frame it as: your goal in Mission 2 is discovery, not validation. If you assume you're wrong upfront, you'll ask better questions, listen more carefully, and find the real problems people have. This mindset separates good founders from those who build things nobody wants. Keep it honest and reassuring."
+    }
+  ],
   quests: {
     quest1: {
       slug: "your-own-pain-and-skills",
@@ -43,17 +43,18 @@ export const mission2: Mission = {
           id: "m2_q1_t1_personal_frustrations",
           title: "Log 3 Recurring Annoyances From Your Week",
           type: "form",
-          component_key: "PersonalPainLogForm",
+          component_key: "OpportunityEntryForm",  // Same form used across Mission 
           sequence: 1,
           grant_points: 25,
           estimated_minutes: 30,
           execution_environment: "off_app",
-          description: "Think about the last 7 days. What small things frustrated you? Maybe a app that crashes, a task that takes too long, or a process that feels unnecessarily complicated. Write down 3 of these moments.",
+          description: "Think about the last 7 days. What small things frustrated you? Maybe an app that crashes, a task that takes too long, or a process that feels unnecessarily complicated. Write down 3 of these moments.",
           ai_config: {
             recommendations: [
-              { title: "The Difference Between an Annoyance and a Business Opportunity", type: "blog", path_or_url: "content/blog/annoyance-vs-opportunity.md" }
+              { title: "The Difference Between an Annoyance and a Business Opportunity", type: "blog", path_or_url: "content/blog/frustrations-as-opportunity.md" },
+              { title: "The Bank Statement Challenge", type: "challenge", path_or_url: "content/challenges/bank-statement-pain.md" },
+              { title: "Why Your Own Frustrations Are Your Best Starting Point", type: "blog", path_or_url: "content/blog/start-with-your-own-pain.md" }
             ],
-            challenge: "If your week felt totally smooth, look at your monthly bank statement. What transaction or bill felt annoying to pay? That's a pain point too.",
             reflection_prompt: "Look closely at your 3 logged issues. Are these temporary personal annoyances, or problems people would actually pay money to solve?"
           }
         },
@@ -61,7 +62,7 @@ export const mission2: Mission = {
           id: "m2_q1_t2_skills_inventory",
           title: "List 3 Things You Do Better Than Most People",
           type: "form",
-          component_key: "SkillTagBuilder",
+          component_key: "OpportunityEntryForm",  // Same form used across Mission 
           sequence: 2,
           grant_points: 25,
           estimated_minutes: 20,
@@ -69,9 +70,10 @@ export const mission2: Mission = {
           description: "What comes naturally to you that others struggle with? Maybe you're good at organizing chaos, explaining technical things simply, or fixing broken processes. List 3 skills you have that others would pay for.",
           ai_config: {
             recommendations: [
-              { title: "How to Spot Your Own Hidden Skills", type: "blog", path_or_url: "content/blog/spot-hidden-skills.md" }
+              { title: "How to Spot Your Own Hidden Skills", type: "blog", path_or_url: "content/blog/spot-your-hidden-skills.md" },
+              { title: "Getting paid for your skills Challenge", type: "challenge", path_or_url: "content/challenges/getting-paid-for-your-skills.md" },
+              { title: "Ikigai: Finding the Intersection of Skill and Value", type: "blog", path_or_url: "content/blog/ikigai-for-founders.md" }
             ],
-            challenge: "If you can't think of anything, ask a coworker, friend, or family member: 'What do I do that makes your life easier?' Let them tell you.",
             reflection_prompt: "Are these skills things you actually enjoy doing, or just things you've learned to do well? If you don't enjoy it, it's not a good business fit."
           }
         }
@@ -80,54 +82,88 @@ export const mission2: Mission = {
     quest2: {
       slug: "the-people-around-you",
       title: "The People Around You",
-      subtitle: "Watch your friends, classmates, or co-workers and notice where they struggle.",
-      description: "You're not the only one with problems. Look at the people in your daily life—what do they complain about? What do they do the hard way? Their frustrations are opportunities too.",
+      subtitle: "Watch real people in your life and spot where they get stuck.",
+      description: "Your own frustrations are a great starting point. But the real gold is in the people around you—friends, family, coworkers, and communities you're part of. They're living with problems they don't even realize are fixable. Your job is to become a quiet observer and spot the friction they've learned to ignore.",
       sequence: 2,
-      estimated_in_app_minutes: 15,
-      estimated_off_app_minutes: 45,
+      estimated_in_app_minutes: 20,
+      estimated_off_app_minutes: 60,
       content_path: "content/mission2/quests/the-people-around-you.md",
       ai_config: {
         role: "SYSTEM_CONDUCTOR",
         persona_name: "The Anthropologist",
-        persona_prompt: "Decode daily group complaining habits into specific service deficits.",
+        persona_prompt: "Guide the user through structured observation. Help them identify which groups to watch, what signals to look for, and how to validate observations with a simple follow-up question. Emphasize that the goal is to find at least one real person they could sell to someday.",
         required_context: ["user_profiles"],
         on_success: { grant_points: 50 }
       },
       tasks: [
         {
-          id: "m2_q2_t1_identify_circles",
-          title: "Name 3 Groups You Spend Time With",
-          type: "form",
-          component_key: "CircleTagMatrix",
+          id: "m2_q2_t1_pick_groups",
+          title: "Pick 2 In-Person Groups to Observe",
+          type: "action",
+          component_key: "CircleTagMatrix", // Not a form
           sequence: 1,
           grant_points: 20,
-          estimated_minutes: 10,
+          estimated_minutes: 15,
           execution_environment: "on_app",
-          description: "Think about the people you interact with regularly—friends, family, coworkers, classmates, or even online communities. List 3 groups. These are your observation labs.",
+          description: "Pick 2 groups of people you interact with regularly in person. These should be groups where you can watch people go about their normal routines without being intrusive.\n\nGood options: your team at work, a hobby or sports group, family gatherings, a regular meetup, or your local community.\n\nWhy in-person? Because you need to find at least one real person you could sell to someday. You can't sell to a screen.",
           ai_config: {
             recommendations: [
-              { title: "Why the Best Ideas Come From the People You Already Know", type: "blog", path_or_url: "content/blog/ideas-from-people-you-know.md" }
+              { title: "How to Choose the Right Groups to Observe", type: "blog", path_or_url: "content/blog/choosing-observation-groups.md" },
             ],
-            challenge: "If you work alone or don't have many in-person groups, pick 3 online communities where you read or participate regularly (Reddit, Facebook groups, Discord servers, etc.).",
-            reflection_prompt: "Which of these groups do you understand the most deeply? Where would you feel most comfortable asking people about their frustrations?"
+            reflection_prompt: "Of the 2 groups you chose, which one gives you the easiest access to observe without people changing their behavior because you're watching? Start with that one."
           }
         },
         {
-          id: "m2_q2_t2_friction_log",
-          title: "Log 2 Clumsy Workarounds You Saw Someone Use",
-          type: "form",
-          component_key: "CircleObservationForm",
+          id: "m2_q2_t2_observation_log",
+          title: "Log 3 Observations Using the 3-Signal Framework",
+          type: "action",
+          component_key: "CircleObservation", // this is not a form
           sequence: 2,
           grant_points: 30,
-          estimated_minutes: 45,
+          estimated_minutes: 60,
           execution_environment: "off_app",
-          description: "Over the next few days, watch the groups you listed. Pay attention to moments when someone does something the hard way—a spreadsheet instead of software, a manual process instead of an automated one, a awkward fix instead of a proper solution. Log 2 examples.",
+          description: "Spend time with your groups and watch for these 3 specific signals:\n\n1. **'Why is this so hard?'** — Someone frustrated by something that should be simple. Look for sighs, complaints, or visible irritation.\n\n2. **'I made it work anyway'** — Someone using a clumsy workaround: a sticky-note system, a spreadsheet for something that should have proper software, or a manual process that could be automated.\n\n3. **'Ugh, this again'** — Someone dealing with a recurring problem they've clearly accepted as 'just how it is.' Look for resignation, not anger.\n\nLog 3 observations across your groups. For each, note who, what happened, and which signal you spotted.",
           ai_config: {
             recommendations: [
-              { title: "How Clumsy Shortcuts Reveal Business Opportunities", type: "blog", path_or_url: "content/blog/clumsy-shortcuts.md" }
+              { title: "The 3 Signals Framework", type: "blog", path_or_url: "content/blog/structured-observation.md" },
+              { title: "How to Observe Without Being Creepy", type: "blog", path_or_url: "content/blog/observing-without-creepy.md" }
             ],
-            challenge: "If you didn't catch anyone using a workaround in person, look up a tutorial video for a common software app. Scroll to the comments—where do users look confused? That's friction.",
-            reflection_prompt: "Is the friction you observed caused by a lack of tools, bad information, or something else? The answer tells you what kind of solution might work."
+            reflection_prompt: "Which of your 3 observations seems like the most expensive problem—in time, money, or emotional energy—for the person experiencing it? That's your best lead."
+          }
+        },
+        {
+          id: "m2_q2_t3_validate_observation",
+          title: "Validate 1 Observation With a Follow-Up Question",
+          type: "action",
+          component_key: "FollowUpQuestions",  // this is not a form
+          sequence: 3,
+          grant_points: 30,
+          estimated_minutes: 20,
+          execution_environment: "off_app",
+          description: "Pick your most promising observation. Go back to that person and ask ONE simple question: 'I noticed you [describe what you saw]. Is that something you deal with often?'\n\n**Rules:**\n- Don't pitch a solution\n- Don't offer to help\n- Just ask and listen\n\nYour goal is to find out if this is a one-time annoyance or a recurring problem. If it's recurring, you've found a real opportunity.",
+          ai_config: {
+            recommendations: [
+              { title: "how to conduct an informal interview", type: "blog", path_or_url: "content/blog/how-to-conduct-an-informal-interview.md" },
+              { title: "Tips for Better Customer Validation Interviews", type: "blog", path_or_url: "content/blog/tips-for-better-customer-validation-interviews.md" }
+            ],
+            reflection_prompt: "Did they confirm it's a recurring problem? Have they tried anything to fix it? Did they spend money on it? The answers to these questions tell you if this is a business opportunity or just a minor annoyance."
+          }
+        },
+        {
+          id: "m2_q2_t4_add_to_opportunities",
+          title: "Add Your Validated Observation to Opportunities",
+          type: "form",
+          component_key: "OpportunityEntryForm",  // Same form used across Mission 2
+          sequence: 4,
+          grant_points: 20,
+          estimated_minutes: 10,
+          execution_environment: "on_app",
+          description: "Now that you've confirmed a real problem exists, add it to your Opportunities table. This is where you'll store every validated problem you find.\n\nYou'll use this same form throughout Mission 2—whether you find problems in your own life, observing others, or mining online forums. Each entry helps you build a portfolio of problems worth solving.",
+          ai_config: {
+            recommendations: [
+              { title: "How to Write a Good Problem Statement", type: "blog", path_or_url: "content/blog/good-problem-statements.md" },
+            ],
+            reflection_prompt: "Look at the problem you just added. If you had to solve it with the least possible effort, what would the simplest version of a solution look like?"
           }
         }
       ]
@@ -135,85 +171,83 @@ export const mission2: Mission = {
     quest3: {
       slug: "the-internet-safari",
       title: "The Internet Safari",
-      subtitle: "Scan online comment sections, reviews, and forums to find real complaints.",
-      description: "Now take it wider. The internet is full of people complaining about their problems. Your job is to find the complaints that repeat over and over—those are clues to real opportunities.",
+      subtitle: "Find real problems people are posting about online.",
+      description: "The internet is a goldmine of complaints. Every day, people post about their frustrations on Reddit, search for solutions on Google, and leave reviews on marketplaces. Your job is to find the complaints that repeat—those are clues to real opportunities.",
       sequence: 3,
-      estimated_in_app_minutes: 20,
-      estimated_off_app_minutes: 60,
+      estimated_in_app_minutes: 30,
+      estimated_off_app_minutes: 120,
       content_path: "content/mission2/quests/the-internet-safari.md",
       ai_config: {
         role: "SYSTEM_CONDUCTOR",
         persona_name: "The Signal Filter",
-        persona_prompt: "Evaluate online data logs. Help the user avoid short fads and focus on long macro waves.",
+        persona_prompt: "Evaluate online data logs. Help the user avoid short fads and focus on long macro waves. Guide them to spot recurring complaints, identify search demand, and find gaps in existing products.",
         required_context: ["user_profiles"],
         on_success: {
-          grant_points: 50,
+          grant_points: 80,
           badge_key: "SCOUT"
         }
       },
       tasks: [
         {
-          id: "m2_q3_t1_safari_grab",
-          title: "Find 2 Complaints Posted Natively Online",
+          id: "m2_q3_t1_reddit_safari",
+          title: "Mine a Subreddit for Real Complaints",
           type: "form",
-          component_key: "DigitalSafariLogForm",
+          component_key: "OpportunityEntryForm",  // Same form used across Mission 2
           sequence: 1,
-          grant_points: 50,
-          estimated_minutes: 60,
+          grant_points: 30,
+          estimated_minutes: 45,
           execution_environment: "off_app",
-          description: "Visit a forum, subreddit, app store review section, or product review site related to something you or your groups care about. Find 2 complaints that repeat across different users. Copy the exact language they used—real words matter.",
+          description: "Pick a subreddit related to something you or your groups care about. Search for posts where people are complaining, asking for help, or venting about a problem.\n\n**What to look for:**\n- Posts that start with 'Does anyone else...' or 'Why is it so hard to...'\n- Repeat complaints across different users\n- People describing workarounds they're using\n\nFind 2 distinct complaints and copy the exact language they used—real words matter. Reddit is great because you can DM the people who posted and validate the problem directly.",
           ai_config: {
             recommendations: [
-              { title: "How to Mine Reddit and Reviews for Real Problems", type: "blog", path_or_url: "content/blog/mining-online-complaints.md" }
+              { title: "How to Mine Reddit for Real Problems", type: "blog", path_or_url: "content/blog/mining-reddit.md" },
+              { title: "The Reddit Challenge", type: "challenge", path_or_url: "content/challenges/reddit-challenge.md" },
+              { title: "How to DM Strangers Without Being Creepy", type: "blog", path_or_url: "content/blog/dm-strangers.md" }
             ],
-            challenge: "Go to an app store listing for a popular product in your area of interest. Filter reviews to '3 stars'—these are people who like the product but still have real frustrations. Those are gold.",
-            reflection_prompt: "Look at the exact words people used to describe their frustration. Are they mad about a missing feature, or are they expressing genuine anger about how the product makes them feel? The emotion tells you how big the problem is."
+            reflection_prompt: "Look at the language people used. Are they describing a one-time annoyance or a recurring frustration? If you could solve this, would they actually pay for it?"
           }
-        }
+        },
+        {
+          id: "m2_q3_t2_google_keywords",
+          title: "Find What People Are Searching For",
+          type: "form",
+          component_key: "OpportunityEntryForm",
+          sequence: 2,
+          grant_points: 25,
+          estimated_minutes: 30,
+          execution_environment: "off_app",
+          description: "Go to Google and start typing phrases related to the problems you've been exploring. Pay attention to the autocomplete suggestions—these are real searches people are making.\n\n**What to look for:**\n- 'How to [solve problem]'\n- 'Best [product] for [use case]'\n- 'Why is [something] so [hard/expensive/confusing]'\n\nAlso try Google Trends to see if interest in a problem is growing, seasonal, or fading. If people are actively searching for a solution, that's demand. And demand is a business opportunity.",
+          ai_config: {
+            recommendations: [
+              { title: "Using Google to Find Business Ideas", type: "blog", path_or_url: "content/blog/google-for-ideas.md" },
+              { title: "The Google Search Challenge", type: "challenge", path_or_url: "content/challenges/google-search.md" },
+              { title: "How to Read Google Trends for Opportunity", type: "blog", path_or_url: "content/blog/google-trends-opportunity.md" }
+            ],
+            reflection_prompt: "What did the autocomplete suggestions tell you about how people phrase their problems? How does that compare to how you might have described the same problem?"
+          }
+        },
+        {
+          id: "m2_q3_t3_marketplace_audit",
+          title: "Spot Gaps in Marketplaces",
+          type: "form",
+          component_key: "OpportunityEntryForm", // have option of picking i didnt find anything interesting
+          sequence: 3,
+          grant_points: 25,
+          estimated_minutes: 45,
+          execution_environment: "off_app",
+          description: "Visit a marketplace where people buy and sell things related to your area of interest. This could be Etsy, Amazon, Upwork, Fiverr, or a niche marketplace.\n\n**What to look for:**\n- **Best-sellers:** What are people buying a lot of? (This tells you there's demand.)\n- **Low-rated products/services:** What are people complaining about in the reviews? (This tells you what's missing.)\n- **Custom requests:** Are people asking for something that isn't being offered?\n\nFind 1 gap: something people are clearly buying but not fully satisfied with. That gap is your opportunity.",
+          ai_config: {
+            recommendations: [
+              { title: "How to Spot Gaps in Marketplaces", type: "blog", path_or_url: "content/blog/marketplace-gaps.md" },
+              { title: "The Marketplace Audit Challenge", type: "challenge", path_or_url: "content/challenges/marketplace-audit.md" },
+              { title: "What Amazon Reviews Can Teach You About Business", type: "blog", path_or_url: "content/blog/amazon-reviews.md" }
+            ],
+            reflection_prompt: "If you were to sell something in this marketplace, what would you do differently from the existing options? What makes you think people would buy from you instead?"
+          }
+        },
       ]
     },
     quest4: {
-      slug: "discovery-simulator",
-      title: "The Practice Interview Game",
-      subtitle: "Test your conversation skills with a simulated customer before talking to real humans.",
-      description: "Talking to strangers about their problems is intimidating. This simulator lets you practice without the pressure. You'll learn what questions work, what don't, and how to keep the conversation focused on their experience—not your idea.",
-      sequence: 4,
-      estimated_in_app_minutes: 30,
-      estimated_off_app_minutes: 0,
-      content_path: "content/mission2/quests/discovery-simulator.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "Alex the Busy Creative",
-        persona_prompt: "Simulate a highly skeptical buyer named Alex. Act short and defensive unless the user asks open, historical questions about your past workflows.",
-        required_context: ["user_profiles"],
-        on_success: {
-          grant_points: 100,
-          badge_key: "DETECTIVE"
-        }
-      },
-      tasks: [
-        {
-          id: "m2_q4_t1_chat_roleplay",
-          title: "Uncover Alex's True Past Problems Without Pitching",
-          type: "simulator",
-          component_key: "LiveChatRoleplayWidget",
-          sequence: 1,
-          grant_points: 100,
-          estimated_minutes: 30,
-          execution_environment: "on_app",
-          description: "You'll have a live chat with Alex, a busy creative professional. Your goal: understand their past struggles. Do not pitch a solution. Do not talk about your idea. Just ask about their history, their workflow, and their frustrations.",
-          ai_config: {
-            recommendations: [
-              { title: "The Mom Test: How to Ask Questions That Don't Suck", type: "blog", path_or_url: "content/blog/the-mom-test-basics.md" },
-              { title: "The Best Discovery Questions to Ask", type: "blog", path_or_url: "content/blog/great-discovery-questions.md" }
-            ],
-            challenge: "If Alex shuts down or gives vague answers, stop guiding the conversation. Ask: 'When was the last time you had to deal with this? What happened?' Historical questions are harder to dodge.",
-            reflection_prompt: "What made Alex open up—talking about your idea, or asking about their past experience? The answer tells you how to approach real interviews."
-          }
-        }
-      ]
-    },
-    quest5: {
       slug: "pain-index-and-final-cut",
       title: "Rate the Pain & Make a Choice",
       subtitle: "Talk to 3 real people, grade their frustration, and pick your primary focus.",
@@ -246,9 +280,11 @@ export const mission2: Mission = {
           ai_config: {
             recommendations: [
               { title: "How to Interview Customers Without Sounding Like a Salesperson", type: "blog", path_or_url: "content/blog/interview-without-selling.md" },
-              { title: "What to Look For in a Discovery Interview", type: "blog", path_or_url: "content/blog/discovery-interview-signals.md" }
+              { title: "What to Look For in a Discovery Interview", type: "blog", path_or_url: "content/blog/discovery-interview-signals.md" },
+              { title: "The 3-Interview Challenge", type: "challenge", path_or_url: "content/challenges/three-interviews.md" },
+              { title: "The 'Spent Money' Signal", type: "blog", path_or_url: "content/blog/spent-money-signal.md" },
+              { title: "Talking to Humans (Book)", type: "book", path_or_url: "https://www.talkingtohumans.com/", subtitle: "By Giff Constable" }
             ],
-            challenge: "If reaching out to new people feels intimidating, interview 3 peers in the Urge community who match your target audience. The community feed is a safe space to start.",
             reflection_prompt: "Looking at your 3 interviews—did any of these people say they've spent actual money trying to solve this problem in the past year? That's the strongest signal you can get."
           }
         },
@@ -265,9 +301,11 @@ export const mission2: Mission = {
           ai_config: {
             recommendations: [
               { title: "How to Choose Between Two Good Ideas", type: "blog", path_or_url: "content/blog/choosing-between-ideas.md" },
-              { title: "Why Focus Is Your Biggest Advantage", type: "blog", path_or_url: "content/blog/focus-is-advantage.md" }
+              { title: "Why Focus Is Your Biggest Advantage", type: "blog", path_or_url: "content/blog/focus-is-advantage.md" },
+              { title: "The Cheapest Test Challenge", type: "challenge", path_or_url: "content/challenges/cheapest-test.md" },
+              { title: "The One-Page Decision Framework", type: "blog", path_or_url: "content/blog/one-page-decision.md" },
+              { title: "The Dip (Book)", type: "book", path_or_url: "https://www.amazon.com/Dip-Little-Book-Teaches-Stick/dp/1591841666", subtitle: "By Seth Godin" }
             ],
-            challenge: "If you're torn between two ideas, pick the one that costs the least time and money to test with a real customer. The cheaper the experiment, the easier it is to change your mind later.",
             reflection_prompt: "You've committed to one direction. How does it feel to let the other ideas go? That feeling of focus is exactly what you'll need moving forward."
           }
         }
