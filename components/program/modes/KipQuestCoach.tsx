@@ -1,3 +1,5 @@
+// components/program/KipQuestCoach.tsx
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -7,7 +9,10 @@ import { $progressStore, setProgressStoreRow, ProgressPayload, ProgressRow } fro
 import { executeSidebarConductorAction } from '@/actions/ai';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar, BookOpen, AlertCircle, Sparkles, CheckCircle2, ChevronRight, Link as LinkIcon, Video, Headphones } from 'lucide-react';
+import { Calendar, BookOpen, AlertCircle, Sparkles, CheckCircle2, ChevronRight, Link as LinkIcon, Video, Headphones, FileText, Download } from 'lucide-react';
+import { ObservationAnalysis } from '@/actions/ai';
+
+
 
 interface KipQuestCoachProps {
   missionId: string;
@@ -148,19 +153,29 @@ function KipQuestBlueprintSuite({ missionId, quest, progress }: { missionId: str
 // ====================================================================
 function KipTaskExecutionSuite({ missionId, questId, task, progress }: { missionId: string; questId: string; task: any; progress: Record<string, ProgressRow> }) {
   const [reflectionText, setReflectionText] = useState('');
+  const [observationInput, setObservationInput] = useState('');
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [activeSummaryUrl, setActiveSummaryUrl] = useState<string | null>(null);
   const [cachedSummaries, setCachedSummaries] = useState<Record<string, string>>({});
+  const [observationAnalysis, setObservationAnalysis] = useState<ObservationAnalysis | string | null>(null);
+  const [isObservationSubmitted, setIsObservationSubmitted] = useState(false);
 
   useEffect(() => {
     setReflectionText('');
+    setObservationInput('');
     setActiveSummaryUrl(null);
+    setObservationAnalysis(null);
+    setIsObservationSubmitted(false);
   }, [task.id]);
 
   const taskProgress = progress[task.id];
   const isCompleted = taskProgress?.status === 'completed';
   const taskAiConfig = task.ai_config || {};
   const retroSaved = taskProgress?.saved_payload?.retrospective;
+  const observationConfig = task.observation_config || {};
+  
+  // Check if this is an observation task
+  const isObservationTask = task.type === 'observation';
 
   const handleTriggerSummary = async (path: string) => {
     setActiveSummaryUrl(path);
@@ -229,12 +244,82 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
     setIsAiLoading(false);
   };
 
+  const handleSubmitObservation = async () => {
+    if (!observationInput.trim()) return;
+    setIsAiLoading(true);
+
+    const response = await executeSidebarConductorAction({
+      taskId: task.id,
+      questId,
+      missionId,
+      contextType: 'observation_analysis',
+      userInputText: observationInput,
+      additionalContext: {
+        analysisPrompt: taskAiConfig.observation_analysis_prompt,
+        guideQuestions: observationConfig.guide_questions
+      }
+    });
+
+    if (response.success && 'data' in response && response.data) {
+      // Store the analysis
+      setObservationAnalysis(response.data);
+      setIsObservationSubmitted(true);
+      
+      // Save to progress (but don't mark complete yet)
+      const existingPayload: ProgressPayload = (taskProgress?.saved_payload as ProgressPayload) || {};
+      
+      // Format the analysis for display/storage
+      const analysisText = typeof response.data === 'string' 
+        ? response.data 
+        : `
+Pattern Recognition: ${response.data.pattern_recognition || ''}
+
+Deeper Questions: ${response.data.deeper_questions?.join('\n') || ''}
+
+Potential Opportunities: ${response.data.potential_opportunities?.join('\n') || ''}
+
+${response.data.encouragement || ''}
+
+Next Steps: ${response.data.next_steps || ''}
+        `.trim();
+
+      const updatedRow: ProgressRow = {
+        ...(taskProgress || {
+          id: crypto.randomUUID(),
+          user_id: '',
+          project_id: null,
+          item_type: 'task',
+          mission_id: missionId,
+          quest_id: questId,
+          task_id: task.id,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          completed_at: null
+        }),
+        status: 'in_progress',
+        saved_payload: {
+          ...existingPayload,
+          observation_analysis: {
+            userInput: observationInput,
+            aiAnalysis: analysisText,
+            structuredAnalysis: response.data,
+            timestamp: new Date().toISOString()
+          }
+        }
+      };
+
+      setProgressStoreRow(updatedRow);
+    }
+    setIsAiLoading(false);
+  };
+
   const getRecommendationIcon = (type: string) => {
     switch (type) {
       case 'blog': return <BookOpen className="w-3.5 h-3.5 text-blue-500" />;
       case 'video': return <Video className="w-3.5 h-3.5 text-red-500" />;
       case 'podcast': return <Headphones className="w-3.5 h-3.5 text-orange-500" />;
       case 'internal_link': return <Sparkles className="w-3.5 h-3.5 text-purple-500" />;
+      case 'download': return <Download className="w-3.5 h-3.5 text-green-500" />;
       default: return <LinkIcon className="w-3.5 h-3.5 text-muted-foreground" />;
     }
   };
@@ -247,7 +332,106 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
           Active Task {task.sequence}
         </span>
         <h4 className="text-xs font-bold text-foreground pt-1.5">{task.title}</h4>
+        {isObservationTask && observationConfig.description && (
+          <p className="text-[10px] text-muted-foreground mt-1 leading-relaxed">
+            {observationConfig.description}
+          </p>
+        )}
       </div>
+
+      {/* OBSERVATION TASK: Show observation prompt and input */}
+      {isObservationTask && !isCompleted && (
+        <div className="space-y-3">
+          {taskAiConfig.observation_prompt && (
+            <div className="p-3.5 border border-primary/20 bg-primary/5 rounded-xl">
+              <div className="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-wide">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Share with Kip for guidance</span>
+              </div>
+              <p className="text-xs text-foreground mt-1.5 leading-relaxed">
+                {taskAiConfig.observation_prompt}
+              </p>
+            </div>
+          )}
+
+          {/* User input for observations */}
+          {!isObservationSubmitted && !observationAnalysis && (
+            <div className="space-y-2">
+              <Textarea
+                placeholder="Share your observations with Kip for analysis..."
+                className="text-xs bg-background resize-none h-20 rounded-lg border-border/80 focus-visible:ring-1"
+                value={observationInput}
+                onChange={(e) => setObservationInput(e.target.value)}
+                disabled={isAiLoading}
+              />
+              <Button
+                size="sm"
+                className="w-full h-8 font-bold text-xs rounded-lg cursor-pointer"
+                disabled={isAiLoading || !observationInput.trim()}
+                onClick={handleSubmitObservation}
+              >
+                {isAiLoading ? 'Analyzing...' : '💡 Get  Insights'}
+              </Button>
+            </div>
+          )}
+
+          {/* Show Kip's analysis */}
+          {observationAnalysis && (
+            <div className="p-3.5 border border-emerald-500/20 bg-emerald-500/5 rounded-xl space-y-3 animate-in slide-in-from-bottom-2">
+              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold">
+                <Sparkles className="w-4 h-4" />
+                <span>Kip's Analysis</span>
+              </div>
+              
+              {typeof observationAnalysis === 'string' ? (
+                <div className="text-xs text-foreground/90 whitespace-pre-wrap leading-relaxed">
+                  {observationAnalysis}
+                </div>
+              ) : (
+                <div className="space-y-2 text-xs text-foreground/90">
+                  {observationAnalysis.pattern_recognition && (
+                    <div>
+                      <p className="font-bold text-[10px] text-muted-foreground uppercase tracking-wider">Patterns Noticed</p>
+                      <p className="mt-0.5">{observationAnalysis.pattern_recognition}</p>
+                    </div>
+                  )}
+                  {observationAnalysis.deeper_questions && observationAnalysis.deeper_questions.length > 0 && (
+                    <div>
+                      <p className="font-bold text-[10px] text-muted-foreground uppercase tracking-wider mt-2">Deeper Questions</p>
+                      <ul className="mt-0.5 space-y-0.5 list-disc pl-4">
+                        {observationAnalysis.deeper_questions.map((q: string, i: number) => (
+                          <li key={i}>{q}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {observationAnalysis.potential_opportunities && observationAnalysis.potential_opportunities.length > 0 && (
+                    <div>
+                      <p className="font-bold text-[10px] text-muted-foreground uppercase tracking-wider mt-2">Potential Opportunities</p>
+                      <ul className="mt-0.5 space-y-0.5 list-disc pl-4">
+                        {observationAnalysis.potential_opportunities.map((o: string, i: number) => (
+                          <li key={i}>{o}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {observationAnalysis.encouragement && (
+                    <div className="mt-2 p-2 bg-emerald-500/10 rounded-lg italic text-emerald-700 dark:text-emerald-300">
+                      "{observationAnalysis.encouragement}"
+                    </div>
+                  )}
+                  {observationAnalysis.next_steps && (
+                    <div className="mt-2 p-2 bg-primary/5 rounded-lg border border-primary/10">
+                      <p className="font-bold text-[10px] text-muted-foreground uppercase tracking-wider">Next Steps</p>
+                      <p className="mt-0.5">{observationAnalysis.next_steps}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* DYNAMIC RECOMMENDATIONS SUITE */}
       {!isCompleted && taskAiConfig.recommendations && taskAiConfig.recommendations.length > 0 && (
@@ -276,6 +460,12 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
                 >
                   {isAiLoading && activeSummaryUrl === rec.path_or_url ? 'Summarizing...' : '⚡ Read Kip Quick Summary'}
                 </Button>
+              ) : rec.type === 'download' ? (
+                <a href={rec.path_or_url} target="_blank" rel="noreferrer" className="block w-full">
+                  <Button size="sm" variant="outline" className="h-6.5 text-[10px] font-bold w-full rounded-lg bg-background cursor-pointer">
+                    📄 Download Resource
+                  </Button>
+                </a>
               ) : (
                 <a href={rec.path_or_url} target={rec.type === 'internal_link' ? '_self' : '_blank'} rel="noreferrer" className="block w-full">
                   <Button size="sm" variant="outline" className="h-6.5 text-[10px] font-bold w-full rounded-lg bg-background cursor-pointer">
@@ -291,19 +481,6 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
               )}
             </div>
           ))}
-        </div>
-      )}
-
-      {/* EXTRA STRETCH CHALLENGE BOX */}
-      {!isCompleted && taskAiConfig.challenge && (
-        <div className="p-3.5 border rounded-xl border-dashed bg-amber-500/5 border-amber-500/20 space-y-1.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide">
-            <AlertCircle className="w-3.5 h-3.5" />
-            <span>Optional Stretch Challenge</span>
-          </div>
-          <p className="text-muted-foreground leading-relaxed font-medium text-[11px]">
-            {taskAiConfig.challenge}
-          </p>
         </div>
       )}
 

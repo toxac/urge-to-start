@@ -6,7 +6,7 @@ import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Download, FileText, CheckCircle2 } from 'lucide-react';
+import { Download, FileText, CheckCircle2, Plus, Edit2, Eye } from 'lucide-react';
 import { completeTaskExecution } from '@/actions/progress';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
 
@@ -38,11 +38,18 @@ export function ObservationComponent({
   const [observationText, setObservationText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isAddingMore, setIsAddingMore] = useState(false);
 
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const preSavedPayload = existingProgress?.saved_payload || {};
+  
+  // Check if we have saved observation data
+  const hasSavedObservation = !!preSavedPayload.observationText;
 
-  // Handle saving observations
+  // Determine which view to show
+  const showConfigView = !hasSavedObservation || isAddingMore;
+
+  // Handle saving/updating observations
   const handleSaveObservations = useCallback(async () => {
     if (!observationText.trim()) return;
 
@@ -50,14 +57,19 @@ export function ObservationComponent({
     setErrorMessage(null);
 
     try {
+      // Merge with existing payload if any
+      const existingPayload = existingProgress?.saved_payload || {};
+      
       const progressSync = await completeTaskExecution({
         taskId,
         savedPayload: {
+          ...existingPayload,
           observationText: observationText.trim(),
           guideQuestions: observationConfig?.guide_questions,
           minObservations: observationConfig?.min_observations,
           observationPeriodDays: observationConfig?.observation_period_days,
-          observationPrompt: observationConfig?.description
+          observationPrompt: observationConfig?.description,
+          updatedAt: new Date().toISOString()
         }
       });
 
@@ -65,9 +77,10 @@ export function ObservationComponent({
         if (progressSync.data) {
           setProgressStoreRow(progressSync.data as any);
         }
+        // Reset adding more state and show viewer
+        setIsAddingMore(false);
         if (onSuccess) onSuccess();
       } else {
-        // TypeScript now knows this is the error variant
         setErrorMessage(progressSync.error || 'Failed to save your observations');
       }
     } catch (err: any) {
@@ -75,7 +88,7 @@ export function ObservationComponent({
     } finally {
       setIsSubmitting(false);
     }
-  }, [observationText, taskId, observationConfig, onSuccess]);
+  }, [observationText, taskId, observationConfig, onSuccess, existingProgress]);
 
   // Handle PDF download
   const handleDownloadPDF = useCallback(() => {
@@ -84,49 +97,98 @@ export function ObservationComponent({
     }
   }, [observationConfig?.pdf_url]);
 
-  // If already completed, show read-only view
-  if (isInitiallyCompleted) {
+  // ============================================================
+  // VIEW 1: OBSERVATION VIEWER (Shows saved data)
+  // ============================================================
+  if (hasSavedObservation && !showConfigView) {
     return (
-      <div className="w-full space-y-4 border rounded-xl p-5 bg-emerald-50/20 border-emerald-500/10">
-        <div className="w-full flex items-center justify-between pb-2 border-b border-dashed border-emerald-500/20">
-          <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
-            <CheckCircle2 className="w-4 h-4" />
-            Observation Complete
-          </span>
-          <span className="text-xs font-medium text-muted-foreground">
-            ✓ Logged
-          </span>
-        </div>
-
-        {preSavedPayload.observationText && (
-          <div className="p-3 rounded-lg bg-muted/10 border border-border/50">
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1.5">
-              Your Observations
-            </p>
-            <p className="text-sm text-foreground whitespace-pre-wrap">
-              {preSavedPayload.observationText}
-            </p>
+      <div className="w-full space-y-4">
+        {errorMessage && (
+          <div className="w-full p-4 border rounded-xl bg-destructive/10 text-destructive text-sm font-medium">
+            ⚠️ {errorMessage}
           </div>
         )}
 
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full"
-          onClick={onSuccess}
-        >
-          Back to Quest
-        </Button>
+        <div className="w-full border rounded-xl p-5 bg-emerald-50/20 border-emerald-500/10">
+          <div className="flex items-center justify-between pb-3 border-b border-dashed border-emerald-500/20">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span className="text-xs font-bold text-emerald-600">
+                Observations Saved
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-medium text-muted-foreground">
+                {preSavedPayload.minObservations || 0} observations
+              </span>
+              {preSavedPayload.observationPeriodDays && (
+                <span className="text-[10px] font-medium text-muted-foreground">
+                  · {preSavedPayload.observationPeriodDays} days
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Saved Observation Content */}
+          <div className="mt-4 p-4 rounded-lg bg-background border border-border/50">
+            <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">
+              {preSavedPayload.observationText}
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="mt-4 flex flex-col sm:flex-row gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2 h-9 flex-1"
+              onClick={() => {
+                // Pre-fill textarea with existing data
+                setObservationText(preSavedPayload.observationText || '');
+                setIsAddingMore(true);
+              }}
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Add More Observations
+            </Button>
+            <Button
+              size="sm"
+              className="gap-2 h-9 flex-1"
+              onClick={onSuccess}
+            >
+              <Eye className="w-3.5 h-3.5" />
+              Back to Quest
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
 
+  // ============================================================
+  // VIEW 2: CONFIG VIEWER (PDF, guide questions, input)
+  // ============================================================
   return (
     <div className="w-full space-y-6">
       {errorMessage && (
         <div className="w-full p-4 border rounded-xl bg-destructive/10 text-destructive text-sm font-medium">
           ⚠️ {errorMessage}
         </div>
+      )}
+
+      {/* Back button if adding more */}
+      {isAddingMore && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-1 h-7 text-xs"
+          onClick={() => {
+            setIsAddingMore(false);
+            setObservationText('');
+          }}
+        >
+          ← Back to Saved Observations
+        </Button>
       )}
 
       {/* Description */}
@@ -189,13 +251,16 @@ export function ObservationComponent({
         </div>
       )}
 
-      {/* Input Area - Just the task input */}
+      {/* Input Area */}
       <div className="w-full space-y-3">
         <Label className="text-sm font-semibold text-foreground">
-          Record Your Observations
+          {hasSavedObservation ? 'Add More Observations' : 'Record Your Observations'}
         </Label>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Write down what you observed. You can also share this with Kip in the sidebar for guidance.
+          {hasSavedObservation 
+            ? 'Add to your existing observations. You can also review what you previously wrote above.'
+            : 'Write down what you observed. You can also share this with Kip in the sidebar for guidance.'
+          }
         </p>
         <Textarea
           placeholder="Type your observations here..."
@@ -211,6 +276,8 @@ export function ObservationComponent({
         >
           {isSubmitting ? (
             'Saving...'
+          ) : hasSavedObservation ? (
+            'Add to Observations'
           ) : (
             'Save Observations'
           )}

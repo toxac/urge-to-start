@@ -1,8 +1,10 @@
+// actions/ai.ts
+
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
 import { executeKipConductor } from '@/lib/ai/conductor';
-import { urgePlaybook } from '@/lib/playbook'; // ⚡ Unified playbook entry point
+import { urgePlaybook } from '@/lib/playbook';
 import { z } from 'zod';
 
 const CritiqueOutputContract = z.object({
@@ -14,12 +16,24 @@ const CritiqueOutputContract = z.object({
   realWorldExecutionAdvice: z.array(z.string()),
 });
 
+// Schema for observation analysis output
+export const ObservationAnalysisContract = z.object({
+  pattern_recognition: z.string(),
+  deeper_questions: z.array(z.string()),
+  potential_opportunities: z.array(z.string()),
+  encouragement: z.string(),
+  next_steps: z.string(),
+});
+
+export type ObservationAnalysis = z.infer<typeof ObservationAnalysisContract>;
+
 interface ActionParams {
   taskId?: string;
   questId?: string;
   missionId?: string;
-  contextType: 'prerequisite_expansion' | 'resource_summary' | 'retrospective_synthesis';
-  userInputText?: string; // Replaces promptKey for cache tracking
+  contextType: 'prerequisite_expansion' | 'resource_summary' | 'retrospective_synthesis' | 'observation_analysis';
+  userInputText?: string;
+  additionalContext?: Record<string, any>;
 }
 
 export async function analyzeUserMessageDraft(scenario: string, userDraft: string, userProfile: any) {
@@ -29,7 +43,7 @@ export async function analyzeUserMessageDraft(scenario: string, userDraft: strin
     skills: ["Master Communicator", "Persuasion Strategist", "Human Behavior Expert"],
     userContext: {
       user_name: userProfile?.full_name,
-      schedule_config: userProfile?.schedule_config // Aligned with upgraded schema
+      schedule_config: userProfile?.schedule_config
     },
     prompt: `
       The user is testing out a message draft for this specific scenario: "${scenario}".
@@ -67,6 +81,7 @@ export async function executeSidebarConductorAction(params: ActionParams) {
 
   let dynamicPrompt = '';
   let activeSkills: string[] = ['Strategic Advisory'];
+  let responseSchema: z.ZodSchema<any> | undefined = undefined;
 
   // 2. ORCHESTRATE CONTEXT-AWARE SYSTEM DIRECTIONS
   switch (params.contextType) {
@@ -74,7 +89,6 @@ export async function executeSidebarConductorAction(params: ActionParams) {
     case 'prerequisite_expansion': {
       const targetPrereq = currentMission.prerequisites?.find(p => p.item === params.userInputText);
       
-      // Pull embedded raw text prompt with fallback
       dynamicPrompt = targetPrereq?.promptRawText || 
         `Provide a helpful, casual explanation of why a builder needs: "${params.userInputText}".`;
       
@@ -123,6 +137,55 @@ export async function executeSidebarConductorAction(params: ActionParams) {
       break;
     }
 
+    case 'observation_analysis': {
+      if (!params.questId || !params.taskId || !params.userInputText) {
+        return { success: false, error: 'Incomplete observation details.' };
+      }
+
+      const currentQuest = currentMission.quests?.[params.questId];
+      const currentTask = currentQuest?.tasks?.find(t => t.id === params.taskId);
+      
+      // Get analysis prompt from task config or use default
+      const analysisPrompt = params.additionalContext?.analysisPrompt || currentTask?.ai_config?.observation_analysis_prompt;
+      const guideQuestions = params.additionalContext?.guideQuestions || currentTask?.observation_config?.guide_questions || [];
+
+      dynamicPrompt = `
+        ACT AS PERSONA: "${currentQuest?.ai_config?.persona_name || 'The Observer'}".
+        
+        ${analysisPrompt || `
+          You are Kip, a grounded mentor helping an entrepreneur reflect on their real-world observations.
+          
+          The user has just completed an observation period for the task: "${currentTask?.title}".
+          
+          Your job:
+          1. Listen carefully to what they observed
+          2. Identify patterns across their observations
+          3. Help them see connections between different observations
+          4. Ask deeper questions that help them notice more
+          5. Help them distinguish between minor annoyances and real business opportunities
+          6. Don't judge their observations—all observations are valuable data
+          7. Keep it conversational and supportive—like a friend helping you think through something
+          8. Don't give them the answers—ask questions that help them discover insights themselves
+        `}
+        
+        The user shared these observations:
+        "${params.userInputText}"
+        
+        ${guideQuestions.length > 0 ? `Reference these guiding questions: ${guideQuestions.join(', ')}` : ''}
+        
+        Please respond with a structured analysis that includes:
+        1. Pattern recognition: What themes or patterns do you see?
+        2. Deeper questions: What would help them understand this better?
+        3. Potential opportunities: Where could this lead?
+        4. Encouragement: Acknowledge their effort
+        5. Next steps: What should they do with this insight?
+      `;
+
+      activeSkills = ['OBSERVATION_ANALYSIS', 'PATTERN_RECOGNITION', 'COACHING'];
+      responseSchema = ObservationAnalysisContract;
+      break;
+    }
+
     default:
       return { success: false, error: 'Unsupported operation context.' };
   }
@@ -131,7 +194,8 @@ export async function executeSidebarConductorAction(params: ActionParams) {
   const aiResponse = await executeKipConductor({
     model: 'deepseek-chat',
     skills: activeSkills,
-    prompt: dynamicPrompt
+    prompt: dynamicPrompt,
+    responseSchema: responseSchema
   });
 
   // 4. PERSIST TO LOG TABLE IF SUCCESSFUL
@@ -139,9 +203,11 @@ export async function executeSidebarConductorAction(params: ActionParams) {
     await supabase.from('ai_logs').insert({
       user_id: user.id,
       mission_id: params.missionId,
+      quest_id: params.questId || null,
+      task_id: params.taskId || null,
       context_type: params.contextType,
       user_input: params.userInputText,
-      generated_output: aiResponse.data // Pure string response mapped safely
+      generated_output: aiResponse.data
     });
   }
 
