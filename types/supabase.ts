@@ -935,6 +935,7 @@ export type Database = {
           id: string
           metadata_config: Json
           mission_id: string
+          observation_config: Json | null
           quest_id: string
           sequence: number
           title: string
@@ -952,6 +953,7 @@ export type Database = {
           id: string
           metadata_config?: Json
           mission_id: string
+          observation_config?: Json | null
           quest_id: string
           sequence: number
           title: string
@@ -969,6 +971,7 @@ export type Database = {
           id?: string
           metadata_config?: Json
           mission_id?: string
+          observation_config?: Json | null
           quest_id?: string
           sequence?: number
           title?: string

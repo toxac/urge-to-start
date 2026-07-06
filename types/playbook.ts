@@ -1,5 +1,5 @@
-export type TaskType = 'form' | 'simulator' | 'log_counter' | 'action' | 'community';
-export type RecommendationType = 'blog' | 'internal_link' | 'youtube' | 'podcast' | 'book' | 'challenge';
+export type TaskType = 'form' | 'simulator' | 'log_counter' | 'action' | 'community' |'observation' ;
+export type RecommendationType = 'blog' | 'internal_link' | 'youtube' | 'podcast' | 'book' | 'challenge'| 'download';
 
 export interface TaskRecommendation {
   title: string;
@@ -9,9 +9,18 @@ export interface TaskRecommendation {
 }
 
 export interface TaskAiConfig {
-  recommendations?: TaskRecommendation[]; 
-  challenge?: string;                    
-  reflection_prompt?: string;            
+  recommendations?: TaskRecommendation[];                   
+  reflection_prompt?: string;   
+  observation_prompt?: string;       // NEW: Question to prompt user input
+  observation_analysis_prompt?: string; // NEW: What Kip should do with the input         
+}
+
+export interface ObservationConfig {
+  pdf_url?: string;               // Link to downloadable PDF worksheet
+  guide_questions?: string[];     // Questions to guide observation
+  min_observations?: number;      // Minimum observations to aim for
+  observation_period_days?: number; // How many days to observe
+  description?: string;            // Optional description for the observation task
 }
 
 export interface Task {
@@ -28,6 +37,7 @@ export interface Task {
   checkback_delay_days?: number;                
   metadata_config?: Record<string, any>;
   ai_config?: TaskAiConfig; 
+  observation_config?: ObservationConfig;
 }
 
 export interface AiConfig {

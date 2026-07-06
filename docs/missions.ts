@@ -444,7 +444,7 @@ export const urgePlaybook = {
     }
   },
   mission3: {
-    title: "Check Your Project's Viability",
+    title: "Project's Viability",
     sequence: 3,
     video_url: "https://urgetostart.com/videos/m3-overview.mp4",
     briefing_text: "Transform a vague problem space into an unshakeable profile structure with direct, actionable math.",

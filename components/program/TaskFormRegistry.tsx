@@ -3,6 +3,7 @@
 import React from 'react';
 import { Database } from '@/types/supabase';
 import { TaskComponentMap } from './tasks';
+import { ObservationConfig } from '@/types/playbook';
 
 type TaskRow = Database['public']['Tables']['tasks']['Row'];
 
@@ -75,6 +76,7 @@ export function TaskFormRegistry({ task, userId, existingProgress, onSuccess }: 
           userId={userId}
           existingProgress={existingProgress}
           onSuccess={onSuccess}
+          observationConfig={task.observation_config as ObservationConfig | undefined}
         />
       </div>
     </div>

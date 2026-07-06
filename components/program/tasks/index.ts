@@ -6,6 +6,7 @@ import { ConstraintForm } from './ConstraintForm';
 import { AskSimulator } from './AskSimulator';
 import { KnownReachoutWidget } from './KnownReachoutWidget';
 import { DigitalPresenceWidget } from './DigitalPresenceWidget';
+import { ObservationComponent } from './ObservationComponent';
 
 export const TaskComponentMap: Record<string, React.ComponentType<any>> = {
   ProfileSetupForm: ProfileSetupForm,
@@ -13,5 +14,6 @@ export const TaskComponentMap: Record<string, React.ComponentType<any>> = {
   ConstraintForm: ConstraintForm,
   AskSimulator: AskSimulator,
   KnownReachoutWidget: KnownReachoutWidget,
-  DigitalPresenceWidget: DigitalPresenceWidget
+  DigitalPresenceWidget: DigitalPresenceWidget,
+  ObservationComponent: ObservationComponent,
 };
