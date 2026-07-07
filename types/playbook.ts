@@ -1,5 +1,6 @@
 export type TaskType = 'form' | 'simulator' | 'log_counter' | 'action' | 'community' |'observation' ;
 export type RecommendationType = 'blog' | 'internal_link' | 'youtube' | 'podcast' | 'book' | 'challenge'| 'download';
+export type RecurrenceInterval = 'daily' | 'weekly' | 'monthly' | 'quarterly';
 
 export interface TaskRecommendation {
   title: string;
@@ -37,6 +38,8 @@ export interface Task {
   checkback_delay_days?: number;                
   metadata_config?: Record<string, any>;
   ai_config?: TaskAiConfig; 
+  recurring?: boolean;              // Whether this task repeats
+  interval?: RecurrenceInterval
   observation_config?: ObservationConfig;
 }
 
