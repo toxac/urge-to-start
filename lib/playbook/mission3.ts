@@ -191,10 +191,10 @@ export const mission3: Mission = {
       slug: "the-rules-of-the-game",
       title: "The Rules of the Game",
       subtitle: "Understand what permissions and policies you need",
-      description: "Every business has rules. Some are simple, some are complex. The key is knowing what you need BEFORE you start, so you don't get surprised later. In this quest, we'll figure out what permissions you need and what policies you should have in place.",
+      description: "Every business has rules. Some are simple, some are complex. The key is knowing what you need BEFORE you start, so you don't get surprised later. Answer a few questions about your business, and we'll generate a personalized compliance checklist showing you exactly what you need to handle—and what can wait.",
       sequence: 3,
-      estimated_in_app_minutes: 45,
-      estimated_off_app_minutes: 60,
+      estimated_in_app_minutes: 60,
+      estimated_off_app_minutes: 30,
       content_path: "content/mission3/quests/the-rules-of-the-game.md",
       ai_config: {
         role: "SYSTEM_CONDUCTOR",
@@ -202,60 +202,45 @@ export const mission3: Mission = {
         persona_prompt: "You are a practical business advisor. Help the user understand what permissions and policies they need. Be realistic—tell them what they need NOW versus what can wait. Don't scare them, but don't sugarcoat it either.",
         required_context: ["user_profiles", "projects"],
         on_success: {
-          grant_points: 50,
+          grant_points: 75,
           badge_key: "RULE_AWARE"
         }
       },
       tasks: [
         {
-          id: "m3_q3_t1_permission_checker",
-          title: "What permissions do you need?",
+          id: "m3_q3_t1_compliance_checklist",
+          title: "Your compliance checklist",
           sequence: 1,
           type: "form",
-          component_key: "PermissionChecker",
-          grant_points: 20,
-          estimated_minutes: 25,
-          description: "Describe your project—what you're building, where you are, and who you're serving. The AI will generate a personalized checklist of permissions you need: licenses, registrations, insurance, etc. It'll also tell you what you DON'T need yet, and at what stage you'll need it.",
+          component_key: "ComplianceChecklist",
+          grant_points: 40,
+          estimated_minutes: 45,
+          description: "We'll ask you a few questions about your business—what you're building, where, how, and at what scale. Then we'll generate a personalized compliance checklist showing you exactly what permissions, registrations, and policies you need to handle, and what can wait until later.",
           ai_config: {
             recommendations: [
               { title: "Common Business Permissions by Industry", type: "blog", path_or_url: "content/blog/common-permissions.md", subtitle: "6 min read" },
-              { title: "What Permissions Can Wait?", type: "blog", path_or_url: "content/blog/permissions-that-can-wait.md", subtitle: "4 min read" }
-            ],
-            // AI will handle this directly in component
+              { title: "What Permissions Can Wait?", type: "blog", path_or_url: "content/blog/permissions-that-can-wait.md", subtitle: "4 min read" },
+              { title: "Business Registration Guide (PDF)", type: "download", path_or_url: "/resources/business-registration-guide.pdf" }
+            ]
+            // Component handles everything internally
           }
         },
         {
-          id: "m3_q3_t2_policy_checker",
-          title: "What policies do you need?",
+          id: "m3_q3_t2_go_nogo_decision",
+          title: "Make your go/no-go decision",
           sequence: 2,
           type: "form",
-          component_key: "PolicyChecker",
-          grant_points: 15,
-          estimated_minutes: 20,
-          description: "Describe what you're selling, what data you're collecting, and where your customers are. The AI will generate a checklist of policies you need: privacy policy, terms of service, refund policy, etc. It'll also tell you what can wait until later.",
-          ai_config: {
-            recommendations: [
-              { title: "Essential Policies for Online Businesses", type: "blog", path_or_url: "content/blog/essential-policies.md", subtitle: "5 min read" },
-              { title: "Privacy Policy Basics", type: "blog", path_or_url: "content/blog/privacy-policy-basics.md", subtitle: "4 min read" }
-            ],
-            // AI will handle this directly in component
-          }
-        },
-        {
-          id: "m3_q3_t3_go_nogo_decision",
-          title: "Make your go/no-go decision",
-          sequence: 3,
-          type: "form",
-          component_key: "PermissionGoNoGo",
-          grant_points: 15,
+          component_key: "ComplianceGoNoGo",
+          grant_points: 35,
           estimated_minutes: 15,
-          description: "Now you have the full picture. Look at everything: what permissions you need, what policies you need, the cost and time involved, what can wait. Have you found everything out? Does this seem doable? Or is it too complicated for where you are right now?",
+          description: "Now that you've gone through the compliance checklist, look at everything: what's required, what's optional, what can wait. Does this seem doable? Is it too complicated for where you are right now? Make your decision and commit to it.",
           ai_config: {
             recommendations: [
               { title: "When to Walk Away from an Idea", type: "blog", path_or_url: "content/blog/when-to-walk-away.md", subtitle: "5 min read" },
-              { title: "It's Okay to Pivot", type: "blog", path_or_url: "content/blog/its-okay-to-pivot.md", subtitle: "4 min read" }
+              { title: "It's Okay to Pivot", type: "blog", path_or_url: "content/blog/its-okay-to-pivot.md", subtitle: "4 min read" },
+              { title: "Sunk Cost Fallacy: Why You Should Quit Sometimes", type: "blog", path_or_url: "content/blog/sunk-cost-fallacy.md", subtitle: "4 min read" }
             ],
-            // If user chooses to restart, redirect to Mission 2, Quest 4
+            // If user chooses to restart, redirect to Mission 2, Quest 4, Task 3 (Project Selection)
           }
         }
       ]
