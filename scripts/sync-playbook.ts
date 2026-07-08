@@ -1,8 +1,9 @@
+// scripts/sync-playbook.ts
 import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
 import { PlaybookConfig } from '../types/playbook';
-import { urgePlaybook } from '../lib/playbook'; // ⚡ FIXED: Resolves from your unified folder setup
+import { urgePlaybook } from '../lib/playbook';
 import { createAdminClient } from '@/lib/supabase/admin';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -26,7 +27,7 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
   const supabase = await createAdminClient();
 
   // 1. CLEAR STALE CONFIGURATIONS
-  console.log(' sweep: Emptying stale system rows across tables...');
+  console.log('🧹 sweep: Emptying stale system rows across tables...');
   
   const { error: clearTasksErr } = await supabase.from('tasks').delete().neq('id', 'placeholder_dummy_row_token');
   if (clearTasksErr) console.warn('Note on task clear run execution:', clearTasksErr.message);
@@ -44,17 +45,22 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
     const missionFolderPath = `content/missions/${missionKey}`;
     const missionMarkdownPath = `${missionFolderPath}/mission.md`;
 
-    mission.briefing_markdown = readMarkdownSafe(missionMarkdownPath);
+    // ⚡ FIXED: Read content from markdown file
+    const markdownContent = readMarkdownSafe(missionMarkdownPath);
+    
     console.log(`\n📦 Processing Mission: ${mission.title} (Sequence ${mission.sequence})`);
 
+    // ⚡ FIXED: Include all mission fields including prerequisites
     const { data: dbMission, error: missionError } = await supabase
       .from('missions')
       .upsert({
-        id: missionKey,
+        id: mission.id || missionKey,
         title: mission.title,
         sequence: mission.sequence,
         video_url: mission.video_url,
-        content: mission.briefing_markdown || mission.briefing_text 
+        content: markdownContent || mission.briefing_text || '',
+        briefing_text: mission.briefing_text || null,
+        prerequisites: mission.prerequisites || null,
       })
       .select('id')
       .single();
@@ -67,15 +73,14 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
     mission.db_id = dbMission.id;
 
     for (const [questKey, quest] of Object.entries(mission.quests)) {
-      const questId = `${missionKey}_${questKey}`;
-      const strictPhysicalPath = `content/missions/${missionKey}/quests/${quest.slug}.md`;
+      // ⚡ FIXED: Use quest.id if available, otherwise construct from missionKey + questKey
+      const questId = quest.id || `${missionKey}_${questKey}`;
+      const strictPhysicalPath = quest.content_path || `content/missions/${missionKey}/quests/${quest.slug}.md`;
       
-      quest.content_path = strictPhysicalPath;
-      quest.content_markdown = readMarkdownSafe(quest.content_path);
+      // Read content from markdown file
+      const markdownContent = readMarkdownSafe(strictPhysicalPath);
 
-      let badgeRewardKey: string | undefined = quest.ai_config.on_success.badge_key;
-
-      // ⚡ SCHEMA ALIGNED: Maps description, plus duration columns to your live quests schema
+      // ⚡ FIXED: Use quest fields directly, not from ai_config
       const { data: dbQuest, error: questError } = await supabase
         .from('quests')
         .upsert({
@@ -84,17 +89,17 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
           slug: quest.slug,
           title: quest.title,
           subtitle: quest.subtitle,
-          description: quest.description || '', 
+          description: quest.description || '',
           sequence: quest.sequence,
-          content: quest.content_markdown || quest.subtitle, 
+          content: markdownContent || quest.content || '',
           is_optional: quest.is_optional || false,
-          persona_name: quest.ai_config.persona_name,
-          persona_prompt: quest.ai_config.persona_prompt,
-          required_context: quest.ai_config.required_context,
-          grant_points_bonus: quest.ai_config.on_success.grant_points,
-          badge_key_reward: badgeRewardKey || null,
-          estimated_in_app_minutes: quest.estimated_in_app_minutes || 0,   
-          estimated_off_app_minutes: quest.estimated_off_app_minutes || 0  
+          persona_name: quest.persona_name,
+          persona_prompt: quest.persona_prompt,
+          required_context: quest.required_context || [],
+          grant_points_bonus: quest.grant_points_bonus || 0,
+          badge_key_reward: quest.badge_key_reward || null,
+          estimated_in_app_minutes: quest.estimated_in_app_minutes || 0,
+          estimated_off_app_minutes: quest.estimated_off_app_minutes || 0,
         })
         .select('id, badge_key_reward')
         .single();
@@ -105,13 +110,9 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
       }
 
       quest.db_id = dbQuest.id;
-      if (dbQuest.badge_key_reward) {
-        quest.ai_config.on_success.badge_db_id = dbQuest.badge_key_reward;
-      }
 
       for (const task of quest.tasks) {
-        // ⚡ SCHEMA ALIGNED: Dropped the estimated_minutes property from the record input 
-        // to match your live table definition exactly and avoid database compilation faults.
+        // ⚡ FIXED: Include all task fields including JSON fields
         const { data: dbTask, error: taskError } = await supabase
           .from('tasks')
           .upsert({
@@ -122,11 +123,17 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
             type: task.type,
             component_key: task.component_key,
             sequence: task.sequence,
+            estimated_minutes: task.estimated_minutes || 0,
             grant_points: task.grant_points,
             description: task.description || '',
-            execution_environment: task.execution_environment || 'on_app',
-            checkback_delay_days: task.checkback_delay_days || 0,
-            metadata_config: task.metadata_config || {}
+            execution_environment: task.execution_environment || null,
+            checkback_delay_days: task.checkback_delay_days || null,
+            recurring: task.recurring || null,
+            interval: task.interval || null,
+            // ⚡ JSON fields - properly typed
+            ai_config: task.ai_config || null,
+            observation_config: task.observation_config || null,
+            metadata_config: task.metadata_config || {},
           })
           .select('id')
           .single();
