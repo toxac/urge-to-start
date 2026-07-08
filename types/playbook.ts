@@ -1,46 +1,44 @@
-export type TaskType = 'form' | 'simulator' | 'log_counter' | 'action' | 'community' |'observation' ;
-export type RecommendationType = 'blog' | 'internal_link' | 'youtube' | 'podcast' | 'book' | 'challenge'| 'download';
-export type RecurrenceInterval = 'daily' | 'weekly' | 'monthly' | 'quarterly';
+// types/playbook.ts
+import { Database, Tables, TablesInsert, Enums } from '@/types/supabase';
 
+// ⚡ Directly use database table row types
+type MissionRow = Tables<'missions'>;
+type QuestRow = Tables<'quests'>;
+type TaskRow = Tables<'tasks'>;
+
+// ⚡ Reuse database enums
+export type TaskType = Enums<'task_execution_type'>; 
+// 'form' | 'simulator' | 'log_counter' | 'action' | 'community' | 'observation'
+
+export type RecommendationType = Enums<'recommendation_type'>;
+// 'blog' | 'internal_link' | 'youtube' | 'podcast' | 'book' | 'challenge' | 'download'
+
+export type RecurrenceInterval = Enums<'recurrence_interval'>;
+// 'daily' | 'weekly' | 'monthly' | 'quarterly'
+
+// ⚡ Custom types that will be stored as JSON in the database
 export interface TaskRecommendation {
   title: string;
   type: RecommendationType;
-  path_or_url: string; 
-  subtitle?: string;   
+  path_or_url: string;
+  subtitle?: string;
 }
 
+// ⚡ Custom types that will be stored as JSON in the database
 export interface TaskAiConfig {
-  recommendations?: TaskRecommendation[];                   
-  reflection_prompt?: string;   
-  observation_prompt?: string;       // NEW: Question to prompt user input
-  observation_analysis_prompt?: string; // NEW: What Kip should do with the input         
+  recommendations?: TaskRecommendation[];
+  reflection_prompt?: string;
+  observation_prompt?: string;
+  observation_analysis_prompt?: string;
 }
 
+// ⚡ Custom types that will be stored as JSON in the database
 export interface ObservationConfig {
-  pdf_url?: string;               // Link to downloadable PDF worksheet
-  guide_questions?: string[];     // Questions to guide observation
-  min_observations?: number;      // Minimum observations to aim for
-  observation_period_days?: number; // How many days to observe
-  description?: string;            // Optional description for the observation task
-}
-
-export interface Task {
-  db_id?: string; 
-  id: string; 
-  title: string;
-  type: TaskType;
-  component_key: string;
-  sequence: number;
-  estimated_minutes: number;
-  grant_points: number;
+  pdf_url?: string;
+  guide_questions?: string[];
+  min_observations?: number;
+  observation_period_days?: number;
   description?: string;
-  execution_environment?: 'on_app' | 'off_app'; 
-  checkback_delay_days?: number;                
-  metadata_config?: Record<string, any>;
-  ai_config?: TaskAiConfig; 
-  recurring?: boolean;              // Whether this task repeats
-  interval?: RecurrenceInterval
-  observation_config?: ObservationConfig;
 }
 
 export interface AiConfig {
@@ -57,38 +55,36 @@ export interface AiConfig {
   };
 }
 
-export interface Quest {
-  db_id?: string; 
-  slug: string;
-  title: string;
-  subtitle: string;
-  description: string; 
-  sequence: number;
-  content_path: string; 
-  estimated_in_app_minutes: number;  
-  estimated_off_app_minutes: number; 
-  content_markdown?: string; 
-  is_optional?: boolean;
-  ai_config: AiConfig;
-  tasks: Task[];
-}
-
 export interface MissionPrerequisite {
   item: string;
   promptRawText?: string | null; 
 }
 
-export interface Mission {
-  db_id?: string; 
-  title: string;
-  sequence: number;
-  video_url: string;
-  content_path: string; 
-  briefing_text: string;
-  briefing_markdown?: string; 
-  prerequisites: MissionPrerequisite[]; 
-  // ⚡ FIXED: Explicitly typed as a flexible Record string mapping to match mission1 template keys
-  quests: Record<string, Quest>; 
+export interface Task extends Omit<TaskRow, 'ai_config' | 'observation_config' | 'metadata_config' | 'recommendations' | 'created_at' | 'updated_at'> {
+  // Override JSON fields with typed versions
+  ai_config: TaskAiConfig | null;
+  observation_config: ObservationConfig | null;
+  metadata_config: Record<string, any>;
+  // ⚡ interval already uses the enum type from the database
+  // No need to override it - it's already RecurrenceInterval | null
+}
+
+export interface Quest extends Omit<QuestRow, 'created_at' | 'updated_at'> {
+  // ⚡ Playbook-only fields (not in database)
+  content_path: string;
+  tasks: Task[];
+}
+
+
+
+// ⚡ MISSION: Extends database row
+export interface Mission extends Omit<MissionRow, 'prerequisites' | 'created_at' | 'updated_at'> {
+  // Override JSON field with typed version that's compatible with Json
+  prerequisites: MissionPrerequisite[] | null;
+  
+  // ⚡ Playbook-only fields (not in database)
+  content_path: string;
+  quests: Record<string, Quest>;
 }
 
 // ⚡ MASTER TYPE: Maps your overarching mission keys (e.g., 'mission1') smoothly

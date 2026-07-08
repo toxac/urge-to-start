@@ -515,27 +515,33 @@ export type Database = {
       }
       missions: {
         Row: {
+          briefing_text: string | null
           content: string
           created_at: string
           id: string
+          prerequisites: Json | null
           sequence: number
           title: string
           updated_at: string
           video_url: string
         }
         Insert: {
+          briefing_text?: string | null
           content: string
           created_at?: string
           id: string
+          prerequisites?: Json | null
           sequence: number
           title: string
           updated_at?: string
           video_url: string
         }
         Update: {
+          briefing_text?: string | null
           content?: string
           created_at?: string
           id?: string
+          prerequisites?: Json | null
           sequence?: number
           title?: string
           updated_at?: string
@@ -925,54 +931,63 @@ export type Database = {
       }
       tasks: {
         Row: {
+          ai_config: Json | null
           checkback_delay_days: number | null
           component_key: string
           created_at: string
           description: string
-          estimated_minutes: number | null
+          estimated_minutes: number
           execution_environment: string | null
           grant_points: number
           id: string
+          interval: Database["public"]["Enums"]["recurrence_interval"] | null
           metadata_config: Json
           mission_id: string
           observation_config: Json | null
           quest_id: string
+          recurring: boolean | null
           sequence: number
           title: string
           type: Database["public"]["Enums"]["task_execution_type"]
           updated_at: string
         }
         Insert: {
+          ai_config?: Json | null
           checkback_delay_days?: number | null
           component_key: string
           created_at?: string
           description?: string
-          estimated_minutes?: number | null
+          estimated_minutes?: number
           execution_environment?: string | null
           grant_points?: number
           id: string
+          interval?: Database["public"]["Enums"]["recurrence_interval"] | null
           metadata_config?: Json
           mission_id: string
           observation_config?: Json | null
           quest_id: string
+          recurring?: boolean | null
           sequence: number
           title: string
           type: Database["public"]["Enums"]["task_execution_type"]
           updated_at?: string
         }
         Update: {
+          ai_config?: Json | null
           checkback_delay_days?: number | null
           component_key?: string
           created_at?: string
           description?: string
-          estimated_minutes?: number | null
+          estimated_minutes?: number
           execution_environment?: string | null
           grant_points?: number
           id?: string
+          interval?: Database["public"]["Enums"]["recurrence_interval"] | null
           metadata_config?: Json
           mission_id?: string
           observation_config?: Json | null
           quest_id?: string
+          recurring?: boolean | null
           sequence?: number
           title?: string
           type?: Database["public"]["Enums"]["task_execution_type"]
@@ -1297,12 +1312,22 @@ export type Database = {
         | "project_launch"
       program_item_type: "mission" | "quest" | "task"
       progress_status: "not_started" | "in_progress" | "completed"
+      recommendation_type:
+        | "blog"
+        | "internal_link"
+        | "youtube"
+        | "podcast"
+        | "book"
+        | "challenge"
+        | "download"
+      recurrence_interval: "daily" | "weekly" | "monthly" | "quarterly"
       task_execution_type:
         | "form"
         | "simulator"
         | "log_counter"
         | "action"
         | "community"
+        | "observation"
       transaction_status: "pending" | "completed" | "failed" | "refunded"
       user_age_group:
         | "under_18"
@@ -1511,12 +1536,23 @@ export const Constants = {
       ],
       program_item_type: ["mission", "quest", "task"],
       progress_status: ["not_started", "in_progress", "completed"],
+      recommendation_type: [
+        "blog",
+        "internal_link",
+        "youtube",
+        "podcast",
+        "book",
+        "challenge",
+        "download",
+      ],
+      recurrence_interval: ["daily", "weekly", "monthly", "quarterly"],
       task_execution_type: [
         "form",
         "simulator",
         "log_counter",
         "action",
         "community",
+        "observation",
       ],
       transaction_status: ["pending", "completed", "failed", "refunded"],
       user_age_group: [
