@@ -1,3 +1,4 @@
+// components/program/tasks/ProfileSetupForm.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -18,6 +19,7 @@ import { updateMyProfile } from '@/actions/profiles';
 import { completeTaskExecution } from '@/actions/progress';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
 import { updateProfileStoreFields } from '@/lib/stores/profileStore';
+import { BaseTaskComponentProps } from './types';
 
 // Custom Akar Brand Icons
 import { LinkedinBoxFillIcon } from '@/components/icons/akar-icons-linkedin-box-fill';
@@ -56,21 +58,11 @@ interface SocialProfileNode {
 interface ProfileFormInputs {
   description: string;
   avatar_url: string;
-  gender: string; // ⚡ ADDED TO INTERFACE
+  gender: string;
   socials: SocialProfileNode[];
 }
 
-interface ProfileSetupFormProps {
-  taskId: string;
-  userId: string;
-  existingProgress?: {
-    status: string;
-    saved_payload?: any;
-  };
-  onSuccess?: () => void;
-}
-
-export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }: ProfileSetupFormProps) {
+export function ProfileSetupForm({ task, userId, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -85,7 +77,7 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
     defaultValues: {
       description: preSavedPayload.description || '',
       avatar_url: preSavedPayload.avatar_url || '',
-      gender: preSavedPayload.gender || '', // ⚡ DEFAULT VALUE
+      gender: preSavedPayload.gender || '',
       socials: preSavedPayload.socials || [],
     }
   });
@@ -159,7 +151,7 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
       const profileSync = await updateMyProfile({
         avatar_url: formData.avatar_url,
         description: formData.description,
-        gender: formData.gender, // ⚡ PASSED DOWN TO UPDATE ACTION HELPER
+        gender: formData.gender,
       } as any);
 
       if (!profileSync.success) {
@@ -173,7 +165,7 @@ export function ProfileSetupForm({ taskId, userId, existingProgress, onSuccess }
       }
 
       const progressSync = await completeTaskExecution({
-        taskId,
+        taskId: task.id, // ✅ Using task.id
         savedPayload: formData as Record<string, any>
       });
 
@@ -424,7 +416,6 @@ interface SubFormProps {
   onOpenChange: (url: string, followers?: number, customName?: string) => void;
 }
 
-// Fixed parameter naming mismatch here cleanly
 function SocialInputSubForm({ platform, initialData, onOpenChange }: SubFormProps) {
   const isOther = platform === 'other';
   const [urlVal, setUrlVal] = useState(initialData?.url || '');

@@ -1,3 +1,4 @@
+// components/program/tasks/KnownReachoutWidget.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -7,20 +8,12 @@ import { Button } from '@/components/ui/button';
 import { completeTaskExecution } from '@/actions/progress';
 import { Copy, Check, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
+import { BaseTaskComponentProps } from './types';
 
-interface KnownReachoutWidgetProps {
-  taskId: string;
-  existingProgress?: {
-    status: 'pending' | 'completed';
-  };
-  onSuccess?: () => void;
-}
-
-export function KnownReachoutWidget({ taskId, existingProgress, onSuccess }: KnownReachoutWidgetProps) {
+export function KnownReachoutWidget({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
   
-  // Reactively track the unified global progress store map
   const progressCache = useStore($progressStore);
   const isCompleted = existingProgress?.status === 'completed';
 
@@ -43,12 +36,11 @@ export function KnownReachoutWidget({ taskId, existingProgress, onSuccess }: Kno
     setIsSubmitting(true);
     try {
       const sync = await completeTaskExecution({
-        taskId,
+        taskId: task.id, // ✅ Using task.id
         savedPayload: { hasSharedWithCircle: true }
       });
 
       if (sync.success) {
-        // Feed the raw returning row data straight into the store helper on success
         if (sync.data) {
           setProgressStoreRow(sync.data as any);
         }

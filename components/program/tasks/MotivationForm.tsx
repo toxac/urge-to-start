@@ -1,3 +1,4 @@
+// components/program/tasks/MotivationForm.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -9,6 +10,7 @@ import { updateMyProfile } from '@/actions/profiles';
 import { completeTaskExecution } from '@/actions/progress';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
 import { updateProfileStoreFields } from '@/lib/stores/profileStore';
+import { BaseTaskComponentProps } from './types';
 
 interface MotivationFormInputs {
   core_focus: string;
@@ -16,16 +18,7 @@ interface MotivationFormInputs {
   anti_goal: string;
 }
 
-interface MotivationFormProps {
-  taskId: string;
-  existingProgress?: {
-    status: 'pending' | 'completed';
-    saved_payload?: any;
-  };
-  onSuccess?: () => void;
-}
-
-export function MotivationForm({ taskId, existingProgress, onSuccess }: MotivationFormProps) {
+export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -56,18 +49,16 @@ export function MotivationForm({ taskId, existingProgress, onSuccess }: Motivati
         return;
       }
 
-      // 1. Sync updated profile record out to subscribers instantly
       if (profileSync.data) {
         updateProfileStoreFields(profileSync.data as any);
       }
 
       const progressSync = await completeTaskExecution({
-        taskId,
+        taskId: task.id, // ✅ Using task.id
         savedPayload: formData as Record<string, any>
       });
 
       if (progressSync.success) {
-        // 2. Sync generic progress row item
         if (progressSync.data) {
           setProgressStoreRow(progressSync.data as any);
         }

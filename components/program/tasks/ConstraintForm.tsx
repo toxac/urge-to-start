@@ -1,3 +1,4 @@
+// components/program/tasks/ConstraintForm.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -9,20 +10,12 @@ import { updateMyProfile } from '@/actions/profiles';
 import { completeTaskExecution } from '@/actions/progress';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
 import { updateProfileStoreFields } from '@/lib/stores/profileStore';
+import { BaseTaskComponentProps } from './types';
 
 interface ConstraintFormInputs {
     weekly_hours: '2_5_hours' | '5_10_hours' | '10_20_hours' | '20_plus';
     time_slot: 'evenings' | 'weekends' | 'scraps';
     money_budget: number;
-}
-
-interface ConstraintFormProps {
-    taskId: string;
-    existingProgress?: {
-        status: 'pending' | 'completed';
-        saved_payload?: any;
-    };
-    onSuccess?: () => void;
 }
 
 const hoursLabels = {
@@ -38,11 +31,10 @@ const slotLabels = {
     scraps: 'Scrapping for bits of time whenever a gap opens up',
 };
 
-export function ConstraintForm({ taskId, existingProgress, onSuccess }: ConstraintFormProps) {
+export function ConstraintForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    // Light switch state to handle dynamic edit overrides seamlessly
     const isInitiallyCompleted = existingProgress?.status === 'completed';
     const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
 
@@ -69,18 +61,17 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
                 setIsSubmitting(false);
                 return;
             }
-            // 1. Cache profile timeline limitations locally for the ambient companion
+
             if (profileSync.data) {
                 updateProfileStoreFields(profileSync.data as any);
             }
 
             const progressSync = await completeTaskExecution({
-                taskId,
+                taskId: task.id, // ✅ Using task.id
                 savedPayload: formData as Record<string, any>
             });
 
             if (progressSync.success) {
-                // 2. Drop raw completed data node into state dictionary map
                 if (progressSync.data) {
                     setProgressStoreRow(progressSync.data as any);
                 }
@@ -96,7 +87,6 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
         }
     };
 
-    // VIEW NODE: READ-ONLY CANVAS DISPLAY IF SUBMITTED AND NOT EDITING
     if (!isEditing) {
         return (
             <div className="w-full space-y-4 border rounded-xl p-5 bg-emerald-50/20 border-emerald-500/10">
@@ -131,7 +121,6 @@ export function ConstraintForm({ taskId, existingProgress, onSuccess }: Constrai
         );
     }
 
-    // FORM INPUT NODE
     return (
         <div className="w-full space-y-5">
             {errorMessage && (

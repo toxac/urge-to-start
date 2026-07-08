@@ -1,3 +1,4 @@
+// components/program/tasks/AskSimulator.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -6,9 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { analyzeUserMessageDraft } from "@/actions/ai";
 import { completeTaskExecution } from "@/actions/progress";
-import { Loader2, Sparkles, RefreshCw, CheckCircle2, AlertTriangle, ArrowLeft, Copy } from "lucide-react";
+import { Loader2, Sparkles, CheckCircle2, AlertTriangle, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { BaseTaskComponentProps } from './types';
 
 const SCENARIOS = [
   { id: "friends_family", label: "✨ [Required] Asking friends and family for early support", context: "Talking to the people closest to you about your new journey. The goal is to get genuine encouragement, early sounding boards, or simple word-of-mouth help without making Sunday dinner awkward." },
@@ -17,16 +19,7 @@ const SCENARIOS = [
   { id: "custom", label: "Write your own unique scenario... (Optional)", context: "Describe any custom interaction or message intent you want to test out below..." }
 ];
 
-interface AskSimulatorProps {
-  taskId: string;
-  existingProgress?: {
-    status: 'pending' | 'completed';
-    saved_payload?: any;
-  };
-  onSuccess?: () => void;
-}
-
-export function AskSimulator({ taskId, existingProgress, onSuccess }: AskSimulatorProps) {
+export function AskSimulator({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const [scenarioId, setScenarioId] = useState("friends_family");
   const [draft, setDraft] = useState(existingProgress?.saved_payload?.userDraft || "");
   const [isPending, setIsPending] = useState(false);
@@ -68,13 +61,13 @@ export function AskSimulator({ taskId, existingProgress, onSuccess }: AskSimulat
     setIsPending(true);
     try {
       const sync = await completeTaskExecution({
-        taskId,
+        taskId: task.id, // ✅ Using task.id
         savedPayload: { userDraft: draft, aiFeedback: feedback, selectedScenario: scenarioId }
       });
 
       if (sync.success) {
         if (sync.data) {
-          setProgressStoreRow(sync.data as any); // Pass row directly
+          setProgressStoreRow(sync.data as any);
         }
         setIsEditing(false);
         if (onSuccess) onSuccess();
@@ -123,8 +116,7 @@ export function AskSimulator({ taskId, existingProgress, onSuccess }: AskSimulat
 
         {/* Score & Hook Banner */}
         <div className="w-full p-4 rounded-xl border bg-muted/30 flex flex-col sm:flex-row items-center gap-4">
-          <div className={`w-14 h-14 rounded-full border-2 bg-background flex items-center justify-center text-xl font-black shrink-0 ${feedback.score >= 8 ? 'text-emerald-500 border-emerald-500' : 'text-amber-500 border-amber-500'
-            }`}>
+          <div className={`w-14 h-14 rounded-full border-2 bg-background flex items-center justify-center text-xl font-black shrink-0 ${feedback.score >= 8 ? 'text-emerald-500 border-emerald-500' : 'text-amber-500 border-amber-500'}`}>
             {feedback.score}/10
           </div>
           <p className="text-sm font-medium text-foreground/80 leading-relaxed text-center sm:text-left">{feedback.summary}</p>

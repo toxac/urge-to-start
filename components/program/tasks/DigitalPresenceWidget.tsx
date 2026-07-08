@@ -1,3 +1,4 @@
+// components/program/tasks/DigitalPresenceWidget.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -6,16 +7,9 @@ import { Button } from '@/components/ui/button';
 import { completeTaskExecution } from '@/actions/progress';
 import { Globe, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { BaseTaskComponentProps } from './types';
 
-interface DigitalPresenceWidgetProps {
-  taskId: string;
-  existingProgress?: {
-    status: 'pending' | 'completed';
-  };
-  onSuccess?: () => void;
-}
-
-export function DigitalPresenceWidget({ taskId, existingProgress, onSuccess }: DigitalPresenceWidgetProps) {
+export function DigitalPresenceWidget({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isCompleted = existingProgress?.status === 'completed';
 
@@ -23,12 +17,11 @@ export function DigitalPresenceWidget({ taskId, existingProgress, onSuccess }: D
     setIsSubmitting(true);
     try {
       const sync = await completeTaskExecution({
-        taskId,
+        taskId: task.id, // ✅ Using task.id
         savedPayload: { hasClaimedVoice: true }
       });
 
       if (sync.success) {
-        // Feed raw returning row metadata straight into global store maps on success
         if (sync.data) {
           setProgressStoreRow(sync.data as any);
         }
