@@ -1,55 +1,33 @@
 // components/program/tasks/ObservationComponent.tsx
-
 'use client';
 
 import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Download, FileText, CheckCircle2, Plus, Edit2, Eye } from 'lucide-react';
+import { Download, FileText, CheckCircle2, Plus, Eye } from 'lucide-react';
 import { completeTaskExecution } from '@/actions/progress';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { BaseTaskComponentProps } from './types';
 
-interface ObservationComponentProps {
-  taskId: string;
-  userId: string;
-  existingProgress?: {
-    id: string;
-    status: 'not_started' | 'in_progress' | 'completed' | string;
-    saved_payload?: any;
-  };
-  onSuccess?: () => void;
-  observationConfig?: {
-    pdf_url?: string;
-    guide_questions?: string[];
-    min_observations?: number;
-    observation_period_days?: number;
-    description?: string;
-  };
-}
-
-export function ObservationComponent({
-  taskId,
-  userId,
-  existingProgress,
-  onSuccess,
-  observationConfig
-}: ObservationComponentProps) {
+export function ObservationComponent({ 
+  task, 
+  userId, 
+  existingProgress, 
+  onSuccess 
+}: BaseTaskComponentProps) {
   const [observationText, setObservationText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isAddingMore, setIsAddingMore] = useState(false);
 
+  const observationConfig = task.observation_config;
+
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const preSavedPayload = existingProgress?.saved_payload || {};
-  
-  // Check if we have saved observation data
   const hasSavedObservation = !!preSavedPayload.observationText;
-
-  // Determine which view to show
   const showConfigView = !hasSavedObservation || isAddingMore;
 
-  // Handle saving/updating observations
   const handleSaveObservations = useCallback(async () => {
     if (!observationText.trim()) return;
 
@@ -57,11 +35,10 @@ export function ObservationComponent({
     setErrorMessage(null);
 
     try {
-      // Merge with existing payload if any
       const existingPayload = existingProgress?.saved_payload || {};
       
       const progressSync = await completeTaskExecution({
-        taskId,
+        taskId: task.id,
         savedPayload: {
           ...existingPayload,
           observationText: observationText.trim(),
@@ -77,7 +54,6 @@ export function ObservationComponent({
         if (progressSync.data) {
           setProgressStoreRow(progressSync.data as any);
         }
-        // Reset adding more state and show viewer
         setIsAddingMore(false);
         if (onSuccess) onSuccess();
       } else {
@@ -88,18 +64,14 @@ export function ObservationComponent({
     } finally {
       setIsSubmitting(false);
     }
-  }, [observationText, taskId, observationConfig, onSuccess, existingProgress]);
+  }, [observationText, task.id, observationConfig, onSuccess, existingProgress]);
 
-  // Handle PDF download
   const handleDownloadPDF = useCallback(() => {
     if (observationConfig?.pdf_url) {
       window.open(observationConfig.pdf_url, '_blank');
     }
   }, [observationConfig?.pdf_url]);
 
-  // ============================================================
-  // VIEW 1: OBSERVATION VIEWER (Shows saved data)
-  // ============================================================
   if (hasSavedObservation && !showConfigView) {
     return (
       <div className="w-full space-y-4">
@@ -113,9 +85,7 @@ export function ObservationComponent({
           <div className="flex items-center justify-between pb-3 border-b border-dashed border-emerald-500/20">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span className="text-xs font-bold text-emerald-600">
-                Observations Saved
-              </span>
+              <span className="text-xs font-bold text-emerald-600">Observations Saved</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-medium text-muted-foreground">
@@ -129,21 +99,18 @@ export function ObservationComponent({
             </div>
           </div>
 
-          {/* Saved Observation Content */}
           <div className="mt-4 p-4 rounded-lg bg-background border border-border/50">
             <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">
               {preSavedPayload.observationText}
             </p>
           </div>
 
-          {/* Action Buttons */}
           <div className="mt-4 flex flex-col sm:flex-row gap-2">
             <Button
               variant="outline"
               size="sm"
               className="gap-2 h-9 flex-1"
               onClick={() => {
-                // Pre-fill textarea with existing data
                 setObservationText(preSavedPayload.observationText || '');
                 setIsAddingMore(true);
               }}
@@ -151,11 +118,7 @@ export function ObservationComponent({
               <Plus className="w-3.5 h-3.5" />
               Add More Observations
             </Button>
-            <Button
-              size="sm"
-              className="gap-2 h-9 flex-1"
-              onClick={onSuccess}
-            >
+            <Button size="sm" className="gap-2 h-9 flex-1" onClick={onSuccess}>
               <Eye className="w-3.5 h-3.5" />
               Back to Quest
             </Button>
@@ -165,9 +128,6 @@ export function ObservationComponent({
     );
   }
 
-  // ============================================================
-  // VIEW 2: CONFIG VIEWER (PDF, guide questions, input)
-  // ============================================================
   return (
     <div className="w-full space-y-6">
       {errorMessage && (
@@ -176,7 +136,6 @@ export function ObservationComponent({
         </div>
       )}
 
-      {/* Back button if adding more */}
       {isAddingMore && (
         <Button
           variant="ghost"
@@ -191,7 +150,6 @@ export function ObservationComponent({
         </Button>
       )}
 
-      {/* Description */}
       {observationConfig?.description && (
         <div className="w-full p-4 border rounded-xl bg-muted/5">
           <p className="text-sm text-foreground leading-relaxed">
@@ -200,7 +158,6 @@ export function ObservationComponent({
         </div>
       )}
 
-      {/* PDF Download Section */}
       {observationConfig?.pdf_url && (
         <div className="w-full p-4 border rounded-xl bg-muted/10">
           <div className="flex items-center justify-between">
@@ -226,7 +183,6 @@ export function ObservationComponent({
         </div>
       )}
 
-      {/* Guide Questions */}
       {observationConfig?.guide_questions && observationConfig.guide_questions.length > 0 && (
         <div className="w-full p-4 border rounded-xl bg-muted/5">
           <h4 className="font-semibold text-sm text-foreground mb-2">Questions to Consider</h4>
@@ -251,7 +207,6 @@ export function ObservationComponent({
         </div>
       )}
 
-      {/* Input Area */}
       <div className="w-full space-y-3">
         <Label className="text-sm font-semibold text-foreground">
           {hasSavedObservation ? 'Add More Observations' : 'Record Your Observations'}
