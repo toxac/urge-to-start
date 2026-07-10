@@ -170,10 +170,7 @@ export const mission2: Mission = {
           metadata_config: {
             source_type: "personal_problems",
             source_context: "Look at your frustration journal. Pick the 3-5 frustrations that felt most real, most frequent, or most interesting. Also look at your skill reflections. Where do your skills and frustrations intersect? Enter them as opportunities.",
-            observation_task_ids: [
-              "m2_q1_t1_observation_week",
-              "m2_q1_t2_skill_reflection"
-            ]
+            dependencies: ["m2_q1_t1_observation_week", "m2_q1_t2_skill_reflection"]
           }
         }
       ]
@@ -272,9 +269,7 @@ export const mission2: Mission = {
           metadata_config: {
             source_type: "zone_of_influence",
             source_context: "Look at your social observations. Which problems seemed most real? Which ones got people excited? Add them as opportunities.",
-            observation_task_ids: [
-              "m2_q2_t1_social_observation"
-            ]
+            dependencies: ["m2_q2_t1_social_observation"]
           }
         }
       ]
