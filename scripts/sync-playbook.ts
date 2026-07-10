@@ -45,22 +45,21 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
     const missionFolderPath = `content/missions/${missionKey}`;
     const missionMarkdownPath = `${missionFolderPath}/mission.md`;
 
-    // ⚡ FIXED: Read content from markdown file
     const markdownContent = readMarkdownSafe(missionMarkdownPath);
     
     console.log(`\n📦 Processing Mission: ${mission.title} (Sequence ${mission.sequence})`);
 
-    // ⚡ FIXED: Include all mission fields including prerequisites
+    // ⚡ Use mission.id from playbook (e.g., "mission1")
     const { data: dbMission, error: missionError } = await supabase
       .from('missions')
       .upsert({
-        id: mission.id || missionKey,
+        id: mission.id, // ✅ Already has the correct ID from playbook
         title: mission.title,
         sequence: mission.sequence,
         video_url: mission.video_url,
         content: markdownContent || mission.briefing_text || '',
         briefing_text: mission.briefing_text || null,
-        prerequisites: mission.prerequisites || null,
+        prerequisites: mission.prerequisites as any || null,
       })
       .select('id')
       .single();
@@ -70,22 +69,20 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
       continue;
     }
 
-    mission.db_id = dbMission.id;
+    const missionDbId = dbMission.id;
 
     for (const [questKey, quest] of Object.entries(mission.quests)) {
-      // ⚡ FIXED: Use quest.id if available, otherwise construct from missionKey + questKey
-      const questId = quest.id || `${missionKey}_${questKey}`;
+      // ⚡ Use quest.id from playbook (e.g., "mission1_quest1")
+      const questId = quest.id;
       const strictPhysicalPath = quest.content_path || `content/missions/${missionKey}/quests/${quest.slug}.md`;
       
-      // Read content from markdown file
       const markdownContent = readMarkdownSafe(strictPhysicalPath);
 
-      // ⚡ FIXED: Use quest fields directly, not from ai_config
       const { data: dbQuest, error: questError } = await supabase
         .from('quests')
         .upsert({
-          id: questId,
-          mission_id: mission.db_id,
+          id: questId, // ✅ Already has the correct ID from playbook
+          mission_id: missionDbId,
           slug: quest.slug,
           title: quest.title,
           subtitle: quest.subtitle,
@@ -109,16 +106,16 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
         continue;
       }
 
-      quest.db_id = dbQuest.id;
+      const questDbId = dbQuest.id;
 
       for (const task of quest.tasks) {
-        // ⚡ FIXED: Include all task fields including JSON fields
+        // ⚡ Use task.id from playbook (e.g., "m1_q1_t1_drivers")
         const { data: dbTask, error: taskError } = await supabase
           .from('tasks')
           .upsert({
-            id: task.id,
-            mission_id: mission.db_id,
-            quest_id: quest.db_id,
+            id: task.id, // ✅ Already has the correct ID from playbook
+            mission_id: missionDbId,
+            quest_id: questDbId,
             title: task.title,
             type: task.type,
             component_key: task.component_key,
@@ -130,10 +127,9 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
             checkback_delay_days: task.checkback_delay_days || null,
             recurring: task.recurring || null,
             interval: task.interval || null,
-            // ⚡ JSON fields - properly typed
-            ai_config: task.ai_config || null,
-            observation_config: task.observation_config || null,
-            metadata_config: task.metadata_config || {},
+            ai_config: task.ai_config as any || null,
+            observation_config: task.observation_config as any || null,
+            metadata_config: task.metadata_config as any || {},
           })
           .select('id')
           .single();
@@ -142,8 +138,6 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
           console.error(`❌ Task configuration update aborted for step element ${task.id}:`, taskError);
           continue;
         }
-
-        task.db_id = dbTask.id;
       }
       console.log(`   ✅ Synced Chapter: "${quest.title}" with [${quest.tasks.length}] sub-tasks mapping smoothly.`);
     }

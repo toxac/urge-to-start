@@ -72,37 +72,10 @@ export const mission2: Mission = {
                 subtitle: "5 min read"
               }
             ],
-            observation_prompt: "You've spent a week observing your own frustrations. Share what you noticed—what patterns emerged? What surprised you? What felt most frustrating or most frequent?",
-            observation_analysis_prompt: `
-              You are Kip, a grounded mentor helping an entrepreneur reflect on their observations of their own frustrations and annoyances.
-
-              The user has just completed a week of observing their own life—noticing what frustrates them, what annoys them, what makes them think "there has to be a better way."
-
-              Your job:
-              1. Listen carefully to what they observed
-              2. Identify patterns across their observations—what themes keep coming up?
-              3. Help them see connections between different observations
-              4. Ask deeper questions about their most interesting observations:
-                 - "When does this frustration happen most?"
-                 - "Who else experiences this besides you?"
-                 - "What do you currently do to cope with this?"
-                 - "How much time or money does this waste?"
-              5. Help them distinguish between minor annoyances and problems that could be real business opportunities
-              6. Don't judge their observations—all observations are valuable data
-              7. Keep it conversational and supportive—like a friend helping you think through something
-              8. Don't give them the answers—ask questions that help them discover insights themselves
-
-              After they share their observations, respond with:
-              - Pattern recognition: What themes or patterns do you see?
-              - Deeper questions: What would help them understand this better?
-              - Potential opportunities: Where could this lead? What problems seem most solvable?
-              - Encouragement: Acknowledge their effort and what they've noticed
-              - Next steps: What should they do with this insight?
-            `,
-            reflection_prompt: "After a week of observing and getting Kip's feedback, what patterns have you noticed? What are you most excited to explore further?"
+            reflection_prompt: "After a week of observing, what patterns have you noticed? What are you most excited to explore further?"
           },
           observation_config: {
-            pdf_url: "/resources/observation-journal.pdf",
+            briefing_text: "For the next 7 days, keep your observation journal with you. Every time something frustrates you, annoys you, or makes you think 'there has to be a better way'—write it down. Don't judge it. Just collect. Aim for at least 10 entries. Notice patterns. What comes up again and again?",
             guide_questions: [
               "What annoyed you today? Why?",
               "What made you think 'I wish there was a better way'?",
@@ -113,14 +86,16 @@ export const mission2: Mission = {
             min_observations: 10,
             observation_period_days: 7
           },
-          metadata_config: {}
+          metadata_config: {
+            source_type: "personal_problems"
+          }
         },
         {
           id: "m2_q1_t2_skill_reflection",
           title: "What are you better at than most people?",
           sequence: 2,
           type: "observation",
-          component_key: "SkillReflectionNotepad",
+          component_key: "ObservationNotepad",
           grant_points: 20,
           estimated_minutes: 90,
           description: "Now let's look at your skills. What do you do better than most people you know? This could be anything—cooking, organizing, explaining, fixing things, making people feel comfortable. Ask 3 people who know you well: 'What am I unusually good at?' And ask yourself: 'Would people pay me to do this for them?'",
@@ -144,36 +119,10 @@ export const mission2: Mission = {
                 subtitle: "4 min read"
               }
             ],
-            observation_prompt: "You've reflected on your skills and asked others what you're good at. Share what you discovered—what are you better at than most people? What did others say? What surprised you?",
-            observation_analysis_prompt: `
-              You are Kip, a grounded mentor helping an entrepreneur reflect on their unique skills and abilities.
-
-              The user has spent time reflecting on their skills—what they're good at, what comes naturally to them, what others appreciate about them.
-
-              Your job:
-              1. Listen to their reflection on their skills
-              2. Help them see the connection between their skills and potential business opportunities
-              3. Ask questions that help them think about how their skills could solve problems:
-                 - "What problems could you solve with this skill?"
-                 - "Who would benefit from what you're good at?"
-                 - "Is there a market for what you can do?"
-                 - "What skills complement your main skill?"
-              4. Encourage them to think about how to monetize their skills
-              5. Help them see that skills don't have to be "business-y"—everyday skills can become businesses
-              6. Keep it conversational and supportive—like a friend helping you see your own potential
-              7. Don't give answers—ask questions that help them discover insights themselves
-
-              After they share their reflections, respond with:
-              - Pattern recognition: What skills seem most valuable?
-              - Deeper questions: What would help them think more about monetizing their skills?
-              - Potential opportunities: Where could their skills lead?
-              - Encouragement: Acknowledge their unique abilities
-              - Next steps: How can they use this insight?
-            `,
             reflection_prompt: "What did people say you're good at? Did any of their answers surprise you? How might your skills connect to the frustrations you observed?"
           },
           observation_config: {
-            pdf_url: "/resources/skill-reflection.pdf",
+            briefing_text: "Ask 3 people who know you well: 'What am I unusually good at?' And ask yourself: 'Would people pay me to do this for them?'",
             guide_questions: [
               "What do people come to you for help with?",
               "What do you do that feels effortless to you but hard for others?",
@@ -184,7 +133,9 @@ export const mission2: Mission = {
             min_observations: 3,
             observation_period_days: 3
           },
-          metadata_config: {}
+          metadata_config: {
+            source_type: "skills"
+          }
         },
         {
           id: "m2_q1_t3_enter_opportunities",
@@ -216,7 +167,14 @@ export const mission2: Mission = {
             ]
           },
           observation_config: null,
-          metadata_config: {}
+          metadata_config: {
+            source_type: "personal_problems",
+            source_context: "Look at your frustration journal. Pick the 3-5 frustrations that felt most real, most frequent, or most interesting. Also look at your skill reflections. Where do your skills and frustrations intersect? Enter them as opportunities.",
+            observation_task_ids: [
+              "m2_q1_t1_observation_week",
+              "m2_q1_t2_skill_reflection"
+            ]
+          }
         }
       ]
     },
@@ -244,7 +202,7 @@ export const mission2: Mission = {
           title: "Observe the problems of people around you",
           sequence: 1,
           type: "observation",
-          component_key: "SocialObservationNotepad",
+          component_key: "ObservationNotepad",
           grant_points: 25,
           estimated_minutes: 180,
           description: "Pick 3 people in your life. Could be a friend, a colleague, a family member, someone at your gym. Over the next week, observe them. What are they complaining about? What do they do that seems unnecessarily hard? What do they buy to fix their problems? Don't ask them yet—just watch. Take notes. Notice patterns.",
@@ -268,36 +226,10 @@ export const mission2: Mission = {
                 subtitle: "4 min read"
               }
             ],
-            observation_prompt: "You've spent time observing the problems of people around you. Share what you noticed—what frustrations did you see? Who seemed most frustrated? What problems seemed most consistent or frequent?",
-            observation_analysis_prompt: `
-              You are Kip, a grounded mentor helping an entrepreneur reflect on their observations of people in their social circle.
-
-              The user has spent time observing friends, family, colleagues, or classmates—noticing their frustrations, annoyances, and workarounds.
-
-              Your job:
-              1. Listen carefully to what they observed about other people's problems
-              2. Identify patterns across their observations—what themes keep coming up across different people?
-              3. Help them think about whether these problems are real enough to build a business around:
-                 - "Is this a one-time frustration or a recurring problem?"
-                 - "How do people currently deal with this?"
-                 - "Is there a workaround people use?"
-                 - "Does this problem affect just one person or many?"
-              4. Ask questions that help them think about the value of solving these problems
-              5. Encourage them to talk to people directly in the next task
-              6. Keep it conversational and supportive—like a friend helping you think through something
-              7. Don't give answers—ask questions that help them discover insights themselves
-
-              After they share their observations, respond with:
-              - Pattern recognition: What themes do you see across different people?
-              - Deeper questions: What would help them understand these problems better?
-              - Potential opportunities: Which problems seem most worth solving?
-              - Encouragement: Acknowledge their effort and what they've noticed
-              - Next steps: Prepare them for having conversations to validate these observations
-            `,
             reflection_prompt: "What surprised you about people's frustrations? Was there a pattern across different people? Which problem seemed most real?"
           },
           observation_config: {
-            pdf_url: "/resources/social-observation.pdf",
+            briefing_text: "Pick 3 people in your life. Could be a friend, a colleague, a family member, someone at your gym. Over the next week, observe them. What are they complaining about? What do they do that seems unnecessarily hard? What do they buy to fix their problems? Don't ask them yet—just watch. Take notes. Notice patterns.",
             guide_questions: [
               "What does this person complain about regularly?",
               "What tasks do they avoid or procrastinate on?",
@@ -308,76 +240,19 @@ export const mission2: Mission = {
             min_observations: 5,
             observation_period_days: 7
           },
-          metadata_config: {}
+          metadata_config: {
+            source_type: "zone_of_influence"
+          }
         },
         {
-          id: "m2_q2_t2_validation_conversation",
-          title: "Have the 'Is this real?' conversation",
-          sequence: 2,
-          type: "action",
-          component_key: "ValidationConversationWidget",
-          grant_points: 30,
-          estimated_minutes: 60,
-          description: "Now you've got some observations. Time to check if they're real. Approach each person and say: 'I noticed [problem]. Is that actually a thing for you? What do you do about it now?' Your job is to listen, not to sell. If they say 'that's not really a problem,' thank them and move on. If they light up and start complaining, you've found something.",
-          mission_id: "mission2",
-          quest_id: "mission2_quest2",
-          execution_environment: "off_app",
-          checkback_delay_days: 3,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Ask Without Pitching", 
-                type: "blog", 
-                path_or_url: "content/blog/ask-without-pitching.md" 
-              },
-              { 
-                title: "The Art of Listening", 
-                type: "youtube", 
-                path_or_url: "https://www.youtube.com/watch?v=QpYVIGWqRiM", 
-                subtitle: "TED talk on active listening" 
-              }
-            ],
-            observation_prompt: "You've had conversations with people about their problems. Share what you learned—what did people say? Who got excited? Who dismissed it? What surprised you?",
-            observation_analysis_prompt: `
-              You are Kip, a grounded mentor helping an entrepreneur reflect on conversations they had about problems people face.
-
-              The user has had conversations with people in their circle, asking if the problems they observed were real, and how they currently deal with them.
-
-              Your job:
-              1. Listen to what they learned from these conversations
-              2. Help them distinguish between real problems and minor annoyances:
-                 - "Did people light up when you asked about the problem?"
-                 - "What was their current workaround or solution?"
-                 - "How much does this problem actually cost them in time or money?"
-                 - "Did they seem interested in a better solution?"
-              3. Help them identify which problems are most worth pursuing
-              4. Encourage them to think about whether the problem is big enough to build a business around
-              5. Keep it conversational and supportive—like a friend helping you think through something
-              6. Don't give answers—ask questions that help them discover insights themselves
-
-              After they share what they learned, respond with:
-              - Pattern recognition: What themes came up across conversations?
-              - Deeper questions: What would help them understand these problems better?
-              - Potential opportunities: Which problems seem most real and most solvable?
-              - Encouragement: Acknowledge their courage in having these conversations
-              - Next steps: What should they do with this insight?
-            `,
-            reflection_prompt: "How did it feel to ask people about their problems? Did anyone get excited? Did anyone dismiss it? What did you learn from the conversations that you didn't expect?"
-          },
-          observation_config: null,
-          metadata_config: {}
-        },
-        {
-          id: "m2_q2_t3_add_opportunities",
+          id: "m2_q2_t2_add_opportunities",
           title: "Add validated opportunities to your list",
-          sequence: 3,
+          sequence: 2,
           type: "form",
           component_key: "OpportunityForm",
           grant_points: 20,
           estimated_minutes: 20,
-          description: "Add the validated problems to your growing list. If 3 people told you 'yes, that's a real pain,' that's worth noting. If someone got excited, that's even better. Keep building your list—you're getting closer.",
+          description: "Look at your social observations. Which problems seemed most real? Which ones got people excited? Add them as opportunities.",
           mission_id: "mission2",
           quest_id: "mission2_quest2",
           execution_environment: null,
@@ -394,7 +269,13 @@ export const mission2: Mission = {
             ]
           },
           observation_config: null,
-          metadata_config: {}
+          metadata_config: {
+            source_type: "zone_of_influence",
+            source_context: "Look at your social observations. Which problems seemed most real? Which ones got people excited? Add them as opportunities.",
+            observation_task_ids: [
+              "m2_q2_t1_social_observation"
+            ]
+          }
         }
       ]
     },
@@ -422,7 +303,7 @@ export const mission2: Mission = {
           title: "What are people searching for?",
           sequence: 1,
           type: "action",
-          component_key: "TrendResearchWidget",
+          component_key: "OpportunityForm",
           grant_points: 25,
           estimated_minutes: 45,
           description: "Open Google Trends. Search 5 terms related to problems you're curious about. Look at related queries—what are people searching for? Also check Reddit: what are people complaining about in subreddits related to your interests? This isn't about copying trends. It's about finding patterns of unmet need.",
@@ -445,42 +326,21 @@ export const mission2: Mission = {
                 path_or_url: "content/blog/reddit-focus-group.md" 
               }
             ],
-            observation_prompt: "You've researched trends and online discussions. Share what you found—what patterns did you notice? What problems seem to be discussed frequently? What surprised you?",
-            observation_analysis_prompt: `
-              You are Kip, a grounded mentor helping an entrepreneur reflect on their research into broader market problems and trends.
-
-              The user has used tools like Google Trends, Reddit, and other platforms to understand what problems people are talking about on a larger scale.
-
-              Your job:
-              1. Listen to what they found in their research
-              2. Help them distinguish between passing trends and real problems:
-                 - "Is this a growing concern or a flash in the pan?"
-                 - "How many people seem to be affected by this problem?"
-                 - "What are people currently doing to solve this?"
-                 - "Are there existing solutions that aren't working well?"
-              3. Help them think about whether these problems align with their skills and interests
-              4. Encourage them to think about market size and viability
-              5. Keep it conversational and supportive—like a friend helping you think through something
-              6. Don't give answers—ask questions that help them discover insights themselves
-
-              After they share what they found, respond with:
-              - Pattern recognition: What themes emerged across different platforms?
-              - Deeper questions: What would help them understand these problems better?
-              - Potential opportunities: Which problems seem most worth exploring further?
-              - Encouragement: Acknowledge their research effort
-              - Next steps: What should they do with this insight?
-            `,
             reflection_prompt: "What surprised you in the search results? Was there a problem that seemed more common than you expected?"
           },
           observation_config: null,
-          metadata_config: {}
+          metadata_config: {
+            source_type: "broader_search",
+            source_context: "What did you find in Google Trends? What related queries came up? What seems to be a growing concern? Add them as opportunities.",
+            observation_task_ids: []
+          }
         },
         {
           id: "m2_q3_t2_forum_research",
           title: "Where do people talk about their problems?",
           sequence: 2,
           type: "action",
-          component_key: "ForumResearchWidget",
+          component_key: "OpportunityForm",
           grant_points: 25,
           estimated_minutes: 60,
           description: "Check Facebook Groups, LinkedIn communities, industry forums. Look for questions that keep coming up. Look for hacks and workarounds. If people are actively discussing a problem, it's worth paying attention to. Join the conversation—ask questions, not pitch.",
@@ -503,41 +363,21 @@ export const mission2: Mission = {
                 path_or_url: "content/blog/ask-research-questions.md" 
               }
             ],
-            observation_prompt: "You've researched online communities and forums. Share what you discovered—what problems are people actively discussing? What questions keep coming up? What workarounds do people share?",
-            observation_analysis_prompt: `
-              You are Kip, a grounded mentor helping an entrepreneur reflect on their research into online communities and forums.
-
-              The user has explored Facebook Groups, LinkedIn communities, and industry forums to understand what problems people are actively discussing.
-
-              Your job:
-              1. Listen to what they found in their community research
-              2. Help them identify problems that people are actively seeking solutions for:
-                 - "What questions keep coming up without good answers?"
-                 - "What workarounds do people share?"
-                 - "How engaged is the community around this problem?"
-                 - "What would happen if someone solved this problem for them?"
-              3. Encourage them to think about whether the problem is big enough to build a business around
-              4. Keep it conversational and supportive—like a friend helping you think through something
-              5. Don't give answers—ask questions that help them discover insights themselves
-
-              After they share what they found, respond with:
-              - Pattern recognition: What themes emerged across different communities?
-              - Deeper questions: What would help them understand these problems better?
-              - Potential opportunities: Which problems seem most worth solving?
-              - Encouragement: Acknowledge their research effort
-              - Next steps: What should they do with this insight?
-            `,
             reflection_prompt: "Which community had the most engaged discussions about problems? What does that tell you?"
           },
           observation_config: null,
-          metadata_config: {}
+          metadata_config: {
+            source_type: "broader_search",
+            source_context: "What problems did you find in forums? What questions keep coming up? Add them as opportunities.",
+            observation_task_ids: []
+          }
         },
         {
           id: "m2_q3_t3_marketplace_research",
           title: "What's already being sold?",
           sequence: 3,
           type: "action",
-          component_key: "MarketplaceResearchWidget",
+          component_key: "OpportunityForm",
           grant_points: 25,
           estimated_minutes: 45,
           description: "Go to Amazon, Etsy, or wherever relevant. Search for products related to your problem area. What do people complain about in the reviews? 'I wish this had...' 'If only it could...' Those complaints are gold. They represent unmet needs that existing products aren't solving.",
@@ -560,34 +400,14 @@ export const mission2: Mission = {
                 path_or_url: "content/blog/competitor-analysis.md" 
               }
             ],
-            observation_prompt: "You've researched marketplaces and product reviews. Share what you discovered—what complaints keep coming up? What gaps did you find in existing solutions?",
-            observation_analysis_prompt: `
-              You are Kip, a grounded mentor helping an entrepreneur reflect on their research into existing products and market gaps.
-
-              The user has explored marketplaces like Amazon and Etsy to understand what problems people have with existing solutions.
-
-              Your job:
-              1. Listen to what they found in their marketplace research
-              2. Help them identify gaps and unmet needs:
-                 - "What complaints keep coming up in reviews?"
-                 - "What features do people wish existing products had?"
-                 - "What do people say they would pay for?"
-                 - "Is there a gap between what's available and what people actually need?"
-              3. Help them think about whether they could fill that gap
-              4. Keep it conversational and supportive—like a friend helping you think through something
-              5. Don't give answers—ask questions that help them discover insights themselves
-
-              After they share what they found, respond with:
-              - Pattern recognition: What complaints came up most frequently?
-              - Deeper questions: What would help them understand these gaps better?
-              - Potential opportunities: Which gaps seem most worth filling?
-              - Encouragement: Acknowledge their research effort
-              - Next steps: What should they do with this insight?
-            `,
             reflection_prompt: "What complaints kept coming up? Is there a gap in the market you could fill?"
           },
           observation_config: null,
-          metadata_config: {}
+          metadata_config: {
+            source_type: "broader_search",
+            source_context: "What complaints did you find in product reviews? What gaps did you identify? Add them as opportunities.",
+            observation_task_ids: []
+          }
         },
         {
           id: "m2_q3_t4_consolidate_opportunities",
@@ -627,8 +447,8 @@ export const mission2: Mission = {
       id: "mission2_quest4",
       slug: "pick-your-path",
       title: "Pick Your Path",
-      subtitle: "Commit to one opportunity and make it your project",
-      description: "You've explored problems from every angle. You've looked inward, outward, and across the market. Now it's time to choose. This isn't about picking the 'perfect' idea—there's no such thing. It's about picking the idea you'll actually pursue. The one that passes the tests. The one that feels right.",
+      subtitle: "Validate, score, and commit to one opportunity",
+      description: "You've explored problems from every angle. You've looked inward, outward, and across the market. Now it's time to validate what's real, score your options, and commit to one. This is the moment of truth.",
       sequence: 4,
       content: "",
       estimated_in_app_minutes: 60,
@@ -643,14 +463,47 @@ export const mission2: Mission = {
       badge_key_reward: "DECIDED",
       tasks: [
         {
-          id: "m2_q4_t1_opportunity_scoring",
-          title: "Score your opportunities honestly",
+          id: "m2_q4_t1_validate_opportunities",
+          title: "Validate your opportunities with real people",
           sequence: 1,
           type: "form",
-          component_key: "OpportunityScoringForm",
+          component_key: "OpportunityValidator",
+          grant_points: 30,
+          estimated_minutes: 60,
+          description: "Take your top 5-10 opportunities. Go back to potential customers. Ask: 'Is this actually a problem for you? Would you pay for a solution?' This is the moment of truth. Log what you learn.",
+          mission_id: "mission2",
+          quest_id: "mission2_quest4",
+          execution_environment: null,
+          checkback_delay_days: 3,
+          recurring: null,
+          interval: null,
+          ai_config: {
+            recommendations: [
+              { 
+                title: "How to Ask 'Would You Pay?' Without Being Pushy", 
+                type: "blog", 
+                path_or_url: "content/blog/ask-would-you-pay.md" 
+              },
+              { 
+                title: "The Art of Validation", 
+                type: "blog", 
+                path_or_url: "content/blog/art-of-validation.md" 
+              }
+            ],
+            reflection_prompt: "What did people say? Did anyone get genuinely excited? Did anyone tell you they'd pay? That's your signal."
+          },
+          observation_config: null,
+          metadata_config: {}
+        },
+        {
+          id: "m2_q4_t2_score_opportunities",
+          title: "Score your opportunities honestly",
+          sequence: 2,
+          type: "form",
+          component_key: "OpportunityScorer",
           grant_points: 30,
           estimated_minutes: 30,
-          description: "Here's the truth: you can't pursue all of them. Let's get real. For each opportunity on your list, score it honestly on these 5 criteria:\n\n• **Do I actually care about this problem?** (1-10)\n• **Do I know people who have this problem?** (1-10)\n• **Could I talk to them easily?** (1-10)\n• **Do I have any unfair advantage here?** (1-10)\n• **Is there a clear way I could get paid?** (1-10)",
+          description: "Here's the truth: you can't pursue all of them. Let's get real. For each validated opportunity, score it honestly on these 5 criteria:\n\n• **Do I actually care about this problem?** (1-10)\n• **Do I know people who have this problem?** (1-10)\n• **Could I talk to them easily?** (1-10)\n• **Do I have any unfair advantage here?** (1-10)\n• **Is there a clear way I could get paid?** (1-10)",
           mission_id: "mission2",
           quest_id: "mission2_quest4",
           execution_environment: null,
@@ -670,85 +523,7 @@ export const mission2: Mission = {
                 path_or_url: "content/blog/5-tests-opportunity.md" 
               }
             ],
-            observation_prompt: "You've scored your opportunities. Share what you discovered—which opportunities scored highest? What patterns did you notice? Which one feels most aligned with your skills and interests?",
-            observation_analysis_prompt: `
-              You are Kip, a grounded mentor helping an entrepreneur make a clear decision about which opportunity to pursue.
-
-              The user has scored their opportunities on key criteria including: care about the problem, access to people who have it, ability to get feedback, unfair advantage, and clarity of getting paid.
-
-              Your job:
-              1. Listen to what they discovered through the scoring process
-              2. Help them think through which opportunity feels most aligned:
-                 - "Which opportunity scored highest across all criteria?"
-                 - "Which one feels most energizing to you?"
-                 - "Which one would you be most excited to work on?"
-                 - "Which one has the clearest path to getting paid?"
-              3. Help them trust their gut while also being realistic
-              4. Remind them: they can always change direction later
-              5. Keep it conversational and supportive—like a friend helping you make a decision
-              6. Don't give answers—ask questions that help them discover their own priorities
-
-              After they share their scoring insights, respond with:
-              - Pattern recognition: What themes emerged in their scoring?
-              - Deeper questions: What would help them decide more confidently?
-              - Potential opportunities: Which opportunity seems most promising?
-              - Encouragement: Acknowledge their thorough evaluation
-              - Next steps: Prepare them for the confirmation conversation
-            `,
             reflection_prompt: "Looking at your scores, which opportunity stands out? Which one would you be most excited to tell people about?"
-          },
-          observation_config: null,
-          metadata_config: {}
-        },
-        {
-          id: "m2_q4_t2_final_confirmation",
-          title: "Have the confirmation conversation",
-          sequence: 2,
-          type: "action",
-          component_key: "ConfirmationConversationWidget",
-          grant_points: 30,
-          estimated_minutes: 60,
-          description: "Take your top 3 opportunities. Go back to the people you spoke with. Say: 'I'm thinking about solving [problem]. Does this actually sound valuable to you? Would you pay for a solution?' If they hesitate or give you a 'maybe,' that's your answer. If they get excited, you're onto something.",
-          mission_id: "mission2",
-          quest_id: "mission2_quest4",
-          execution_environment: "off_app",
-          checkback_delay_days: 2,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Ask 'Would You Pay?' Without Being Pushy", 
-                type: "blog", 
-                path_or_url: "content/blog/ask-would-you-pay.md" 
-              }
-            ],
-            observation_prompt: "You've had the confirmation conversations. Share what you learned—what did people say? Who got excited? Who said they'd pay? What surprised you?",
-            observation_analysis_prompt: `
-              You are Kip, a grounded mentor helping an entrepreneur make their final decision after confirmation conversations.
-
-              The user has had conversations with people, asking them if the problem is real and if they'd pay for a solution.
-
-              Your job:
-              1. Listen to what they learned from these conversations
-              2. Help them interpret the signals they received:
-                 - "Who got genuinely excited about your idea?"
-                 - "Who said they'd pay or use it?"
-                 - "Who hesitated or gave you a maybe?"
-                 - "What did you learn that you didn't expect?"
-              3. Help them identify which opportunity has the strongest signals
-              4. Encourage them to trust both the data and their gut
-              5. Remind them: you can always pivot later—you just need to start
-              6. Keep it conversational and supportive—like a friend helping you think through a decision
-
-              After they share what they learned, respond with:
-              - Pattern recognition: What themes came up across conversations?
-              - Deeper questions: What would help them decide with confidence?
-              - Potential opportunities: Which one feels most likely to succeed?
-              - Encouragement: Acknowledge their courage in having these conversations
-              - Next steps: Prepare them to commit to their project
-            `,
-            reflection_prompt: "What did people say? Did anyone get genuinely excited? Did anyone tell you they'd pay? That's your signal."
           },
           observation_config: null,
           metadata_config: {}

@@ -35,6 +35,7 @@ export interface TaskAiConfig {
 // ⚡ Custom types that will be stored as JSON in the database
 export interface ObservationConfig {
   pdf_url?: string;
+  briefing_text?: string;
   guide_questions?: string[];
   min_observations?: number;
   observation_period_days?: number;
