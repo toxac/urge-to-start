@@ -7,6 +7,7 @@ import { KnownReachoutWidget } from './KnownReachoutWidget';
 import { DigitalPresenceWidget } from './DigitalPresenceWidget';
 import { ObservationNotepad } from './ObservationNotepad';
 import { BaseTaskComponentProps } from './types';
+import { OpportunityForm } from './opportunity/OpportunityForm';
 
 export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskComponentProps>> = {
   ProfileSetupForm,
@@ -16,6 +17,7 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   KnownReachoutWidget,
   DigitalPresenceWidget,
   ObservationNotepad,
+  OpportunityForm
 };
 
 export type { BaseTaskComponentProps } from './types';

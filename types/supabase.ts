@@ -656,11 +656,13 @@ export type Database = {
           id: string
           pain_score_grade: number | null
           project_id: string | null
-          source_type: string
+          scores: Json | null
+          source_type: Database["public"]["Enums"]["opportunity_source_type"]
           status: Database["public"]["Enums"]["opportunity_status"]
           title: string
           updated_at: string
           user_id: string
+          validated_at: string | null
           validation_interviews: Json
         }
         Insert: {
@@ -670,11 +672,13 @@ export type Database = {
           id?: string
           pain_score_grade?: number | null
           project_id?: string | null
-          source_type: string
+          scores?: Json | null
+          source_type: Database["public"]["Enums"]["opportunity_source_type"]
           status?: Database["public"]["Enums"]["opportunity_status"]
           title: string
           updated_at?: string
           user_id: string
+          validated_at?: string | null
           validation_interviews?: Json
         }
         Update: {
@@ -684,11 +688,13 @@ export type Database = {
           id?: string
           pain_score_grade?: number | null
           project_id?: string | null
-          source_type?: string
+          scores?: Json | null
+          source_type?: Database["public"]["Enums"]["opportunity_source_type"]
           status?: Database["public"]["Enums"]["opportunity_status"]
           title?: string
           updated_at?: string
           user_id?: string
+          validated_at?: string | null
           validation_interviews?: Json
         }
         Relationships: [
@@ -1302,7 +1308,17 @@ export type Database = {
         | "merch"
         | "digital_asset"
         | "service"
-      opportunity_status: "raw_seed" | "validated" | "committed" | "archived"
+      opportunity_source_type:
+        | "personal_problems"
+        | "skills"
+        | "zone_of_influence"
+        | "broader_search"
+      opportunity_status:
+        | "raw_seed"
+        | "validated"
+        | "committed"
+        | "archived"
+        | "scored"
       post_category:
         | "build_journal"
         | "marketing_win"
@@ -1525,7 +1541,19 @@ export const Constants = {
         "digital_asset",
         "service",
       ],
-      opportunity_status: ["raw_seed", "validated", "committed", "archived"],
+      opportunity_source_type: [
+        "personal_problems",
+        "skills",
+        "zone_of_influence",
+        "broader_search",
+      ],
+      opportunity_status: [
+        "raw_seed",
+        "validated",
+        "committed",
+        "archived",
+        "scored",
+      ],
       post_category: [
         "build_journal",
         "marketing_win",
