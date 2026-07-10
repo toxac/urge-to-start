@@ -152,7 +152,7 @@ export function ObservationNotepad({ task, userId, existingProgress, onSuccess }
       {/* Observations List (Collapsible) */}
       {observations.length > 0 && (
         <Collapsible open={isOpen} onOpenChange={setIsOpen} className="border rounded-lg">
-          <CollapsibleTrigger asChild>
+          <CollapsibleTrigger>
             <Button 
               variant="ghost" 
               className="w-full justify-between p-4 h-auto hover:bg-muted/5"
