@@ -11,10 +11,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, Loader2, Rocket, ArrowRight } from 'lucide-react';
 import { getOpportunities, commitToOpportunity } from '@/actions/opportunities';
+import { createProject } from '@/actions/projects';
 import { completeTaskExecution } from '@/actions/progress';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
 import { BaseTaskComponentProps } from '../types';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 interface ProjectFormData {
   biz_name: string;
@@ -32,7 +34,7 @@ export function ProjectCreationForm({ task, userId, existingProgress, onSuccess 
   const isCompleted = existingProgress?.status === 'completed';
   const preSavedPayload = existingProgress?.saved_payload || {};
 
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<ProjectFormData>({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<ProjectFormData>({
     defaultValues: {
       biz_name: preSavedPayload.biz_name || '',
       five_word_hook: preSavedPayload.five_word_hook || '',
@@ -40,7 +42,6 @@ export function ProjectCreationForm({ task, userId, existingProgress, onSuccess 
     }
   });
 
-  // Load scored opportunities
   useEffect(() => {
     async function loadOpportunities() {
       setIsLoading(true);
@@ -52,7 +53,6 @@ export function ProjectCreationForm({ task, userId, existingProgress, onSuccess 
         if (result.success) {
           setOpportunities(result.data);
           
-          // If there's a previously selected opportunity, pre-select it
           if (preSavedPayload.selectedId) {
             setSelectedId(preSavedPayload.selectedId);
             const opp = result.data.find(o => o.id === preSavedPayload.selectedId);
@@ -89,36 +89,49 @@ export function ProjectCreationForm({ task, userId, existingProgress, onSuccess 
 
     setIsSubmitting(true);
     try {
-      const result = await commitToOpportunity(selectedId, {
+      // Step 1: Create the project (no opportunity_id in projects table)
+      const projectResult = await createProject({
         biz_name: data.biz_name,
         five_word_hook: data.five_word_hook,
-        tagline: data.tagline
       });
 
-      if (result.success) {
-        const progressSync = await completeTaskExecution({
-          taskId: task.id,
-          savedPayload: {
-            ...data,
-            selectedId,
-            projectId: result.data.project.id,
-            opportunityId: result.data.opportunity.id,
-            completedAt: new Date().toISOString()
-          }
-        });
+      if (!projectResult.success) {
+        toast.error(projectResult.error || 'Failed to create project');
+        return;
+      }
 
-        if (progressSync.success) {
-          if (progressSync.data) {
-            setProgressStoreRow(progressSync.data as any);
-          }
-          setIsComplete(true);
-          if (onSuccess) onSuccess();
-          toast.success('🎉 Project created successfully!');
-        } else {
-          toast.error(progressSync.error || 'Failed to save progress');
+      // Step 2: Update the opportunity to link to the project
+      const commitResult = await commitToOpportunity(selectedId, {
+        biz_name: data.biz_name,
+        five_word_hook: data.five_word_hook,
+        tagline: data.tagline,
+      });
+
+      if (!commitResult.success) {
+        toast.warning('Project created, but opportunity link failed. Please contact support.');
+      }
+
+      // Step 3: Save progress
+      const progressSync = await completeTaskExecution({
+        taskId: task.id,
+        savedPayload: {
+          ...data,
+          selectedId,
+          projectId: projectResult.data.id,
+          opportunityId: selectedId,
+          completedAt: new Date().toISOString()
         }
+      });
+
+      if (progressSync.success) {
+        if (progressSync.data) {
+          setProgressStoreRow(progressSync.data as any);
+        }
+        setIsComplete(true);
+        if (onSuccess) onSuccess();
+        toast.success('🎉 Project created successfully!');
       } else {
-        toast.error(result.error || 'Failed to create project');
+        toast.error(progressSync.error || 'Failed to save progress');
       }
     } catch (err) {
       toast.error('Something went wrong');
@@ -181,7 +194,6 @@ export function ProjectCreationForm({ task, userId, existingProgress, onSuccess 
         </p>
       </div>
 
-      {/* Select Opportunity */}
       <div className="space-y-3">
         <Label className="text-sm font-medium">Select Your Opportunity *</Label>
         
@@ -236,7 +248,6 @@ export function ProjectCreationForm({ task, userId, existingProgress, onSuccess 
         )}
       </div>
 
-      {/* Project Details Form */}
       {selectedId && (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 border-t pt-4">
           <div className="space-y-1.5">
