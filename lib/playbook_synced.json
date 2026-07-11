@@ -1,550 +1,927 @@
 {
   "mission1": {
-    "title": "Build Your Founder Mindset",
+    "id": "mission1",
+    "title": "Get Out of Your Own Head",
     "sequence": 1,
     "video_url": "https://urgetostart.com/videos/m1-overview.mp4",
-    "briefing_text": "Before we look at business opportunities, we have to look at you. We are going to destroy the overthinking trap and build your real-world resilience.",
+    "briefing_text": "Before we look at business ideas, we need to focus on you. We're going to break out of the overthinking loop and build the habits you need to actually stick with this in the real world.",
+    "content": "",
+    "content_path": "content/missions/mission1/mission.md",
     "prerequisites": [
       {
-        "item": "Commitment to allocate 3+ hours per week of uninterrupted focus",
-        "promptKey": "M1_PRE_TIME_AUDIT"
+        "item": "Commit to finding at least 3 hours a week.",
+        "promptRawText": "The user is trying to find 3 hours a week while working full-time. Give them a practical strategy to protect three 60-minute blocks without burning out."
       },
       {
-        "item": "A reliable laptop or computer with a stable internet connection",
-        "promptKey": null
+        "item": "A reliable computer and a decent internet connection"
       },
       {
-        "item": "Willingness to share raw personal reflections with the companion system",
-        "promptKey": "M1_PRE_PSYCH_SAFETY"
+        "item": "Willingness to be completely honest with yourself and the system",
+        "promptRawText": "The user is nervous about sharing their ideas. Remind them that starting matters more than keeping secrets, and hiding an idea just keeps them isolated."
       }
     ],
     "quests": {
       "quest1": {
-        "slug": "your-goals-and-free-time",
-        "title": "Your Goals & Free Time",
-        "subtitle": "Be honest about why you are starting and how many hours you actually have.",
+        "id": "mission1_quest1",
+        "slug": "starting-your-new-chapter",
+        "title": "Your Fresh Start",
+        "subtitle": "Get real about why you are here, face your roadblocks, and introduce yourself.",
+        "description": "Every great journey begins exactly where you are standing right now. Before we look at business ideas, let's nail down what is driving you to build, map out the real-world boundaries you are working around, and introduce yourself to your fellow founders.",
         "sequence": 1,
-        "content_path": "content/missions/mission1/quests/your-goals-and-free-time.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Mirror",
-          "persona_prompt": "You are a grounded advisor. Review user profiles and constraints. If they give abstract answers like 'I want to be rich', challenge them to define what concrete personal freedom looks like.",
-          "required_context": [
-            "user_profiles"
-          ],
-          "on_success": {
-            "grant_points": 50,
-            "badge_key": "PATHFINDER",
-            "badge_db_id": "PATHFINDER"
-          }
-        },
+        "content": "",
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 0,
+        "grant_points_bonus": 50,
+        "is_optional": false,
+        "mission_id": "mission1",
+        "content_path": "content/missions/mission1/quests/starting-your-new-chapter.md",
+        "persona_name": "The Mirror",
+        "persona_prompt": "You are a grounded advisor and a supportive friend. Review user motivations and roadblocks. Call out vague answers kindly, and help them turn big dreams into everyday actions.",
+        "required_context": [
+          "user_profiles"
+        ],
+        "badge_key_reward": "PATHFINDER",
         "tasks": [
           {
-            "id": "m1_q1_t1_profile",
-            "title": "Introduce Yourself",
-            "type": "form",
-            "component_key": "ProfileSetupForm",
-            "description": "Everything good in life begins with a conversation. Share a bit about who you are, where you're building from, and what your background looks like.",
+            "id": "m1_q1_t1_drivers",
+            "title": "Why do you want to start a business?",
             "sequence": 1,
-            "grant_points": 10,
-            "ai_config": {
-              "resources": [
-                {
-                  "title": "Urge Workspace Dashboard Tour",
-                  "url": "https://urgetostart.com/guides/dashboard-onboarding"
-                }
-              ],
-              "alternative_approach": "If you feel uneasy framing your background, describe yourself from the perspective of a close collaborator highlighting your primary curious interest.",
-              "reflection_prompt": "Now that you've formalized your baseline introduction profile, does starting this path feel like a tangible reality or an abstract idea?"
-            },
-            "db_id": "m1_q1_t1_profile"
-          },
-          {
-            "id": "m1_q1_t2_drivers",
-            "title": "What's Driving You to Start?",
-            "sequence": 2,
             "type": "form",
             "component_key": "MotivationForm",
             "grant_points": 20,
-            "description": "Let's get real for a second. Building a business takes serious grit, and generic goals burn out fast when things get tough. What is the actual fuel behind your engine?",
+            "estimated_minutes": 15,
+            "description": "Let's be totally honest. Building a business takes serious energy, and vague goals fade the moment life gets busy. What is the actual change you want to make in your life?",
+            "mission_id": "mission1",
+            "quest_id": "mission1_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "Isolating Internal Core Drivers",
-                  "url": "https://urgetostart.com/guides/finding-your-why"
+                  "title": "Finding Your Real Why",
+                  "type": "blog",
+                  "path_or_url": "content/blog/reasons-to-start.md",
+                  "subtitle": "4 min layout read"
                 }
-              ],
-              "alternative_approach": "Instead of writing standard lifestyle benchmarks, focus purely on what single, specific daily operational friction you want to remove from your routine forever.",
-              "reflection_prompt": "When you look at the core driver you typed out, are you doing this to run away from an immediate negative constraint or to chase a positive freedom threshold?"
+              ]
             },
-            "db_id": "m1_q1_t2_drivers"
+            "observation_config": null,
+            "metadata_config": {}
           },
           {
-            "id": "m1_q1_t3_constraints",
-            "title": "Set Your Realistic Weekly Limits",
+            "id": "m1_q1_t2_commitments",
+            "title": "Be realistic about your schedule and roadblocks",
+            "sequence": 2,
+            "type": "form",
+            "component_key": "CommitmentForm",
+            "grant_points": 20,
+            "estimated_minutes": 15,
+            "description": "Let's get real about your schedule and the roadblocks you are working around. This is about being honest with yourself so you can actually make progress.",
+            "mission_id": "mission1",
+            "quest_id": "mission1_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
+            "ai_config": {
+              "recommendations": [
+                {
+                  "title": "Starting with almost nothing",
+                  "type": "blog",
+                  "path_or_url": "content/blog/starting-with-nothing.md",
+                  "subtitle": "4 min layout read"
+                },
+                {
+                  "title": "Getting Practical",
+                  "type": "blog",
+                  "path_or_url": "content/blog/lets-get-practical.md",
+                  "subtitle": "4 min layout read"
+                }
+              ]
+            },
+            "observation_config": null,
+            "metadata_config": {}
+          },
+          {
+            "id": "m1_q1_t3_profile",
+            "title": "Introduce yourself to the community",
             "sequence": 3,
             "type": "form",
-            "component_key": "ConstraintForm",
-            "grant_points": 20,
-            "description": "Excitement is great, but let's be totally honest about the hours you actually have. Side-building is a marathon, not a sprint. Pick a number you can stick to.",
+            "component_key": "ProfileSetupForm",
+            "description": "You're not in this alone. Put a face to the name, write a brief bio, and share your links so other people here can see what you're up to.",
+            "grant_points": 10,
+            "estimated_minutes": 15,
+            "mission_id": "mission1",
+            "quest_id": "mission1_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "Calendar Isolation: The 15-Minute Block Trick",
-                  "url": "https://urgetostart.com/guides/calendar-fencing"
+                  "title": "Community Code of Conduct",
+                  "type": "internal_link",
+                  "path_or_url": "app/(marketing)/code-of-conduct"
+                },
+                {
+                  "title": "Explore the Community Board",
+                  "type": "internal_link",
+                  "path_or_url": "/platform/program/community",
+                  "subtitle": "See what others are building"
                 }
-              ],
-              "alternative_approach": "If a standard weekly allocation feels too strict right now, target a simple boundary: commit to waking up 30 minutes earlier on Tuesdays and Thursdays.",
-              "reflection_prompt": "You chose your hours. If a sudden operational crisis occurs in your personal schedule this week, what secondary boundary is your defense line to protect this time?"
+              ]
             },
-            "db_id": "m1_q1_t3_constraints"
+            "observation_config": null,
+            "metadata_config": {}
           }
-        ],
-        "content_markdown": "",
-        "db_id": "mission1_quest1"
+        ]
       },
       "quest2": {
-        "slug": "practice-asking-for-help",
-        "title": "Practice Asking for Help",
-        "subtitle": "Get over the fear of reaching out and learn to write short, direct requests.",
+        "id": "mission1_quest2",
+        "slug": "asking-for-allies",
+        "title": "Learn to ask",
+        "subtitle": "When you ask you might just get what you want!",
+        "description": "The power of asking lies in its ability to unlock new possibilities, break down social barriers, and accelerate personal and professional growth. By overcoming the fear of rejection, you open yourself to feedback, better opportunities, and deeper connections with others",
         "sequence": 2,
-        "content_path": "content/missions/mission1/quests/practice-asking-for-help.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Editor",
-          "persona_prompt": "You are an expert copywriter. Review message drafts. Flag vague phrases like 'pick your brain' or apologetic filler copy, and provide a direct alternative.",
-          "required_context": [
-            "user_profiles"
-          ],
-          "on_success": {
-            "grant_points": 50,
-            "badge_key": "COMMUNICATOR",
-            "badge_db_id": "COMMUNICATOR"
-          }
-        },
+        "content": "",
+        "estimated_in_app_minutes": 30,
+        "estimated_off_app_minutes": 120,
+        "grant_points_bonus": 50,
+        "is_optional": false,
+        "mission_id": "mission1",
+        "content_path": "content/missions/mission1/quests/art-of-asking.md",
+        "persona_name": "The Editor",
+        "persona_prompt": "You are a helpful copy editor. Review message drafts. Highlight hesitant filler words like 'just checking in' or 'sorry to bother you', and suggest more confident alternatives.",
+        "required_context": [
+          "user_profiles"
+        ],
+        "badge_key_reward": "COMMUNICATOR",
         "tasks": [
           {
             "id": "m1_q2_t1_ask_sim",
-            "title": "Test Drive Your Message",
+            "title": "Element of a good ask",
+            "sequence": 1,
             "type": "simulator",
             "component_key": "AskSimulator",
-            "sequence": 1,
             "grant_points": 30,
-            "description": "To practice getting requests right, jump into this safe sandbox with Kip. Draft a quick message asking your friends and family for early support.",
+            "estimated_minutes": 15,
+            "description": "Lets practice few asks before you approach people in the real world.",
+            "mission_id": "mission1",
+            "quest_id": "mission1_quest2",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "The 60-Second Ask Framework Rules",
-                  "url": "https://urgetostart.com/guides/asking-without-shame"
+                  "title": "The Art of Asking",
+                  "type": "blog",
+                  "path_or_url": "content/blog/art-of-asking.md"
+                },
+                {
+                  "title": "The Power of Asking",
+                  "type": "youtube",
+                  "path_or_url": "https://www.youtube.com/watch?v=xMj_P_6H69g",
+                  "subtitle": "TED talk by Amanda Palmer"
                 }
-              ],
-              "alternative_approach": "If messaging family scripts feels awkward, change the target entirely. Write the prompt as a short note to an old professional colleague or classmate.",
-              "reflection_prompt": "Did crafting that request copy make you feel like you were asking for an annoying favor, or did it feel like you were inviting an ally into your building arc?"
+              ]
             },
-            "db_id": "m1_q2_t1_ask_sim"
+            "observation_config": null,
+            "metadata_config": {}
           },
           {
             "id": "m1_q2_t2_known_reachout",
-            "title": "Reach Out to Your Circle",
+            "title": "Get your cheer squad",
+            "sequence": 2,
             "type": "action",
             "component_key": "KnownReachoutWidget",
-            "sequence": 2,
             "grant_points": 20,
-            "description": "Now that you have practiced the skill, let's execute it. Copy your polished message from the previous step and send it to the allies who have your back.",
+            "estimated_minutes": 60,
+            "description": "Ask people you know to be part of your journey. This could be a friend, a mentor, or a family member. Ask them to give you feedback on your idea, or just to be a cheerleader for your progress.",
+            "mission_id": "mission1",
+            "quest_id": "mission1_quest2",
+            "execution_environment": "off_app",
+            "checkback_delay_days": 2,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "Managing Outbound Response Anxiety",
-                  "url": "https://urgetostart.com/guides/managing-responses"
+                  "title": "Dealing with Response Anxiety",
+                  "type": "blog",
+                  "path_or_url": "content/blog/managing-responses.md"
+                },
+                {
+                  "title": "Ask for more",
+                  "type": "challenge",
+                  "path_or_url": "content/blog/ask-challenge.md"
                 }
               ],
-              "alternative_approach": "If messaging people individually triggers total friction, drop the request into a small group thread where your tightest circles already chat daily.",
-              "reflection_prompt": "You officially hit send. What surprised you more: the immediate speed of their direct responses, or the internal drops in your anxiety once it was gone?"
+              "reflection_prompt": "Now that you've hit send, did the reality of doing it feel lighter than the anxiety you had beforehand?"
             },
-            "db_id": "m1_q2_t2_known_reachout"
+            "observation_config": null,
+            "metadata_config": {}
           },
           {
             "id": "m1_q2_t3_digital_presence",
-            "title": "Claim Your Digital Voice",
+            "title": "Build your presence",
+            "sequence": 3,
             "type": "action",
             "component_key": "DigitalPresenceWidget",
-            "sequence": 3,
             "grant_points": 25,
-            "description": "Building in public isn't about pretending to be a guru; it's just about documenting your learning journey out loud. Update your bio cleanly, and share your first honest update.",
+            "estimated_minutes": 15,
+            "description": "Having a digital presence is important for building credibility and trust. It also helps you to be found by people who are interested in your work. Let's make sure you have a basic digital presence set up.",
+            "mission_id": "mission1",
+            "quest_id": "mission1_quest2",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "The Perfect Anti-Brag Bio Template",
-                  "url": "https://urgetostart.com/guides/clean-profiles"
+                  "title": "Ways to build a digital presence",
+                  "type": "blog",
+                  "path_or_url": "content/blog/ways-to-build-digital-presence.md"
+                },
+                {
+                  "title": "Gain 100 followers in a week",
+                  "type": "challenge",
+                  "path_or_url": "content/blog/gain-100-followers-challenge.md"
                 }
-              ],
-              "alternative_approach": "If updating your primary public network profile feels exposed, use a pseudonym or create a completely blank profile account dedicated strictly to tracking your progress.",
-              "reflection_prompt": "Your first update is officially out in the open. How does stepping away from passive consuming toward active publishing alter your mindset as a builder?"
+              ]
             },
-            "db_id": "m1_q2_t3_digital_presence"
+            "observation_config": null,
+            "metadata_config": {}
           }
-        ],
-        "content_markdown": "",
-        "db_id": "mission1_quest2"
+        ]
       },
       "quest3": {
-        "slug": "get-comfortable-hearing-no",
-        "title": "Get Comfortable Hearing No",
-        "subtitle": "Go into the real world and get rejected on purpose to see that it won't kill you.",
+        "id": "mission1_quest3",
+        "slug": "building-resilience",
+        "title": "Get Used to Hearing No",
+        "subtitle": "Collect a few real-world rejections and see that they won't kill you.",
+        "description": "Hearing 'no' stings at first—that's normal. But here's the thing: it's not about you. It's just feedback. This module is a safe space to practice taking small knocks so you can see they don't actually hurt. By the end, you'll have proof that rejection is just information, not a verdict.",
         "sequence": 3,
-        "content_path": "content/missions/mission1/quests/get-comfortable-hearing-no.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Hype-Man",
-          "persona_prompt": "You are an encouraging coach. The user is logging rejections. Reframe their entries as clean customer data point upgrades.",
-          "required_context": [
-            "user_profiles"
-          ],
-          "on_success": {
-            "grant_points": 100,
-            "badge_key": "FORTRESS",
-            "badge_db_id": "FORTRESS"
-          }
-        },
+        "content": "",
+        "estimated_in_app_minutes": 15,
+        "estimated_off_app_minutes": 180,
+        "grant_points_bonus": 100,
+        "is_optional": false,
+        "mission_id": "mission1",
+        "content_path": "content/missions/mission1/quests/building-resilience.md",
+        "persona_name": "The Hype-Man",
+        "persona_prompt": "You are an encouraging coach. The user is logging rejections. Reframe their entries as clean user feedback rather than personal setbacks.",
+        "required_context": [
+          "user_profiles"
+        ],
+        "badge_key_reward": "FORTRESS",
         "tasks": [
           {
             "id": "m1_q3_t1_rejection_log",
-            "title": "Log 3 Real-World Rejections",
+            "title": "Log 3 minor rejections this week",
+            "sequence": 1,
             "type": "log_counter",
             "component_key": "RejectionCounterForm",
-            "sequence": 1,
             "grant_points": 80,
+            "estimated_minutes": 120,
+            "description": "Here's a small experiment: go ask for something small that you expect to be turned down for. Maybe ask a cafe for a discount, or request a favor from someone you don't know well. The goal isn't to get a 'yes'—it's to collect a 'no' on purpose. When it happens, take a breath. Notice that you're okay. That's the whole point.",
+            "mission_id": "mission1",
+            "quest_id": "mission1_quest3",
+            "execution_environment": "off_app",
+            "checkback_delay_days": 3,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "The Gamification of Friction (Jia Jiang Rules)",
-                  "url": "https://urgetostart.com/guides/rejection-therapy"
+                  "title": "Your First No Is the Hardest",
+                  "type": "blog",
+                  "path_or_url": "content/blog/first-no-hardest.md"
+                },
+                {
+                  "title": "Jia Jiang: 100 Days of Rejection",
+                  "type": "youtube",
+                  "path_or_url": "https://www.youtube.com/watch?v=-vZXgApsPCQ",
+                  "subtitle": "Famous TED talk experiment"
+                },
+                {
+                  "title": "Post your experience to the community board",
+                  "type": "challenge",
+                  "path_or_url": "/user/posts"
                 }
               ],
-              "alternative_approach": "If you cannot find direct buyers to pitch today, collect low-stakes rejections: ask a local coffee stand for a 10% discount on your order just to hear the word 'no'.",
-              "reflection_prompt": "Now that you have logged these rejections, did the structural outcome crush your motivation, or did you realize the physical aftermath was entirely harmless?"
+              "reflection_prompt": "Now that you've done it—did the rejection actually hurt? Or did it just feel a little awkward and then pass? Write down what happened, how you felt, and what you noticed. This is your proof that you can handle more than you think."
             },
-            "db_id": "m1_q3_t1_rejection_log"
+            "observation_config": null,
+            "metadata_config": {}
           },
           {
             "id": "m1_q3_t2_club_unlock",
-            "title": "Open the Rejection Club Feed",
+            "title": "See how your peers are doing",
+            "sequence": 2,
             "type": "community",
             "component_key": "CommunityFeedTeaser",
-            "sequence": 2,
             "grant_points": 20,
+            "estimated_minutes": 15,
+            "description": "Open the community feed. Scroll through what others have posted. You'll see the same awkward moments, the same small rejections, the same 'I survived that' energy. This is your reminder that you're in good company.",
+            "mission_id": "mission1",
+            "quest_id": "mission1_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "Leveraging Shared Community Momentum",
-                  "url": "https://urgetostart.com/guides/peer-leverage"
+                  "title": "You're Not the Only One",
+                  "type": "blog",
+                  "path_or_url": "content/blog/not-alone.md"
                 }
-              ],
-              "alternative_approach": "If you don't want to post your entry openly to the main board yet, silently review 3 logs submitted by other founders to internalize their metrics.",
-              "reflection_prompt": "Seeing that every active peer around you experiences the identical friction, does failure feel like an individual flaw or a universal system variable?"
+              ]
             },
-            "db_id": "m1_q3_t2_club_unlock"
+            "observation_config": null,
+            "metadata_config": {}
           }
-        ],
-        "content_markdown": "",
-        "db_id": "mission1_quest3"
+        ]
       }
-    },
-    "briefing_markdown": "",
-    "db_id": "mission1"
+    }
   },
   "mission2": {
+    "id": "mission2",
     "title": "Find Problems Worth Solving",
     "sequence": 2,
     "video_url": "https://urgetostart.com/videos/m2-overview.mp4",
-    "briefing_text": "Businesses aren't invented; they are noticed. Stop searching for random ideas and begin tracking structural real-world friction.",
+    "briefing_text": "Before you build anything, you need to find a problem worth solving. We're going to start with what you know best—your own frustrations—and gradually expand outward. By the end of this mission, you'll have a real opportunity you can turn into a business.",
+    "content": "",
+    "content_path": "content/mission2/mission.md",
     "prerequisites": [
       {
-        "item": "Completion of Mission 1 validation badges and foundational profiles",
-        "promptKey": "M2_PRE_BADGE_AUDIT"
+        "item": "Your observation journal (PDF or physical notebook)",
+        "promptRawText": "You've got your observation journal ready. This is your tool for capturing frustrations and annoyances in real life. Keep it with you—you'll be using it a lot in this mission."
       },
       {
-        "item": "Observation notebook or a blank digital memo sheet active on your phone",
-        "promptKey": null
+        "item": "Willingness to talk to people about their problems",
+        "promptRawText": "You'll need to have real conversations with people—friends, colleagues, even strangers. This isn't about selling. It's about listening. Remind yourself: you're doing research, not pitching."
       },
       {
-        "item": "Willingness to assume that your initial ideas might be entirely wrong",
-        "promptKey": "M2_PRE_EGO_DETACHMENT"
+        "item": "Patience with the process",
+        "promptRawText": "Finding a good problem takes time. You might feel like you're not making progress. That's normal. Trust the process—every observation is data."
       }
     ],
     "quests": {
       "quest1": {
-        "slug": "your-own-pain-and-skills",
-        "title": "Your Own Pain & Skills",
-        "subtitle": "Look at what annoys you in your weekly routine, and what you are already good at doing.",
+        "id": "mission2_quest1",
+        "slug": "your-frustrations",
+        "title": "Your Own Frustrations",
+        "subtitle": "Start with what you know best—your own life",
+        "description": "The best problems to solve are often the ones you experience yourself. You understand them intimately. You know the pain points. You're the expert. In this quest, we're going to mine your own frustrations and skills for business opportunities.",
         "sequence": 1,
-        "content_path": "content/missions/mission2/quests/your-own-pain-and-skills.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Pattern Matcher",
-          "persona_prompt": "Analyze raw personal frustrations. Help the user isolate recurring operational problems from simple complaints.",
-          "required_context": [
-            "user_profiles"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
+        "content": "",
+        "estimated_in_app_minutes": 90,
+        "estimated_off_app_minutes": 180,
+        "grant_points_bonus": 50,
+        "is_optional": false,
+        "mission_id": "mission2",
+        "content_path": "content/missions/mission2/quests/your-frustrations.md",
+        "persona_name": "The Observer",
+        "persona_prompt": "You are a patient guide helping the user notice patterns in their own frustrations. Ask gentle questions that help them see their problems more clearly. Never dismiss their experiences. Help them connect dots.",
+        "required_context": [
+          "user_profiles"
+        ],
+        "badge_key_reward": "SELF_AWARE",
         "tasks": [
           {
-            "id": "m2_q1_t1_personal_frustrations",
-            "title": "Log 3 Inconveniences From Your Week",
-            "type": "form",
-            "component_key": "PersonalPainLogForm",
+            "id": "m2_q1_t1_observation_week",
+            "title": "Collect your frustrations and annoyances",
             "sequence": 1,
+            "type": "observation",
+            "component_key": "ObservationNotepad",
             "grant_points": 25,
+            "estimated_minutes": 180,
+            "description": "For the next 7 days, keep your observation journal with you. Every time something frustrates you, annoys you, or makes you think 'there has to be a better way'—write it down. Don't judge it. Just collect. Aim for at least 10 entries. Notice patterns. What comes up again and again?",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest1",
+            "execution_environment": "off_app",
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "Spotting True Commercial Inconvenience",
-                  "url": "https://urgetostart.com/guides/pain-spotting"
+                  "title": "Download Observation Journal (PDF)",
+                  "type": "download",
+                  "path_or_url": "/resources/observation-journal.pdf"
+                },
+                {
+                  "title": "How to Spot Hidden Opportunities in Your Frustrations",
+                  "type": "blog",
+                  "path_or_url": "content/blog/spot-opportunities-in-yourself.md",
+                  "subtitle": "5 min read"
                 }
               ],
-              "alternative_approach": "If your weekly schedule felt completely smooth, review your monthly bank statement: what transaction or utility bill felt annoying to pay?",
-              "reflection_prompt": "Look closely at your 3 logged issues. Are these temporary personal annoyances, or structural bottlenecks people would pay money to bypass?"
+              "reflection_prompt": "After a week of observing, what patterns have you noticed? What are you most excited to explore further?"
             },
-            "db_id": "m2_q1_t1_personal_frustrations"
+            "observation_config": {
+              "briefing_text": "For the next 7 days, keep your observation journal with you. Every time something frustrates you, annoys you, or makes you think 'there has to be a better way'—write it down. Don't judge it. Just collect. Aim for at least 10 entries. Notice patterns. What comes up again and again?",
+              "guide_questions": [
+                "What annoyed you today? Why?",
+                "What made you think 'I wish there was a better way'?",
+                "What did you spend too much time on?",
+                "What did you find yourself explaining to someone else?",
+                "What made you say 'that's just how it is'?"
+              ],
+              "min_observations": 10,
+              "observation_period_days": 7
+            },
+            "metadata_config": {
+              "source_type": "personal_problems"
+            }
           },
           {
-            "id": "m2_q1_t2_skills_inventory",
-            "title": "List Things You Do Better Than Average",
-            "type": "form",
-            "component_key": "SkillTagBuilder",
+            "id": "m2_q1_t2_skill_reflection",
+            "title": "What are you better at than most people?",
             "sequence": 2,
-            "grant_points": 25,
+            "type": "observation",
+            "component_key": "ObservationNotepad",
+            "grant_points": 20,
+            "estimated_minutes": 90,
+            "description": "Now let's look at your skills. What do you do better than most people you know? This could be anything—cooking, organizing, explaining, fixing things, making people feel comfortable. Ask 3 people who know you well: 'What am I unusually good at?' And ask yourself: 'Would people pay me to do this for them?'",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest1",
+            "execution_environment": "off_app",
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "Deconstructing Your Hidden Technical Capital",
-                  "url": "https://urgetostart.com/guides/uncovering-skills"
+                  "title": "Skill Reflection Worksheet (PDF)",
+                  "type": "download",
+                  "path_or_url": "/resources/skill-reflection.pdf"
+                },
+                {
+                  "title": "How to Turn Your Skills Into a Business",
+                  "type": "blog",
+                  "path_or_url": "content/blog/skills-to-business.md",
+                  "subtitle": "4 min read"
                 }
               ],
-              "alternative_approach": "If you struggle to list structural skills, think about what tasks your coworkers, friends, or parents constantly ask you to fix or handle for them.",
-              "reflection_prompt": "Are the native skill tags you configured traits you genuinely enjoy executing, or are they historical habits you are trying to move away from?"
+              "reflection_prompt": "What did people say you're good at? Did any of their answers surprise you? How might your skills connect to the frustrations you observed?"
             },
-            "db_id": "m2_q1_t2_skills_inventory"
+            "observation_config": {
+              "briefing_text": "Ask 3 people who know you well: 'What am I unusually good at?' And ask yourself: 'Would people pay me to do this for them?'",
+              "guide_questions": [
+                "What do people come to you for help with?",
+                "What do you do that feels effortless to you but hard for others?",
+                "What have you been doing since you were young?",
+                "What do you enjoy doing so much that you lose track of time?",
+                "What do you know more about than the average person?"
+              ],
+              "min_observations": 3,
+              "observation_period_days": 3
+            },
+            "metadata_config": {
+              "source_type": "skills"
+            }
+          },
+          {
+            "id": "m2_q1_t3_enter_opportunities",
+            "title": "Enter your best opportunities",
+            "sequence": 3,
+            "type": "form",
+            "component_key": "OpportunityForm",
+            "grant_points": 25,
+            "estimated_minutes": 30,
+            "description": "Open your observation journal. Pick the 3-5 frustrations that felt most real, most frequent, or most interesting. Also look at your skill reflections. Where do your skills and frustrations intersect? Enter them into the system as opportunities—these are the raw materials for your business.",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
+            "ai_config": {
+              "recommendations": [
+                {
+                  "title": "From Frustration to Business Idea",
+                  "type": "blog",
+                  "path_or_url": "content/blog/frustration-to-business.md"
+                },
+                {
+                  "title": "How to Write a Clear Problem Statement",
+                  "type": "blog",
+                  "path_or_url": "content/blog/problem-statement.md"
+                }
+              ]
+            },
+            "observation_config": null,
+            "metadata_config": {
+              "source_type": "personal_problems",
+              "source_context": "Look at your frustration journal. Pick the 3-5 frustrations that felt most real, most frequent, or most interesting. Also look at your skill reflections. Where do your skills and frustrations intersect? Enter them as opportunities.",
+              "dependencies": [
+                "m2_q1_t1_observation_week",
+                "m2_q1_t2_skill_reflection"
+              ]
+            }
           }
-        ],
-        "content_markdown": "",
-        "db_id": "mission2_quest1"
+        ]
       },
       "quest2": {
-        "slug": "the-people-around-you",
-        "title": "The People Around You",
-        "subtitle": "Watch your friends, classmates, or co-workers and notice where they struggle.",
+        "id": "mission2_quest2",
+        "slug": "people-in-your-circle",
+        "title": "People in Your Circle",
+        "subtitle": "The problems of people you know are the problems you understand best",
+        "description": "Now we're expanding outward. The people you know—friends, family, colleagues, classmates—have problems too. And because you know them, you can observe their frustrations firsthand. This is research you can do without leaving your comfort zone.",
         "sequence": 2,
-        "content_path": "content/missions/mission2/quests/the-people-around-you.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Anthropologist",
-          "persona_prompt": "Decode daily group complaining habits into specific service deficits.",
-          "required_context": [
-            "user_profiles"
-          ],
-          "on_success": {
-            "grant_points": 50
-          }
-        },
+        "content": "",
+        "estimated_in_app_minutes": 60,
+        "estimated_off_app_minutes": 240,
+        "grant_points_bonus": 50,
+        "is_optional": false,
+        "mission_id": "mission2",
+        "content_path": "content/missions/mission2/quests/people-in-your-circle.md",
+        "persona_name": "The Investigator",
+        "persona_prompt": "You are a curious researcher helping the user observe problems in their social circles. Encourage them to be good listeners. Help them distinguish between minor annoyances and real problems. Remind them: they're doing research, not pitching.",
+        "required_context": [
+          "user_profiles"
+        ],
+        "badge_key_reward": "CURIOUS",
         "tasks": [
           {
-            "id": "m2_q2_t1_identify_circles",
-            "title": "Select the Groups You Spend Time With",
-            "type": "form",
-            "component_key": "CircleTagMatrix",
+            "id": "m2_q2_t1_social_observation",
+            "title": "Observe the problems of people around you",
             "sequence": 1,
-            "grant_points": 20,
+            "type": "observation",
+            "component_key": "ObservationNotepad",
+            "grant_points": 25,
+            "estimated_minutes": 180,
+            "description": "Pick 3 people in your life. Could be a friend, a colleague, a family member, someone at your gym. Over the next week, observe them. What are they complaining about? What do they do that seems unnecessarily hard? What do they buy to fix their problems? Don't ask them yet—just watch. Take notes. Notice patterns.",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest2",
+            "execution_environment": "off_app",
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "Mapping Niche Subcultures for Customer Discovery",
-                  "url": "https://urgetostart.com/guides/subculture-mapping"
+                  "title": "Social Observation Worksheet (PDF)",
+                  "type": "download",
+                  "path_or_url": "/resources/social-observation.pdf"
+                },
+                {
+                  "title": "How to Observe Without Judging",
+                  "type": "blog",
+                  "path_or_url": "content/blog/observing-without-judging.md",
+                  "subtitle": "4 min read"
                 }
               ],
-              "alternative_approach": "If you work completely isolated or remote, select online sub-communities or forums where you actively read daily interaction logs.",
-              "reflection_prompt": "Which of these user circles do you possess the highest native empathy for, and where do you have the most direct structural access?"
+              "reflection_prompt": "What surprised you about people's frustrations? Was there a pattern across different people? Which problem seemed most real?"
             },
-            "db_id": "m2_q2_t1_identify_circles"
+            "observation_config": {
+              "briefing_text": "Pick 3 people in your life. Could be a friend, a colleague, a family member, someone at your gym. Over the next week, observe them. What are they complaining about? What do they do that seems unnecessarily hard? What do they buy to fix their problems? Don't ask them yet—just watch. Take notes. Notice patterns.",
+              "guide_questions": [
+                "What does this person complain about regularly?",
+                "What tasks do they avoid or procrastinate on?",
+                "What do they spend money on to solve problems?",
+                "What do they do that seems inefficient?",
+                "What makes them frustrated or stressed?"
+              ],
+              "min_observations": 5,
+              "observation_period_days": 7
+            },
+            "metadata_config": {
+              "source_type": "zone_of_influence"
+            }
           },
           {
-            "id": "m2_q2_t2_friction_log",
-            "title": "Log 2 Clumsy Shortcuts You Saw Someone Use",
-            "type": "form",
-            "component_key": "CircleObservationForm",
+            "id": "m2_q2_t2_add_opportunities",
+            "title": "Add validated opportunities to your list",
             "sequence": 2,
-            "grant_points": 30,
-            "description": "Log 2 clumsy workarounds or shortcuts you saw someone utilize to bypass a bottleneck.",
+            "type": "form",
+            "component_key": "OpportunityForm",
+            "grant_points": 20,
+            "estimated_minutes": 20,
+            "description": "Look at your social observations. Which problems seemed most real? Which ones got people excited? Add them as opportunities.",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest2",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "The Clumsy Shortcut Audit Framework",
-                  "url": "https://urgetostart.com/guides/shortcut-hunting"
+                  "title": "From Observation to Opportunity",
+                  "type": "blog",
+                  "path_or_url": "content/blog/observation-to-opportunity.md"
                 }
-              ],
-              "alternative_approach": "If you didn't catch anyone using a shortcut physically, look up a tutorial video for a common software app: where do users look confused in comment threads?",
-              "reflection_prompt": "Every clumsy shortcut is a hidden validation sign for a product. Is the friction you observed caused by a lack of tools or bad information?"
+              ]
             },
-            "db_id": "m2_q2_t2_friction_log"
+            "observation_config": null,
+            "metadata_config": {
+              "source_type": "zone_of_influence",
+              "source_context": "Look at your social observations. Which problems seemed most real? Which ones got people excited? Add them as opportunities.",
+              "dependencies": [
+                "m2_q2_t1_social_observation"
+              ]
+            }
           }
-        ],
-        "content_markdown": "",
-        "db_id": "mission2_quest2"
+        ]
       },
       "quest3": {
-        "slug": "the-internet-safari",
-        "title": "The Internet Safari",
-        "subtitle": "Scan online comment sections, reviews, and forums to find real complaints.",
+        "id": "mission2_quest3",
+        "slug": "the-world-out-there",
+        "title": "The World Out There",
+        "subtitle": "Find problems that are big enough to build a business around",
+        "description": "Now we're looking at the broader market. This is where you find problems that affect enough people to make a real business. You'll use tools like Google Trends, Reddit, Facebook Groups, and marketplaces to see what people are struggling with on a larger scale.",
         "sequence": 3,
-        "content_path": "content/missions/mission2/quests/the-internet-safari.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Signal Filter",
-          "persona_prompt": "Evaluate online data logs. Help the user avoid short fads and focus on long macro waves.",
-          "required_context": [
-            "user_profiles"
-          ],
-          "on_success": {
-            "grant_points": 50,
-            "badge_key": "SCOUT",
-            "badge_db_id": "SCOUT"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m2_q3_t1_safari_grab",
-            "title": "Find 2 Complaints Posted Natively Online",
-            "type": "form",
-            "component_key": "DigitalSafariLogForm",
-            "sequence": 1,
-            "grant_points": 50,
-            "ai_config": {
-              "resources": [
-                {
-                  "title": "Advanced Search Filters for Reddit and Review Boards",
-                  "url": "https://urgetostart.com/guides/safari-mining"
-                }
-              ],
-              "alternative_approach": "Head directly to a popular service platform's app store listing. Filter reviews strictly by '3-stars' to find users who like the core utility but hate the active friction.",
-              "reflection_prompt": "Look at the raw language the internet user chose to describe their frustration. Are they attacking a missing software feature, or expressing genuine operational anger?"
-            },
-            "db_id": "m2_q3_t1_safari_grab"
-          }
+        "content": "",
+        "estimated_in_app_minutes": 90,
+        "estimated_off_app_minutes": 180,
+        "grant_points_bonus": 75,
+        "is_optional": false,
+        "mission_id": "mission2",
+        "content_path": "content/missions/mission2/quests/the-world-out-there.md",
+        "persona_name": "The Cartographer",
+        "persona_prompt": "You are helping the user map the landscape of problems. Guide them to look for patterns, not just individual complaints. Help them understand the difference between a niche problem and a market opportunity.",
+        "required_context": [
+          "user_profiles",
+          "opportunities"
         ],
-        "content_markdown": "",
-        "db_id": "mission2_quest3"
-      },
-      "quest4": {
-        "slug": "discovery-simulator",
-        "title": "The Practice Interview Game",
-        "subtitle": "Test your conversation skills with a simulated customer before talking to real humans.",
-        "sequence": 4,
-        "content_path": "content/missions/mission2/quests/discovery-simulator.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "Alex the Busy Creative",
-          "persona_prompt": "Simulate a highly skeptical buyer named Alex. Act short and defensive unless the user asks open, historical questions about your past workflows.",
-          "required_context": [
-            "user_profiles"
-          ],
-          "on_success": {
-            "grant_points": 100,
-            "badge_key": "DETECTIVE",
-            "badge_db_id": "DETECTIVE"
-          }
-        },
+        "badge_key_reward": "OBSERVER",
         "tasks": [
           {
-            "id": "m2_q4_t1_chat_roleplay",
-            "title": "Uncover Alex's True Past Problems Without Pitching",
-            "type": "simulator",
-            "component_key": "LiveChatRoleplayWidget",
+            "id": "m2_q3_t1_trend_research",
+            "title": "What are people searching for?",
             "sequence": 1,
-            "grant_points": 100,
+            "type": "action",
+            "component_key": "OpportunityForm",
+            "grant_points": 25,
+            "estimated_minutes": 45,
+            "description": "Open Google Trends. Search 5 terms related to problems you're curious about. Look at related queries—what are people searching for? Also check Reddit: what are people complaining about in subreddits related to your interests? This isn't about copying trends. It's about finding patterns of unmet need.",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest3",
+            "execution_environment": "off_app",
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "The Mom Test Core Conversation Rules",
-                  "url": "https://urgetostart.com/guides/mom-test-foundations"
+                  "title": "How to Use Google Trends for Business Ideas",
+                  "type": "blog",
+                  "path_or_url": "content/blog/google-trends-guide.md"
+                },
+                {
+                  "title": "Reddit: The World's Largest Focus Group",
+                  "type": "blog",
+                  "path_or_url": "content/blog/reddit-focus-group.md"
                 }
               ],
-              "alternative_approach": "If Alex completely locks up on you during the script, stop trying to guide the conversation. Ask a purely historical question about the last time he encountered the task.",
-              "reflection_prompt": "You officially navigated the sandbox conversation. What statement triggered Alex to drop his guard: a generic pitch outline, or an invitation to unpack his past workflow history?"
+              "reflection_prompt": "What surprised you in the search results? Was there a problem that seemed more common than you expected?"
             },
-            "db_id": "m2_q4_t1_chat_roleplay"
-          }
-        ],
-        "content_markdown": "",
-        "db_id": "mission2_quest4"
-      },
-      "quest5": {
-        "slug": "pain-index-and-final-cut",
-        "title": "Rate the Pain & Make a Choice",
-        "subtitle": "Talk to 3 real people, grade their frustration, and pick your primary focus.",
-        "sequence": 5,
-        "content_path": "content/missions/mission2/quests/pain-index-and-final-cut.md",
-        "ai_config": {
-          "role": "SYSTEM_CONDUCTOR",
-          "persona_name": "The Ruthless Judge",
-          "persona_prompt": "Review logged ideas side-by-side. Rank them on alignment with user profile constraints and pain level metrics.",
-          "required_context": [
-            "user_profiles",
-            "opportunities"
-          ],
-          "on_success": {
-            "grant_points": 150,
-            "badge_key": "ALCHEMIST",
-            "badge_db_id": "ALCHEMIST"
-          }
-        },
-        "tasks": [
-          {
-            "id": "m2_q5_t1_interview_log",
-            "title": "Log 3 Real Validation Conversations",
-            "type": "form",
-            "component_key": "PainIndexTrackerForm",
-            "sequence": 1,
-            "grant_points": 100,
-            "ai_config": {
-              "resources": [
-                {
-                  "title": "Navigating Real-World Discovery Interviews Safely",
-                  "url": "https://urgetostart.com/guides/interviewing-humans"
-                }
-              ],
-              "alternative_approach": "If reaching out to new contacts triggers massive friction, interview 3 peers within the internal Urge community feed who match your target persona profile parameters.",
-              "reflection_prompt": "Reviewing the raw data logs from your 3 interviews, did the subjects state that they actively spent real money trying to resolve this bottleneck in the past year?"
-            },
-            "db_id": "m2_q5_t1_interview_log"
+            "observation_config": null,
+            "metadata_config": {
+              "source_type": "broader_search",
+              "source_context": "What did you find in Google Trends? What related queries came up? What seems to be a growing concern? Add them as opportunities.",
+              "observation_task_ids": []
+            }
           },
           {
-            "id": "m2_q5_t2_synthesize_cut",
-            "title": "Pick the One Idea You Will Commit To",
-            "type": "action",
-            "component_key": "OpportunityDecisionBoard",
+            "id": "m2_q3_t2_forum_research",
+            "title": "Where do people talk about their problems?",
             "sequence": 2,
-            "grant_points": 50,
+            "type": "action",
+            "component_key": "OpportunityForm",
+            "grant_points": 25,
+            "estimated_minutes": 60,
+            "description": "Check Facebook Groups, LinkedIn communities, industry forums. Look for questions that keep coming up. Look for hacks and workarounds. If people are actively discussing a problem, it's worth paying attention to. Join the conversation—ask questions, not pitch.",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest3",
+            "execution_environment": "off_app",
+            "checkback_delay_days": 2,
+            "recurring": null,
+            "interval": null,
             "ai_config": {
-              "resources": [
+              "recommendations": [
                 {
-                  "title": "The Elimination Framework: Shifting to Mono-Focus",
-                  "url": "https://urgetostart.com/guides/making-the-cut"
+                  "title": "Finding Problems in Online Communities",
+                  "type": "blog",
+                  "path_or_url": "content/blog/online-communities-problems.md"
+                },
+                {
+                  "title": "How to Ask Research Questions in Forums",
+                  "type": "blog",
+                  "path_or_url": "content/blog/ask-research-questions.md"
                 }
               ],
-              "alternative_approach": "If you feel paralyzed choosing between two distinct ideas, pick the path that carries the absolute lowest software tool cost to deploy an initial version.",
-              "reflection_prompt": "You have committed to a single workspace direction. How does closing the alternative loops feel to your mindset as a tactical operator?"
+              "reflection_prompt": "Which community had the most engaged discussions about problems? What does that tell you?"
             },
-            "db_id": "m2_q5_t2_synthesize_cut"
+            "observation_config": null,
+            "metadata_config": {
+              "source_type": "broader_search",
+              "source_context": "What problems did you find in forums? What questions keep coming up? Add them as opportunities.",
+              "observation_task_ids": []
+            }
+          },
+          {
+            "id": "m2_q3_t3_marketplace_research",
+            "title": "What's already being sold?",
+            "sequence": 3,
+            "type": "action",
+            "component_key": "OpportunityForm",
+            "grant_points": 25,
+            "estimated_minutes": 45,
+            "description": "Go to Amazon, Etsy, or wherever relevant. Search for products related to your problem area. What do people complain about in the reviews? 'I wish this had...' 'If only it could...' Those complaints are gold. They represent unmet needs that existing products aren't solving.",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest3",
+            "execution_environment": "off_app",
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
+            "ai_config": {
+              "recommendations": [
+                {
+                  "title": "Reading Between the Lines of Product Reviews",
+                  "type": "blog",
+                  "path_or_url": "content/blog/product-review-insights.md"
+                },
+                {
+                  "title": "Competitor Analysis for Beginners",
+                  "type": "blog",
+                  "path_or_url": "content/blog/competitor-analysis.md"
+                }
+              ],
+              "reflection_prompt": "What complaints kept coming up? Is there a gap in the market you could fill?"
+            },
+            "observation_config": null,
+            "metadata_config": {
+              "source_type": "broader_search",
+              "source_context": "What complaints did you find in product reviews? What gaps did you identify? Add them as opportunities.",
+              "observation_task_ids": []
+            }
+          },
+          {
+            "id": "m2_q3_t4_consolidate_opportunities",
+            "title": "Consolidate your opportunity list",
+            "sequence": 4,
+            "type": "form",
+            "component_key": "OpportunityListReview",
+            "grant_points": 20,
+            "estimated_minutes": 30,
+            "description": "You've done a lot of research. You've got observations from yourself, from people you know, and from the broader market. Now it's time to review everything. Look at your list. Which problems seem most real? Which affect the most people? Which are you most excited to solve? Add the best ones to your master opportunity list.",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
+            "ai_config": {
+              "recommendations": [
+                {
+                  "title": "How to Prioritize Business Ideas",
+                  "type": "blog",
+                  "path_or_url": "content/blog/prioritize-ideas.md"
+                },
+                {
+                  "title": "The Problem Filter: Separating Wheat from Chaff",
+                  "type": "blog",
+                  "path_or_url": "content/blog/problem-filter.md"
+                }
+              ]
+            },
+            "observation_config": null,
+            "metadata_config": {}
           }
+        ]
+      },
+      "quest4": {
+        "id": "mission2_quest4",
+        "slug": "pick-your-path",
+        "title": "Pick Your Path",
+        "subtitle": "Validate, score, and commit to one opportunity",
+        "description": "You've explored problems from every angle. You've looked inward, outward, and across the market. Now it's time to validate what's real, score your options, and commit to one. This is the moment of truth.",
+        "sequence": 4,
+        "content": "",
+        "estimated_in_app_minutes": 60,
+        "estimated_off_app_minutes": 120,
+        "grant_points_bonus": 100,
+        "is_optional": false,
+        "mission_id": "mission2",
+        "content_path": "content/missions/mission2/quests/pick-your-path.md",
+        "persona_name": "The Decider",
+        "persona_prompt": "You are helping the user make a clear decision. Don't let them waffle. Help them weigh the evidence, trust their gut, and commit. Remind them: they can always change direction later. The important thing is to start.",
+        "required_context": [
+          "user_profiles",
+          "opportunities"
         ],
-        "content_markdown": "",
-        "db_id": "mission2_quest5"
+        "badge_key_reward": "DECIDED",
+        "tasks": [
+          {
+            "id": "m2_q4_t1_validate_opportunities",
+            "title": "Validate your opportunities with real people",
+            "sequence": 1,
+            "type": "form",
+            "component_key": "OpportunityValidator",
+            "grant_points": 30,
+            "estimated_minutes": 60,
+            "description": "Take your top 5-10 opportunities. Go back to potential customers. Ask: 'Is this actually a problem for you? Would you pay for a solution?' This is the moment of truth. Log what you learn.",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": 3,
+            "recurring": null,
+            "interval": null,
+            "ai_config": {
+              "recommendations": [
+                {
+                  "title": "How to Ask 'Would You Pay?' Without Being Pushy",
+                  "type": "blog",
+                  "path_or_url": "content/blog/ask-would-you-pay.md"
+                },
+                {
+                  "title": "The Art of Validation",
+                  "type": "blog",
+                  "path_or_url": "content/blog/art-of-validation.md"
+                }
+              ],
+              "reflection_prompt": "What did people say? Did anyone get genuinely excited? Did anyone tell you they'd pay? That's your signal."
+            },
+            "observation_config": null,
+            "metadata_config": {}
+          },
+          {
+            "id": "m2_q4_t2_score_opportunities",
+            "title": "Score your opportunities honestly",
+            "sequence": 2,
+            "type": "form",
+            "component_key": "OpportunityScorer",
+            "grant_points": 30,
+            "estimated_minutes": 30,
+            "description": "Here's the truth: you can't pursue all of them. Let's get real. For each validated opportunity, score it honestly on these 5 criteria:\n\n• **Do I actually care about this problem?** (1-10)\n• **Do I know people who have this problem?** (1-10)\n• **Could I talk to them easily?** (1-10)\n• **Do I have any unfair advantage here?** (1-10)\n• **Is there a clear way I could get paid?** (1-10)",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
+            "ai_config": {
+              "recommendations": [
+                {
+                  "title": "How to Choose the Right Business Idea",
+                  "type": "blog",
+                  "path_or_url": "content/blog/choose-right-idea.md"
+                },
+                {
+                  "title": "The 5 Tests of a Good Business Opportunity",
+                  "type": "blog",
+                  "path_or_url": "content/blog/5-tests-opportunity.md"
+                }
+              ],
+              "reflection_prompt": "Looking at your scores, which opportunity stands out? Which one would you be most excited to tell people about?"
+            },
+            "observation_config": null,
+            "metadata_config": {}
+          },
+          {
+            "id": "m2_q4_t3_create_project",
+            "title": "Save your project",
+            "sequence": 3,
+            "type": "form",
+            "component_key": "ProjectCreationForm",
+            "grant_points": 40,
+            "estimated_minutes": 20,
+            "description": "You've found it. The opportunity that passes the test. Save it as your project. This is your starting point. Everything from here on is about making this real. Congratulations—you've taken the hardest step.",
+            "mission_id": "mission2",
+            "quest_id": "mission2_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": null,
+            "interval": null,
+            "ai_config": {
+              "recommendations": [
+                {
+                  "title": "What to Do After You Pick Your Business Idea",
+                  "type": "blog",
+                  "path_or_url": "content/blog/after-picking-idea.md"
+                },
+                {
+                  "title": "Your First 30 Days as a Founder",
+                  "type": "blog",
+                  "path_or_url": "content/blog/first-30-days.md"
+                }
+              ]
+            },
+            "observation_config": null,
+            "metadata_config": {}
+          }
+        ]
       }
-    },
-    "briefing_markdown": "",
-    "db_id": "mission2"
+    }
   }
 }
