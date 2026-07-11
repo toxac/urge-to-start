@@ -11,10 +11,10 @@ import {mission8} from "./mission8";
 export const urgePlaybook: PlaybookConfig = {
   mission1,
   mission2, 
-  mission3, 
-  mission4, 
-  mission5, 
-  mission6, 
-  mission7, 
-  mission8,  
+  //mission3, 
+  //mission4, 
+  //mission5, 
+  //mission6, 
+  //mission7, 
+  //mission8,  
 };
