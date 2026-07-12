@@ -387,7 +387,7 @@
         "grant_points_bonus": 50,
         "is_optional": false,
         "mission_id": "mission2",
-        "content_path": "content/missions/mission2/quests/your-frustrations.md",
+        "content_path": "content/missions/mission2/quests/your-own-pain-and-skills.md",
         "persona_name": "The Observer",
         "persona_prompt": "You are a patient guide helping the user notice patterns in their own frustrations. Ask gentle questions that help them see their problems more clearly. Never dismiss their experiences. Help them connect dots.",
         "required_context": [
@@ -543,7 +543,7 @@
         "grant_points_bonus": 50,
         "is_optional": false,
         "mission_id": "mission2",
-        "content_path": "content/missions/mission2/quests/people-in-your-circle.md",
+        "content_path": "content/missions/mission2/quests/your-zone-of-influence.md",
         "persona_name": "The Investigator",
         "persona_prompt": "You are a curious researcher helping the user observe problems in their social circles. Encourage them to be good listeners. Help them distinguish between minor annoyances and real problems. Remind them: they're doing research, not pitching.",
         "required_context": [
