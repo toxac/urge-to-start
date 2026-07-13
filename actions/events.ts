@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { Database, Json } from '@/types/supabase';
 import { createClient } from '@/lib/supabase/server';
+import { CreateEventSchema, QueryEventsSchema } from '@/types/events';
 
 type EventRow = Database['public']['Tables']['events']['Row'];
 type EventInsert = Database['public']['Tables']['events']['Insert'];
@@ -16,29 +17,6 @@ type ActionResponse<T> =
 // ZOD RUNTIME VALIDATION SCHEMAS
 // =========================================================================
 
-export const CreateEventSchema = z.object({
-  title: z.string().min(1).max(255).trim(),
-  description: z.string().min(1),
-  event_date: z.string().datetime(),
-  timezone: z.string().min(1).trim().default('UTC'),
-  format: z.enum(['virtual', 'irl']),
-  type: z.enum(['pitch', 'standup', 'mentor_session', 'launch', 'networking', 'program_based']),
-  price: z.number().min(0).default(0),
-  currency: z.string().min(3).max(5).trim().toUpperCase().default('INR'),
-  is_free_for_member: z.boolean().default(true),
-  is_public: z.boolean().default(true),
-  contact_email: z.string().email().trim(),
-  speakers: z.array(z.record(z.string(), z.any())).default([]),
-  venue_details: z.record(z.string(), z.any()).default({}),
-  redeemable_points: z.number().int().min(0).default(0),
-  video_link: z.string().url().optional().nullable(),
-});
-
-export const QueryEventsSchema = z.object({
-  format: z.enum(['virtual', 'irl']).optional().nullable(),
-  type: z.enum(['pitch', 'standup', 'mentor_session', 'launch', 'networking', 'program_based']).optional().nullable(),
-  includePrivate: z.boolean().default(false),
-});
 
 // =========================================================================
 // SERVER ACTIONS LAYER
@@ -46,6 +24,7 @@ export const QueryEventsSchema = z.object({
 
 /**
  * POST: Privileged creation endpoint allowing Admins or Mentors to schedule events.
+ * Updated to check roles array instead of a single role field.
  */
 export async function createPlatformEventAdmin(rawInput: z.infer<typeof CreateEventSchema>): Promise<ActionResponse<EventRow>> {
   try {
@@ -53,17 +32,38 @@ export async function createPlatformEventAdmin(rawInput: z.infer<typeof CreateEv
     const supabase = await createClient();
 
     const { data: { user } } = await supabase.auth.getUser();
-    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user?.id || '').single();
+    if (!user) {
+      return { success: false, error: 'Authentication required to create events' };
+    }
 
-    if (!profile || (profile.role !== 'admin' && profile.role !== 'mentor')) {
-      return { success: false, error: 'Access Denied: Only platform administrators or mentors can organize calendar events' };
+    // ✅ FIXED: Use roles array instead of single role field
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('roles')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile) {
+      return { success: false, error: 'User profile not found' };
+    }
+
+    // Check if user has admin or mentor role in their roles array
+    const userRoles = (profile.roles || []) as string[];
+    const isAdmin = userRoles.includes('superadmin') || userRoles.includes('admin_marketing') || userRoles.includes('admin_accounts');
+    const isMentor = userRoles.includes('mentor');
+
+    if (!isAdmin && !isMentor) {
+      return { 
+        success: false, 
+        error: 'Access Denied: Only platform administrators or mentors can organize calendar events' 
+      };
     }
 
     const eventPayload: EventInsert = {
       ...validated,
       speakers: validated.speakers as Json,
       venue_details: validated.venue_details as Json,
-      participants: [] as any, // Initializes registration sheet empty
+      participants: [] as any,
       updated_at: new Date().toISOString(),
     };
 
@@ -161,7 +161,7 @@ export async function getUpcomingEventsFeed(rawInput: z.infer<typeof QueryEvents
     let dbQuery = supabase
       .from('events')
       .select('*')
-      .gte('event_date', new Date().toISOString()); // Pull only upcoming entries
+      .gte('event_date', new Date().toISOString());
 
     if (!query.includePrivate) {
       dbQuery = dbQuery.eq('is_public', true);

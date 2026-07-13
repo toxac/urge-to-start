@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { Database, Json } from '@/types/supabase';
 import { createClient } from '@/lib/supabase/server';
+import { CreateProjectSchema, UpdateProjectSchema } from '@/types/projects';
 
 type ProjectRow = Database['public']['Tables']['projects']['Row'];
 type ProjectInsert = Database['public']['Tables']['projects']['Insert'];
@@ -18,17 +19,7 @@ type ActionResponse<T> =
 // ZOD RUNTIME VALIDATION SCHEMAS
 // =========================================================================
 
-export const CreateProjectSchema = z.object({
-  biz_name: z.string().min(1).max(255).trim(),
-  five_word_hook: z.string().max(100).nullable().optional(),
-  // ⚡ No opportunity_id here - it's handled by opportunities table
-});
 
-export const UpdateProjectSchema = z.object({
-  biz_name: z.string().min(1).max(255).trim().optional(),
-  five_word_hook: z.string().max(100).nullable().optional(),
-  is_active: z.boolean().optional(),
-});
 
 // =========================================================================
 // SERVER ACTIONS

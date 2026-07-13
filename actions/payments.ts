@@ -10,7 +10,7 @@ import {
   ValidateDiscountSchema, 
   InitializeCheckoutSchema, 
   CompleteCheckoutSchema 
-} from '@/actions/payments.schemas';
+} from '@/types/payments';
 
 // Extract strict database interfaces from your schema definition contract
 type DiscountRow = Database['public']['Tables']['discounts']['Row'];
