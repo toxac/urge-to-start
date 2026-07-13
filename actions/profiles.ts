@@ -1,48 +1,28 @@
 'use server';
 
-import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { Database, Json } from '@/types/supabase'; // Import the unified Json type explicitly
+import { Json } from '@/types/supabase';
 import { createClient } from '@/lib/supabase/server';
+import { z } from 'zod';
+import {
+  ProfileRow,
+  ProfileUpdate,
+  ActionResponse,
+  UserRole,
+  UpdateProfileSchema,
+  AdvanceOnboardingSchema,
+  RoleMetadataSchema,
+  AdminSyncRoleSchema,
+} from '@/types/profiles';
 
-type ProfileRow = Database['public']['Tables']['profiles']['Row'];
-type ProfileUpdate = Database['public']['Tables']['profiles']['Update'];
-
-type ActionResponse<T> = 
-  | { success: true; data: T } 
-  | { success: false; error: string };
-
-// =========================================================================
-// ZOD RUNTIME VALIDATION SCHEMAS
-// =========================================================================
-
-export const UpdateProfileSchema = z.object({
-  full_name: z.string().min(1).max(100).trim().optional(),
-  username: z.string().min(3).max(30).trim().regex(/^[a-zA-Z0-9_]+$/, {
-    message: "Username can only contain letters, numbers, and underscores"
-  }).optional(),
-  avatar_url: z.string().url().optional().nullable(),
-  city: z.string().max(100).trim().optional().nullable(),
-  country: z.string().min(2).max(100).trim().optional(),
-  description: z.string().max(1000).trim().optional().nullable(),
-  core_driver: z.string().max(255).trim().optional().nullable(),
-  // FIXED Error 1: Explicitly defining both key and value schemas for z.record
-  social_profiles: z.record(z.string(), z.string().url().or(z.string())).optional(),
-});
-
-export const AdvanceOnboardingSchema = z.object({
-  step: z.number().int().min(1).max(10),
-});
-
-export const RoleMetadataSchema = z.object({
-  // FIXED Error 2: Providing both key and value schema requirements to z.record
-  metadata: z.record(z.string(), z.any()),
-});
-
-export const AdminSyncRoleSchema = z.object({
-  userId: z.string().uuid(),
-  role: z.enum(['lead', 'member_full', 'member_network', 'mentor', 'provider', 'admin', 'suspended']),
-});
+// Helper to safely cast to UserRole[]
+function asUserRoles(roles: string[]): UserRole[] {
+  const validRoles: UserRole[] = [
+    'base', 'enrolled', 'member', 'provider', 'mentor', 
+    'superadmin', 'admin_marketing', 'admin_accounts'
+  ];
+  return roles.filter((r): r is UserRole => validRoles.includes(r as UserRole));
+}
 
 // =========================================================================
 // SERVER ACTIONS LAYER
@@ -52,18 +32,21 @@ export const AdminSyncRoleSchema = z.object({
  * PATCH: Safely updates the user's personal profile card fields.
  * Aligns custom dictionary mappings cleanly with Supabase Json interfaces.
  */
-export async function updateMyProfile(rawInput: z.infer<typeof UpdateProfileSchema>): Promise<ActionResponse<ProfileRow>> {
+export async function updateMyProfile(
+  rawInput: z.infer<typeof UpdateProfileSchema>
+): Promise<ActionResponse<ProfileRow>> {
   try {
     const validated = UpdateProfileSchema.parse(rawInput);
     const supabase = await createClient();
 
     const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) return { success: false, error: 'Authentication required to modify profile coordinates' };
+    if (authError || !user) {
+      return { success: false, error: 'Authentication required to modify profile coordinates' };
+    }
 
-    // FIXED Error 3: Cast social_profiles directly to your schema's recursive Json type interface
     const profileUpdatePayload: ProfileUpdate = {
       ...validated,
-      social_profiles: validated.social_profiles as Json, // Direct database assignment compatibility lock
+      social_profiles: validated.social_profiles as Json,
       updated_at: new Date().toISOString(),
     };
 
@@ -89,13 +72,17 @@ export async function updateMyProfile(rawInput: z.infer<typeof UpdateProfileSche
 /**
  * PATCH: Updates the user's current sequence pointer inside the onboarding loop setup.
  */
-export async function advanceOnboardingStep(rawInput: z.infer<typeof AdvanceOnboardingSchema>): Promise<ActionResponse<{ step: number }>> {
+export async function advanceOnboardingStep(
+  rawInput: z.infer<typeof AdvanceOnboardingSchema>
+): Promise<ActionResponse<{ step: number }>> {
   try {
     const { step } = AdvanceOnboardingSchema.parse(rawInput);
     const supabase = await createClient();
 
     const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) return { success: false, error: 'Authentication signature required' };
+    if (authError || !user) {
+      return { success: false, error: 'Authentication signature required' };
+    }
 
     const { error } = await supabase
       .from('profiles')
@@ -115,6 +102,7 @@ export async function advanceOnboardingStep(rawInput: z.infer<typeof AdvanceOnbo
 
 /**
  * PATCH: Safely manages specialized unstructured role details inside role-restricted JSONB columns.
+ * Checks if the user has the required role in their roles array before allowing metadata updates.
  */
 export async function updateRoleMetadata(
   type: 'mentor' | 'provider',
@@ -125,80 +113,172 @@ export async function updateRoleMetadata(
     const supabase = await createClient();
 
     const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) return { success: false, error: 'Authentication credentials not verified' };
+    if (authError || !user) {
+      return { success: false, error: 'Authentication credentials not verified' };
+    }
 
+    // Fetch the user's profile with roles and existing metadata
     const { data: profile, error: fetchErr } = await supabase
       .from('profiles')
-      .select('role, mentor_metadata, provider_metadata')
+      .select('roles, mentor_metadata, provider_metadata')
       .eq('id', user.id)
       .single();
 
-    if (fetchErr || !profile) return { success: false, error: 'User workspace profile not found' };
+    if (fetchErr || !profile) {
+      return { success: false, error: 'User workspace profile not found' };
+    }
 
-    const updatePayload: ProfileUpdate = {
-      updated_at: new Date().toISOString()
-    };
+    // Check if user has the required role
+    const userRoles = asUserRoles(profile.roles || []);
+    const hasRequiredRole = userRoles.includes(type as UserRole);
+    
+    // Admin can update any role
+    const isAdmin = userRoles.includes('superadmin');
 
     if (type === 'mentor') {
-      if (profile.role !== 'mentor' && profile.role !== 'admin') {
-        return { success: false, error: 'Access Denied: Account does not possess certified Mentor parameters' };
+      if (!hasRequiredRole && !isAdmin) {
+        return { 
+          success: false, 
+          error: 'Access Denied: Account does not possess certified Mentor parameters. Required role: "mentor"' 
+        };
       }
+      
       const currentMeta = (profile.mentor_metadata as Record<string, any>) || {};
-      // Ensure the structural payload maps cleanly to the expected custom Json union type interface
-      updatePayload.mentor_metadata = { ...currentMeta, ...metadata } as Json;
+      const updatePayload: ProfileUpdate = {
+        mentor_metadata: { ...currentMeta, ...metadata } as Json,
+        updated_at: new Date().toISOString()
+      };
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .update(updatePayload)
+        .eq('id', user.id)
+        .select()
+        .single();
+
+      if (error || !data) throw error;
+
+      revalidatePath(`/dashboard/settings`);
+      return { success: true, data };
     } 
     
     else if (type === 'provider') {
-      if (profile.role !== 'provider' && profile.role !== 'admin') {
-        return { success: false, error: 'Access Denied: Account does not possess verified Partner Provider parameters' };
+      if (!hasRequiredRole && !isAdmin) {
+        return { 
+          success: false, 
+          error: 'Access Denied: Account does not possess verified Partner Provider parameters. Required role: "provider"' 
+        };
       }
+      
       const currentMeta = (profile.provider_metadata as Record<string, any>) || {};
-      updatePayload.provider_metadata = { ...currentMeta, ...metadata } as Json;
+      const updatePayload: ProfileUpdate = {
+        provider_metadata: { ...currentMeta, ...metadata } as Json,
+        updated_at: new Date().toISOString()
+      };
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .update(updatePayload)
+        .eq('id', user.id)
+        .select()
+        .single();
+
+      if (error || !data) throw error;
+
+      revalidatePath(`/dashboard/settings`);
+      return { success: true, data };
     }
 
-    const { data, error } = await supabase
-      .from('profiles')
-      .update(updatePayload)
-      .eq('id', user.id)
-      .select()
-      .single();
-
-    if (error || !data) throw error;
-
-    revalidatePath(`/dashboard/settings`);
-    return { success: true, data };
+    return { success: false, error: 'Invalid metadata type specified' };
   } catch (err: any) {
     return { success: false, error: err.message || 'Failed to merge metadata parameters' };
   }
 }
 
 /**
- * PATCH: Secure administrative action handler to sync user roles or freeze bad accounts.
+ * PATCH: Secure administrative action handler to sync user roles.
+ * Allows admins to add or remove roles from a user's roles array.
  */
-export async function syncUserRoleAdmin(rawInput: z.infer<typeof AdminSyncRoleSchema>): Promise<ActionResponse<{ assignedRole: string }>> {
+export async function syncUserRoleAdmin(
+  rawInput: z.infer<typeof AdminSyncRoleSchema>
+): Promise<ActionResponse<{ assignedRole: string; currentRoles: UserRole[] }>> {
   try {
     const validated = AdminSyncRoleSchema.parse(rawInput);
     const supabase = await createClient();
 
-    const { data: { user } } = await supabase.auth.getUser();
-    const { data: callerProfile } = await supabase.from('profiles').select('role').eq('id', user?.id || '').single();
-
-    if (!callerProfile || callerProfile.role !== 'admin') {
-      return { success: false, error: 'Access Denied: Administrative authority credentials required' };
+    // Verify the caller is an admin
+    const { data: { user: callerUser } } = await supabase.auth.getUser();
+    if (!callerUser) {
+      return { success: false, error: 'Authentication required' };
     }
 
-    const { error } = await supabase
+    const { data: callerProfile } = await supabase
+      .from('profiles')
+      .select('roles')
+      .eq('id', callerUser.id)
+      .single();
+
+    if (!callerProfile || !callerProfile.roles?.includes('superadmin')) {
+      return { success: false, error: 'Access Denied: Super Admin authority credentials required' };
+    }
+
+    // Get the target user's current roles
+    const { data: targetProfile, error: fetchError } = await supabase
+      .from('profiles')
+      .select('roles')
+      .eq('id', validated.userId)
+      .single();
+
+    if (fetchError || !targetProfile) {
+      return { success: false, error: 'Target user not found' };
+    }
+
+    const currentRoles = asUserRoles(targetProfile.roles || []);
+    let updatedRoles: UserRole[];
+
+    // Handle the role assignment based on the operation
+    if (validated.operation === 'add') {
+      // Add role if not already present
+      if (currentRoles.includes(validated.role as UserRole)) {
+        return { 
+          success: false, 
+          error: `User already has the "${validated.role}" role` 
+        };
+      }
+      updatedRoles = [...currentRoles, validated.role as UserRole];
+    } else if (validated.operation === 'remove') {
+      // Remove role if present
+      if (!currentRoles.includes(validated.role as UserRole)) {
+        return { 
+          success: false, 
+          error: `User does not have the "${validated.role}" role` 
+        };
+      }
+      updatedRoles = currentRoles.filter(r => r !== validated.role);
+    } else {
+      // Replace operation (default) - set exactly this role
+      updatedRoles = [validated.role as UserRole];
+    }
+
+    // Update the user's roles
+    const { error: updateError } = await supabase
       .from('profiles')
       .update({ 
-        role: validated.role, 
+        roles: updatedRoles, 
         updated_at: new Date().toISOString() 
       })
       .eq('id', validated.userId);
 
-    if (error) throw error;
+    if (updateError) throw updateError;
 
     revalidatePath(`/admin/users`);
-    return { success: true, data: { assignedRole: validated.role } };
+    return { 
+      success: true, 
+      data: { 
+        assignedRole: validated.role,
+        currentRoles: updatedRoles 
+      } 
+    };
   } catch (err: any) {
     return { success: false, error: err.message || 'Failed to sync platform authorization credentials' };
   }
