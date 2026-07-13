@@ -14,10 +14,10 @@ type ActionResponse<T> =
   | { success: false; error: string };
 
 // =========================================================================
-// ZOD RUNTIME VALIDATION SCHEMAS
+// ZOD RUNTIME VALIDATION SCHEMAS (NOT EXPORTED - keep internal only)
 // =========================================================================
 
-export const CompleteTaskSchema = z.object({
+const CompleteTaskSchema = z.object({
   taskId: z.string().uuid(),
   savedPayload: z.record(z.string(), z.any()).default({}),
 });
@@ -29,6 +29,7 @@ export const CompleteTaskSchema = z.object({
 /**
  * POST: Marks an individual task completed.
  * Safely handles idempotency, increments global profiles XP, and processes automatic milestone unlocks.
+ * Updated to work with the new quest schema where grant_points and badge_key are nested in ai_config.
  */
 export async function completeTaskExecution(rawInput: z.infer<typeof CompleteTaskSchema>): Promise<ActionResponse<{ 
   taskPointsAwarded: number; 
@@ -82,7 +83,12 @@ export async function completeTaskExecution(rawInput: z.infer<typeof CompleteTas
     if (currentProgress) {
       const { error: updErr } = await supabase
         .from('user_progress')
-        .update({ status: 'completed', saved_payload: validated.savedPayload as Json, completed_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+        .update({ 
+          status: 'completed', 
+          saved_payload: validated.savedPayload as Json, 
+          completed_at: new Date().toISOString(), 
+          updated_at: new Date().toISOString() 
+        })
         .eq('user_id', user.id)
         .eq('task_id', task.id);
       if (updErr) throw updErr;
@@ -107,7 +113,7 @@ export async function completeTaskExecution(rawInput: z.infer<typeof CompleteTas
       .eq('status', 'completed');
 
     const totalQuestTasksCount = allQuestTasks?.length || 0;
-    const completedQuestTasksCount = (userCompletedQuestTasks?.length || 0) + (currentProgress ? 0 : 1); // Add current execution if it wasn't tracked in DB yet
+    const completedQuestTasksCount = (userCompletedQuestTasks?.length || 0) + (currentProgress ? 0 : 1);
 
     let questCompleted = false;
     let questPointsAwarded = 0;
@@ -116,31 +122,41 @@ export async function completeTaskExecution(rawInput: z.infer<typeof CompleteTas
     if (totalQuestTasksCount > 0 && completedQuestTasksCount >= totalQuestTasksCount) {
       questCompleted = true;
 
-      // Extract quest milestone bonuses and badge parameters
+      // 🔄 UPDATED: Extract quest milestone bonuses from ai_config JSONB
       const { data: quest } = await supabase
         .from('quests')
-        .select('grant_points_bonus, badge_key_reward')
+        .select('ai_config')
         .eq('id', task.quest_id)
         .single();
 
-      if (quest) {
-        questPointsAwarded = quest.grant_points_bonus;
+      if (quest && quest.ai_config) {
+        // Parse the ai_config JSONB to extract on_success values
+        const aiConfig = quest.ai_config as {
+          on_success?: {
+            grant_points?: number;
+            badge_key?: string;
+          };
+        };
+        
+        const onSuccess = aiConfig.on_success || {};
+        questPointsAwarded = onSuccess.grant_points || 0;
         pointsToAward += questPointsAwarded;
 
         // If the quest rewards a badge, verify it isn't already logged and write to achievements
-        if (quest.badge_key_reward) {
+        const badgeKey = onSuccess.badge_key;
+        if (badgeKey) {
           const { data: existingAchievement } = await supabase
             .from('user_accomplishments')
             .select('id')
             .eq('user_id', user.id)
-            .eq('badge_key', quest.badge_key_reward)
+            .eq('badge_key', badgeKey)
             .maybeSingle();
 
           if (!existingAchievement) {
-            badgeUnlocked = quest.badge_key_reward;
+            badgeUnlocked = badgeKey;
             const accomplishmentPayload: AccomplishmentInsert = {
               user_id: user.id,
-              badge_key: quest.badge_key_reward,
+              badge_key: badgeKey,
               awarded_at: new Date().toISOString()
             };
             await supabase.from('user_accomplishments').insert(accomplishmentPayload);

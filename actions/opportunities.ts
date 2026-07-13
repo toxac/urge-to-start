@@ -35,7 +35,7 @@ const OpportunityStatus = z.enum([
   'scored'
 ]);
 
-export const CreateOpportunitySchema = z.object({
+const CreateOpportunitySchema = z.object({
   title: z.string().min(1).max(255).trim(),
   description: z.string().min(1),
   source_type: OpportunitySourceType,
@@ -44,7 +44,7 @@ export const CreateOpportunitySchema = z.object({
   scores: z.record(z.string(), z.any()).nullable().default(null),
 });
 
-export const ValidateOpportunitySchema = z.object({
+const ValidateOpportunitySchema = z.object({
   opportunityId: z.string().uuid(),
   people_spoken_to: z.number().min(0),
   confirmed_problem: z.boolean(),
@@ -54,7 +54,7 @@ export const ValidateOpportunitySchema = z.object({
   insights: z.string().optional(),
 });
 
-export const ScoreOpportunitySchema = z.object({
+const ScoreOpportunitySchema = z.object({
   opportunityId: z.string().uuid(),
   cares_about_problem: z.number().min(1).max(10),
   knows_people_with_problem: z.number().min(1).max(10),
@@ -67,8 +67,8 @@ export const ScoreOpportunitySchema = z.object({
 // TYPES FOR OPTIONS
 // =========================================================================
 
-export type OpportunityStatusType = 'raw_seed' | 'validated' | 'committed' | 'archived' | 'scored';
-export type OpportunitySourceType = 'personal_problems' | 'skills' | 'zone_of_influence' | 'broader_search';
+type OpportunityStatusType = 'raw_seed' | 'validated' | 'committed' | 'archived' | 'scored';
+type OpportunitySourceType = 'personal_problems' | 'skills' | 'zone_of_influence' | 'broader_search';
 
 // =========================================================================
 // SERVER ACTIONS
