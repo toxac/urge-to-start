@@ -837,19 +837,15 @@ export type Database = {
       }
       quests: {
         Row: {
-          badge_key_reward: string | null
+          ai_config: Json
           content: string
           created_at: string
           description: string | null
           estimated_in_app_minutes: number | null
           estimated_off_app_minutes: number | null
-          grant_points_bonus: number
           id: string
           is_optional: boolean
           mission_id: string
-          persona_name: string
-          persona_prompt: string
-          required_context: string[]
           sequence: number
           slug: string
           subtitle: string
@@ -857,19 +853,15 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          badge_key_reward?: string | null
+          ai_config: Json
           content: string
           created_at?: string
           description?: string | null
           estimated_in_app_minutes?: number | null
           estimated_off_app_minutes?: number | null
-          grant_points_bonus?: number
           id: string
           is_optional?: boolean
           mission_id: string
-          persona_name: string
-          persona_prompt: string
-          required_context?: string[]
           sequence: number
           slug: string
           subtitle: string
@@ -877,19 +869,15 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          badge_key_reward?: string | null
+          ai_config?: Json
           content?: string
           created_at?: string
           description?: string | null
           estimated_in_app_minutes?: number | null
           estimated_off_app_minutes?: number | null
-          grant_points_bonus?: number
           id?: string
           is_optional?: boolean
           mission_id?: string
-          persona_name?: string
-          persona_prompt?: string
-          required_context?: string[]
           sequence?: number
           slug?: string
           subtitle?: string

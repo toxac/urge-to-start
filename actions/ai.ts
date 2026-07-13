@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server';
 import { executeKipConductor } from '@/lib/ai/conductor';
 import { urgePlaybook } from '@/lib/playbook';
 import { z } from 'zod';
+import { ObservationAnalysisContract, type ObservationAnalysis } from '@/types/ai-schema';
 
 const CritiqueOutputContract = z.object({
   score: z.number(),
@@ -16,16 +17,6 @@ const CritiqueOutputContract = z.object({
   realWorldExecutionAdvice: z.array(z.string()),
 });
 
-// Schema for observation analysis output
-export const ObservationAnalysisContract = z.object({
-  pattern_recognition: z.string(),
-  deeper_questions: z.array(z.string()),
-  potential_opportunities: z.array(z.string()),
-  encouragement: z.string(),
-  next_steps: z.string(),
-});
-
-export type ObservationAnalysis = z.infer<typeof ObservationAnalysisContract>;
 
 interface ActionParams {
   taskId?: string;

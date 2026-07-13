@@ -42,7 +42,7 @@ export interface ObservationConfig {
   description?: string;
 }
 
-export interface AiConfig {
+export interface QuestAiConfig {
   role: 'SYSTEM_CONDUCTOR';
   persona_name: string;
   persona_prompt: string;
@@ -70,8 +70,9 @@ export interface Task extends Omit<TaskRow, 'ai_config' | 'observation_config' |
   // No need to override it - it's already RecurrenceInterval | null
 }
 
-export interface Quest extends Omit<QuestRow, 'created_at' | 'updated_at'> {
+export interface Quest extends Omit<QuestRow, 'created_at' | 'updated_at' | 'ai_config'> {
   // ⚡ Playbook-only fields (not in database)
+  ai_config: QuestAiConfig;
   content_path: string;
   tasks: Task[];
 }
