@@ -34,14 +34,19 @@ export const mission5: Mission = {
       content: "",
       estimated_in_app_minutes: 75,
       estimated_off_app_minutes: 30,
-      grant_points_bonus: 50,
       is_optional: false,
       mission_id: "mission5",
       content_path: "content/mission5/quests/what-are-you-building.md",
-      persona_name: "The Architect",
-      persona_prompt: "You help founders define their build scope and avoid scope creep. Challenge them to be specific. Push them to define what's IN and what's OUT. Help them set realistic first milestones.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "SCOPE_DEFINED",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Architect",
+        persona_prompt: "You help founders define their build scope and avoid scope creep. Challenge them to be specific. Push them to define what's IN and what's OUT. Help them set realistic first milestones.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 50,
+          badge_key: "SCOPE_DEFINED"
+        }
+      },
       tasks: [
         {
           id: "m5_q1_t1_build_scope",
@@ -157,14 +162,19 @@ export const mission5: Mission = {
       content: "",
       estimated_in_app_minutes: 60,
       estimated_off_app_minutes: 30,
-      grant_points_bonus: 50,
       is_optional: false,
       mission_id: "mission5",
       content_path: "content/mission5/quests/what-do-you-need-to-build.md",
-      persona_name: "The Quartermaster",
-      persona_prompt: "You help founders inventory what they need to build. Help them identify tools, supplies, skills, and resources. Push them to be honest about what they have and what they need. Help them think through bottlenecks before they start.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "BUILD_READY",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Quartermaster",
+        persona_prompt: "You help founders inventory what they need to build. Help them identify tools, supplies, skills, and resources. Push them to be honest about what they have and what they need. Help them think through bottlenecks before they start.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 50,
+          badge_key: "BUILD_READY"
+        }
+      },
       tasks: [
         {
           id: "m5_q2_t1_supplies_audit",
@@ -302,14 +312,19 @@ export const mission5: Mission = {
       content: "",
       estimated_in_app_minutes: 30,
       estimated_off_app_minutes: 120,
-      grant_points_bonus: 50,
       is_optional: false,
       mission_id: "mission5",
       content_path: "content/mission5/quests/where-will-people-find-you.md",
-      persona_name: "The Broadcaster",
-      persona_prompt: "You help founders set up their presence. Encourage them to keep it simple—one landing page, one social channel, one content piece. Help them think about what their customer needs to see to get excited.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "PRESENCE_ESTABLISHED",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Broadcaster",
+        persona_prompt: "You help founders set up their presence. Encourage them to keep it simple—one landing page, one social channel, one content piece. Help them think about what their customer needs to see to get excited.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 50,
+          badge_key: "PRESENCE_ESTABLISHED"
+        }
+      },
       tasks: [
         {
           id: "m5_q3_t1_landing_page",
@@ -459,14 +474,19 @@ export const mission5: Mission = {
       content: "",
       estimated_in_app_minutes: 30,
       estimated_off_app_minutes: 120,
-      grant_points_bonus: 75,
       is_optional: false,
       mission_id: "mission5",
       content_path: "content/mission5/quests/whos-watching.md",
-      persona_name: "The Connector",
-      persona_prompt: "You help founders build an audience. Encourage them to reach out to their personal network first—that's where their early believers are. Help them craft messages that feel natural, not salesy. Remind them: people want to support people they know.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "AUDIENCE_BUILDER",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Connector",
+        persona_prompt: "You help founders build an audience. Encourage them to reach out to their personal network first—that's where their early believers are. Help them craft messages that feel natural, not salesy. Remind them: people want to support people they know.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 75,
+          badge_key: "AUDIENCE_BUILDER"
+        }
+      },
       tasks: [
         {
           id: "m5_q4_t1_waitlist_setup",
@@ -616,14 +636,19 @@ export const mission5: Mission = {
       content: "",
       estimated_in_app_minutes: 60,
       estimated_off_app_minutes: 15,
-      grant_points_bonus: 75,
       is_optional: false,
       mission_id: "mission5",
       content_path: "content/mission5/quests/whats-the-plan.md",
-      persona_name: "The Planner",
-      persona_prompt: "You help founders create realistic build plans. Push them to be specific and achievable. Challenge them on their timeline. Help them think through what could go wrong. Encourage them to commit to the plan.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "PLAN_READY",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Planner",
+        persona_prompt: "You help founders create realistic build plans. Push them to be specific and achievable. Challenge them on their timeline. Help them think through what could go wrong. Encourage them to commit to the plan.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 75,
+          badge_key: "PLAN_READY"
+        }
+      },
       tasks: [
         {
           id: "m5_q5_t1_build_timeline",

@@ -34,14 +34,19 @@ export const mission6: Mission = {
       content: "",
       estimated_in_app_minutes: 15,
       estimated_off_app_minutes: 10080,
-      grant_points_bonus: 100,
       is_optional: false,
       mission_id: "mission6",
       content_path: "content/mission6/quests/build-your-msp.md",
-      persona_name: "The Builder",
-      persona_prompt: "You are an encouraging coach helping a founder stay focused during the build phase. Celebrate their wins. Help them think through blockers. Remind them: progress over perfection. Every day they build is a win.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "BUILDER",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Builder",
+        persona_prompt: "You are an encouraging coach helping a founder stay focused during the build phase. Celebrate their wins. Help them think through blockers. Remind them: progress over perfection. Every day they build is a win.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 100,
+          badge_key: "BUILDER"
+        }
+      },
       tasks: [
         {
           id: "m6_q1_t1_build_sprint",
@@ -158,14 +163,19 @@ export const mission6: Mission = {
       content: "",
       estimated_in_app_minutes: 45,
       estimated_off_app_minutes: 480,
-      grant_points_bonus: 100,
       is_optional: false,
       mission_id: "mission6",
       content_path: "content/mission6/quests/get-it-in-front-of-people.md",
-      persona_name: "The Tester",
-      persona_prompt: "You help founders test their products with real users. Encourage them to be open to feedback. Remind them: feedback is data, not criticism. Help them see patterns in what testers say.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "USER_TESTED",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Tester",
+        persona_prompt: "You help founders test their products with real users. Encourage them to be open to feedback. Remind them: feedback is data, not criticism. Help them see patterns in what testers say.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 100,
+          badge_key: "USER_TESTED"
+        }
+      },
       tasks: [
         {
           id: "m6_q2_t1_alpha_test",
@@ -287,14 +297,19 @@ export const mission6: Mission = {
       content: "",
       estimated_in_app_minutes: 30,
       estimated_off_app_minutes: 240,
-      grant_points_bonus: 75,
       is_optional: false,
       mission_id: "mission6",
       content_path: "content/mission6/quests/get-paid-and-launch-internally.md",
-      persona_name: "The Closer",
-      persona_prompt: "You help founders sell their first product. Encourage them to be bold but genuine. Remind them: pre-sales are about trust, not pressure. Celebrate every sale—no matter how small. Help them pace themselves—only pre-sell what they can handle.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "FIRST_SALE",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Closer",
+        persona_prompt: "You help founders sell their first product. Encourage them to be bold but genuine. Remind them: pre-sales are about trust, not pressure. Celebrate every sale—no matter how small. Help them pace themselves—only pre-sell what they can handle.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 75,
+          badge_key: "FIRST_SALE"
+        }
+      },
       tasks: [
         {
           id: "m6_q3_t1_pre_sale_offer",
@@ -422,14 +437,19 @@ export const mission6: Mission = {
       content: "",
       estimated_in_app_minutes: 30,
       estimated_off_app_minutes: 30,
-      grant_points_bonus: 100,
       is_optional: false,
       mission_id: "mission6",
       content_path: "content/mission6/quests/validate-and-prepare-for-launch.md",
-      persona_name: "The Inspector",
-      persona_prompt: "You help founders do their final pre-launch checks. Be thorough but pragmatic. Help them distinguish between 'must-have' and 'nice-to-have.' Encourage them to launch even if everything isn't perfect.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "LAUNCH_READY",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Inspector",
+        persona_prompt: "You help founders do their final pre-launch checks. Be thorough but pragmatic. Help them distinguish between 'must-have' and 'nice-to-have.' Encourage them to launch even if everything isn't perfect.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 100,
+          badge_key: "LAUNCH_READY"
+        }
+      },
       tasks: [
         {
           id: "m6_q4_t1_compliance_check",

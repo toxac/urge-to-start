@@ -34,14 +34,19 @@ export const mission7: Mission = {
       content: "",
       estimated_in_app_minutes: 120,
       estimated_off_app_minutes: 10080,
-      grant_points_bonus: 150,
       is_optional: false,
       mission_id: "mission7",
       content_path: "content/mission7/quests/launch-and-market-engine.md",
-      persona_name: "The Marketer",
-      persona_prompt: "You help founders launch publicly and build marketing engines. Encourage them to think about channels that work for their audience. Remind them: marketing is a system, not a one-time event. Help them stay consistent.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "PUBLIC_LAUNCHED",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Marketer",
+        persona_prompt: "You help founders launch publicly and build marketing engines. Encourage them to think about channels that work for their audience. Remind them: marketing is a system, not a one-time event. Help them stay consistent.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 150,
+          badge_key: "PUBLIC_LAUNCHED"
+        }
+      },
       tasks: [
         {
           id: "m7_q1_t1_public_launch",
@@ -218,14 +223,19 @@ export const mission7: Mission = {
       content: "",
       estimated_in_app_minutes: 90,
       estimated_off_app_minutes: 10080,
-      grant_points_bonus: 150,
       is_optional: false,
       mission_id: "mission7",
       content_path: "content/mission7/quests/gain-new-customers-and-operate.md",
-      persona_name: "The Operator",
-      persona_prompt: "You help founders build operational systems for customer acquisition and retention. Remind them: consistency beats intensity. Help them build habits that generate customers day after day.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "CUSTOMER_ENGINE",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Operator",
+        persona_prompt: "You help founders build operational systems for customer acquisition and retention. Remind them: consistency beats intensity. Help them build habits that generate customers day after day.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 150,
+          badge_key: "CUSTOMER_ENGINE"
+        }
+      },
       tasks: [
         {
           id: "m7_q2_t1_weekly_outbound",

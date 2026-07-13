@@ -34,14 +34,19 @@ export const mission4: Mission = {
       content: "",
       estimated_in_app_minutes: 90,
       estimated_off_app_minutes: 120,
-      grant_points_bonus: 75,
       is_optional: false,
       mission_id: "mission4",
       content_path: "content/mission4/quests/what-will-you-charge.md",
-      persona_name: "The Economist",
-      persona_prompt: "You are a pricing strategist. Help the user think through their pricing model and price points. Challenge them to think about value, not just cost. Help them talk to customers about price without being pushy.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "PRICE_SETTER",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Economist",
+        persona_prompt: "You are a pricing strategist. Help the user think through their pricing model and price points. Challenge them to think about value, not just cost. Help them talk to customers about price without being pushy.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 75,
+          badge_key: "PRICE_SETTER"
+        }
+      },
       tasks: [
         {
           id: "m4_q1_t1_pricing_models",
@@ -174,14 +179,19 @@ export const mission4: Mission = {
       content: "",
       estimated_in_app_minutes: 75,
       estimated_off_app_minutes: 120,
-      grant_points_bonus: 50,
       is_optional: false,
       mission_id: "mission4",
       content_path: "content/mission4/quests/how-will-you-reach-them.md",
-      persona_name: "The Marketer",
-      persona_prompt: "You are a practical marketing strategist. Help the user think through how to reach their customers. Encourage them to start small and test cheaply. Help them think about cost per acquisition and what's sustainable.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "MARKET_STRATEGIST",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Marketer",
+        persona_prompt: "You are a practical marketing strategist. Help the user think through how to reach their customers. Encourage them to start small and test cheaply. Help them think about cost per acquisition and what's sustainable.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 50,
+          badge_key: "MARKET_STRATEGIST"
+        }
+      },
       tasks: [
         {
           id: "m4_q2_t1_channel_exploration",
@@ -315,14 +325,19 @@ export const mission4: Mission = {
       content: "",
       estimated_in_app_minutes: 45,
       estimated_off_app_minutes: 90,
-      grant_points_bonus: 50,
       is_optional: false,
       mission_id: "mission4",
       content_path: "content/mission4/quests/who-can-help-you-sell.md",
-      persona_name: "The Connector",
-      persona_prompt: "You help founders think about partnerships and distribution. Help them identify potential partners who already have access to their customers. Encourage them to think creatively—partners don't have to be formal, they can be complementary businesses, influencers, or even customers.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "PARTNERSHIP_BUILDER",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Connector",
+        persona_prompt: "You help founders think about partnerships and distribution. Help them identify potential partners who already have access to their customers. Encourage them to think creatively—partners don't have to be formal, they can be complementary businesses, influencers, or even customers.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 50,
+          badge_key: "PARTNERSHIP_BUILDER"
+        }
+      },
       tasks: [
         {
           id: "m4_q3_t1_partner_mapping",
@@ -450,14 +465,19 @@ export const mission4: Mission = {
       content: "",
       estimated_in_app_minutes: 45,
       estimated_off_app_minutes: 30,
-      grant_points_bonus: 50,
       is_optional: false,
       mission_id: "mission4",
       content_path: "content/mission4/quests/what-will-it-cost-you.md",
-      persona_name: "The Accountant",
-      persona_prompt: "You are a practical financial advisor. Help the user think through their costs and unit economics. Don't scare them with complexity—help them see the simple picture. Help them distinguish between necessary and nice-to-have costs.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "COST_AWARE",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Accountant",
+        persona_prompt: "You are a practical financial advisor. Help the user think through their costs and unit economics. Don't scare them with complexity—help them see the simple picture. Help them distinguish between necessary and nice-to-have costs.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 50,
+          badge_key: "COST_AWARE"
+        }
+      },
       tasks: [
         {
           id: "m4_q4_t1_cost_mapping",
@@ -583,14 +603,19 @@ export const mission4: Mission = {
       content: "",
       estimated_in_app_minutes: 60,
       estimated_off_app_minutes: 0,
-      grant_points_bonus: 100,
       is_optional: false,
       mission_id: "mission4",
       content_path: "content/mission4/quests/does-the-math-work.md",
-      persona_name: "The Realist",
-      persona_prompt: "You are a grounded advisor who helps founders make hard decisions. Don't be a cheerleader. Challenge their assumptions. Ask the tough questions. Help them see if this is truly viable. If the math doesn't work, help them accept that and move on.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "ECONOMICS_VERIFIED",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Realist",
+        persona_prompt: "You are a grounded advisor who helps founders make hard decisions. Don't be a cheerleader. Challenge their assumptions. Ask the tough questions. Help them see if this is truly viable. If the math doesn't work, help them accept that and move on.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 100,
+          badge_key: "ECONOMICS_VERIFIED"
+        }
+      },
       tasks: [
         {
           id: "m4_q5_t1_breakeven_analysis",

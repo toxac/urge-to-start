@@ -34,14 +34,19 @@ export const mission8: Mission = {
       content: "",
       estimated_in_app_minutes: 90,
       estimated_off_app_minutes: 120,
-      grant_points_bonus: 75,
       is_optional: false,
       mission_id: "mission8",
       content_path: "content/mission8/quests/review-your-journey.md",
-      persona_name: "The Reflector",
-      persona_prompt: "You help founders reflect on their journey. Ask deep questions. Help them see patterns. Celebrate their wins. Challenge their assumptions. This is about honest reflection, not self-criticism.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "REFLECTED",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Reflector",
+        persona_prompt: "You help founders reflect on their journey. Ask deep questions. Help them see patterns. Celebrate their wins. Challenge their assumptions. This is about honest reflection, not self-criticism.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 75,
+          badge_key: "REFLECTED"
+        }
+      },
       tasks: [
         {
           id: "m8_q1_t1_journey_timeline",
@@ -147,14 +152,19 @@ export const mission8: Mission = {
       content: "",
       estimated_in_app_minutes: 90,
       estimated_off_app_minutes: 60,
-      grant_points_bonus: 75,
       is_optional: false,
       mission_id: "mission8",
       content_path: "content/mission8/quests/review-your-business.md",
-      persona_name: "The Analyst",
-      persona_prompt: "You help founders look at their business data honestly. Help them see patterns. Challenge their assumptions. Celebrate their successes. Help them learn from their mistakes.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "BUSINESS_REVIEWED",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Analyst",
+        persona_prompt: "You help founders look at their business data honestly. Help them see patterns. Challenge their assumptions. Celebrate their successes. Help them learn from their mistakes.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 75,
+          badge_key: "BUSINESS_REVIEWED"
+        }
+      },
       tasks: [
         {
           id: "m8_q2_t1_revenue_review",
@@ -262,14 +272,19 @@ export const mission8: Mission = {
       content: "",
       estimated_in_app_minutes: 60,
       estimated_off_app_minutes: 60,
-      grant_points_bonus: 100,
       is_optional: false,
       mission_id: "mission8",
       content_path: "content/mission8/quests/the-reality-crossroads.md",
-      persona_name: "The Crossroads Guide",
-      persona_prompt: "You help founders make big decisions. Don't sugarcoat it. Help them see the reality of their situation. Encourage them to trust their gut but also look at the data. This is about clarity, not comfort.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "CROSSROADS_DECIDED",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Crossroads Guide",
+        persona_prompt: "You help founders make big decisions. Don't sugarcoat it. Help them see the reality of their situation. Encourage them to trust their gut but also look at the data. This is about clarity, not comfort.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 100,
+          badge_key: "CROSSROADS_DECIDED"
+        }
+      },
       tasks: [
         {
           id: "m8_q3_t1_three_paths",
@@ -392,14 +407,19 @@ export const mission8: Mission = {
       content: "",
       estimated_in_app_minutes: 45,
       estimated_off_app_minutes: 60,
-      grant_points_bonus: 100,
       is_optional: false,
       mission_id: "mission8",
       content_path: "content/mission8/quests/whats-next.md",
-      persona_name: "The Planner",
-      persona_prompt: "You help founders turn decisions into plans. Help them set realistic goals and timelines. Encourage them to dream big but start small.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "FOUNDER",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Planner",
+        persona_prompt: "You help founders turn decisions into plans. Help them set realistic goals and timelines. Encourage them to dream big but start small.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 100,
+          badge_key: "FOUNDER"
+        }
+      },
       tasks: [
         {
           id: "m8_q4_t1_next_goals",

@@ -33,14 +33,20 @@ export const mission1: Mission = {
       content: "",
       estimated_in_app_minutes: 45,
       estimated_off_app_minutes: 0,
-      grant_points_bonus: 50,
       is_optional: false,
       mission_id: "mission1",
       content_path: "content/missions/mission1/quests/starting-your-new-chapter.md",
-      persona_name: "The Mirror",
-      persona_prompt: "You are a grounded advisor and a supportive friend. Review user motivations and roadblocks. Call out vague answers kindly, and help them turn big dreams into everyday actions.",
-      required_context: ["user_profiles"],
-      badge_key_reward: "PATHFINDER",
+      // ✅ ai_config is now nested
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Mirror",
+        persona_prompt: "You are a grounded advisor and a supportive friend. Review user motivations and roadblocks. Call out vague answers kindly, and help them turn big dreams into everyday actions.",
+        required_context: ["user_profiles"],
+        on_success: {
+          grant_points: 50,
+          badge_key: "PATHFINDER"
+        }
+      },
       tasks: [
         {
           id: "m1_q1_t1_drivers",
@@ -149,14 +155,20 @@ export const mission1: Mission = {
       content: "",
       estimated_in_app_minutes: 30,
       estimated_off_app_minutes: 120,
-      grant_points_bonus: 50,
       is_optional: false,
       mission_id: "mission1",
       content_path: "content/missions/mission1/quests/art-of-asking.md",
-      persona_name: "The Editor",
-      persona_prompt: "You are a helpful copy editor. Review message drafts. Highlight hesitant filler words like 'just checking in' or 'sorry to bother you', and suggest more confident alternatives.",
-      required_context: ["user_profiles"],
-      badge_key_reward: "COMMUNICATOR",
+      // ✅ ai_config is now nested
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Editor",
+        persona_prompt: "You are a helpful copy editor. Review message drafts. Highlight hesitant filler words like 'just checking in' or 'sorry to bother you', and suggest more confident alternatives.",
+        required_context: ["user_profiles"],
+        on_success: {
+          grant_points: 50,
+          badge_key: "COMMUNICATOR"
+        }
+      },
       tasks: [
         {
           id: "m1_q2_t1_ask_sim",
@@ -268,14 +280,20 @@ export const mission1: Mission = {
       content: "",
       estimated_in_app_minutes: 15,
       estimated_off_app_minutes: 180,
-      grant_points_bonus: 100,
       is_optional: false,
       mission_id: "mission1",
       content_path: "content/missions/mission1/quests/building-resilience.md",
-      persona_name: "The Hype-Man",
-      persona_prompt: "You are an encouraging coach. The user is logging rejections. Reframe their entries as clean user feedback rather than personal setbacks.",
-      required_context: ["user_profiles"],
-      badge_key_reward: "FORTRESS",
+      // ✅ ai_config is now nested
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Hype-Man",
+        persona_prompt: "You are an encouraging coach. The user is logging rejections. Reframe their entries as clean user feedback rather than personal setbacks.",
+        required_context: ["user_profiles"],
+        on_success: {
+          grant_points: 100,
+          badge_key: "FORTRESS"
+        }
+      },
       tasks: [
         {
           id: "m1_q3_t1_rejection_log",

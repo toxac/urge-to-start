@@ -34,14 +34,20 @@ export const mission2: Mission = {
       content: "",
       estimated_in_app_minutes: 90,
       estimated_off_app_minutes: 180,
-      grant_points_bonus: 50,
       is_optional: false,
       mission_id: "mission2",
       content_path: "content/missions/mission2/quests/your-own-pain-and-skills.md",
-      persona_name: "The Observer",
-      persona_prompt: "You are a patient guide helping the user notice patterns in their own frustrations. Ask gentle questions that help them see their problems more clearly. Never dismiss their experiences. Help them connect dots.",
-      required_context: ["user_profiles"],
-      badge_key_reward: "SELF_AWARE",
+      // ✅ Nested ai_config
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Observer",
+        persona_prompt: "You are a patient guide helping the user notice patterns in their own frustrations. Ask gentle questions that help them see their problems more clearly. Never dismiss their experiences. Help them connect dots.",
+        required_context: ["user_profiles"],
+        on_success: {
+          grant_points: 50,
+          badge_key: "SELF_AWARE"
+        }
+      },
       tasks: [
         {
           id: "m2_q1_t1_observation_week",
@@ -185,14 +191,20 @@ export const mission2: Mission = {
       content: "",
       estimated_in_app_minutes: 60,
       estimated_off_app_minutes: 240,
-      grant_points_bonus: 50,
       is_optional: false,
       mission_id: "mission2",
       content_path: "content/missions/mission2/quests/your-zone-of-influence.md",
-      persona_name: "The Investigator",
-      persona_prompt: "You are a curious researcher helping the user observe problems in their social circles. Encourage them to be good listeners. Help them distinguish between minor annoyances and real problems. Remind them: they're doing research, not pitching.",
-      required_context: ["user_profiles"],
-      badge_key_reward: "CURIOUS",
+      // ✅ Nested ai_config
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Investigator",
+        persona_prompt: "You are a curious researcher helping the user observe problems in their social circles. Encourage them to be good listeners. Help them distinguish between minor annoyances and real problems. Remind them: they're doing research, not pitching.",
+        required_context: ["user_profiles"],
+        on_success: {
+          grant_points: 50,
+          badge_key: "CURIOUS"
+        }
+      },
       tasks: [
         {
           id: "m2_q2_t1_social_observation",
@@ -284,14 +296,20 @@ export const mission2: Mission = {
       content: "",
       estimated_in_app_minutes: 90,
       estimated_off_app_minutes: 180,
-      grant_points_bonus: 75,
       is_optional: false,
       mission_id: "mission2",
       content_path: "content/missions/mission2/quests/the-world-out-there.md",
-      persona_name: "The Cartographer",
-      persona_prompt: "You are helping the user map the landscape of problems. Guide them to look for patterns, not just individual complaints. Help them understand the difference between a niche problem and a market opportunity.",
-      required_context: ["user_profiles", "opportunities"],
-      badge_key_reward: "OBSERVER",
+      // ✅ Nested ai_config
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Cartographer",
+        persona_prompt: "You are helping the user map the landscape of problems. Guide them to look for patterns, not just individual complaints. Help them understand the difference between a niche problem and a market opportunity.",
+        required_context: ["user_profiles", "opportunities"],
+        on_success: {
+          grant_points: 75,
+          badge_key: "OBSERVER"
+        }
+      },
       tasks: [
         {
           id: "m2_q3_t1_trend_research",
@@ -448,14 +466,20 @@ export const mission2: Mission = {
       content: "",
       estimated_in_app_minutes: 60,
       estimated_off_app_minutes: 120,
-      grant_points_bonus: 100,
       is_optional: false,
       mission_id: "mission2",
       content_path: "content/missions/mission2/quests/pick-your-path.md",
-      persona_name: "The Decider",
-      persona_prompt: "You are helping the user make a clear decision. Don't let them waffle. Help them weigh the evidence, trust their gut, and commit. Remind them: they can always change direction later. The important thing is to start.",
-      required_context: ["user_profiles", "opportunities"],
-      badge_key_reward: "DECIDED",
+      // ✅ Nested ai_config
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Decider",
+        persona_prompt: "You are helping the user make a clear decision. Don't let them waffle. Help them weigh the evidence, trust their gut, and commit. Remind them: they can always change direction later. The important thing is to start.",
+        required_context: ["user_profiles", "opportunities"],
+        on_success: {
+          grant_points: 100,
+          badge_key: "DECIDED"
+        }
+      },
       tasks: [
         {
           id: "m2_q4_t1_validate_opportunities",

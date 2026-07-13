@@ -34,14 +34,19 @@ export const mission3: Mission = {
       content: "",
       estimated_in_app_minutes: 90,
       estimated_off_app_minutes: 240,
-      grant_points_bonus: 75,
       is_optional: false,
       mission_id: "mission3",
       content_path: "content/mission3/quests/who-are-your-customers.md",
-      persona_name: "The Anthropologist",
-      persona_prompt: "You are a customer research expert. Help the user understand their customers deeply. Encourage them to be specific. Push them to talk to real people. Help them see patterns in what they learn.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "CUSTOMER_OBSERVER",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Anthropologist",
+        persona_prompt: "You are a customer research expert. Help the user understand their customers deeply. Encourage them to be specific. Push them to talk to real people. Help them see patterns in what they learn.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 75,
+          badge_key: "CUSTOMER_OBSERVER"
+        }
+      },
       tasks: [
         {
           id: "m3_q1_t1_customer_avatar",
@@ -197,14 +202,19 @@ export const mission3: Mission = {
       content: "",
       estimated_in_app_minutes: 60,
       estimated_off_app_minutes: 90,
-      grant_points_bonus: 50,
       is_optional: false,
       mission_id: "mission3",
       content_path: "content/mission3/quests/who-else-is-doing-this.md",
-      persona_name: "The Strategist",
-      persona_prompt: "You are a competitive strategy expert. Help the user understand their competitive landscape. Encourage them to look at both direct and indirect competitors. Help them identify what makes them unique.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "COMPETITIVE_INTELLIGENCE",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Strategist",
+        persona_prompt: "You are a competitive strategy expert. Help the user understand their competitive landscape. Encourage them to look at both direct and indirect competitors. Help them identify what makes them unique.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 50,
+          badge_key: "COMPETITIVE_INTELLIGENCE"
+        }
+      },
       tasks: [
         {
           id: "m3_q2_t1_competitor_research",
@@ -320,14 +330,19 @@ export const mission3: Mission = {
       content: "",
       estimated_in_app_minutes: 60,
       estimated_off_app_minutes: 30,
-      grant_points_bonus: 75,
       is_optional: false,
       mission_id: "mission3",
       content_path: "content/mission3/quests/the-rules-of-the-game.md",
-      persona_name: "The Advisor",
-      persona_prompt: "You are a practical business advisor. Help the user understand what permissions and policies they need. Be realistic—tell them what they need NOW versus what can wait. Don't scare them, but don't sugarcoat it either.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "RULE_AWARE",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Advisor",
+        persona_prompt: "You are a practical business advisor. Help the user understand what permissions and policies they need. Be realistic—tell them what they need NOW versus what can wait. Don't scare them, but don't sugarcoat it either.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 75,
+          badge_key: "RULE_AWARE"
+        }
+      },
       tasks: [
         {
           id: "m3_q3_t1_compliance_checklist",
@@ -420,14 +435,19 @@ export const mission3: Mission = {
       content: "",
       estimated_in_app_minutes: 75,
       estimated_off_app_minutes: 30,
-      grant_points_bonus: 75,
       is_optional: false,
       mission_id: "mission3",
       content_path: "content/mission3/quests/what-will-you-build.md",
-      persona_name: "The Architect",
-      persona_prompt: "You are a product strategist. Help the user explore the solution space and define their Minimum Sellable Product. Push them to think beyond their default solution. Help them identify the smallest, most sellable thing they could build.",
-      required_context: ["user_profiles", "projects"],
-      badge_key_reward: "SOLUTION_ARCHITECT",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Architect",
+        persona_prompt: "You are a product strategist. Help the user explore the solution space and define their Minimum Sellable Product. Push them to think beyond their default solution. Help them identify the smallest, most sellable thing they could build.",
+        required_context: ["user_profiles", "projects"],
+        on_success: {
+          grant_points: 75,
+          badge_key: "SOLUTION_ARCHITECT"
+        }
+      },
       tasks: [
         {
           id: "m3_q4_t1_core_problem",
@@ -611,14 +631,19 @@ export const mission3: Mission = {
       content: "",
       estimated_in_app_minutes: 45,
       estimated_off_app_minutes: 0,
-      grant_points_bonus: 100,
       is_optional: false,
       mission_id: "mission3",
       content_path: "content/mission3/quests/does-this-actually-make-sense.md",
-      persona_name: "The Realist",
-      persona_prompt: "You are a grounded advisor who helps founders make hard decisions. Don't be a cheerleader. Challenge their assumptions. Ask the tough questions. Help them see if this is truly viable. If it's not, help them accept that and move on.",
-      required_context: ["user_profiles", "projects", "opportunities"],
-      badge_key_reward: "VIABILITY_VERIFIED",
+      ai_config: {
+        role: "SYSTEM_CONDUCTOR",
+        persona_name: "The Realist",
+        persona_prompt: "You are a grounded advisor who helps founders make hard decisions. Don't be a cheerleader. Challenge their assumptions. Ask the tough questions. Help them see if this is truly viable. If it's not, help them accept that and move on.",
+        required_context: ["user_profiles", "projects", "opportunities"],
+        on_success: {
+          grant_points: 100,
+          badge_key: "VIABILITY_VERIFIED"
+        }
+      },
       tasks: [
         {
           id: "m3_q5_t1_numbers_check",
