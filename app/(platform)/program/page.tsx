@@ -12,7 +12,7 @@ import { ShieldAlert, ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
 export default function ProgramDashboardPage() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  
+
   const playbook = useStore($playbookStore);
   const progress = useStore($progressStore);
 
@@ -23,13 +23,16 @@ export default function ProgramDashboardPage() {
 
   // 2. Transform the raw playbook mapping into a clean ordered tracking stack
   const missions = Object.entries(playbook || {})
-    .map(([id, data]) => ({ id, ...data }))
+    .map(([id, data]) => {
+      const { id: _, ...rest } = data; // omit any existing 'id'
+      return { id, ...rest };
+    })
     .sort((a, b) => a.sequence - b.sequence);
 
   // 3. Find the exact mission the user is currently working on
   const activeMission = missions.find((mission) => {
     const quests = Object.values(mission.quests || {});
-    return quests.some((quest: any) => 
+    return quests.some((quest: any) =>
       quest.tasks?.some((task: any) => progress[task.id]?.status !== 'completed')
     );
   }) || missions[0];
@@ -51,21 +54,21 @@ export default function ProgramDashboardPage() {
 
   return (
     <div className="w-full space-y-10 animate-in fade-in duration-300">
-      
+
       {/* Streamlined Workspace Title Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div className="space-y-1">
           <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-primary">
-            Urge Start Playbook
+            Start
           </span>
           <h1 className="text-2xl md:text-3xl font-serif font-bold tracking-tight text-foreground">
-            Your Building Track
+            Your Missions
           </h1>
           <p className="text-xs text-muted-foreground font-medium max-w-md leading-relaxed">
             No spreadsheets, no hype. Focus entirely on the immediate task in front of you.
           </p>
         </div>
-        
+
         {/* Simple Progress Telemetry Component */}
         <div className="bg-muted/50 border border-border px-3 py-1.5 rounded-xl shrink-0 text-left md:text-right">
           <span className="text-[10px] font-sans font-bold text-muted-foreground uppercase tracking-wider block">Tasks Mastered</span>
@@ -82,7 +85,7 @@ export default function ProgramDashboardPage() {
 
           <div className="space-y-1.5 relative z-10">
             <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-md">
-              Current Target — Sequence 0{activeMission.sequence}
+              Current Target — Mission 0{activeMission.sequence}
             </span>
             <h2 className="text-xl font-bold text-foreground tracking-tight pt-2">
               {activeMission.title}
@@ -105,7 +108,7 @@ export default function ProgramDashboardPage() {
               {isPending ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" />
               ) : null}
-              Resume Building Flow
+              Continue Quests
               <ArrowRight className="w-3.5 h-3.5 ml-2" />
             </Button>
           </div>
@@ -115,13 +118,13 @@ export default function ProgramDashboardPage() {
       {/* ─── THE ROADMAP SEQUENCE STACK ─── */}
       <div className="space-y-4">
         <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted-foreground tracking-wider pb-2 border-b border-border/60">
-          The Complete Track Roadmap
+          The Roadmap
         </h3>
-        
+
         <div className="grid grid-cols-1 gap-2.5">
           {missions.map((m) => {
             const isCurrent = activeMission?.id === m.id;
-            
+
             // Calculate completions safely across inner collections
             const totalTasks = Object.values(m.quests || {}).reduce((acc: number, q: any) => acc + (q.tasks?.length || 0), 0);
             const completedTasks = Object.values(m.quests || {}).reduce((acc: number, q: any) => {
@@ -133,15 +136,14 @@ export default function ProgramDashboardPage() {
               <div
                 key={m.id}
                 onClick={() => router.push(`/program/mission/${m.id}`)}
-                className={`p-4 border rounded-xl flex items-center justify-between transition group cursor-pointer ${
-                  isCurrent 
-                    ? 'border-primary/30 bg-primary/5 font-semibold shadow-sm' 
+                className={`p-4 border rounded-xl flex items-center justify-between transition group cursor-pointer ${isCurrent
+                    ? 'border-primary/30 bg-primary/5 font-semibold shadow-sm'
                     : 'border-border bg-card/40 opacity-75 hover:opacity-100 hover:border-border-hover'
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-4 min-w-0">
                   <span className={`text-xs font-sans font-bold shrink-0 ${isCurrent ? 'text-primary' : 'text-muted-foreground'}`}>
-                    0{m.sequence}
+                    Mission-0{m.sequence}
                   </span>
                   <p className="text-xs text-foreground font-bold truncate tracking-tight">
                     {m.title}
@@ -157,7 +159,7 @@ export default function ProgramDashboardPage() {
                     </span>
                   ) : (
                     <span className="text-[9px] font-sans font-bold text-muted-foreground group-hover:text-foreground transition uppercase tracking-wider">
-                      View Track
+                      View Quests
                     </span>
                   )}
                 </div>
