@@ -63,7 +63,7 @@ export default function MissionRoadmapPage() {
           Back to Roadmap
         </button>
         <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted-foreground/60">
-          Strategic Briefing
+          Mission Brief
         </span>
       </div>
 
@@ -73,7 +73,7 @@ export default function MissionRoadmapPage() {
           Mission Track 0{currentMission.sequence}
         </span>
         
-        <h1 className="text-3xl md:text-4xl font-serif font-bold tracking-tight text-foreground max-w-xl leading-tight">
+        <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight text-foreground max-w-xl leading-tight">
           {currentMission.title}
         </h1>
         
@@ -98,7 +98,7 @@ export default function MissionRoadmapPage() {
       <div className="space-y-4 pt-4">
         <div className="pb-2 border-b border-border/60">
           <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted-foreground tracking-wider">
-            Target Quest Objectives
+            Quests
           </h3>
         </div>
 

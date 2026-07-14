@@ -5,7 +5,7 @@ export const mission2: Mission = {
   id: "mission2",
   title: "Find Problems Worth Solving",
   sequence: 2,
-  video_url: "https://urgetostart.com/videos/m2-overview.mp4",
+  video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
   briefing_text: "Before you build anything, you need to find a problem worth solving. We're going to start with what you know best—your own frustrations—and gradually expand outward. By the end of this mission, you'll have a real opportunity you can turn into a business.",
   content: "",
   content_path: "content/mission2/mission.md",

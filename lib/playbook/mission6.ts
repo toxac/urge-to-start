@@ -5,7 +5,7 @@ export const mission6: Mission = {
   id: "mission6",
   title: "Building Your Solution & Gathering Traction",
   sequence: 6,
-  video_url: "https://urgetostart.com/videos/m6-overview.mp4",
+  video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
   briefing_text: "You've planned, you've prepared, you've built an audience. Now it's time to build. In this mission, you'll build your Minimum Sellable Product, test it with real users, get your first pre-sales (from your network AND the Urge community), and prepare for public launch. The app is your dashboard—most of the work happens in the real world.",
   content: "",
   content_path: "content/mission6/mission.md",

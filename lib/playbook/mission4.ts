@@ -5,7 +5,7 @@ export const mission4: Mission = {
   id: "mission4",
   title: "How Will You Make Money?",
   sequence: 4,
-  video_url: "https://urgetostart.com/videos/m4-overview.mp4",
+  video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
   briefing_text: "You've validated the problem, the customer, and the solution. Now let's figure out if this can actually be a business. We'll explore pricing models, go-to-market channels, partnerships, costs, and finally check if the math works. By the end of this mission, you'll know if you have a viable business—or if you need to go back to the drawing board.",
   content: "",
   content_path: "content/mission4/mission.md",

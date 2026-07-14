@@ -5,7 +5,7 @@ export const mission5: Mission = {
   id: "mission5",
   title: "From Plan to Build",
   sequence: 5,
-  video_url: "https://urgetostart.com/videos/m5-overview.mp4",
+  video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
   briefing_text: "You've validated the problem, the solution, and the economics. Now it's time to transition from planning to building. But here's the secret: the best builders don't build in isolation. They build WITH an audience watching, waiting, and cheering them on. In this mission, you'll define exactly what you're building, set up your presence, gather early followers, and create your build plan. When you're done, you'll have a roadmap, a landing page, a waitlist, and people waiting for what you're building.",
   content: "",
   content_path: "content/mission5/mission.md",

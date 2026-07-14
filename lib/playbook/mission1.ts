@@ -5,7 +5,7 @@ export const mission1: Mission = {
   id: "mission1",
   title: "Get Out of Your Own Head",
   sequence: 1,
-  video_url: "https://urgetostart.com/videos/m1-overview.mp4",
+  video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
   briefing_text: "Before we look at business ideas, we need to focus on you. We're going to break out of the overthinking loop and build the habits you need to actually stick with this in the real world.",
   content: "",
   content_path: "content/missions/mission1/mission.md",

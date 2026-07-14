@@ -5,7 +5,7 @@ export const mission7: Mission = {
   id: "mission7",
   title: "The Public Launch & Market Engine",
   sequence: 7,
-  video_url: "https://urgetostart.com/videos/m7-overview.mp4",
+  video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
   briefing_text: "You've launched internally, made pre-sales, and validated your product. Now it's time to go public. This mission is about launching to the world and building a sustainable customer acquisition engine. Over the next quarter, you'll focus on two parallel tracks: launching and marketing, and building a sales pipeline that brings in new customers consistently.",
   content: "",
   content_path: "content/mission7/mission.md",

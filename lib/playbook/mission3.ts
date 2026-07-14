@@ -5,7 +5,7 @@ export const mission3: Mission = {
   id: "mission3",
   title: "Project's Viability",
   sequence: 3,
-  video_url: "https://urgetostart.com/videos/m3-overview.mp4",
+  video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
   briefing_text: "You've picked an opportunity. Now let's make sure it's actually viable before you invest serious time and money. We'll talk to real customers, understand the competition, figure out what permissions you need, design your Minimum Sellable Product, and do a final reality check. By the end of this mission, you'll know if this is worth pursuing—or if you should go back to the drawing board.",
   content: "",
   content_path: "content/mission3/mission.md",

@@ -5,7 +5,7 @@ export const mission8: Mission = {
   id: "mission8",
   title: "True Review & The Reality Crossroads",
   sequence: 8,
-  video_url: "https://urgetostart.com/videos/m8-overview.mp4",
+  video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
   briefing_text: "You've come a long way. From your first observation to your public launch, you've built something real. Now it's time to stop, look back, and decide what's next. This mission is about honest reflection—what worked, what didn't, and where you go from here. You'll review your journey, your business, and your life. Then you'll make the big decision: optimize, expand, or pivot.",
   content: "",
   content_path: "content/mission8/mission.md",
