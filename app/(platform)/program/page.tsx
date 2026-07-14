@@ -61,7 +61,7 @@ export default function ProgramDashboardPage() {
           <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-primary">
             Start
           </span>
-          <h1 className="text-2xl md:text-3xl font-serif font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight text-foreground">
             Your Missions
           </h1>
           <p className="text-xs text-muted-foreground font-medium max-w-md leading-relaxed">
