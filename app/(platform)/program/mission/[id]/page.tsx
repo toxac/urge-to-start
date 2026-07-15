@@ -6,6 +6,7 @@ import { useStore } from '@nanostores/react';
 import { $playbookStore, setCompanionFocus } from '@/lib/stores/companionStore';
 import { $progressStore } from '@/lib/stores/progressStore';
 import { Button } from '@/components/ui/button';
+import {MissionHeader} from '@/components/layout/MissionHeader';
 import { ChevronLeft, PlayCircle, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
 
 
@@ -93,18 +94,12 @@ export default function MissionRoadmapPage() {
       </div>
 
       {/* Header & Video */}
-      <div className="flex flex-col items-center text-center space-y-4 pt-4">
-        <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-primary bg-primary/10 px-2.5 py-0.5 rounded-md">
-          Mission Track 0{currentMission.sequence}
-        </span>
-
-        <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight text-foreground max-w-xl leading-tight">
-          {currentMission.title}
-        </h1>
-
-        <p className="text-xs md:text-sm text-muted-foreground leading-relaxed max-w-xl mx-auto font-medium">
-          {currentMission.briefing_text}
-        </p>
+      <div className="pt-4">
+        <MissionHeader
+          sequence={currentMission.sequence}
+          title={currentMission.title}
+          briefingText={currentMission.briefing_text}
+        />
       </div>
 
       {/* Video Player */}
@@ -131,7 +126,7 @@ export default function MissionRoadmapPage() {
       )}
       {markdownHtml && !loadingMarkdown && (
         <div
-          className="prose prose-sm max-w-none prose-headings:font-serif prose-headings:font-bold prose-headings:text-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground prose-ul:text-muted-foreground prose-li:text-muted-foreground"
+          className="prose prose-lg max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground prose-ul:text-muted-foreground prose-li:text-muted-foreground"
           dangerouslySetInnerHTML={{ __html: markdownHtml }}
         />
       )}
