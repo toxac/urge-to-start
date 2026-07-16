@@ -76,13 +76,13 @@ export async function executeSidebarConductorAction(params: ActionParams) {
 
   // 2. ORCHESTRATE CONTEXT-AWARE SYSTEM DIRECTIONS
   switch (params.contextType) {
-    
+
     case 'prerequisite_expansion': {
       const targetPrereq = currentMission.prerequisites?.find(p => p.item === params.userInputText);
-      
-      dynamicPrompt = targetPrereq?.promptRawText || 
+
+      dynamicPrompt = targetPrereq?.promptRawText ||
         `Provide a helpful, casual explanation of why a builder needs: "${params.userInputText}".`;
-      
+
       activeSkills = ['MINDSET_COACHING', 'STRATEGIC_ALIGNMENT'];
       break;
     }
@@ -91,7 +91,7 @@ export async function executeSidebarConductorAction(params: ActionParams) {
       if (!params.questId || !params.taskId || !params.userInputText) {
         return { success: false, error: 'Incomplete recommendation parameters.' };
       }
-      
+
       const currentQuest = currentMission.quests?.[params.questId];
       const currentTask = currentQuest?.tasks?.find(t => t.id === params.taskId);
       const rec = currentTask?.ai_config?.recommendations?.find(r => r.path_or_url === params.userInputText);
@@ -101,7 +101,7 @@ export async function executeSidebarConductorAction(params: ActionParams) {
         Provide a friendly, clean, direct summary of this recommended ${rec?.type || 'material'}: "${rec?.title || params.userInputText}".
         Keep it under 3 brief paragraphs. Highlight actionable points using clean bullets and bolds.
       `;
-      
+
       activeSkills = ['CONTENT_SYNTHESIS', 'TECHNICAL_TRANSLATION'];
       break;
     }
@@ -113,13 +113,15 @@ export async function executeSidebarConductorAction(params: ActionParams) {
 
       const currentQuest = currentMission.quests?.[params.questId];
       const currentTask = currentQuest?.tasks?.find(t => t.id === params.taskId);
+      const reflectionPrompt = currentTask?.ai_config?.reflection_prompt || 'How did this step feel?';
 
       dynamicPrompt = `
         ACT AS PERSONA: "${currentQuest?.ai_config?.persona_name || 'The Mirror'}".
         PERSONA DIRECTIVE: "${currentQuest?.ai_config?.persona_prompt}".
         
         The user just completed the step: "${currentTask?.title}".
-        They provided this reflection: "${params.userInputText}".
+        The reflection prompt they responded to: "${reflectionPrompt}".
+        Their response: "${params.userInputText}".
         
         Review their response as an encouraging friend. If their reflection is vague, challenge them gently to be more concrete.
       `;
@@ -135,7 +137,7 @@ export async function executeSidebarConductorAction(params: ActionParams) {
 
       const currentQuest = currentMission.quests?.[params.questId];
       const currentTask = currentQuest?.tasks?.find(t => t.id === params.taskId);
-      
+
       // Get analysis prompt from task config or use default
       const analysisPrompt = params.additionalContext?.analysisPrompt || currentTask?.ai_config?.observation_analysis_prompt;
       const guideQuestions = params.additionalContext?.guideQuestions || currentTask?.observation_config?.guide_questions || [];
