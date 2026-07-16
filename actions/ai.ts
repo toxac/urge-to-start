@@ -7,7 +7,7 @@ import { executeKipConductor } from '@/lib/ai/conductor';
 import { urgePlaybook } from '@/lib/playbook';
 import { z } from 'zod';
 import { ObservationAnalysisContract, type ObservationAnalysis } from '@/types/ai-schema';
-
+import { ActionParams } from '@/types/ai-schema';
 const CritiqueOutputContract = z.object({
   score: z.number(),
   summary: z.string(),
@@ -17,15 +17,6 @@ const CritiqueOutputContract = z.object({
   realWorldExecutionAdvice: z.array(z.string()),
 });
 
-
-interface ActionParams {
-  taskId?: string;
-  questId?: string;
-  missionId?: string;
-  contextType: 'prerequisite_expansion' | 'resource_summary' | 'retrospective_synthesis' | 'observation_analysis';
-  userInputText?: string;
-  additionalContext?: Record<string, any>;
-}
 
 export async function analyzeUserMessageDraft(scenario: string, userDraft: string, userProfile: any) {
   return await executeKipConductor({

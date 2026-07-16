@@ -18,4 +18,13 @@ export const ObservationAnalysisContract = z.object({
   next_steps: z.string(),
 });
 
+export interface ActionParams {
+  taskId?: string;
+  questId?: string;
+  missionId?: string;
+  contextType: 'prerequisite_expansion' | 'resource_summary' | 'retrospective_synthesis' | 'observation_analysis';
+  userInputText?: string;
+  additionalContext?: Record<string, any>;
+}
+
 export type ObservationAnalysis = z.infer<typeof ObservationAnalysisContract>;
