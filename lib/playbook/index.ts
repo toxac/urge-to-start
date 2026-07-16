@@ -1,3 +1,4 @@
+// lib/playbook/index.ts
 import { PlaybookConfig } from "@/types/playbook";
 import { mission1 } from "./mission1";
 import {mission2} from "./mission2";

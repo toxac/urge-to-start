@@ -139,8 +139,8 @@ export default function MissionRoadmapPage() {
       {/* Quests List */}
       <div className="space-y-4 pt-4">
         <div className="pb-2 border-b border-border/60">
-          <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted-foreground tracking-wider">
-            Quests
+          <h3 className="text-lg font-sans font-bold uppercase tracking-widest text-muted-foreground tracking-wider">
+            Quests 
           </h3>
         </div>
 
@@ -155,7 +155,7 @@ export default function MissionRoadmapPage() {
               <div
                 key={quest.key}
                 onClick={() => router.push(`/program/quest/${quest.slug}`)}
-                className="group bg-card/40 border border-border rounded-2xl p-6 shadow-sm hover:border-primary/30 transition duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden"
+                className="group bg-card/40 border border-primary/30 rounded-2xl p-6 shadow-sm hover:border-primary/80 transition duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden"
               >
                 <div className="space-y-1.5 flex-1 text-left">
                   <div className="flex items-center gap-2.5">
