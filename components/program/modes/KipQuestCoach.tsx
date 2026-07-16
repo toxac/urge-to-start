@@ -23,6 +23,7 @@ interface KipQuestCoachProps {
 
 export function KipQuestCoach({ missionId, questId, activeTaskId, progress }: KipQuestCoachProps) {
   const playbook = useStore($playbookStore);
+  const [error, setError] = useState<string | null>(null);
   
   const currentMission = playbook[missionId];
   const currentQuest = currentMission?.quests?.[questId];
@@ -159,6 +160,7 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
   const [cachedSummaries, setCachedSummaries] = useState<Record<string, string>>({});
   const [observationAnalysis, setObservationAnalysis] = useState<ObservationAnalysis | string | null>(null);
   const [isObservationSubmitted, setIsObservationSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setReflectionText('');
@@ -178,26 +180,29 @@ function KipTaskExecutionSuite({ missionId, questId, task, progress }: { mission
   const isObservationTask = task.type === 'observation';
 
   const handleTriggerSummary = async (path: string) => {
-    setActiveSummaryUrl(path);
-    if (cachedSummaries[path]) return;
-    
-    setIsAiLoading(true);
-    const response = await executeSidebarConductorAction({
-      taskId: task.id,
-      questId,
-      missionId,
-      contextType: 'resource_summary',
-      userInputText: path
-    });
+  setError(null);
+  setActiveSummaryUrl(path);
+  if (cachedSummaries[path]) return;
+  
+  setIsAiLoading(true);
+  const response = await executeSidebarConductorAction({
+    taskId: task.id,
+    questId,
+    missionId,
+    contextType: 'resource_summary',
+    userInputText: path
+  });
 
-    if (response.success && 'data' in response && response.data) {
-      setCachedSummaries((prev) => ({
-        ...prev,
-        [path]: response.data.summary || response.data
-      }));
-    }
-    setIsAiLoading(false);
-  };
+  if (response.success && 'data' in response && response.data) {
+    setCachedSummaries((prev) => ({
+      ...prev,
+      [path]: response.data.summary || response.data
+    }));
+  } else {
+    setError(response.error || 'Something went wrong. Please try again.');
+  }
+  setIsAiLoading(false);
+};
 
   const handleSendReflection = async () => {
     if (!reflectionText.trim()) return;
