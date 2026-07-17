@@ -24,8 +24,9 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
   const [plans, setPlans] = useState<UserPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [updating, setUpdating] = useState<string | null>(null);
+  const [isRescheduling, setIsRescheduling] = useState(false);
 
+  // Load existing plans
   useEffect(() => {
     const fetchPlans = async () => {
       try {
@@ -41,12 +42,22 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
     fetchPlans();
   }, [quest.id]);
 
+  // Calculate completion metrics
+  const tasks = quest.tasks || [];
+  const completedCount = tasks.filter((t: any) => progress[t.id]?.status === 'completed').length;
+  const progressRatio = Math.min(100, Math.floor((completedCount / tasks.length) * 100));
+  const isQuestFullyCompleted = tasks.length > 0 && completedCount === tasks.length;
+
+  // Auto‑complete plans when quest is fully completed
   useEffect(() => {
     if (isQuestFullyCompleted && plans.some(p => p.status === 'scheduled')) {
-      // Mark all plans as completed
       completeQuestPlans(quest.id).then(() => {
         setPlans(prev => prev.map(p => p.status === 'scheduled' ? { ...p, status: 'completed' } : p));
-      }).catch(err => toast.error('Failed to update plan status'));
+        toast.success('All sessions marked as completed – great job!');
+      }).catch(err => {
+        console.error(err);
+        toast.error('Failed to update plan status');
+      });
     }
   }, [isQuestFullyCompleted, plans, quest.id]);
 
@@ -54,11 +65,7 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
     setPlans(newPlans);
   };
 
-  const handleReschedule = () => {
-    // We can optionally delete all existing plans before opening the dialog,
-    // but we'll let the dialog generate new ones (which will replace them).
-    // If we want to replace, we need to delete existing plans first.
-    // For now, we'll open the dialog and let it generate new plans.
+  const handleOpenDialog = () => {
     setDialogOpen(true);
   };
 
@@ -72,11 +79,6 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
       toast.error('Failed to cancel sessions');
     }
   };
-
-  const tasks = quest.tasks || [];
-  const completedCount = tasks.filter((t: any) => progress[t.id]?.status === 'completed').length;
-  const progressRatio = Math.min(100, Math.floor((completedCount / tasks.length) * 100));
-  const isQuestFullyCompleted = tasks.length > 0 && completedCount === tasks.length;
 
   return (
     <div className="space-y-5 animate-in fade-in duration-200 text-left">
@@ -127,7 +129,7 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
             Your Schedule
           </span>
           <div className="flex gap-1">
-            {plans.length > 0 && (
+            {plans.some(p => p.status === 'scheduled') && (
               <Button
                 size="sm"
                 variant="ghost"
@@ -141,7 +143,7 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
               size="sm"
               variant="outline"
               className="h-6 text-[10px] font-bold gap-1"
-              onClick={() => setDialogOpen(true)}
+              onClick={handleOpenDialog}
               disabled={loading}
             >
               {plans.length > 0 ? <RefreshCw className="w-3 h-3" /> : '📅 Plan'}
@@ -153,23 +155,21 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
           <div className="flex items-center justify-center py-4">
             <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
           </div>
-        ) : plans.length === 0 ? (
-          <p className="text-muted-foreground text-[11px] italic">No plans yet. Click "Plan" to schedule your sessions.</p>
+        ) : plans.filter(p => p.status !== 'cancelled').length === 0 ? (
+          <p className="text-muted-foreground text-[11px] italic">No active plans. Click "Plan" to schedule your sessions.</p>
         ) : (
           <ul className="space-y-2">
-            {plans.map((plan) => {
+            {plans.filter(p => p.status !== 'cancelled').map((plan) => {
               const isPast = new Date(plan.end_time) < new Date();
+              const isCompleted = plan.status === 'completed';
               const isScheduled = plan.status === 'scheduled';
-              const isCancelled = plan.status === 'cancelled';
               const metadata = (plan.metadata || {}) as { sessionNumber?: number; totalSessions?: number };
-
-              if (isCancelled) return null;
 
               return (
                 <li key={plan.id} className="flex items-center justify-between p-2 border rounded-lg bg-muted/10 text-xs">
                   <div className="flex items-center gap-2 truncate">
-                    <Clock className={`w-3 h-3 ${isPast ? 'text-muted-foreground' : 'text-primary'}`} />
-                    <span className={`font-medium truncate ${isPast ? 'text-muted-foreground' : 'text-foreground'}`}>
+                    <Clock className={`w-3 h-3 ${isPast ? 'text-muted-foreground' : isCompleted ? 'text-emerald-500' : 'text-primary'}`} />
+                    <span className={`font-medium truncate ${isPast ? 'text-muted-foreground' : isCompleted ? 'text-emerald-600' : 'text-foreground'}`}>
                       {new Date(plan.start_time).toLocaleDateString()} at {new Date(plan.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                     <span className="text-muted-foreground">–</span>
@@ -182,23 +182,13 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
                     {isPast && isScheduled && (
                       <span className="text-[9px] text-amber-600">(past)</span>
                     )}
+                    {isCompleted && (
+                      <span className="text-[9px] text-emerald-600">✅ done</span>
+                    )}
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     {isScheduled && !isPast && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-5 px-1 text-[10px] text-muted-foreground hover:text-primary"
-                        onClick={() => {
-                          // Maybe allow rescheduling a single session? For now we just do a bulk reschedule.
-                          // We'll keep the bulk reschedule via the "Plan" button.
-                        }}
-                      >
-                        <RefreshCw className="w-3 h-3" />
-                      </Button>
-                    )}
-                    {isPast && isScheduled && (
-                      <span className="text-[10px] text-muted-foreground">(missed)</span>
+                      <span className="text-[10px] text-muted-foreground">upcoming</span>
                     )}
                   </div>
                 </li>
@@ -225,12 +215,14 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
         </div>
       </div>
 
+      {/* Dialog for creating plans */}
       <PlanDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         missionId={missionId}
         questId={quest.id}
         onSuccess={handleScheduleGenerated}
+        existingPlans={plans.filter(p => p.status === 'scheduled')} // optional – for rescheduling
       />
     </div>
   );
