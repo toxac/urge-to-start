@@ -2,15 +2,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useStore } from '@nanostores/react';
 import { Button } from '@/components/ui/button';
 import { Calendar, Sparkles, Loader2, RefreshCw, Trash2, ChevronRight } from 'lucide-react';
 import { useKipProgress } from '@/hooks/useKipProgress';
-import { getQuestPlans, updatePlanStatus, completeQuestPlans } from '@/actions/plans';
 import { PlanDialog } from './PlanDialog';
 import type { Quest } from '@/types/playbook';
 import type { ProgressRow } from '@/lib/stores/progressStore';
-import type { UserPlan } from '@/types/plans';
 import { toast } from 'sonner';
+
+// Import store and actions
+import { $plans, $planLoading, fetchPlans, updatePlan, completeAllPlans } from '@/lib/stores/planStore';
 
 interface Props {
   quest: Quest;
@@ -21,34 +23,29 @@ interface Props {
 
 export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: Props) {
   const { totalCompleted, nextTask } = useKipProgress();
-  const [plans, setPlans] = useState<UserPlan[]>([]);
-  const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  // Subscribe to store
+  const plansMap = useStore($plans);
+  const loadingMap = useStore($planLoading);
+  const plans = plansMap[quest.id] || [];
+  const loading = loadingMap[quest.id] || false;
+
+  // Fetch plans on mount (or when quest.id changes)
   useEffect(() => {
-    const fetchPlans = async () => {
-      try {
-        const data = await getQuestPlans(quest.id);
-        setPlans(data);
-      } catch (error) {
-        console.error('Failed to fetch plans:', error);
-        toast.error('Could not load your plans');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPlans();
+    fetchPlans(quest.id);
   }, [quest.id]);
 
+  // Calculate completion metrics
   const tasks = quest.tasks || [];
   const completedCount = tasks.filter((t: any) => progress[t.id]?.status === 'completed').length;
   const progressRatio = Math.min(100, Math.floor((completedCount / tasks.length) * 100));
   const isQuestFullyCompleted = tasks.length > 0 && completedCount === tasks.length;
 
+  // Auto‑complete plans when quest is fully completed
   useEffect(() => {
     if (isQuestFullyCompleted && plans.some(p => p.status === 'scheduled')) {
-      completeQuestPlans(quest.id).then(() => {
-        setPlans(prev => prev.map(p => p.status === 'scheduled' ? { ...p, status: 'completed' } : p));
+      completeAllPlans(quest.id).then(() => {
         toast.success('All sessions marked as completed – great job!');
       }).catch(err => {
         console.error(err);
@@ -57,16 +54,11 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
     }
   }, [isQuestFullyCompleted, plans, quest.id]);
 
-  const handleScheduleGenerated = (newPlans: UserPlan[]) => {
-    setPlans(newPlans);
-  };
-
   const handleDeleteAllPlans = async () => {
     if (!confirm('Delete all scheduled sessions for this quest?')) return;
     try {
       const scheduled = plans.filter(p => p.status === 'scheduled');
-      await Promise.all(scheduled.map(p => updatePlanStatus(p.id, 'cancelled')));
-      setPlans(prev => prev.map(p => p.status === 'scheduled' ? { ...p, status: 'cancelled' } : p));
+      await Promise.all(scheduled.map(p => updatePlan(p.id, 'cancelled')));
       toast.success('All sessions cancelled');
     } catch (error) {
       toast.error('Failed to cancel sessions');
@@ -207,7 +199,6 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
         onOpenChange={setDialogOpen}
         missionId={missionId}
         questId={quest.id}
-        onSuccess={handleScheduleGenerated}
         existingPlans={scheduledPlans}
       />
     </div>

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
-import { generateQuestSchedule } from '@/actions/plans';
+import { generateAndSetPlans } from '@/lib/stores/planStore';
 import { toast } from 'sonner';
 import type { UserPlan } from '@/types/plans';
 
@@ -18,11 +18,10 @@ interface Props {
   onOpenChange: (open: boolean) => void;
   missionId: string;
   questId: string;
-  onSuccess: (plans: UserPlan[]) => void;
   existingPlans?: UserPlan[];
 }
 
-export function PlanDialog({ open, onOpenChange, missionId, questId, onSuccess, existingPlans }: Props) {
+export function PlanDialog({ open, onOpenChange, missionId, questId, existingPlans }: Props) {
   const [sessions, setSessions] = useState(3);
   const [duration, setDuration] = useState(60);
   const [useDefault, setUseDefault] = useState(true);
@@ -52,18 +51,15 @@ export function PlanDialog({ open, onOpenChange, missionId, questId, onSuccess, 
             preferred_days: selectedDays,
             preferred_hours: { start: startTime, end: endTime },
           };
-      const result = await generateQuestSchedule({
+      const newPlans = await generateAndSetPlans({
         missionId,
         questId,
         numberOfSessions: sessions,
         durationMinutes: duration,
         override,
       });
-      if (result.success) {
-        onSuccess(result.data);
-        toast.success(isRescheduling ? 'Schedule updated!' : `Planned ${result.data.length} sessions!`);
-        onOpenChange(false);
-      }
+      toast.success(isRescheduling ? 'Schedule updated!' : `Planned ${newPlans.length} sessions!`);
+      onOpenChange(false);
     } catch (error: any) {
       toast.error(error.message || 'Failed to generate schedule');
     } finally {
