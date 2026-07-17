@@ -1,10 +1,9 @@
 interface MissionHeaderProps {
   sequence: number;
   title: string;
-  briefingText: string | null;
 }
 
-export function MissionHeader({ sequence, title, briefingText }: MissionHeaderProps) {
+export function MissionHeader({ sequence, title}: MissionHeaderProps) {
   return (
     <div className="w-full space-y-1">
       {/* Mission number with full-width border */}
@@ -19,10 +18,6 @@ export function MissionHeader({ sequence, title, briefingText }: MissionHeaderPr
         {title}
       </h1>
 
-      {/* Brief – smaller, clean, no vertical line */}
-      <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-        {briefingText}
-      </p>
     </div>
   );
 }

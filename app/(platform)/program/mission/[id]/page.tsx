@@ -98,7 +98,6 @@ export default function MissionRoadmapPage() {
         <MissionHeader
           sequence={currentMission.sequence}
           title={currentMission.title}
-          briefingText={currentMission.briefing_text}
         />
       </div>
 
