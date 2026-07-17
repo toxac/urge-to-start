@@ -3,9 +3,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Calendar, Sparkles, CheckCircle2, Loader2, Clock, ChevronRight } from 'lucide-react';
-import { useKipCalendar } from '@/hooks/useKipCalendar';
-import { generateQuestSchedule, getQuestPlans, updatePlanStatus } from '@/actions/plans';
+import { Calendar, Sparkles, Loader2, Clock, ChevronRight, RefreshCw, Trash2 } from 'lucide-react';
+import { useKipProgress } from '@/hooks/useKipProgress';
+import { getQuestPlans, updatePlanStatus, generateQuestSchedule } from '@/actions/plans';
+import { PlanDialog } from './PlanDialog';
 import type { Quest } from '@/types/playbook';
 import type { ProgressRow } from '@/lib/stores/progressStore';
 import type { UserPlan } from '@/types/plans';
@@ -19,17 +20,16 @@ interface Props {
 }
 
 export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: Props) {
-  const { generateAndDownloadICS } = useKipCalendar();
+  const { totalCompleted, nextTask } = useKipProgress();
   const [plans, setPlans] = useState<UserPlan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [updating, setUpdating] = useState<string | null>(null);
 
-  // Load existing plans
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const data = await getQuestPlans(missionId, quest.id);
+        const data = await getQuestPlans(quest.id);
         setPlans(data);
       } catch (error) {
         console.error('Failed to fetch plans:', error);
@@ -39,42 +39,31 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
       }
     };
     fetchPlans();
-  }, [missionId, quest.id]);
+  }, [quest.id]);
 
-  const handleGenerateSchedule = async () => {
-    setGenerating(true);
-    try {
-      const result = await generateQuestSchedule({
-        missionId,
-        questId: quest.id,
-        numberOfSessions: 3,
-        durationMinutes: 60,
-      });
-      if (result.success) {
-        setPlans(result.data);
-        toast.success(`Planned ${result.data.length} sessions for this quest!`);
-      }
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to generate schedule');
-    } finally {
-      setGenerating(false);
-    }
+  const handleScheduleGenerated = (newPlans: UserPlan[]) => {
+    setPlans(newPlans);
   };
 
-  const handleUpdateStatus = async (planId: string, status: 'completed' | 'missed' | 'cancelled') => {
-    setUpdating(planId);
+  const handleReschedule = () => {
+    // We can optionally delete all existing plans before opening the dialog,
+    // but we'll let the dialog generate new ones (which will replace them).
+    // If we want to replace, we need to delete existing plans first.
+    // For now, we'll open the dialog and let it generate new plans.
+    setDialogOpen(true);
+  };
+
+  const handleDeleteAllPlans = async () => {
+    if (!confirm('Delete all scheduled sessions for this quest?')) return;
     try {
-      await updatePlanStatus(planId, status);
-      setPlans(prev => prev.map(p => p.id === planId ? { ...p, status } : p));
-      toast.success(`Session marked as ${status}`);
+      await Promise.all(plans.map(p => updatePlanStatus(p.id, 'cancelled')));
+      setPlans([]);
+      toast.success('All sessions cancelled');
     } catch (error) {
-      toast.error('Failed to update plan');
-    } finally {
-      setUpdating(null);
+      toast.error('Failed to cancel sessions');
     }
   };
 
-  // Calculate completion ratio
   const tasks = quest.tasks || [];
   const completedCount = tasks.filter((t: any) => progress[t.id]?.status === 'completed').length;
   const progressRatio = Math.min(100, Math.floor((completedCount / tasks.length) * 100));
@@ -91,7 +80,7 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
         <p className="text-muted-foreground leading-relaxed text-[11px] font-medium">{quest.description}</p>
       </div>
 
-      {/* Progress & time estimates */}
+      {/* Progress */}
       <div className="border border-border bg-muted/30 rounded-xl p-3.5 space-y-3">
         <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-foreground">
           <Calendar className="w-3.5 h-3.5 text-primary" />
@@ -128,15 +117,27 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
           <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
             Your Schedule
           </span>
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-6 text-[10px] font-bold gap-1"
-            onClick={handleGenerateSchedule}
-            disabled={generating || loading}
-          >
-            {generating ? <Loader2 className="w-3 h-3 animate-spin" /> : '📅 Plan this quest'}
-          </Button>
+          <div className="flex gap-1">
+            {plans.length > 0 && (
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-6 px-2 text-[10px] text-muted-foreground"
+                onClick={handleDeleteAllPlans}
+              >
+                <Trash2 className="w-3 h-3" />
+              </Button>
+            )}
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-6 text-[10px] font-bold gap-1"
+              onClick={() => setDialogOpen(true)}
+              disabled={loading}
+            >
+              {plans.length > 0 ? <RefreshCw className="w-3 h-3" /> : '📅 Plan'}
+            </Button>
+          </div>
         </div>
 
         {loading ? (
@@ -144,22 +145,22 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
             <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
           </div>
         ) : plans.length === 0 ? (
-          <p className="text-muted-foreground text-[11px] italic">No plans yet. Click "Plan this quest" to schedule your sessions.</p>
+          <p className="text-muted-foreground text-[11px] italic">No plans yet. Click "Plan" to schedule your sessions.</p>
         ) : (
           <ul className="space-y-2">
             {plans.map((plan) => {
               const isPast = new Date(plan.end_time) < new Date();
-              const isCompleted = plan.status === 'completed';
-              const isMissed = plan.status === 'missed';
-              const isCancelled = plan.status === 'cancelled';
               const isScheduled = plan.status === 'scheduled';
+              const isCancelled = plan.status === 'cancelled';
               const metadata = (plan.metadata || {}) as { sessionNumber?: number; totalSessions?: number };
+
+              if (isCancelled) return null;
 
               return (
                 <li key={plan.id} className="flex items-center justify-between p-2 border rounded-lg bg-muted/10 text-xs">
                   <div className="flex items-center gap-2 truncate">
                     <Clock className={`w-3 h-3 ${isPast ? 'text-muted-foreground' : 'text-primary'}`} />
-                    <span className="font-medium truncate">
+                    <span className={`font-medium truncate ${isPast ? 'text-muted-foreground' : 'text-foreground'}`}>
                       {new Date(plan.start_time).toLocaleDateString()} at {new Date(plan.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                     <span className="text-muted-foreground">–</span>
@@ -169,35 +170,26 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
                     {metadata.sessionNumber && (
                       <span className="text-[9px] text-muted-foreground">(#{metadata.sessionNumber})</span>
                     )}
+                    {isPast && isScheduled && (
+                      <span className="text-[9px] text-amber-600">(past)</span>
+                    )}
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     {isScheduled && !isPast && (
-                      <>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 px-2 text-[10px] text-green-600 hover:bg-green-50"
-                          onClick={() => handleUpdateStatus(plan.id, 'completed')}
-                          disabled={updating === plan.id}
-                        >
-                          {updating === plan.id ? <Loader2 className="w-3 h-3 animate-spin" /> : '✅ Done'}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 px-2 text-[10px] text-red-600 hover:bg-red-50"
-                          onClick={() => handleUpdateStatus(plan.id, 'missed')}
-                          disabled={updating === plan.id}
-                        >
-                          {updating === plan.id ? <Loader2 className="w-3 h-3 animate-spin" /> : '❌ Miss'}
-                        </Button>
-                      </>
-                    )}
-                    {(isCompleted || isMissed || isCancelled) && (
-                      <span className="text-[10px] text-muted-foreground capitalize">{plan.status}</span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-5 px-1 text-[10px] text-muted-foreground hover:text-primary"
+                        onClick={() => {
+                          // Maybe allow rescheduling a single session? For now we just do a bulk reschedule.
+                          // We'll keep the bulk reschedule via the "Plan" button.
+                        }}
+                      >
+                        <RefreshCw className="w-3 h-3" />
+                      </Button>
                     )}
                     {isPast && isScheduled && (
-                      <span className="text-[10px] text-amber-600">(past)</span>
+                      <span className="text-[10px] text-muted-foreground">(missed)</span>
                     )}
                   </div>
                 </li>
@@ -223,6 +215,14 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
           </button>
         </div>
       </div>
+
+      <PlanDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        missionId={missionId}
+        questId={quest.id}
+        onSuccess={handleScheduleGenerated}
+      />
     </div>
   );
 }

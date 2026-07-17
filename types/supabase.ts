@@ -1114,12 +1114,9 @@ export type Database = {
           item_id: string
           item_type: string
           metadata: Json | null
-          mission_id: string | null
-          quest_id: string | null
           reminder_sent: boolean | null
           start_time: string
           status: Database["public"]["Enums"]["plan_status"] | null
-          task_id: string | null
           updated_at: string | null
           user_id: string
         }
@@ -1130,12 +1127,9 @@ export type Database = {
           item_id: string
           item_type: string
           metadata?: Json | null
-          mission_id?: string | null
-          quest_id?: string | null
           reminder_sent?: boolean | null
           start_time: string
           status?: Database["public"]["Enums"]["plan_status"] | null
-          task_id?: string | null
           updated_at?: string | null
           user_id: string
         }
@@ -1146,12 +1140,9 @@ export type Database = {
           item_id?: string
           item_type?: string
           metadata?: Json | null
-          mission_id?: string | null
-          quest_id?: string | null
           reminder_sent?: boolean | null
           start_time?: string
           status?: Database["public"]["Enums"]["plan_status"] | null
-          task_id?: string | null
           updated_at?: string | null
           user_id?: string
         }

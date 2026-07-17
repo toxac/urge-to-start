@@ -64,21 +64,15 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
   }
 
   const plans: UserPlanInsert[] = slots.map((slot, index) => ({
-    user_id: user.id,
-    item_type: 'quest',
-    item_id: params.questId,
-    mission_id: params.missionId,
-    quest_id: params.questId,
-    task_id: params.taskId || null,
-    start_time: slot.start.toISOString(),
-    end_time: slot.end.toISOString(),
-    status: 'scheduled',
-    reminder_sent: false,
-    metadata: {
-      sessionNumber: index + 1,
-      totalSessions: slots.length,
-    },
-  }));
+  user_id: user.id,
+  item_type: 'quest',
+  item_id: params.questId,
+  start_time: slot.start.toISOString(),
+  end_time: slot.end.toISOString(),
+  status: 'scheduled',
+  reminder_sent: false,
+  metadata: { sessionNumber: index + 1, totalSessions: slots.length },
+}));
 
   const { data, error } = await supabase
     .from('user_plans')
@@ -89,23 +83,19 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
   return { success: true, data: data as UserPlan[] };
 }
 
-export async function getQuestPlans(missionId: string, questId: string, taskId?: string): Promise<UserPlan[]> {
+export async function getQuestPlans(questId: string): Promise<UserPlan[]> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
-  let query = supabase
+  const { data, error } = await supabase
     .from('user_plans')
     .select('*')
     .eq('user_id', user.id)
-    .eq('mission_id', missionId)
-    .eq('quest_id', questId);
+    .eq('item_type', 'quest')
+    .eq('item_id', questId)
+    .order('start_time', { ascending: true });
 
-  if (taskId) {
-    query = query.eq('task_id', taskId);
-  }
-
-  const { data, error } = await query.order('start_time', { ascending: true });
   if (error) throw new Error(error.message);
   return data as UserPlan[];
 }
