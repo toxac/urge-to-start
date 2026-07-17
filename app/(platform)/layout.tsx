@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { StoreHydrator } from '@/components/providers/StoreHydrator';
 import { SidebarComponent } from '@/components/layout/Sidebar'; 
-import { KipSidebarCompanion } from '@/components/program/KipSidebarCompanion';
+import { KipSidebarCompanion } from '@/components/program/kip/KipSidebarCompanion';
 
 export default async function PlatformLayout({
   children,
