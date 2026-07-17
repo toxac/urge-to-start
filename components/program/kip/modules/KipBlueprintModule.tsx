@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar, Sparkles, Loader2, Clock, ChevronRight, RefreshCw, Trash2 } from 'lucide-react';
 import { useKipProgress } from '@/hooks/useKipProgress';
-import { getQuestPlans, updatePlanStatus, generateQuestSchedule } from '@/actions/plans';
+import { getQuestPlans, updatePlanStatus, generateQuestSchedule, completeQuestPlans } from '@/actions/plans';
 import { PlanDialog } from './PlanDialog';
 import type { Quest } from '@/types/playbook';
 import type { ProgressRow } from '@/lib/stores/progressStore';
@@ -40,6 +40,15 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
     };
     fetchPlans();
   }, [quest.id]);
+
+  useEffect(() => {
+    if (isQuestFullyCompleted && plans.some(p => p.status === 'scheduled')) {
+      // Mark all plans as completed
+      completeQuestPlans(quest.id).then(() => {
+        setPlans(prev => prev.map(p => p.status === 'scheduled' ? { ...p, status: 'completed' } : p));
+      }).catch(err => toast.error('Failed to update plan status'));
+    }
+  }, [isQuestFullyCompleted, plans, quest.id]);
 
   const handleScheduleGenerated = (newPlans: UserPlan[]) => {
     setPlans(newPlans);

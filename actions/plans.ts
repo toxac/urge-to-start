@@ -5,6 +5,29 @@ import { createClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 import { GenerateScheduleSchema, ScheduleConfigSchema, UserPlanInsert, UserPlan } from '@/types/plans';
 
+// Generic helper to fetch plans for any item type
+async function getPlansForItem(itemType: string, itemId: string): Promise<UserPlan[]> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Unauthorized');
+
+  const { data, error } = await supabase
+    .from('user_plans')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('item_type', itemType)
+    .eq('item_id', itemId)
+    .order('start_time', { ascending: true });
+
+  if (error) throw new Error(error.message);
+  return data as UserPlan[];
+}
+
+// Export as async function (required for Server Actions)
+export async function getQuestPlans(questId: string): Promise<UserPlan[]> {
+  return getPlansForItem('quest', questId);
+}
+
 export async function generateQuestSchedule(params: z.infer<typeof GenerateScheduleSchema>) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -23,6 +46,7 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
   const preferredHourStart = config.preferred_hours.start;
   const preferredHourEnd = config.preferred_hours.end;
 
+  // Slot generation logic (same as before)
   const now = new Date();
   const startDate = new Date(now);
   startDate.setDate(now.getDate() + 1);
@@ -64,15 +88,19 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
   }
 
   const plans: UserPlanInsert[] = slots.map((slot, index) => ({
-  user_id: user.id,
-  item_type: 'quest',
-  item_id: params.questId,
-  start_time: slot.start.toISOString(),
-  end_time: slot.end.toISOString(),
-  status: 'scheduled',
-  reminder_sent: false,
-  metadata: { sessionNumber: index + 1, totalSessions: slots.length },
-}));
+    user_id: user.id,
+    item_type: 'quest',
+    item_id: params.questId,
+    start_time: slot.start.toISOString(),
+    end_time: slot.end.toISOString(),
+    status: 'scheduled',
+    reminder_sent: false,
+    metadata: {
+      sessionNumber: index + 1,
+      totalSessions: slots.length,
+      missionId: params.missionId, // store for reference
+    },
+  }));
 
   const { data, error } = await supabase
     .from('user_plans')
@@ -81,23 +109,6 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
 
   if (error) throw new Error(error.message);
   return { success: true, data: data as UserPlan[] };
-}
-
-export async function getQuestPlans(questId: string): Promise<UserPlan[]> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('Unauthorized');
-
-  const { data, error } = await supabase
-    .from('user_plans')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('item_type', 'quest')
-    .eq('item_id', questId)
-    .order('start_time', { ascending: true });
-
-  if (error) throw new Error(error.message);
-  return data as UserPlan[];
 }
 
 export async function updatePlanStatus(planId: string, status: 'completed' | 'missed' | 'cancelled') {
@@ -110,6 +121,23 @@ export async function updatePlanStatus(planId: string, status: 'completed' | 'mi
     .update({ status, updated_at: new Date().toISOString() })
     .eq('id', planId)
     .eq('user_id', user.id);
+
+  if (error) throw new Error(error.message);
+  return { success: true };
+}
+
+export async function completeQuestPlans(questId: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Unauthorized');
+
+  const { error } = await supabase
+    .from('user_plans')
+    .update({ status: 'completed', updated_at: new Date().toISOString() })
+    .eq('user_id', user.id)
+    .eq('item_type', 'quest')
+    .eq('item_id', questId)
+    .eq('status', 'scheduled'); // only update scheduled ones
 
   if (error) throw new Error(error.message);
   return { success: true };
