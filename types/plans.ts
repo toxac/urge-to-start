@@ -7,13 +7,7 @@ export type UserPlan = Database['public']['Tables']['user_plans']['Row'];
 export type UserPlanInsert = Database['public']['Tables']['user_plans']['Insert'];
 export type UserPlanUpdate = Database['public']['Tables']['user_plans']['Update'];
 
-export const GenerateScheduleSchema = z.object({
-  missionId: z.string(),
-  questId: z.string(),
-  taskId: z.string().optional(),
-  numberOfSessions: z.number().default(3),
-  durationMinutes: z.number().default(60),
-});
+
 
 export const ScheduleConfigSchema = z.object({
   preferred_days: z.array(z.string()).default(['monday', 'wednesday', 'friday']),
@@ -25,3 +19,21 @@ export const ScheduleConfigSchema = z.object({
 });
 
 export type ScheduleConfig = z.infer<typeof ScheduleConfigSchema>;
+
+export const ScheduleOverrideSchema = z.object({
+  preferred_days: z.array(z.string()).optional(),
+  preferred_hours: z.object({
+    start: z.string().optional(),
+    end: z.string().optional(),
+  }).optional(),
+});
+export type ScheduleOverride = z.infer<typeof ScheduleOverrideSchema>;
+
+export const GenerateScheduleSchema = z.object({
+  missionId: z.string(),
+  questId: z.string(),
+  taskId: z.string().optional(),
+  numberOfSessions: z.number().default(3),
+  durationMinutes: z.number().default(60),
+  override: ScheduleOverrideSchema.optional(),
+});
