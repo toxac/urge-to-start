@@ -1106,6 +1106,65 @@ export type Database = {
           },
         ]
       }
+      user_plans: {
+        Row: {
+          created_at: string | null
+          end_time: string
+          id: string
+          item_id: string
+          item_type: string
+          metadata: Json | null
+          mission_id: string | null
+          quest_id: string | null
+          reminder_sent: boolean | null
+          start_time: string
+          status: Database["public"]["Enums"]["plan_status"] | null
+          task_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          end_time: string
+          id?: string
+          item_id: string
+          item_type: string
+          metadata?: Json | null
+          mission_id?: string | null
+          quest_id?: string | null
+          reminder_sent?: boolean | null
+          start_time: string
+          status?: Database["public"]["Enums"]["plan_status"] | null
+          task_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          end_time?: string
+          id?: string
+          item_id?: string
+          item_type?: string
+          metadata?: Json | null
+          mission_id?: string | null
+          quest_id?: string | null
+          reminder_sent?: boolean | null
+          start_time?: string
+          status?: Database["public"]["Enums"]["plan_status"] | null
+          task_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_plans_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_posts: {
         Row: {
           category: Database["public"]["Enums"]["post_category"]
@@ -1307,6 +1366,7 @@ export type Database = {
         | "committed"
         | "archived"
         | "scored"
+      plan_status: "scheduled" | "completed" | "missed" | "cancelled"
       post_category:
         | "build_journal"
         | "marketing_win"
@@ -1542,6 +1602,7 @@ export const Constants = {
         "archived",
         "scored",
       ],
+      plan_status: ["scheduled", "completed", "missed", "cancelled"],
       post_category: [
         "build_journal",
         "marketing_win",
