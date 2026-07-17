@@ -5,7 +5,6 @@ import { createClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 import { GenerateScheduleSchema, ScheduleConfigSchema, UserPlanInsert, UserPlan } from '@/types/plans';
 
-// Generic helper to fetch plans for any item type
 async function getPlansForItem(itemType: string, itemId: string): Promise<UserPlan[]> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -23,7 +22,6 @@ async function getPlansForItem(itemType: string, itemId: string): Promise<UserPl
   return data as UserPlan[];
 }
 
-// Export as async function (required for Server Actions)
 export async function getQuestPlans(questId: string): Promise<UserPlan[]> {
   return getPlansForItem('quest', questId);
 }
@@ -42,12 +40,13 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
   const parsedConfig = ScheduleConfigSchema.safeParse(profile?.schedule_config);
   const config = parsedConfig.success ? parsedConfig.data : ScheduleConfigSchema.parse({});
 
+  // Use override if provided
   const override = params.override;
-const preferredDays = override?.preferred_days ?? config.preferred_days;
-const preferredHourStart = override?.preferred_hours?.start ?? config.preferred_hours.start;
-const preferredHourEnd = override?.preferred_hours?.end ?? config.preferred_hours.end;
+  const preferredDays = override?.preferred_days ?? config.preferred_days;
+  const preferredHourStart = override?.preferred_hours?.start ?? config.preferred_hours.start;
+  const preferredHourEnd = override?.preferred_hours?.end ?? config.preferred_hours.end;
 
-  // Slot generation logic (same as before)
+  // Generate slots (next 7 days)
   const now = new Date();
   const startDate = new Date(now);
   startDate.setDate(now.getDate() + 1);
@@ -99,7 +98,7 @@ const preferredHourEnd = override?.preferred_hours?.end ?? config.preferred_hour
     metadata: {
       sessionNumber: index + 1,
       totalSessions: slots.length,
-      missionId: params.missionId, // store for reference
+      missionId: params.missionId,
     },
   }));
 
@@ -138,7 +137,7 @@ export async function completeQuestPlans(questId: string) {
     .eq('user_id', user.id)
     .eq('item_type', 'quest')
     .eq('item_id', questId)
-    .eq('status', 'scheduled'); // only update scheduled ones
+    .eq('status', 'scheduled');
 
   if (error) throw new Error(error.message);
   return { success: true };

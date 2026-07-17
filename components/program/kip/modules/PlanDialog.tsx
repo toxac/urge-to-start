@@ -6,12 +6,12 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch'; // need to import or use checkbox
-import { Checkbox } from '@/components/ui/checkbox'; // or custom
 import { Loader2 } from 'lucide-react';
 import { generateQuestSchedule } from '@/actions/plans';
 import { toast } from 'sonner';
 import type { UserPlan } from '@/types/plans';
+
+const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 interface Props {
   open: boolean;
@@ -21,8 +21,6 @@ interface Props {
   onSuccess: (plans: UserPlan[]) => void;
   existingPlans?: UserPlan[];
 }
-
-const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 export function PlanDialog({ open, onOpenChange, missionId, questId, onSuccess, existingPlans }: Props) {
   const [sessions, setSessions] = useState(3);
@@ -36,16 +34,24 @@ export function PlanDialog({ open, onOpenChange, missionId, questId, onSuccess, 
   const isRescheduling = existingPlans && existingPlans.length > 0;
 
   const toggleDay = (day: string) => {
-    setSelectedDays(prev => prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]);
+    setSelectedDays(prev =>
+      prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]
+    );
   };
 
   const handleConfirm = async () => {
+    if (!useDefault && selectedDays.length === 0) {
+      toast.error('Please select at least one day');
+      return;
+    }
     setIsGenerating(true);
     try {
-      const override = useDefault ? undefined : {
-        preferred_days: selectedDays,
-        preferred_hours: { start: startTime, end: endTime },
-      };
+      const override = useDefault
+        ? undefined
+        : {
+            preferred_days: selectedDays,
+            preferred_hours: { start: startTime, end: endTime },
+          };
       const result = await generateQuestSchedule({
         missionId,
         questId,
@@ -72,8 +78,8 @@ export function PlanDialog({ open, onOpenChange, missionId, questId, onSuccess, 
           <DialogTitle>{isRescheduling ? 'Reschedule your quest' : 'Plan your quest'}</DialogTitle>
           <DialogDescription>
             {isRescheduling
-              ? 'Adjust the number of sessions and duration to create a new schedule. Existing sessions will be replaced.'
-              : 'Choose how many sessions and how long each should be. We\'ll suggest time slots based on your availability.'}
+              ? 'Adjust the schedule and replace existing sessions.'
+              : 'Choose how many sessions and when you want to work.'}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-3">
@@ -102,28 +108,32 @@ export function PlanDialog({ open, onOpenChange, missionId, questId, onSuccess, 
           </div>
 
           <div className="flex items-center space-x-2 pt-2">
-            <Switch
+            <input
+              type="checkbox"
               id="use-default"
               checked={useDefault}
-              onCheckedChange={setUseDefault}
+              onChange={(e) => setUseDefault(e.target.checked)}
+              className="h-4 w-4 rounded border-gray-300"
             />
-            <Label htmlFor="use-default">Use my default schedule</Label>
+            <Label htmlFor="use-default" className="text-sm">Use my default schedule</Label>
           </div>
 
           {!useDefault && (
             <div className="space-y-3 border rounded-lg p-3 bg-muted/20">
               <div>
                 <Label className="text-xs font-medium">Preferred days</Label>
-                <div className="flex flex-wrap gap-1 mt-1">
+                <div className="flex flex-wrap gap-1.5 mt-1">
                   {DAYS.map(day => (
-                    <div key={day} className="flex items-center space-x-1">
-                      <Checkbox
-                        id={`day-${day}`}
-                        checked={selectedDays.includes(day)}
-                        onCheckedChange={() => toggleDay(day)}
-                      />
-                      <Label htmlFor={`day-${day}`} className="text-xs capitalize">{day.slice(0,3)}</Label>
-                    </div>
+                    <Button
+                      key={day}
+                      type="button"
+                      variant={selectedDays.includes(day) ? 'default' : 'outline'}
+                      size="sm"
+                      className="h-7 px-2 text-[10px] capitalize"
+                      onClick={() => toggleDay(day)}
+                    >
+                      {day.slice(0, 3)}
+                    </Button>
                   ))}
                 </div>
               </div>
