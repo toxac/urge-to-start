@@ -60,7 +60,7 @@ export default function MissionRoadmapPage() {
       <div className="flex flex-col items-center justify-center space-y-3 py-32 animate-in fade-in duration-200">
         <Loader2 className="w-5 h-5 animate-spin text-primary" />
         <span className="text-xs font-sans font-medium text-muted-foreground tracking-wide">
-          Decrypting mission parameters...
+          Fetching mission details ...
         </span>
       </div>
     );
