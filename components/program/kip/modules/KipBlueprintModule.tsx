@@ -3,15 +3,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Calendar, Sparkles, CheckCircle2, Loader2, Clock, XCircle } from 'lucide-react';
+import { Calendar, Sparkles, CheckCircle2, Loader2, Clock, ChevronRight } from 'lucide-react';
 import { useKipCalendar } from '@/hooks/useKipCalendar';
-import { useKipProgress } from '@/hooks/useKipProgress';
 import { generateQuestSchedule, getQuestPlans, updatePlanStatus } from '@/actions/plans';
-import type { Quest} from '@/types/playbook';
+import type { Quest } from '@/types/playbook';
 import type { ProgressRow } from '@/lib/stores/progressStore';
 import type { UserPlan } from '@/types/plans';
 import { toast } from 'sonner';
-import { ChevronRight } from 'lucide-react';
 
 interface Props {
   quest: Quest;
@@ -22,8 +20,6 @@ interface Props {
 
 export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: Props) {
   const { generateAndDownloadICS } = useKipCalendar();
-  const { totalCompleted, nextTask } = useKipProgress(); // might not need totalCompleted here
-
   const [plans, setPlans] = useState<UserPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
@@ -157,6 +153,7 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
               const isMissed = plan.status === 'missed';
               const isCancelled = plan.status === 'cancelled';
               const isScheduled = plan.status === 'scheduled';
+              const metadata = (plan.metadata || {}) as { sessionNumber?: number; totalSessions?: number };
 
               return (
                 <li key={plan.id} className="flex items-center justify-between p-2 border rounded-lg bg-muted/10 text-xs">
@@ -169,8 +166,8 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
                     <span className="text-muted-foreground text-[10px]">
                       {Math.round((new Date(plan.end_time).getTime() - new Date(plan.start_time).getTime()) / 60000)} min
                     </span>
-                    {plan.metadata?.sessionNumber && (
-                      <span className="text-[9px] text-muted-foreground">(#{plan.metadata.sessionNumber})</span>
+                    {metadata.sessionNumber && (
+                      <span className="text-[9px] text-muted-foreground">(#{metadata.sessionNumber})</span>
                     )}
                   </div>
                   <div className="flex items-center gap-1 shrink-0">

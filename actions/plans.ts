@@ -1,31 +1,28 @@
+// actions/plans.ts
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
 import { z } from 'zod';
-import { GenerateScheduleSchema, ScheduleConfigSchema, UserPlanInsert } from '@/types/plans';
+import { GenerateScheduleSchema, ScheduleConfigSchema, UserPlanInsert, UserPlan } from '@/types/plans';
 
 export async function generateQuestSchedule(params: z.infer<typeof GenerateScheduleSchema>) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
-  // Fetch profile with schedule_config
   const { data: profile } = await supabase
     .from('profiles')
     .select('schedule_config')
     .eq('id', user.id)
     .single();
 
-  // Parse schedule_config safely
   const parsedConfig = ScheduleConfigSchema.safeParse(profile?.schedule_config);
   const config = parsedConfig.success ? parsedConfig.data : ScheduleConfigSchema.parse({});
 
   const preferredDays = config.preferred_days;
   const preferredHourStart = config.preferred_hours.start;
   const preferredHourEnd = config.preferred_hours.end;
-  // timezone can be used later, but not needed for slot generation
 
-  // Prepare date range (next 7 days)
   const now = new Date();
   const startDate = new Date(now);
   startDate.setDate(now.getDate() + 1);
@@ -37,7 +34,7 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
   };
   const preferredDayNumbers = preferredDays.map(d => dayMap[d.toLowerCase()]);
 
-  const slotDuration = params.durationMinutes * 60 * 1000; // ms
+  const slotDuration = params.durationMinutes * 60 * 1000;
   const [startH, startM] = preferredHourStart.split(':').map(Number);
   const [endH, endM] = preferredHourEnd.split(':').map(Number);
 
@@ -54,7 +51,6 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
       slotEnd.setTime(slotStart.getTime() + slotDuration);
       const windowEnd = new Date(current);
       windowEnd.setHours(endH, endM, 0, 0);
-
       if (slotEnd <= windowEnd) {
         slots.push({ start: slotStart, end: slotEnd });
         sessionsCreated++;
@@ -67,7 +63,6 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
     throw new Error('No available time slots found based on your availability.');
   }
 
-  // Build insert data
   const plans: UserPlanInsert[] = slots.map((slot, index) => ({
     user_id: user.id,
     item_type: 'quest',
@@ -91,13 +86,41 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
     .select();
 
   if (error) throw new Error(error.message);
-  return { success: true, data };
+  return { success: true, data: data as UserPlan[] };
 }
 
-export async function getQuestPlans(missionId: string, questId: string, taskId?: string) {
-  // ... same as before
+export async function getQuestPlans(missionId: string, questId: string, taskId?: string): Promise<UserPlan[]> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Unauthorized');
+
+  let query = supabase
+    .from('user_plans')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('mission_id', missionId)
+    .eq('quest_id', questId);
+
+  if (taskId) {
+    query = query.eq('task_id', taskId);
+  }
+
+  const { data, error } = await query.order('start_time', { ascending: true });
+  if (error) throw new Error(error.message);
+  return data as UserPlan[];
 }
 
 export async function updatePlanStatus(planId: string, status: 'completed' | 'missed' | 'cancelled') {
-  // ... same as before
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Unauthorized');
+
+  const { error } = await supabase
+    .from('user_plans')
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq('id', planId)
+    .eq('user_id', user.id);
+
+  if (error) throw new Error(error.message);
+  return { success: true };
 }
