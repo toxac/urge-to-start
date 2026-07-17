@@ -42,9 +42,10 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
   const parsedConfig = ScheduleConfigSchema.safeParse(profile?.schedule_config);
   const config = parsedConfig.success ? parsedConfig.data : ScheduleConfigSchema.parse({});
 
-  const preferredDays = config.preferred_days;
-  const preferredHourStart = config.preferred_hours.start;
-  const preferredHourEnd = config.preferred_hours.end;
+  const override = params.override;
+const preferredDays = override?.preferred_days ?? config.preferred_days;
+const preferredHourStart = override?.preferred_hours?.start ?? config.preferred_hours.start;
+const preferredHourEnd = override?.preferred_hours?.end ?? config.preferred_hours.end;
 
   // Slot generation logic (same as before)
   const now = new Date();
