@@ -11,6 +11,7 @@ import type { Quest} from '@/types/playbook';
 import type { ProgressRow } from '@/lib/stores/progressStore';
 import type { UserPlan } from '@/types/plans';
 import { toast } from 'sonner';
+import { ChevronRight } from 'lucide-react';
 
 interface Props {
   quest: Quest;
