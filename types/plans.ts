@@ -1,4 +1,3 @@
-
 // types/plans.ts
 import { z } from 'zod';
 import { Database } from './supabase';
@@ -6,8 +5,6 @@ import { Database } from './supabase';
 export type UserPlan = Database['public']['Tables']['user_plans']['Row'];
 export type UserPlanInsert = Database['public']['Tables']['user_plans']['Insert'];
 export type UserPlanUpdate = Database['public']['Tables']['user_plans']['Update'];
-
-
 
 export const ScheduleConfigSchema = z.object({
   preferred_days: z.array(z.string()).default(['monday', 'wednesday', 'friday']),
@@ -17,7 +14,6 @@ export const ScheduleConfigSchema = z.object({
   }).default({ start: '19:00', end: '22:00' }),
   timezone: z.string().default('UTC'),
 });
-
 export type ScheduleConfig = z.infer<typeof ScheduleConfigSchema>;
 
 export const ScheduleOverrideSchema = z.object({
@@ -32,8 +28,7 @@ export type ScheduleOverride = z.infer<typeof ScheduleOverrideSchema>;
 export const GenerateScheduleSchema = z.object({
   missionId: z.string(),
   questId: z.string(),
-  taskId: z.string().optional(),
-  numberOfSessions: z.number().default(3),
+  taskIds: z.array(z.string()), // ✅ new – list of task IDs to plan
   durationMinutes: z.number().default(60),
   override: ScheduleOverrideSchema.optional(),
 });
