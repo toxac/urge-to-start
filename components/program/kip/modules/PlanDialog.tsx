@@ -1,7 +1,7 @@
 // components/program/kip/modules/PlanDialog.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,9 @@ import { Loader2 } from 'lucide-react';
 import { generateAndSetPlans } from '@/lib/stores/planStore';
 import { toast } from 'sonner';
 import type { UserPlan } from '@/types/plans';
+import { useStore } from '@nanostores/react';
+import { $profileStore } from '@/lib/stores/profileStore';
+import type { ScheduleConfig } from '@/types/plans';
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
@@ -21,14 +24,36 @@ interface Props {
   existingPlans?: UserPlan[];
 }
 
+// Helper to parse profile config (safe)
+function getDefaultConfig(profile: any): { days: string[]; start: string; end: string } {
+  const config = (profile?.schedule_config || {}) as ScheduleConfig;
+  return {
+    days: config.preferred_days || ['monday', 'wednesday', 'friday'],
+    start: config.preferred_hours?.start || '19:00',
+    end: config.preferred_hours?.end || '22:00',
+  };
+}
+
 export function PlanDialog({ open, onOpenChange, missionId, questId, existingPlans }: Props) {
+  const profile = useStore($profileStore);
+  const defaults = getDefaultConfig(profile);
+
   const [sessions, setSessions] = useState(3);
   const [duration, setDuration] = useState(60);
-  const [useDefault, setUseDefault] = useState(true);
-  const [selectedDays, setSelectedDays] = useState<string[]>(['monday', 'wednesday', 'friday']);
-  const [startTime, setStartTime] = useState('19:00');
-  const [endTime, setEndTime] = useState('22:00');
+  const [selectedDays, setSelectedDays] = useState<string[]>(defaults.days);
+  const [startTime, setStartTime] = useState(defaults.start);
+  const [endTime, setEndTime] = useState(defaults.end);
   const [isGenerating, setIsGenerating] = useState(false);
+
+  // Reset to profile defaults when dialog opens (or when profile changes)
+  useEffect(() => {
+    if (open) {
+      const d = getDefaultConfig(profile);
+      setSelectedDays(d.days);
+      setStartTime(d.start);
+      setEndTime(d.end);
+    }
+  }, [open, profile]);
 
   const isRescheduling = existingPlans && existingPlans.length > 0;
 
@@ -39,18 +64,16 @@ export function PlanDialog({ open, onOpenChange, missionId, questId, existingPla
   };
 
   const handleConfirm = async () => {
-    if (!useDefault && selectedDays.length === 0) {
+    if (selectedDays.length === 0) {
       toast.error('Please select at least one day');
       return;
     }
     setIsGenerating(true);
     try {
-      const override = useDefault
-        ? undefined
-        : {
-            preferred_days: selectedDays,
-            preferred_hours: { start: startTime, end: endTime },
-          };
+      const override = {
+        preferred_days: selectedDays,
+        preferred_hours: { start: startTime, end: endTime },
+      };
       const newPlans = await generateAndSetPlans({
         missionId,
         questId,
@@ -103,60 +126,46 @@ export function PlanDialog({ open, onOpenChange, missionId, questId, existingPla
             />
           </div>
 
-          <div className="flex items-center space-x-2 pt-2">
-            <input
-              type="checkbox"
-              id="use-default"
-              checked={useDefault}
-              onChange={(e) => setUseDefault(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300"
-            />
-            <Label htmlFor="use-default" className="text-sm">Use my default schedule</Label>
+          <div>
+            <Label className="text-xs font-medium">Preferred days</Label>
+            <div className="flex flex-wrap gap-1.5 mt-1">
+              {DAYS.map(day => (
+                <Button
+                  key={day}
+                  type="button"
+                  variant={selectedDays.includes(day) ? 'default' : 'outline'}
+                  size="sm"
+                  className="h-7 px-2 text-[10px] capitalize"
+                  onClick={() => toggleDay(day)}
+                >
+                  {day.slice(0, 3)}
+                </Button>
+              ))}
+            </div>
           </div>
 
-          {!useDefault && (
-            <div className="space-y-3 border rounded-lg p-3 bg-muted/20">
-              <div>
-                <Label className="text-xs font-medium">Preferred days</Label>
-                <div className="flex flex-wrap gap-1.5 mt-1">
-                  {DAYS.map(day => (
-                    <Button
-                      key={day}
-                      type="button"
-                      variant={selectedDays.includes(day) ? 'default' : 'outline'}
-                      size="sm"
-                      className="h-7 px-2 text-[10px] capitalize"
-                      onClick={() => toggleDay(day)}
-                    >
-                      {day.slice(0, 3)}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <Label htmlFor="start-time" className="text-xs">Start time</Label>
-                  <Input
-                    id="start-time"
-                    type="time"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    className="h-8 text-sm"
-                  />
-                </div>
-                <div className="flex-1">
-                  <Label htmlFor="end-time" className="text-xs">End time</Label>
-                  <Input
-                    id="end-time"
-                    type="time"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                    className="h-8 text-sm"
-                  />
-                </div>
-              </div>
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <Label htmlFor="start-time" className="text-xs">Start time</Label>
+              <Input
+                id="start-time"
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="h-8 text-sm"
+              />
             </div>
-          )}
+            <div className="flex-1">
+              <Label htmlFor="end-time" className="text-xs">End time</Label>
+              <Input
+                id="end-time"
+                type="time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="h-8 text-sm"
+              />
+            </div>
+          </div>
         </div>
 
         <DialogFooter>
