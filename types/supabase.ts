@@ -1292,6 +1292,56 @@ export type Database = {
           },
         ]
       }
+      user_questions: {
+        Row: {
+          admin_answer: string | null
+          ai_answer: string | null
+          created_at: string | null
+          flagged_for_admin: boolean | null
+          id: string
+          item_id: string
+          item_type: string
+          question: string
+          status: Database["public"]["Enums"]["question_status"] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          admin_answer?: string | null
+          ai_answer?: string | null
+          created_at?: string | null
+          flagged_for_admin?: boolean | null
+          id?: string
+          item_id: string
+          item_type: string
+          question: string
+          status?: Database["public"]["Enums"]["question_status"] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          admin_answer?: string | null
+          ai_answer?: string | null
+          created_at?: string | null
+          flagged_for_admin?: boolean | null
+          id?: string
+          item_id?: string
+          item_type?: string
+          question?: string
+          status?: Database["public"]["Enums"]["question_status"] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_questions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -1367,6 +1417,11 @@ export type Database = {
         | "project_launch"
       program_item_type: "mission" | "quest" | "task"
       progress_status: "not_started" | "in_progress" | "completed"
+      question_status:
+        | "pending"
+        | "answered_by_ai"
+        | "flagged_for_admin"
+        | "resolved_by_admin"
       recommendation_type:
         | "blog"
         | "internal_link"
@@ -1604,6 +1659,12 @@ export const Constants = {
       ],
       program_item_type: ["mission", "quest", "task"],
       progress_status: ["not_started", "in_progress", "completed"],
+      question_status: [
+        "pending",
+        "answered_by_ai",
+        "flagged_for_admin",
+        "resolved_by_admin",
+      ],
       recommendation_type: [
         "blog",
         "internal_link",
