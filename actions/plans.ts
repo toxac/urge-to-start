@@ -4,6 +4,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 import { GenerateScheduleSchema, ScheduleConfigSchema, UserPlanInsert, UserPlan } from '@/types/plans';
+import { urgePlaybook } from '@/lib/playbook';
 
 async function getPlansForItem(itemType: string, itemId: string): Promise<UserPlan[]> {
   const supabase = await createClient();
@@ -26,11 +27,16 @@ export async function getQuestPlans(questId: string): Promise<UserPlan[]> {
   return getPlansForItem('quest', questId);
 }
 
+export async function getTaskPlans(taskId: string): Promise<UserPlan[]> {
+  return getPlansForItem('task', taskId);
+}
+
 export async function generateQuestSchedule(params: z.infer<typeof GenerateScheduleSchema>) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
+  // Fetch profile config
   const { data: profile } = await supabase
     .from('profiles')
     .select('schedule_config')
@@ -46,7 +52,7 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
   const preferredHourStart = override?.preferred_hours?.start ?? config.preferred_hours.start;
   const preferredHourEnd = override?.preferred_hours?.end ?? config.preferred_hours.end;
 
-  // Generate slots (next 7 days)
+  // Generate time slots (next 7 days)
   const now = new Date();
   const startDate = new Date(now);
   startDate.setDate(now.getDate() + 1);
@@ -65,8 +71,9 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
   const slots: { start: Date; end: Date }[] = [];
   let current = new Date(startDate);
   let sessionsCreated = 0;
+  const maxSessions = params.taskIds.length; // one session per selected task
 
-  while (current <= endDate && sessionsCreated < params.numberOfSessions) {
+  while (current <= endDate && sessionsCreated < maxSessions) {
     const dayOfWeek = current.getDay();
     if (preferredDayNumbers.includes(dayOfWeek)) {
       const slotStart = new Date(current);
@@ -87,20 +94,32 @@ export async function generateQuestSchedule(params: z.infer<typeof GenerateSched
     throw new Error('No available time slots found based on your availability.');
   }
 
-  const plans: UserPlanInsert[] = slots.map((slot, index) => ({
-    user_id: user.id,
-    item_type: 'quest',
-    item_id: params.questId,
-    start_time: slot.start.toISOString(),
-    end_time: slot.end.toISOString(),
-    status: 'scheduled',
-    reminder_sent: false,
-    metadata: {
-      sessionNumber: index + 1,
-      totalSessions: slots.length,
-      missionId: params.missionId,
-    },
-  }));
+  // Build insert data – one plan per task, in order
+  const quest = urgePlaybook[params.missionId]?.quests?.[params.questId];
+  const tasks = quest?.tasks || [];
+  const selectedTasks = tasks.filter(t => params.taskIds.includes(t.id));
+  const plans: UserPlanInsert[] = slots.map((slot, index) => {
+    const task = selectedTasks[index];
+    return {
+      user_id: user.id,
+      item_type: 'task',
+      item_id: task.id,
+      start_time: slot.start.toISOString(),
+      end_time: slot.end.toISOString(),
+      status: 'scheduled',
+      reminder_sent: false,
+      metadata: {
+        sessionNumber: index + 1,
+        totalSessions: slots.length,
+        missionId: params.missionId,
+        questId: params.questId,
+        taskId: task.id,
+        taskTitle: task.title,
+        questTitle: quest?.title,
+        url: `/program/quest/${quest?.slug || params.questId}`,
+      },
+    };
+  });
 
   const { data, error } = await supabase
     .from('user_plans')
@@ -126,18 +145,20 @@ export async function updatePlanStatus(planId: string, status: 'completed' | 'mi
   return { success: true };
 }
 
-export async function completeQuestPlans(questId: string) {
+export async function completeAllPlansForQuest(questId: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
 
+  // We now have plans with item_type = 'task', but we want to complete all plans for a quest.
+  // Since we store questId in metadata, we can query by metadata->>questId
   const { error } = await supabase
     .from('user_plans')
     .update({ status: 'completed', updated_at: new Date().toISOString() })
     .eq('user_id', user.id)
-    .eq('item_type', 'quest')
-    .eq('item_id', questId)
-    .eq('status', 'scheduled');
+    .eq('item_type', 'task')
+    .eq('status', 'scheduled')
+    .filter('metadata->>questId', 'eq', questId);
 
   if (error) throw new Error(error.message);
   return { success: true };
