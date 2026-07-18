@@ -1,23 +1,14 @@
 // lib/stores/planStore.ts
-import { atom, map } from 'nanostores';
+import { map } from 'nanostores';
 import type { UserPlan } from '@/types/plans';
-import { getQuestPlans, generateQuestSchedule, updatePlanStatus, completeQuestPlans } from '@/actions/plans';
+import { getQuestPlans, generateQuestSchedule, updatePlanStatus, completeAllPlansForQuest } from '@/actions/plans';
 
-// Store shape: { [questId: string]: UserPlan[] }
 export const $plans = map<Record<string, UserPlan[]>>({});
-
-// Loading states per quest
 export const $planLoading = map<Record<string, boolean>>({});
-
-// Errors per quest
 export const $planError = map<Record<string, string | null>>({});
 
-// --- Actions ---
-
 export async function fetchPlans(questId: string) {
-  // Avoid duplicate fetches
   if ($plans.get()[questId] !== undefined) return;
-
   $planLoading.setKey(questId, true);
   $planError.setKey(questId, null);
   try {
@@ -33,7 +24,7 @@ export async function fetchPlans(questId: string) {
 export async function generateAndSetPlans(params: {
   missionId: string;
   questId: string;
-  numberOfSessions: number;
+  taskIds: string[];
   durationMinutes: number;
   override?: any;
 }) {
@@ -68,14 +59,13 @@ export async function updatePlan(planId: string, status: 'completed' | 'missed' 
 }
 
 export async function completeAllPlans(questId: string) {
-  await completeQuestPlans(questId);
+  await completeAllPlansForQuest(questId);
   const plans = $plans.get()[questId];
   if (plans) {
     $plans.setKey(questId, plans.map(p => p.status === 'scheduled' ? { ...p, status: 'completed' } : p));
   }
 }
 
-// Helper to clear plans (e.g., on logout)
 export function clearPlans() {
   $plans.set({});
   $planLoading.set({});

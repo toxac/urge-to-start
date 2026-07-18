@@ -11,7 +11,6 @@ import type { Quest } from '@/types/playbook';
 import type { ProgressRow } from '@/lib/stores/progressStore';
 import { toast } from 'sonner';
 
-// Import store and actions
 import { $plans, $planLoading, fetchPlans, updatePlan, completeAllPlans } from '@/lib/stores/planStore';
 
 interface Props {
@@ -25,24 +24,20 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
   const { totalCompleted, nextTask } = useKipProgress();
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  // Subscribe to store
   const plansMap = useStore($plans);
   const loadingMap = useStore($planLoading);
   const plans = plansMap[quest.id] || [];
   const loading = loadingMap[quest.id] || false;
 
-  // Fetch plans on mount (or when quest.id changes)
   useEffect(() => {
     fetchPlans(quest.id);
   }, [quest.id]);
 
-  // Calculate completion metrics
   const tasks = quest.tasks || [];
   const completedCount = tasks.filter((t: any) => progress[t.id]?.status === 'completed').length;
   const progressRatio = Math.min(100, Math.floor((completedCount / tasks.length) * 100));
   const isQuestFullyCompleted = tasks.length > 0 && completedCount === tasks.length;
 
-  // Auto‑complete plans when quest is fully completed
   useEffect(() => {
     if (isQuestFullyCompleted && plans.some(p => p.status === 'scheduled')) {
       completeAllPlans(quest.id).then(() => {
@@ -67,13 +62,15 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
 
   const scheduledPlans = plans.filter(p => p.status === 'scheduled');
 
-  // Helper to format date/time
   const formatPlanTime = (dateStr: string) => {
     const d = new Date(dateStr);
     const day = d.toLocaleDateString(undefined, { weekday: 'short' });
     const time = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
     return `${day} at ${time}`;
   };
+
+  // Build task lookup map
+  const taskMap = tasks.reduce((acc, t) => ({ ...acc, [t.id]: t }), {} as Record<string, any>);
 
   return (
     <div className="space-y-5 animate-in fade-in duration-200 text-left">
@@ -85,7 +82,7 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
         <p className="text-muted-foreground leading-relaxed text-[11px] font-medium">{quest.description}</p>
       </div>
 
-      {/* Progress */}
+      {/* Progress block */}
       <div className="border border-border bg-muted/30 rounded-xl p-3.5 space-y-3">
         <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-foreground">
           <Calendar className="w-3.5 h-3.5 text-primary" />
@@ -116,12 +113,13 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
         )}
       </div>
 
-      {/* Planning Section */}
+      {/* Schedule block – consistent style with progress */}
       <div className="border border-border bg-card rounded-xl p-3.5 space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
-            Your Schedule
-          </span>
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-foreground">
+            <Calendar className="w-3.5 h-3.5 text-primary" />
+            <span>Your Schedule</span>
+          </div>
           <div className="flex gap-1">
             {scheduledPlans.length > 0 && (
               <Button
@@ -150,20 +148,25 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
             <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
           </div>
         ) : scheduledPlans.length === 0 && plans.filter(p => p.status === 'completed').length === 0 ? (
-          <p className="text-muted-foreground text-[11px] italic">No active plans. Click "Plan" to schedule your sessions.</p>
+          <p className="text-muted-foreground text-[11px] italic">No active plans. Click "Plan" to schedule your tasks.</p>
         ) : (
           <ul className="space-y-1.5">
             {plans.filter(p => p.status !== 'cancelled').map((plan) => {
               const isPast = new Date(plan.end_time) < new Date();
               const isCompleted = plan.status === 'completed';
               const isScheduled = plan.status === 'scheduled';
+              const task = taskMap[plan.item_id];
+              // ✅ Safe metadata access
+              const meta = plan.metadata as Record<string, any> | undefined;
+              const taskTitle = task?.title || meta?.taskTitle || 'Unknown task';
+              const taskSeq = task?.sequence || meta?.taskSequence || '';
 
               return (
                 <li key={plan.id} className="flex items-center justify-between text-xs">
                   <span className="truncate">
                     {isCompleted && <span className="mr-1.5 text-emerald-500">✅</span>}
                     <span className={isPast && isScheduled ? 'text-muted-foreground' : ''}>
-                      {quest.title} – {formatPlanTime(plan.start_time)}
+                      {taskSeq}. {taskTitle} – {formatPlanTime(plan.start_time)}
                     </span>
                     {isPast && isScheduled && <span className="ml-1.5 text-amber-600 text-[10px]">(past)</span>}
                   </span>
@@ -199,6 +202,12 @@ export function KipBlueprintModule({ quest, missionId, progress, onStartTask }: 
         onOpenChange={setDialogOpen}
         missionId={missionId}
         questId={quest.id}
+        tasks={tasks.map(t => ({
+          id: t.id,
+          title: t.title,
+          sequence: t.sequence,
+          completed: progress[t.id]?.status === 'completed',
+        }))}
         existingPlans={scheduledPlans}
       />
     </div>
