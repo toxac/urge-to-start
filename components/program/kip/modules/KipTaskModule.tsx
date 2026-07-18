@@ -8,6 +8,7 @@ import { Task } from '@/types/playbook';
 import { KipRecommendationItem } from './KipRecommendationItem';
 import { KipObservationZone } from './KipObservationZone';
 import { KipReflectionZone } from './KipReflectionZone';
+import { KipQuestionZone } from './KipQuestionZone';
 
 interface Props {
   task: Task;
@@ -67,6 +68,15 @@ export function KipTaskModule({ task, questId, missionId, progress, onCloseTask,
               missionId={missionId}
             />
           ))}
+        </div>
+      )}
+
+      {!isCompleted && (
+        <div className="space-y-2 mt-4">
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide block">
+            Have a question?
+          </span>
+          <KipQuestionZone itemType="task" itemId={task.id} />
         </div>
       )}
 

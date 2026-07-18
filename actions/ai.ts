@@ -170,6 +170,74 @@ export async function executeSidebarConductorAction(params: ActionParams) {
       break;
     }
 
+    case 'program_question': {
+      // Build a prompt that includes the playbook summary and context
+      const { additionalContext } = params;
+      const itemType = additionalContext?.itemType || 'task';
+      const itemId = additionalContext?.itemId || '';
+
+      // Find the current item in the playbook (if possible)
+      let contextInfo = '';
+      if (itemType === 'task') {
+        // Search for the task in the playbook
+        for (const mId of Object.keys(urgePlaybook)) {
+          const mission = urgePlaybook[mId];
+          for (const qId of Object.keys(mission.quests)) {
+            const quest = mission.quests[qId];
+            const task = quest.tasks.find(t => t.id === itemId);
+            if (task) {
+              contextInfo = `The user is currently working on the task: "${task.title}" in quest: "${quest.title}" of mission: "${mission.title}".`;
+              break;
+            }
+          }
+          if (contextInfo) break;
+        }
+      } else if (itemType === 'quest') {
+        // Similar for quest
+        for (const mId of Object.keys(urgePlaybook)) {
+          const mission = urgePlaybook[mId];
+          for (const qId of Object.keys(mission.quests)) {
+            const quest = mission.quests[qId];
+            if (quest.id === itemId || quest.slug === itemId) {
+              contextInfo = `The user is currently in the quest: "${quest.title}" of mission: "${mission.title}".`;
+              break;
+            }
+          }
+          if (contextInfo) break;
+        }
+      }
+
+      // Build a summary of the entire playbook (mission titles, quest titles, task titles)
+      const playbookSummary = Object.values(urgePlaybook).map(m => {
+        const questsSummary = Object.values(m.quests).map(q => {
+          const tasksSummary = q.tasks.map(t => `- ${t.title}`).join('\n');
+          return `- Quest: ${q.title}\n  Tasks:\n${tasksSummary}`;
+        }).join('\n');
+        return `Mission: ${m.title}\n${questsSummary}`;
+      }).join('\n\n');
+
+      dynamicPrompt = `
+    You are Kip, a guide for entrepreneurs going through the Urge program.
+    ${contextInfo}
+
+    The entire program structure is:
+    ${playbookSummary}
+
+    The user asks: "${params.userInputText}"
+
+    Provide a helpful, concise answer that:
+    1. Directly addresses their question.
+    2. If the answer involves a future mission or quest, explicitly say: "This will be covered in Mission X, Quest Y."
+    3. If the program does not address this topic, suggest they ask an admin/mentor for further guidance.
+
+    Keep the tone friendly, encouraging, and practical.
+  `;
+
+      activeSkills = ['PROGRAM_KNOWLEDGE', 'GUIDANCE'];
+      responseSchema = undefined; // plain text response
+      break;
+    }
+
     default:
       return { success: false, error: 'Unsupported operation context.' };
   }
