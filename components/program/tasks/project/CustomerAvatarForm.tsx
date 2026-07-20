@@ -42,30 +42,29 @@ export function CustomerAvatarForm({ task, userId, existingProgress, onSuccess }
 
   // Load existing project data
   useEffect(() => {
-    async function loadProject() {
-      setIsLoading(true);
-      try {
-        const result = await getCurrentProject();
-        if (result.success && result.data) {
-          setProjectId(result.data.id);
-          
-          // Pre-fill from existing validation_data
+  async function loadProject() {
+    setIsLoading(true);
+    try {
+      const result = await getCurrentProject();
+      // ⚡ FIXED: Check success before accessing data
+      if (result.success && result.data) {
+        setProjectId(result.data.id);
+        
+        // Pre-fill from existing validation_data if no saved payload exists
+        if (!existingProgress?.saved_payload) {
           const validationData = result.data.validation_data as any || {};
           const avatar = validationData.customer_avatar || {};
-          
-          // Only pre-fill if no saved payload exists
-          if (!existingProgress?.saved_payload) {
-            // We'll handle this via react-hook-form default values
-          }
+          // You might want to set form values here
         }
-      } catch (err) {
-        toast.error('Failed to load project data');
-      } finally {
-        setIsLoading(false);
       }
+    } catch (err) {
+      toast.error('Failed to load project data');
+    } finally {
+      setIsLoading(false);
     }
-    loadProject();
-  }, [userId]);
+  }
+  loadProject();
+}, [userId, existingProgress]);
 
   const onSubmit = async (data: CustomerAvatarData) => {
     setIsSubmitting(true);

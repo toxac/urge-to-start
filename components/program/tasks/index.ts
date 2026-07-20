@@ -14,6 +14,7 @@ import { OpportunityListReview } from './opportunity/OpportunityListReview';
 import { OpportunityScorer } from './opportunity/OpportunityScorer';
 import { OpportunityValidator } from './opportunity/OpportunityValidator';
 import { ProjectCreationForm } from './project/ProjectCreationForm';
+import { SimpleActionWidget } from './SimpleActionWidget';
 
 
 export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskComponentProps>> = {
@@ -32,6 +33,7 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   OpportunityScorer,
   ProjectCreationForm,
   // mission 3
+  SimpleActionWidget,
   CustomerAvatarForm,
   InterviewSynthesisForm,
 };
