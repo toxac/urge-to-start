@@ -19,6 +19,11 @@ import { UnfairAdvantageForm } from './project/UnfairAdvantageForm';
 import { PositioningStatementForm } from './project/PositioningStatementForm';
 import { ComplianceChecklist } from './project/ComplainceChecklist';
 import { GoNoGoDecisionForm } from './project/GoNoGoDecisionForm';
+import { CoreProblemForm } from './project/CoreProblemForm';
+import { SolutionSpaceForm } from './project/SolutionSpaceForm';
+import { SolutionPathForm } from './project/SolutionPathForm';
+import { MSPDefinitionForm } from './project/MSPDefinitionForm';
+import { MSPCanvasForm } from './project/MSPCanvasForm';
 
 
 export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskComponentProps>> = {
@@ -44,6 +49,11 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   PositioningStatementForm,
   ComplianceChecklist,
   GoNoGoDecisionForm,
+  CoreProblemForm,
+  SolutionSpaceForm,
+  SolutionPathForm,
+  MSPDefinitionForm,
+  MSPCanvasForm,
 };
 
 export type { BaseTaskComponentProps } from './types';
