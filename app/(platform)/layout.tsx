@@ -14,7 +14,7 @@ export default async function PlatformLayout({
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    redirect('/login');
+    redirect('/auth');
   }
 
   const [profileResponse, progressResponse] = await Promise.all([
