@@ -1,4 +1,5 @@
-// components/program/tasks/ComplianceChecklist.tsx
+// components/program/tasks/project/ComplianceChecklist.tsx
+'use client';
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
@@ -20,6 +21,11 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { completeTaskExecution } from '@/actions/progress';
+import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { getCurrentProject, updateProjectSection } from '@/actions/projects';
+import { BaseTaskComponentProps } from '../types';
+import { toast } from 'sonner';
 
 import {
   REVENUE_BUCKETS,
@@ -28,7 +34,6 @@ import {
   URGENCY,
   GROUP_META,
   STATUS_OPTIONS,
-  STORAGE_KEY,
   type ComplianceRequirement,
   type UserAnswers,
   type ItemStatus,
@@ -38,10 +43,7 @@ import {
   type ModeType,
   type StructureType,
   type SectorType,
-  type RevenueBucket,
-  type EmployeeBucket,
-  type ExportPayload,
-} from "@/lib/data/comliance";
+} from "@/lib/data/compliance";
 
 type GroupedItems = Record<UrgencyType, (ComplianceRequirement & { urgency: UrgencyType; status: StatusType })[]>;
 
@@ -80,66 +82,183 @@ function isApplicable(item: ComplianceRequirement, answers: UserAnswers): boolea
   return true;
 }
 
-interface ComplianceChecklistProps {
-  onSave?: (state: { answers: UserAnswers; statuses: Record<string, ItemStatus> }) => void;
-  initialAnswers?: Partial<UserAnswers>;
-}
-
-export default function ComplianceChecklist({ onSave, initialAnswers }: ComplianceChecklistProps) {
+export function ComplianceChecklist({ task, userId, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const [loaded, setLoaded] = useState(false);
-  const [stage, setStage] = useState<"intake" | "dossier">("intake");
-  const [answers, setAnswers] = useState<UserAnswers>({
-    mode: "both",
-    structure: "not-decided",
-    sector: "general",
-    state: "",
-    employees: "0",
-    revenue: "pre-revenue",
-    ...initialAnswers,
-  });
-  const [statuses, setStatuses] = useState<Record<string, ItemStatus>>({});
+  const [projectId, setProjectId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  
+  // Load state from existingProgress or default
+  const [stage, setStage] = useState<"intake" | "dossier">(
+    existingProgress?.saved_payload?.stage || "intake"
+  );
+  
+  const [answers, setAnswers] = useState<UserAnswers>(
+    existingProgress?.saved_payload?.answers || {
+      mode: "both",
+      structure: "not-decided",
+      sector: "general",
+      state: "",
+      employees: "0",
+      revenue: "pre-revenue",
+    }
+  );
+  
+  const [statuses, setStatuses] = useState<Record<string, ItemStatus>>(
+    existingProgress?.saved_payload?.statuses || {}
+  );
+  
   const [expandedGroups, setExpandedGroups] = useState<Record<UrgencyType, boolean>>({
     "do-now": true,
     watch: false,
     later: false,
     optional: false,
   });
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [saveFlash, setSaveFlash] = useState(false);
+  
+  const [activeId, setActiveId] = useState<string | null>(
+    existingProgress?.saved_payload?.activeId || null
+  );
 
-  // load persisted state
+  const isCompleted = existingProgress?.status === 'completed';
+
+  // Load project data
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    
-    (async () => {
+    async function loadProject() {
+      setIsLoading(true);
       try {
-        const res = await window.localStorage.getItem(STORAGE_KEY);
-        if (res) {
-          const parsed = JSON.parse(res);
-          if (parsed.answers) setAnswers(parsed.answers);
-          if (parsed.statuses) setStatuses(parsed.statuses);
-          if (parsed.stage) setStage(parsed.stage);
+        const result = await getCurrentProject();
+        if (result.success && result.data) {
+          setProjectId(result.data.id);
+          
+          // Load existing compliance data from project
+          const complianceData = (result.data.compliance_checklist as any) || {};
+          if (complianceData.statuses && Object.keys(complianceData.statuses).length > 0) {
+            setStatuses(complianceData.statuses);
+          }
+          if (complianceData.answers) {
+            setAnswers((prev) => ({ ...prev, ...complianceData.answers }));
+          }
+          if (complianceData.stage) {
+            setStage(complianceData.stage);
+          }
         }
-      } catch (e) {
-        // no saved state yet — fine
+      } catch (err) {
+        console.error('Failed to load project data', err);
       } finally {
+        setIsLoading(false);
         setLoaded(true);
       }
-    })();
-  }, []);
-
-  // persist on change
-  useEffect(() => {
-    if (!loaded || typeof window === "undefined") return;
-    const payload = JSON.stringify({ answers, statuses, stage });
-    window.localStorage.setItem(STORAGE_KEY, payload);
-    setSaveFlash(true);
-    setTimeout(() => setSaveFlash(false), 900);
-    
-    if (onSave) {
-      onSave({ answers, statuses });
     }
-  }, [answers, statuses, stage, loaded, onSave]);
+    loadProject();
+  }, [userId]);
+
+  // Save to project and progress
+  const saveState = useCallback(async (data: { 
+    answers: UserAnswers; 
+    statuses: Record<string, ItemStatus>; 
+    stage: "intake" | "dossier";
+    activeId?: string | null;
+  }) => {
+    if (!projectId) return;
+
+    setIsSaving(true);
+    try {
+      // Save to projects table
+      const projectResult = await updateProjectSection(projectId, 'compliance_checklist', {
+        answers: data.answers,
+        statuses: data.statuses,
+        stage: data.stage,
+        activeId: data.activeId || null,
+        updatedAt: new Date().toISOString()
+      });
+
+      if (!projectResult.success) {
+        toast.error('Failed to save compliance data');
+        return;
+      }
+
+      // Save to user_progress (draft)
+      const progressSync = await completeTaskExecution({
+        taskId: task.id,
+        savedPayload: {
+          answers: data.answers,
+          statuses: data.statuses,
+          stage: data.stage,
+          activeId: data.activeId || null,
+          isDraft: true
+        }
+      });
+
+      if (!progressSync.success) {
+        toast.error('Failed to save progress');
+        return;
+      }
+
+      if (progressSync.data) {
+        setProgressStoreRow(progressSync.data as any);
+      }
+    } catch (err) {
+      toast.error('Something went wrong saving compliance data');
+    } finally {
+      setIsSaving(false);
+    }
+  }, [projectId, task.id]);
+
+  // Auto-save on changes
+  useEffect(() => {
+    if (!loaded || !projectId) return;
+    
+    const timeout = setTimeout(() => {
+      saveState({ answers, statuses, stage, activeId });
+    }, 2000);
+    
+    return () => clearTimeout(timeout);
+  }, [answers, statuses, stage, activeId, loaded, projectId, saveState]);
+
+  // Mark task complete
+  const handleMarkComplete = useCallback(async () => {
+    // Check if all items are either 'done' or 'not-applicable'
+    const applicableItems = REQUIREMENTS.filter((item) => isApplicable(item, answers));
+    const allComplete = applicableItems.every((item) => {
+      const status = statuses[item.id]?.status;
+      return status === 'done' || status === 'not-applicable';
+    });
+
+    if (!allComplete) {
+      toast.error('Please mark all applicable items as "Filed" or "Doesn\'t apply" before completing.');
+      return;
+    }
+
+    try {
+      // Final save to project
+      await saveState({ answers, statuses, stage, activeId });
+
+      // Mark task as complete
+      const progressSync = await completeTaskExecution({
+        taskId: task.id,
+        savedPayload: {
+          answers,
+          statuses,
+          stage,
+          activeId,
+          completedAt: new Date().toISOString(),
+          isComplete: true
+        }
+      });
+
+      if (progressSync.success) {
+        if (progressSync.data) {
+          setProgressStoreRow(progressSync.data as any);
+        }
+        if (onSuccess) onSuccess();
+        toast.success('✅ Compliance checklist complete!');
+      } else {
+        toast.error(progressSync.error || 'Failed to complete task');
+      }
+    } catch (err) {
+      toast.error('Something went wrong');
+    }
+  }, [answers, statuses, stage, activeId, saveState, onSuccess]);
 
   const applicableItems = useMemo(
     () => REQUIREMENTS.filter((item) => isApplicable(item, answers)),
@@ -181,7 +300,7 @@ export default function ComplianceChecklist({ onSave, initialAnswers }: Complian
   const toggleGroup = (key: UrgencyType) => setExpandedGroups((g) => ({ ...g, [key]: !g[key] }));
 
   const exportJSON = () => {
-    const payload: ExportPayload = {
+    const payload = {
       exportedAt: new Date().toISOString(),
       answers,
       checklist: withUrgency.map((i) => ({
@@ -215,12 +334,39 @@ export default function ComplianceChecklist({ onSave, initialAnswers }: Complian
       employees: "0",
       revenue: "pre-revenue",
     });
-    if (typeof window !== "undefined") {
-      window.localStorage.removeItem(STORAGE_KEY);
-    }
+    setActiveId(null);
   };
 
   const activeItem = withUrgency.find((i) => i.id === activeId) || null;
+
+  if (isCompleted) {
+    return (
+      <div className="w-full space-y-4">
+        <div className="flex items-center gap-2 text-emerald-600">
+          <CheckCircle2 className="w-5 h-5" />
+          <span className="font-medium">Compliance Checklist Complete</span>
+        </div>
+        <div className="p-4 border rounded-xl bg-muted/5">
+          <p className="text-sm text-muted-foreground">
+            {doneCount} of {totalCount} items filed. You're ready to proceed.
+          </p>
+        </div>
+        <Button variant="outline" onClick={onSuccess} className="w-full">
+          Back to Quest
+        </Button>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center p-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+      </div>
+    );
+  }
+
+  const activeItemData = withUrgency.find((i) => i.id === activeId) || null;
 
   return (
     <div className="w-full space-y-6">
@@ -236,8 +382,8 @@ export default function ComplianceChecklist({ onSave, initialAnswers }: Complian
         </div>
         {stage === "dossier" && (
           <div className="flex items-center gap-2">
-            <span className={`text-[10px] font-mono text-muted-foreground transition-colors ${saveFlash ? 'text-primary' : ''}`}>
-              {saveFlash ? "Saved" : "Autosaved"}
+            <span className="text-[10px] font-mono text-muted-foreground">
+              {isSaving ? "Saving..." : "Saved"}
             </span>
             <Button variant="outline" size="sm" onClick={exportJSON} className="h-8 text-xs gap-1.5">
               <Download size={14} /> Export
@@ -316,35 +462,35 @@ export default function ComplianceChecklist({ onSave, initialAnswers }: Complian
                   );
                 })}
               </div>
+
+              {/* Complete Button */}
+              <div className="border-t pt-4">
+                <Button
+                  onClick={handleMarkComplete}
+                  disabled={isSaving}
+                  className="w-full h-10 text-sm"
+                >
+                  {isSaving ? 'Saving...' : `Complete Checklist (+${task.grant_points} XP)`}
+                </Button>
+                {totalCount > 0 && doneCount < totalCount && (
+                  <p className="text-[10px] text-muted-foreground text-center mt-2">
+                    {totalCount - doneCount} items remaining
+                  </p>
+                )}
+              </div>
             </div>
           </aside>
 
           <main>
-            {!activeItem ? (
-              <div className="border rounded-xl p-8 text-center">
-                <div className="inline-block px-3 py-1 border-2 border-destructive/30 text-destructive text-xs font-bold uppercase tracking-wider rounded-md mb-4">
-                  FILED
-                </div>
-                <h3 className="text-lg font-bold text-foreground">Pick up where you left off</h3>
-                <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
-                  Your dossier is sorted by what actually needs attention now versus what can wait. Start with what's urgent.
-                </p>
-                {grouped["do-now"][0] && (
-                  <Button 
-                    className="mt-4"
-                    onClick={() => setActiveId(grouped["do-now"][0].id)}
-                  >
-                    Start with "{grouped["do-now"][0].title}" <ArrowRight size={15} className="ml-2" />
-                  </Button>
-                )}
-              </div>
+            {!activeItemData ? (
+              <EmptyState grouped={grouped} onPick={setActiveId} />
             ) : (
               <ItemDetail
-                item={activeItem}
-                status={statuses[activeItem.id]?.status || "not-started"}
-                notes={statuses[activeItem.id]?.notes || ""}
-                onStatus={(s) => setItemStatus(activeItem.id, s)}
-                onNotes={(n) => setItemNotes(activeItem.id, n)}
+                item={activeItemData}
+                status={statuses[activeItemData.id]?.status || "not-started"}
+                notes={statuses[activeItemData.id]?.notes || ""}
+                onStatus={(s) => setItemStatus(activeItemData.id, s)}
+                onNotes={(n) => setItemNotes(activeItemData.id, n)}
               />
             )}
           </main>
@@ -354,7 +500,7 @@ export default function ComplianceChecklist({ onSave, initialAnswers }: Complian
   );
 }
 
-/* ---------------- Intake ---------------- */
+/* ---------------- Sub-components ---------------- */
 
 interface IntakeFormProps {
   answers: UserAnswers;
@@ -501,7 +647,33 @@ function IntakeForm({ answers, setAnswer, onDone }: IntakeFormProps) {
   );
 }
 
-/* ---------------- Item detail ---------------- */
+interface EmptyStateProps {
+  grouped: GroupedItems;
+  onPick: (id: string) => void;
+}
+
+function EmptyState({ grouped, onPick }: EmptyStateProps) {
+  const firstDoNow = grouped["do-now"][0];
+  return (
+    <div className="border rounded-xl p-8 text-center">
+      <div className="inline-block px-3 py-1 border-2 border-destructive/30 text-destructive text-xs font-bold uppercase tracking-wider rounded-md mb-4">
+        FILED
+      </div>
+      <h3 className="text-lg font-bold text-foreground">Pick up where you left off</h3>
+      <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
+        Your dossier is sorted by what actually needs attention now versus what can wait. Start with what's urgent.
+      </p>
+      {firstDoNow && (
+        <Button 
+          className="mt-4"
+          onClick={() => onPick(firstDoNow.id)}
+        >
+          Start with "{firstDoNow.title}" <ArrowRight size={15} className="ml-2" />
+        </Button>
+      )}
+    </div>
+  );
+}
 
 interface ItemDetailProps {
   item: ComplianceRequirement & { urgency: UrgencyType; status: StatusType };

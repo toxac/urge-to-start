@@ -17,6 +17,8 @@ import { ProjectCreationForm } from './project/ProjectCreationForm';
 import { SimpleActionWidget } from './SimpleActionWidget';
 import { UnfairAdvantageForm } from './project/UnfairAdvantageForm';
 import { PositioningStatementForm } from './project/PositioningStatementForm';
+import { ComplianceChecklist } from './project/ComplainceChecklist';
+import { GoNoGoDecisionForm } from './project/GoNoGoDecisionForm';
 
 
 export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskComponentProps>> = {
@@ -40,6 +42,8 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   InterviewSynthesisForm,
   UnfairAdvantageForm,
   PositioningStatementForm,
+  ComplianceChecklist,
+  GoNoGoDecisionForm,
 };
 
 export type { BaseTaskComponentProps } from './types';
