@@ -15,16 +15,6 @@ type ActionResponse<T> =
   | { success: true; data: T } 
   | { success: false; error: string };
 
-// =========================================================================
-// ZOD RUNTIME VALIDATION SCHEMAS
-// =========================================================================
-
-
-
-// =========================================================================
-// SERVER ACTIONS
-// =========================================================================
-
 /**
  * POST: Creates a new project
  */
@@ -112,11 +102,9 @@ export async function getProjects(
 }
 
 /**
- * GET: Fetch a single project by ID
+ * GET: Fetch the current user's project
  */
-export async function getProject(
-  projectId: string
-): Promise<ActionResponse<ProjectRow>> {
+export async function getCurrentProject(): Promise<ActionResponse<ProjectRow>> {
   try {
     const supabase = await createClient();
 
@@ -128,11 +116,17 @@ export async function getProject(
     const { data, error } = await supabase
       .from('projects')
       .select('*')
-      .eq('id', projectId)
       .eq('user_id', user.id)
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
+      .limit(1)
       .single();
 
     if (error) {
+      // If no project found, return null data
+      if (error.code === 'PGRST116') {
+        return { success: true, data: null as any };
+      }
       console.error('Get project error:', error);
       throw error;
     }
@@ -175,10 +169,32 @@ export async function updateProject(
       return { success: false, error: 'Access denied' };
     }
 
+    // Build update payload - only include fields that are provided
     const updatePayload: ProjectUpdate = {
-      updated_at: new Date().toISOString(),
-      ...validated,
+      updated_at: new Date().toISOString()
     };
+
+    // Core fields
+    if (validated.biz_name !== undefined) updatePayload.biz_name = validated.biz_name;
+    if (validated.five_word_hook !== undefined) updatePayload.five_word_hook = validated.five_word_hook;
+    if (validated.tagline !== undefined) updatePayload.tagline = validated.tagline;
+    if (validated.is_active !== undefined) updatePayload.is_active = validated.is_active;
+    if (validated.status !== undefined) updatePayload.status = validated.status;
+    if (validated.current_mission !== undefined) updatePayload.current_mission = validated.current_mission;
+
+    // JSON fields
+    if (validated.discovery_metrics !== undefined) updatePayload.discovery_metrics = validated.discovery_metrics as Json;
+    if (validated.financial_blueprint !== undefined) updatePayload.financial_blueprint = validated.financial_blueprint as Json;
+    if (validated.infrastructure_nodes !== undefined) updatePayload.infrastructure_nodes = validated.infrastructure_nodes as Json;
+    if (validated.validation_data !== undefined) updatePayload.validation_data = validated.validation_data as Json;
+    if (validated.competitive_landscape !== undefined) updatePayload.competitive_landscape = validated.competitive_landscape as Json;
+    if (validated.compliance_checklist !== undefined) updatePayload.compliance_checklist = validated.compliance_checklist as Json;
+    if (validated.solution_design !== undefined) updatePayload.solution_design = validated.solution_design as Json;
+    if (validated.viability_check !== undefined) updatePayload.viability_check = validated.viability_check as Json;
+    if (validated.build_data !== undefined) updatePayload.build_data = validated.build_data as Json;
+    if (validated.launch_data !== undefined) updatePayload.launch_data = validated.launch_data as Json;
+    if (validated.operations_data !== undefined) updatePayload.operations_data = validated.operations_data as Json;
+    if (validated.review_data !== undefined) updatePayload.review_data = validated.review_data as Json;
 
     const { data, error } = await supabase
       .from('projects')
@@ -198,4 +214,21 @@ export async function updateProject(
     console.error('Update project catch:', err);
     return { success: false, error: err.message || 'Failed to update project' };
   }
+}
+
+
+/**
+ * Helper: Update a specific section of the project
+ */
+export async function updateProjectSection(
+  projectId: string,
+  section: keyof Pick<
+    ProjectRow,
+    'validation_data' | 'competitive_landscape' | 'compliance_checklist' | 
+    'solution_design' | 'viability_check' | 'build_data' | 
+    'launch_data' | 'operations_data' | 'review_data'
+  >,
+  data: Record<string, any>
+): Promise<ActionResponse<ProjectRow>> {
+  return updateProject(projectId, { [section]: data });
 }

@@ -8,16 +8,32 @@ import { DigitalPresenceWidget } from './DigitalPresenceWidget';
 import { ObservationNotepad } from './ObservationNotepad';
 import { BaseTaskComponentProps } from './types';
 import { OpportunityForm } from './opportunity/OpportunityForm';
+import { CustomerAvatarForm } from './project/CustomerAvatarForm';
+import { InterviewSynthesisForm } from './project/InterviewSynthesisForm';
+import { OpportunityListReview } from './opportunity/OpportunityListReview';
+import { OpportunityScorer } from './opportunity/OpportunityScorer';
+import { OpportunityValidator } from './opportunity/OpportunityValidator';
+import { ProjectCreationForm } from './project/ProjectCreationForm';
+
 
 export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskComponentProps>> = {
+  //mission 1
   ProfileSetupForm,
   MotivationForm,
   ConstraintForm,
   AskSimulator,
   KnownReachoutWidget,
   DigitalPresenceWidget,
+  //mission 2
   ObservationNotepad,
-  OpportunityForm
+  OpportunityForm,
+  OpportunityListReview,
+  OpportunityValidator,
+  OpportunityScorer,
+  ProjectCreationForm,
+  // mission 3
+  CustomerAvatarForm,
+  InterviewSynthesisForm,
 };
 
 export type { BaseTaskComponentProps } from './types';
