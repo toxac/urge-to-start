@@ -29,9 +29,7 @@ export function NavigationHeader() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group shrink-0">
           <span className="w-2.5 h-2.5 bg-primary rounded-sm group-hover:scale-110 transition-transform" />
-          <span className="text-xl font-black tracking-tight text-foreground font-sans">
-            Urge
-          </span>
+          <span className="text-xl font-black tracking-wider text-foreground font-mono">URGE</span>
         </Link>
 
         {/* Desktop Nav */}
@@ -68,12 +66,12 @@ export function NavigationHeader() {
             <Link href="/auth">Sign In</Link>
           </Button>
 
-          {/* Mobile Menu */}
+          {/* Mobile Menu - Fixed: SheetTrigger directly with no nested Button */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger >
-              <Button variant="ghost" size="icon" className="md:hidden h-9 w-9 rounded-full">
+            <SheetTrigger>
+              <button className="md:hidden h-9 w-9 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
                 <Menu className="h-5 w-5" />
-              </Button>
+              </button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px] p-6">
               <div className="flex flex-col gap-6 mt-8">

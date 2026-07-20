@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowRight, Target, Users, Compass, Zap, Shield, Sparkles } from 'lucide-react';
+import { ArrowRight, Users, Target, Compass, Zap, Shield, ShoppingBag, TestTube, ChevronRight } from 'lucide-react';
 
 export default function Homepage() {
   return (
@@ -38,169 +38,210 @@ export default function Homepage() {
           </div>
 
           <p className="mt-6 text-sm text-muted-foreground">
-            No card required. No commitment.
+            No card required. No commitment. Just the first step.
           </p>
         </div>
       </section>
 
-      {/* THE REAL REASON */}
-      <section className="border-t border-border/40">
+      {/* THE PROBLEM – BOLDER FRAMING */}
+      <section className="border-t border-border/40 bg-card/20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20">
-          <div className="grid md:grid-cols-5 gap-12">
-            <div className="md:col-span-2">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-                The real reason
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-12">
+              <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                The real problem
+              </span>
+              <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground mt-2">
+                You know what you want to build.
+                <br />
+                <span className="text-muted-foreground">You just don't know how to start.</span>
               </h2>
-              <p className="text-3xl font-bold tracking-tight text-foreground">
-                It's not that you don't have ideas.
-              </p>
             </div>
-            <div className="md:col-span-3 space-y-6 text-base text-muted-foreground leading-relaxed">
+
+            <div className="space-y-8 text-lg text-muted-foreground leading-relaxed">
               <p>
-                You've got plenty. What's actually stopping you isn't a lack of information —
-                there's more startup advice online than any person could read in a lifetime.
+                It's not that you lack ideas. It's that every time you try to move forward, you hit the same wall.
               </p>
-              <ul className="space-y-3 text-foreground">
-                <li className="flex items-start gap-3">
-                  <span className="text-primary mt-1">→</span>
-                  <span>You don't know where to actually start</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-primary mt-1">→</span>
-                  <span>You think your plan needs to be perfect before you move</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-primary mt-1">→</span>
-                  <span>Asking for help feels like admitting you don't know what you're doing</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-primary mt-1">→</span>
-                  <span>Every guide tells you something different, and none tell you when</span>
-                </li>
-              </ul>
-              <p className="pt-2">
-                None of that gets fixed by another podcast. It gets fixed by doing{' '}
-                <span className="text-foreground font-medium">one small, slightly uncomfortable thing</span>,
-                on purpose, with someone watching your back.
-              </p>
+
+              <div className="grid sm:grid-cols-2 gap-6 pt-4">
+                <div className="bg-background border border-border/60 rounded-xl p-6">
+                  <div className="flex items-start gap-4">
+                    <span className="text-2xl text-destructive font-bold">✕</span>
+                    <div>
+                      <p className="font-semibold text-foreground">Information overload</p>
+                      <p className="text-sm text-muted-foreground">More advice than you could ever read. None of it tells you what to do first.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-background border border-border/60 rounded-xl p-6">
+                  <div className="flex items-start gap-4">
+                    <span className="text-2xl text-destructive font-bold">✕</span>
+                    <div>
+                      <p className="font-semibold text-foreground">Analysis paralysis</p>
+                      <p className="text-sm text-muted-foreground">You think you need a perfect plan. So you never actually start.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-background border border-border/60 rounded-xl p-6">
+                  <div className="flex items-start gap-4">
+                    <span className="text-2xl text-destructive font-bold">✕</span>
+                    <div>
+                      <p className="font-semibold text-foreground">Fear of asking</p>
+                      <p className="text-sm text-muted-foreground">You don't want to look stupid. So you stay quiet and stay stuck.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-background border border-border/60 rounded-xl p-6">
+                  <div className="flex items-start gap-4">
+                    <span className="text-2xl text-destructive font-bold">✕</span>
+                    <div>
+                      <p className="font-semibold text-foreground">The "right time" trap</p>
+                      <p className="text-sm text-muted-foreground">There's always a reason to wait. A better idea. A safer moment. More time.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-primary/5 border border-primary/20 rounded-xl p-6 text-center">
+                <p className="text-foreground font-medium">
+                  None of that gets fixed by another podcast or a "how to start a business" article.
+                </p>
+                <p className="text-base text-muted-foreground mt-2">
+                  It gets fixed by doing <span className="text-foreground font-semibold">one small thing</span> that moves you forward.
+                  <br />
+                  With someone watching your back.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* HOW WE'RE DIFFERENT */}
-      <section className="border-t border-border/40 bg-card/30">
+      {/* WHAT WE BELIEVE – EFFORT + MANIFESTO MERGED */}
+      <section className="border-t border-border/40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20">
           <div className="text-center mb-14">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-              Our manifesto
+            <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              What we believe
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mt-2 max-w-2xl mx-auto">
+              We've spent years figuring out what actually works.
             </h2>
-            <p className="text-2xl font-bold text-foreground max-w-2xl mx-auto">
-              We reject the myth of the overnight success.
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              So you don't have to.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <Card className="bg-background border-border/60 p-8 space-y-4">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">✕</span>
-                <span className="text-sm font-semibold text-muted-foreground">Unicorn hype</span>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <div className="bg-card border border-border/60 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-2xl">🎯</span>
+                  <h3 className="text-xl font-bold text-foreground">Start with the problem, not the solution</h3>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Most people fall in love with their idea. We help you fall in love with the problem. Talk to real people. Understand what they actually need. Then build something they'll pay for.
+                </p>
               </div>
-              <div className="flex items-center gap-3">
-                <span className="text-2xl text-primary">✓</span>
-                <span className="text-base font-semibold text-foreground">Solve a real problem</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Not every business needs to be a billion-dollar exit. Start with something people actually need.
-              </p>
-            </Card>
 
-            <Card className="bg-background border-border/60 p-8 space-y-4">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">✕</span>
-                <span className="text-sm font-semibold text-muted-foreground">Build to pitch</span>
+              <div className="bg-card border border-border/60 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-2xl">⚡</span>
+                  <h3 className="text-xl font-bold text-foreground">Build to sell, not to pitch</h3>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Your only investors are your customers. Their currency is their time, money, and trust. We show you how to earn it.
+                </p>
               </div>
-              <div className="flex items-center gap-3">
-                <span className="text-2xl text-primary">✓</span>
-                <span className="text-base font-semibold text-foreground">Build to sell</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Your only true investors are your customers. Their currency is their time, money, and trust.
-              </p>
-            </Card>
+            </div>
 
-            <Card className="bg-background border-border/60 p-8 space-y-4">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">✕</span>
-                <span className="text-sm font-semibold text-muted-foreground">Perfect plans</span>
+            <div className="space-y-6">
+              <div className="bg-card border border-border/60 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-2xl">🧠</span>
+                  <h3 className="text-xl font-bold text-foreground">Mindset first. Everything else second.</h3>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Before you can build a business, you need the right mindset. The ability to ask. The resilience to hear no. The discipline to keep going. We build that first.
+                </p>
               </div>
-              <div className="flex items-center gap-3">
-                <span className="text-2xl text-primary">✓</span>
-                <span className="text-base font-semibold text-foreground">Real market validation</span>
+
+              <div className="bg-card border border-border/60 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-2xl">📋</span>
+                  <h3 className="text-xl font-bold text-foreground">Action over analysis</h3>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  No 40-page business plans. No endless spreadsheets. Just clear, sequential actions that move you forward. One step at a time.
+                </p>
               </div>
-              <p className="text-sm text-muted-foreground">
-                Skip the spreadsheets. Talk to real people. Build something they'll pay for.
-              </p>
-            </Card>
+            </div>
+          </div>
+
+          <div className="mt-10 text-center">
+            <p className="text-sm text-muted-foreground font-medium">
+              This isn't a trend. This isn't a fad. This is the hard work of building something real.
+            </p>
           </div>
         </div>
       </section>
 
       {/* THE PROGRAM */}
-      <section className="border-t border-border/40">
+      <section className="border-t border-border/40 bg-card/20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20">
           <div className="flex items-center justify-between mb-10">
             <div>
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+              <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
                 The program
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mt-1">
+                8 missions. <span className="text-muted-foreground">Your entire journey from idea to launch.</span>
               </h2>
-              <p className="text-2xl font-bold text-foreground">Not a course. A program you move through.</p>
             </div>
             <Button variant="ghost" className="text-sm font-medium hidden sm:flex">
               <Link href="/how-it-works/program">
-                See all missions →
+                See all →
               </Link>
             </Button>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="bg-background border-border/60 p-7 space-y-4 hover:border-primary/30 transition-colors">
+            <Card className="bg-background border-border/60 p-7 space-y-4 hover:border-primary/30 transition-colors group">
               <div className="flex items-center gap-2 text-sm font-mono text-primary font-semibold">
                 <Target className="h-4 w-4" />
                 MISSION 01
               </div>
-              <h3 className="text-xl font-bold text-foreground">Build Your Founder Mindset</h3>
+              <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">Build Your Founder Mindset</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Before we look at business opportunities, we look at you. Deal with overthinking, get honest about your time, and practice asking for support.
+                Before we look at business, we look at you. Overthinking, time management, asking for support—the foundations.
               </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border/40">
-                <Sparkles className="h-3 w-3 text-primary" />
-                Quest 1 is free
+                <span className="inline-flex items-center gap-1 text-primary font-medium">✨ Quest 1 free</span>
               </div>
             </Card>
 
-            <Card className="bg-background border-border/60 p-7 space-y-4 hover:border-primary/30 transition-colors">
+            <Card className="bg-background border-border/60 p-7 space-y-4 hover:border-primary/30 transition-colors group">
               <div className="flex items-center gap-2 text-sm font-mono text-primary font-semibold">
                 <Compass className="h-4 w-4" />
                 MISSION 02
               </div>
-              <h3 className="text-xl font-bold text-foreground">Find Problems Worth Solving</h3>
+              <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">Find Problems Worth Solving</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Start with your own frustrations, then talk to real people. Build a list of real problems that are worth solving.
+                Start with your frustrations, then talk to real people. Build a list of real problems people will pay to solve.
               </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border/40">
                 4 quests · Real-world research
               </div>
             </Card>
 
-            <Card className="bg-background border-border/60 p-7 space-y-4 hover:border-primary/30 transition-colors">
+            <Card className="bg-background border-border/60 p-7 space-y-4 hover:border-primary/30 transition-colors group">
               <div className="flex items-center gap-2 text-sm font-mono text-primary font-semibold">
                 <Users className="h-4 w-4" />
                 MISSION 03
               </div>
-              <h3 className="text-xl font-bold text-foreground">Project Viability</h3>
+              <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">Test if It Actually Works</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Talk to customers, understand the competition, and define your Minimum Sellable Product. Make sure it actually makes sense.
+                Talk to customers, understand the competition, define what you'll build. Make sure it makes sense before you invest time.
               </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border/40">
                 5 quests · Customer validation
@@ -218,46 +259,105 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* SUPPORT SYSTEM */}
-      <section className="border-t border-border/40 bg-card/30">
+      {/* THE NETWORK – EXPANDED */}
+      <section className="border-t border-border/40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20">
-          <div className="text-center mb-12">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-              You're not alone
+          <div className="text-center mb-14">
+            <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              The network
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mt-1">
+              You don't build alone.
             </h2>
-            <p className="text-2xl font-bold text-foreground">Nobody builds alone.</p>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              When you join Urge, you get access to a community, a marketplace, and a testing ground. All designed to help you succeed.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-background border-border/60 p-8 space-y-4">
+          <div className="grid md:grid-cols-3 gap-6">
+
+            {/* Community */}
+            <Card className="bg-card border-border/60 p-7 space-y-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary/10 rounded-lg">
                   <Users className="h-5 w-5 text-primary" />
                 </div>
-                <h3 className="text-lg font-bold text-foreground">Your Cheer Squad</h3>
+                <h3 className="text-lg font-bold text-foreground">Community</h3>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                A small group of people who follow your progress and expect to hear from you. Not a forum you'll forget—real people who know your mission and are quietly rooting for you.
-              </p>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span><span className="text-foreground font-medium">Other founders</span> — People going through the same journey</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span><span className="text-foreground font-medium">Mentors & experts</span> — Real advice from people who've been there</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span><span className="text-foreground font-medium">Your cheer squad</span> — A small group that holds you accountable</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span><span className="text-foreground font-medium">Investors</span> — For when you're ready to scale</span>
+                </li>
+              </ul>
             </Card>
 
-            <Card className="bg-background border-border/60 p-8 space-y-4">
+            {/* Marketplace */}
+            <Card className="bg-card border-border/60 p-7 space-y-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary/10 rounded-lg">
-                  <Shield className="h-5 w-5 text-primary" />
+                  <ShoppingBag className="h-5 w-5 text-primary" />
                 </div>
-                <h3 className="text-lg font-bold text-foreground">The Network</h3>
+                <h3 className="text-lg font-bold text-foreground">Marketplace</h3>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Other founders going through the same thing. Industry folks who actually know things. A safe place to test your product before you launch.
-              </p>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span><span className="text-foreground font-medium">Tools & services</span> — Legal, marketing, infrastructure, and more</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span><span className="text-foreground font-medium">Vetted providers</span> — Only the best, curated for founders</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span><span className="text-foreground font-medium">Special offers</span> — Tailored packages for early-stage startups</span>
+                </li>
+              </ul>
             </Card>
+
+            {/* Testing Ground */}
+            <Card className="bg-card border-border/60 p-7 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <TestTube className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground">Testing Ground</h3>
+              </div>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span><span className="text-foreground font-medium">Early validation</span> — Test your product with real users</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span><span className="text-foreground font-medium">Internal launch</span> — Get feedback before going public</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span><span className="text-foreground font-medium">Early customers</span> — Build momentum and confidence</span>
+                </li>
+              </ul>
+            </Card>
+
           </div>
         </div>
       </section>
 
       {/* SOCIAL PROOF */}
-      <div className="border-t border-border/40">
+      <div className="border-t border-border/40 bg-card/10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-center">
           <p className="text-sm text-muted-foreground">
             Join <span className="text-foreground font-semibold">200+</span> founders already building their first business.
@@ -288,7 +388,11 @@ export default function Homepage() {
             </Button>
           </div>
 
-          <div className="mt-6">
+          <p className="mt-4 text-sm text-muted-foreground">
+            Includes 1 year of network membership.
+          </p>
+
+          <div className="mt-8">
             <Link
               href="/auth?optin=newsletter"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
