@@ -15,6 +15,8 @@ import { OpportunityScorer } from './opportunity/OpportunityScorer';
 import { OpportunityValidator } from './opportunity/OpportunityValidator';
 import { ProjectCreationForm } from './project/ProjectCreationForm';
 import { SimpleActionWidget } from './SimpleActionWidget';
+import { UnfairAdvantageForm } from './project/UnfairAdvantageForm';
+import { PositioningStatementForm } from './project/PositioningStatementForm';
 
 
 export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskComponentProps>> = {
@@ -36,6 +38,8 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   SimpleActionWidget,
   CustomerAvatarForm,
   InterviewSynthesisForm,
+  UnfairAdvantageForm,
+  PositioningStatementForm,
 };
 
 export type { BaseTaskComponentProps } from './types';
