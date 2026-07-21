@@ -226,7 +226,7 @@ export async function updateProjectSection(
     ProjectRow,
     'validation_data' | 'competitive_landscape' | 'compliance_checklist' | 
     'solution_design' | 'viability_check' | 'build_data' | 
-    'launch_data' | 'operations_data' | 'review_data'
+    'launch_data' | 'operations_data' | 'review_data' | 'financial_blueprint'
   >,
   data: Record<string, any>
 ): Promise<ActionResponse<ProjectRow>> {

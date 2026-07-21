@@ -17,7 +17,7 @@ export const UpdateProjectSchema = z.object({
   
   // JSON fields - each can be updated individually
   discovery_metrics: z.record(z.string(), z.any()).optional(),
-  financial_blueprint: z.record(z.string(), z.any()).optional(),
+  financial_blueprint: z.record(z.string(), z.any()).optional(), 
   infrastructure_nodes: z.record(z.string(), z.any()).optional(),
   validation_data: z.record(z.string(), z.any()).optional(),
   competitive_landscape: z.record(z.string(), z.any()).optional(),
