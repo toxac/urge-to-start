@@ -1,6 +1,4 @@
-
-
-```ts
+// complete project type definition
 type Project = {
     biz_name: string | null;
     build_data: Json;
@@ -22,8 +20,14 @@ type Project = {
     tagline: string | null;
     updated_at: string;
     user_id: string;
-    validation_data: Json;
+    validation_data: Json; // customer avatar comes here should be separate field
     viability_check: Json;
 }
 
-```
+type ProjectCreationFormSchema = {
+    biz_name: string;
+    five_word_hook: string;
+    tagline: string;
+}
+
+
