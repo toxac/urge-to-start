@@ -139,7 +139,32 @@ Handling rejection a simulation based on their reflections
 
 ---
 
-## Mission : Discovery
+## M2 - Mission : Discovery
+
+### M2/Q1 - Mining Yourself
+
+#### M2/Q1/T1 - Personal Frustations
+
+#### M2/Q1/T1 - Your Skills
+
+### M2/Q2 - Zone of influence
+#### M2/Q2/T1 - Observe
+#### M2/Q2/T3 - Validate
+
+### M2/Q3 - Broader Search
+
+#### M2/Q3/T1 - Places to look
+#### M2/Q3/T2 - Validate and add
+
+### M2/Q4 - Picking the right opportunity
+
+#### M2/Q4/T1 - Scoring
+
+#### M2/Q4/T2 - Rank and pick
+
+
+
+
 
 
 
@@ -225,6 +250,131 @@ type ReferenceSchema = {
     title: string;
 }
 
+// user_progress table
+type UserProgress = {
+    completed_at: string | null;
+    created_at: string ;
+    id: string ;
+    item_type: Database["public"]["Enums"]["program_item_type"];
+    mission_id: string | null;
+    project_id: string | null;
+    quest_id: string | null;
+    reflection: Json;
+    status: Database["public"]["Enums"]["progress_status"];
+    task_id: string | null;
+    updated_at: string;
+    repeat_at: string | null; // when user iterates this step
+    user_id: string;
+    additional_data: json;
+}
+
+type Database["public"]["Enums"]["progress_status"] = "not_started" | "in_progress" | "completed" | "repeat" ; // already in database
+
+type Database["public"]["Enums"]["program_item_type"] = "mission" | "quest" | "task"
+          
+
+// user_observations table
+type UserObservations = {
+    id : string; //uuid auto
+    user_id: string; //fk 
+    title: string;
+    source_type: ObservationSource; //enum
+    program_item_type: Database["public"]["Enums"]["program_item_type"] | null;
+    program_item_id: string | null;
+    project_id: string | null;
+    opportunity_id: string | null;
+    context: json | null ;
+    tags: string[] | null;
+    created_at: string;  // date now()
+    updated_at: string; // date now()
+}
+
+type ObservationSource = | 'opportunity_personal_frustration'
+  | 'opportunity_social_observation'
+  | 'project_customer_interview'
+  | 'project_competitor_research'
+  | 'opportunity_market_trend'
+  | 'online_forum'
+  | 'product_review'
+  | 'other' // not in database
+
+// people_table  -> extending squad table to include all people
+
+// user_opportunities table new
+type UserContact = {
+  id: string // uuid auto
+  user_id: string // fk auth
+  project_id: string // fk projects table
+
+  // Basic Info
+  email: string
+  first_name: string
+  last_name: string
+  phone: string
+  company: string
+  job_title: string
+
+  // Social
+  linkedin_url: string
+  instagram_username: string
+  twitter_handle: string
+
+  // Classification (for the founder's business)
+  categories: UserContactCategory[]
+  status: UserContactStatus // NOT NULL DEFAULT 'active'
+  source: UserContactSource
+  stage: UserContactStage
+
+  // Internal notes (array for timestamped entries)
+  notes: string[]
+
+  // Communication tracking
+  last_contacted_at: string
+  next_follow_up_at: string
+
+  // Flag for email lists
+  opted_in_newsletter: boolean
+
+  // Extra metadata (e.g., meeting summaries, custom fields)
+  metadata: Record<string, any>
+
+  // Timestamps
+  created_at: string // date now()
+  updated_at: string // date now()
+}
+
+type UserContactStatus = 'active' | 'inactive' | 'lost'
+
+type UserContactSource =
+  | 'personal_network'
+  | 'social_media'
+  | 'website_form'
+  | 'referral'
+  | 'outbound'
+  | 'customer_interview'
+  | 'partnership_outreach'
+  | 'urge_community'
+  | 'other'
+
+type UserContactStage =
+  | 'lead' // Raw contact—just met or just captured
+  | 'interviewed' // Had a real customer interview (Mission 3)
+  | 'engaged' // Follows your journey, replies to updates, warm
+  | 'tester' // Actively using your alpha/beta product (Mission 6)
+  | 'pre_sale' // Committed to buy (pre-sale, deposit, signed up)
+  | 'customer' // Paid and actively using your product/service
+  | 'advocate' // Loves it—gives referrals, testimonials, champions you
+  | 'cold' // Went quiet, not responding to outreach
+  | 'nurturing' // Keep in touch for later (not ready yet, but warm)
+
+type UserContactCategory =
+  | 'squad' // Cheer squad (Mission 1)
+  | 'partner' // Business partner
+  | 'tester' // Alpha/beta tester
+  | 'presales' // Pre-sale customers
+  | 'customer' // Paying customer
+
+
 ```
 
 
@@ -242,8 +392,9 @@ type Profile = {
     motivations ?: ProfileMotivationSchema;
     commitment ?: ProfileCommtimentSchema;
     roadblocks ?: ProfileRoadblockSchema;
-    social_footprint ?: ProfileSocialFootprintSchema[];
-    assessment ?: ProfileAssessmentSchema;
+    social_footprint : ProfileSocialFootprintSchema[] | null;
+    assessment : ProfileAssessmentSchema[] | null;
+    skills: ProfileSkills[] | null;
     provider_metadata?: json;
     mentor_profile?: json;
     currecncy?: string;
@@ -253,7 +404,13 @@ type Profile = {
     onboarding_step?: string;
 }
 
-type ProfileMotivationSchema = {
+type ProfileSkills = { // M1/Q2/T2 - skills and expertise
+    category: string;
+    title: string;
+    level: string;
+}
+
+type ProfileMotivationSchema = { //M1/Q1/T1 - Why Start
     push: string;
     push_other: string | null;
     pull: string;
@@ -263,19 +420,19 @@ type ProfileMotivationSchema = {
     why_statement: string;
 }
 
-type ProfileCommtimentSchema = {
+type ProfileCommtimentSchema = { //M1/Q1/T2 - Your Commitment
     time_to_launch: number; // in months
     weekly_hours: number;
     capital: number | null;
 }
 
-type ProfileRoadblockSchema = {
+type ProfileRoadblockSchema = { //  M1/Q1/T3 - Roadblocks
     roadblocks: string[] | null;
     roadblocks_other: string | null;
 \
 }
 
-type ProfileSocialFootprintSchema = {
+type ProfileSocialFootprintSchema = {  //M1/Q2/T1 - Social resource
     type: "platform" | "clubs" | "professional" | "network" | "other";
     name: string; 
     profile_link_url: string;
@@ -283,7 +440,10 @@ type ProfileSocialFootprintSchema = {
 }
 
 type ProfileAssessmentSchema = {
-
+    assessment_type: string;
+    observation: string;
+    recommendation: string[];
+    score: number;
 }
 
 ```
