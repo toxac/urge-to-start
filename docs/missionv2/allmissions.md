@@ -320,6 +320,31 @@ We will have to save ai analysis in notes this will be same for all ObservationO
 
 #### M2/Q4/T1 - Scoring
 
+**Details**
+- Type: observation-form
+- Form Component: OpportunityRatingForm
+- Data: User input gets saved in user_opportunity table
+- Fields
+    - title 
+    - content
+    - additional_data
+- additional_context:
+    - source_type: 'opportunity_market_trend'
+    - observation_propmt: string
+- dependencies : []
+- ai_config: //no ai assesssment required here
+    - role: string
+    - prompt: none
+    - context:
+- references: reference blogs 
+    - Finding opportunities on reddits and other forums
+    - Finding opportunities on marketplaces
+    - Discovering opportunities is trends and keywords
+
+**Notes**
+We will use additional_data column to store more things relate to the observation based on market search context
+
+
 #### M2/Q4/T2 - Rank and pick
 
 
@@ -544,6 +569,38 @@ type UserContactCategory =
 
 ```
 
+## user_opportunities table 
+- change the name from opportunities to user_opportunities for consistent naming pattern
+
+```ts
+type UserOpportunities = {
+          capture_metadata: Json | null;
+          assessment: OpportunityAssessment | null; // new field
+          created_at: string ; // for scoring in mission 2
+          description: string;
+          id: string;
+          pain_score_grade: number | null;
+          project_id: string | null;
+          scores: Json | null;
+          source_type: Database["public"]["Enums"]["opportunity_source_type"]
+          status: Database["public"]["Enums"]["opportunity_status"]
+          title: string
+          updated_at: string
+          user_id: string
+          validated_at: string | null
+          validation_interviews: Json
+
+      }
+
+type OpportunitySourceType =   "personal_problems", "skills", "zone_of_influence", "broader_search";
+
+type OpportunityStatus =    "raw_seed" | "archived" | "shortlisted" | "selected";
+
+type OpportunityAssessment = {
+    
+}
+
+```
 
 
 ## profiles (profiles table)
