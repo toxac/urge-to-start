@@ -151,10 +151,11 @@ We will use universal observation form and pass the related information using ad
 **Details**
 - Type: observation-form
 - Form Component: ObservationForm
-- Data: User input gets saved in user_opportunities table
+- Data: User input gets saved in user_observations table
 - Fields
     - title 
     - content
+    - adiitional_data
 - additional_context:
     - source_type: 'opportunity_personal_frustration'
     - observation_propmt: string
@@ -173,15 +174,14 @@ this form will list all the observation which have program_item_id as the curren
 **Details**
 - Type: observation-form
 - Form Component: ObservationForm
-- Data: User input gets saved in user_opportunities table
+- Data: User input gets saved in user_observations table
 - Fields
     - title 
     - content
+    - additional_data
 - additional_context:
     - source_type: 'opportunity_skills'
     - observation_propmt: string
-    - program_item_type: "task"
-    - program_item_id: "M2/Q1/T2"
 - dependencies : []
 - ai_config: //no ai assesssment required here
     - role: string
@@ -202,22 +202,119 @@ we want to list all the observations for M2/Q1/T2 and M2/Q1/T1(use dependencies 
 - program_context:
     - source_type: null
     - observation_propmt: null
-    - program_item_type: null
-    - program_item_id: "M2/Q1/T3"
 - dependencies : ["M2/Q1/T2", "M2/Q1/T1"]
 - ai_config: //no ai assesssment required here
     - role: "Business Analyst"
-    - prompt: "Analyse the observations user has made and give user your assessment with following criteria and output result"
+    - prompt: "Analyse the observations user has made and give user your assessment with following criteria and output result as assessment + formatted opportunity from observation"
 - references: 
 
+**note**
+The flow inside the form
+- show all observation based on dependency array
+- have simple validation entry from user before we open "analyse and add to opportunity" dialog.
+- we will have the ai analyse the observation with user validation and user profile from quest user_profile context
+- output results first analysis and below that oppportunity form with data populated from ai response with add button
+
 ### M2/Q2 - Zone of influence
+
 #### M2/Q2/T1 - Observe
-#### M2/Q2/T3 - Validate
+**Details**
+- Type: observation-form
+- Form Component: ObservationForm
+- Data: User input gets saved in user_observations table
+- Fields
+    - title 
+    - content
+    - additional_data
+- additional_context:
+    - source_type: 'opportunity_social_observation'
+    - observation_propmt: string
+
+- dependencies : []
+- ai_config: //no ai assesssment required here
+    - role: string
+    - prompt: none
+    - context:
+- references: reference blog - How to observe people
+
+**Notes**
+We will use additional_data column to store more things relate to the observation based on observing people in users zone of influence contextually
+
+#### M2/Q2/T2 - Add to opportuinity
+
+This is same as task  M2/Q1/T3 - Oprtunities from your life
+
+**Details**
+- Type: standard-form
+- Form Component: ObservationOpportunityForm
+- Data: User input gets saved in user_opportunities table
+- Fields
+    - title 
+    - content
+- program_context:
+    - source_type: null
+    - observation_propmt: null
+- dependencies : ["M2/Q2/T1"]
+- ai_config: //no ai assesssment required here
+    - role: "Business Analyst"
+    - prompt: "Analyse the observations user has made and give user your assessment with following criteria and output result as assessment + formatted opportunity from observation"
+- references: 
+
 
 ### M2/Q3 - Broader Search
+we have to add few challenges to the quest
 
-#### M2/Q3/T1 - Places to look
+#### M2/Q3/T1 - Places to look (observation)
+
+**Details**
+- Type: observation-form
+- Form Component: ObservationForm
+- Data: User input gets saved in user_observations table
+- Fields
+    - title 
+    - content
+    - additional_data
+- additional_context:
+    - source_type: 'opportunity_market_trend'
+    - observation_propmt: string
+- dependencies : []
+- ai_config: //no ai assesssment required here
+    - role: string
+    - prompt: none
+    - context:
+- references: reference blogs 
+    - Finding opportunities on reddits and other forums
+    - Finding opportunities on marketplaces
+    - Discovering opportunities is trends and keywords
+
+**Notes**
+We will use additional_data column to store more things relate to the observation based on market search context
+
 #### M2/Q3/T2 - Validate and add
+
+This is same as task  M2/Q1/T3 and M2/Q2/T2 
+
+**Details**
+- Type: standard-form
+- Form Component: ObservationOpportunityForm
+- Data: User input gets saved in user_opportunities table
+- Fields
+    - title 
+    - content
+- program_context:
+    - source_type: null
+    - observation_propmt: null
+- dependencies : ["M2/Q3/T1"]
+- ai_config: //no ai assesssment required here
+    - role: "Business Analyst"
+    - prompt: "Analyse the observations user has made and give user your assessment with following criteria and output result as assessment + formatted opportunity from observation"
+- references: 
+
+**notes**
+We will have to save ai analysis in notes this will be same for all ObservationOpportunityForms. The data saved will have the following shape
+    - source ( user/ai)
+    - content
+    - datatime
 
 ### M2/Q4 - Picking the right opportunity
 
@@ -352,6 +449,8 @@ type UserObservations = {
     opportunity_id: string | null;
     context: json | null ;
     tags: string[] | null;
+    additional_data: json | null;
+    notes: json[] | null;
     created_at: string;  // date now()
     updated_at: string; // date now()
 }
