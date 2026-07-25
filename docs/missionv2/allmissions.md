@@ -142,10 +142,73 @@ Handling rejection a simulation based on their reflections
 ## M2 - Mission : Discovery
 
 ### M2/Q1 - Mining Yourself
+We will have users do it in two steps, first task to observe and record and then validate and add to user_opportunities table 
 
 #### M2/Q1/T1 - Personal Frustations
 
-#### M2/Q1/T1 - Your Skills
+We will use universal observation form and pass the related information using additional_context field
+
+**Details**
+- Type: observation-form
+- Form Component: ObservationForm
+- Data: User input gets saved in user_opportunities table
+- Fields
+    - title 
+    - content
+- additional_context:
+    - source_type: 'opportunity_personal_frustration'
+    - observation_propmt: string
+    - program_item_type: "task"
+    - program_item_id: "M2/Q1/T1"
+- references: reference blog - how to observe your day
+
+
+
+**Notes**
+this form will list all the observation which have program_item_id as the current. We will only need to do it with task context because all observation happen in task context.
+
+
+#### M2/Q1/T2 - Your Skills
+
+**Details**
+- Type: observation-form
+- Form Component: ObservationForm
+- Data: User input gets saved in user_opportunities table
+- Fields
+    - title 
+    - content
+- additional_context:
+    - source_type: 'opportunity_skills'
+    - observation_propmt: string
+    - program_item_type: "task"
+    - program_item_id: "M2/Q1/T2"
+- dependencies : []
+- ai_config: //no ai assesssment required here
+    - role: string
+    - prompt: none
+    - context:
+- references: reference blog - monetizable skills key questions to ask
+
+#### M2/Q1/T3 - Oprtunities from your life
+we want to list all the observations for M2/Q1/T2 and M2/Q1/T1(use dependencies to pull up data from user_observation using program_item_id for tasks). Have a button to add as opportunity which will open a dialog for ai synthesis and formatting the observation as opportunity to be added straight to user_opportunities table. 
+
+**Details**
+- Type: standard-form
+- Form Component: ObservationOpportunityForm
+- Data: User input gets saved in user_opportunities table
+- Fields
+    - title 
+    - content
+- program_context:
+    - source_type: null
+    - observation_propmt: null
+    - program_item_type: null
+    - program_item_id: "M2/Q1/T3"
+- dependencies : ["M2/Q1/T2", "M2/Q1/T1"]
+- ai_config: //no ai assesssment required here
+    - role: "Business Analyst"
+    - prompt: "Analyse the observations user has made and give user your assessment with following criteria and output result"
+- references: 
 
 ### M2/Q2 - Zone of influence
 #### M2/Q2/T1 - Observe
@@ -241,6 +304,9 @@ type TaskSchema = {
     references: ReferenceSchema[];
     component_key: string;
     reflection_prompt: string | null;
+    program_context: json;
+    ai_config: json;
+    dependencies: string[]| null;
 }
 
 type ReferenceSchema = {
@@ -279,6 +345,7 @@ type UserObservations = {
     user_id: string; //fk 
     title: string;
     source_type: ObservationSource; //enum
+    content: string;
     program_item_type: Database["public"]["Enums"]["program_item_type"] | null;
     program_item_id: string | null;
     project_id: string | null;
@@ -290,6 +357,7 @@ type UserObservations = {
 }
 
 type ObservationSource = | 'opportunity_personal_frustration'
+    | 'opportunity_skills'
   | 'opportunity_social_observation'
   | 'project_customer_interview'
   | 'project_competitor_research'
