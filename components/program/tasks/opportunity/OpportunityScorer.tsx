@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, Loader2, Trophy, ArrowUp, ArrowDown } from 'lucide-react';
-import { getOpportunities, scoreOpportunity, OpportunityStatusType } from '@/actions/opportunities';
+import { getOpportunities, scoreOpportunity} from '@/actions/opportunities';
 import { completeTaskExecution } from '@/actions/progress';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
 import { BaseTaskComponentProps } from '../types';

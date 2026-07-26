@@ -122,7 +122,7 @@ I wan tusers to send request for people to be part of their squad and hold them 
 
 **Notes**
 - Invites: When users send out email, we will add link for people to confirm, so when they click it we will update the status.
-- people table -> we want to use one table for all the external people connected to the user as they all are prospective customers. These will have categories of squad, lead, customer, mentor etc
+- user_contacts table (type UserContacts) -> we want to use one table for all the external people connected to the user as they all are prospective customers. These will have categories of squad, lead, customer, mentor etc
 
 
 ### M1/Q4 Hearing Nos
@@ -321,36 +321,69 @@ We will have to save ai analysis in notes this will be same for all ObservationO
 #### M2/Q4/T1 - Scoring
 
 **Details**
-- Type: observation-form
-- Form Component: OpportunityRatingForm
-- Data: User input gets saved in user_opportunity table
+- Type: standard-form
+- Form Component: OpportunityAssessmentForm
+- Data: User input gets saved in user_opportunity.assessment 
 - Fields
-    - title 
-    - content
-    - additional_data
+    - assessment (refer below for form details)
 - additional_context:
-    - source_type: 'opportunity_market_trend'
-    - observation_propmt: string
+    - source_type: null
+    - observation_propmt: null
 - dependencies : []
 - ai_config: //no ai assesssment required here
     - role: string
     - prompt: none
     - context:
-- references: reference blogs 
-    - Finding opportunities on reddits and other forums
-    - Finding opportunities on marketplaces
-    - Discovering opportunities is trends and keywords
+- references: null
 
 **Notes**
-We will use additional_data column to store more things relate to the observation based on market search context
+User will do a quick scoring of all the opportunities. below are the form details. 
+- field: criteria.passion (out of 5)
+    - Question/label : If money and status didn't exist, would I still be obsessed with fixing this problem?
+    - tooltip: "First-timers quit when novelty fades. Does this genuinely excite you?"
+- field: criteria.urgency (select from options)
+    - "Just an annoyance. They could ignore it forever without real consequences." score 1
+    - "Occasional frustration. They waste time on it, but they have a manual workaround that 'works for now'." score 2
+    - "Daily drag. It costs them measurable time (e.g., 5+ hours/week) or creates constant operational friction." score 3
+    - "Bleeding money. It actively costs them real dollars, loses clients, or causes chargebacks every single month." score 4
+    - "Existential threat. Their operations stall, they face heavy penalties, or they lose a major client if it's not fixed within weeks." score 5
+- field: workaround_spend (boolean)
+    - question/label : Are they already spending time, money, or effort on a clumsy workaround to cope?
+    - tooltip: "If they aren't actively trying to solve it now, they won't pay for your solution later."
+- field: unfair_advantage (options)
+    - "Zero edge. I am learning about this industry for the first time, just like any random person on the street." score 1
+    - "Insider pain. I am a heavy user myself—so I intimately understand the daily frustrations and jargon." score 2
+    - "Direct access. I have a warm network of 10+ potential customers who have already agreed to give me feedback." score 3
+    - "Ready-made asset. I already own a unique asset (codebase, massive social audience, proprietary data, or a patent) that gives me a 6-month head start." score 4
+    - "Deep industry royalty. I have 5+ years of insider executive experience AND warm decision-makers ready to sign a LOI (Letter of Intent) as my first paying customers." score 5
+- field: msp_feasibility (out of 5)
+    - question : can i build this?
+
 
 
 #### M2/Q4/T2 - Rank and pick
 
+tails**
+- Type: observation-form
+- Form Component: OpportunitySelectionForm
+- Data: User input gets saved in user_opportunity and creates new row in user_projects
+- Fields
+    - 
+- additional_context:
+    - source_type: null
+    - observation_propmt: null
+- dependencies : []
+- ai_config: //no ai assesssment required here
+    - role: string
+    - prompt: none
+    - context:
+- references: null
 
 
-
-
+**Notes**
+- We let user pick on and keep two more in shortlisted that they can revisit if selected one fails validation.
+- We also need to integrate a Gate here
+- Gate : if user does want to continue with any of the ideas then we will set all the tasks/quests in mission 2 as repeat status and they can start from M2 again look for more opportunities
 
 
 
@@ -492,7 +525,7 @@ type ObservationSource = | 'opportunity_personal_frustration'
 
 // people_table  -> extending squad table to include all people
 
-// user_opportunities table new
+// user_contacts table new
 type UserContact = {
   id: string // uuid auto
   user_id: string // fk auth
@@ -597,7 +630,18 @@ type OpportunitySourceType =   "personal_problems", "skills", "zone_of_influence
 type OpportunityStatus =    "raw_seed" | "archived" | "shortlisted" | "selected";
 
 type OpportunityAssessment = {
-    
+  version: string;
+  evaluatedAt: string;
+  criteria: {
+    passion: number | null;
+    urgency: number | null;
+    workaround_spend:  number | null;
+    unfair_advantage: number | null;
+    msp_feasibility: number | null;
+  },
+  totalScore: number | null;
+  category: string | null;
+  notes: string | null;
 }
 
 ```
