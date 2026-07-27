@@ -11,7 +11,6 @@ type MissionSchema  = {
     content: string | null; 
     content_path: string;
     sequence: number;
-    notes : NoteSchema[] | null; // for notes related to mission (prerequisites, warning, motivation etc)
     video_url : string | null;
     big_question : string | null;
     estimated_time_in_days : number;
@@ -40,6 +39,7 @@ type QuestSchema = { // no ai config in quest and mission, it will be only at ta
         grant_points: number;
         badge_key: string;
     }
+    notes : NoteSchema[] | null;
     challenges: ChallengeSchema[] | null;
     tasks: TaskSchema[];
 }

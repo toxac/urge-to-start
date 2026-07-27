@@ -1,17 +1,43 @@
 # Mission 1 : Beg. Borrow. Steel.
 **Blockers addressed:** I don't know if i can do this
-**Big Question:** "Am I ready to start?
-**Fields to include:**
-- title : Beg. Borrow. Steel.
-- video_url : "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm"
-- sequence: 1
-- estimated_time_in_days: number
-- content: only for database which which we populated from the markdown in content_path
-- content_path: "content/missions/mission1/mission.md"
-- notes instead of prerequisites : [{}]
+**Big Question:** "
+**Playbook config Fields:**
+  - id: mission-1
+  - title: Beg.Borrow.Steel
+  - content: null // only to be populated in db 
+  - content_path: "content/missions/mission1/mission.md"
+  - sequence: 1
+  - video_url : "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm"
+  - big_question : Am I ready to start?
+  - estimated_time_in_days : number;
+  - quests : see sections below
+  - context: ["user_profile]
 ---
 
+**Comments**
+- remove the notes from mission and add it to quests 
+- remove the ai_config from quest and add it to taks, we will not have active generation from quest page
+
+
+
 ## Quest 1: The New Beginning
+  - id: "mission1_quest1"
+  - title: string;
+  - content_path: "content/missions/mission1/quests/starting-your-new-chapter.md"
+  - content: null
+  - video_url : "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm"
+  - sequence: 1
+  - estimated_in_app_minutes: number;
+  - estimated_off_app_minutes: number;
+  - context: ["user_profile]
+  - on_success: 
+      - grant_points: 50
+      - badge_key: "PATHFINDER"
+  - challenges: ChallengeSchema[] | null;
+  - tasks: refer the tasks below
+  - notes: null
+
+
 - id: "mission1_quest1"
 - title: The New Beginning
 - description: not required, we will only use content from content_path
