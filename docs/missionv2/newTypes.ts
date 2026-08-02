@@ -326,3 +326,33 @@ type ProfileAssessmentSchema = {
     score: number;
 }
 
+
+// complete project type definition
+type Project = {
+    biz_name: string | null;
+    competitive_landscape: JSON
+    compliance_checklist: JSON;
+    created_at: string;
+    discovery_metrics: JSON;
+    financial_blueprint: JSON;
+    five_word_hook: string | null;
+    id: string;
+    infrastructure_nodes: JSON;
+    is_active: boolean;
+    launch_data: JSON;
+    review_data: JSON;
+    solution_design: JSON;
+    status: string;
+    tagline: string | null;
+    updated_at: string;
+    user_id: string;
+    validation_data: JSON; // customer avatar comes here should be separate field
+    viability_check: JSON;
+}
+
+type ProjectCreationFormSchema = {
+    biz_name: string;
+    five_word_hook: string;
+    tagline: string;
+}
+
