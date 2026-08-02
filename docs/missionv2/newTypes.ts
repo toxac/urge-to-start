@@ -330,6 +330,9 @@ type ProfileAssessmentSchema = {
 // complete project type definition
 type Project = {
     biz_name: string | null;
+    problem_hypothesis: JSON;
+    opportunity_id: string; // reference to user_opportunities table
+    opportunity_data: JSON;
     competitive_landscape: JSON
     compliance_checklist: JSON;
     created_at: string;
