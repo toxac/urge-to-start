@@ -107,7 +107,9 @@ export type ExecutionType =
     | "simulator" 
     | "off-task-action" 
     | "observation-form" 
+    | "dashboard-view"
     | "log_counter";
+
 
 // ============================================
 // REFERENCES
