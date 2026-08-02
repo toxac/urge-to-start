@@ -16,6 +16,7 @@ type MissionSchema  = {
     estimated_time_in_days : number;
     quests : QuestSchema [];
     context: string[]; // for personalisation
+    success_message: string ;
 }
 
 type NoteSchema = {
@@ -42,6 +43,7 @@ type QuestSchema = { // no ai config in quest and mission, it will be only at ta
     notes : NoteSchema[] | null;
     challenges: ChallengeSchema[] | null;
     tasks: TaskSchema[];
+    success_message: string ;
 }
 
 
