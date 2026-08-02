@@ -95,6 +95,7 @@ export type TaskSchema = {
     };
     ai_config: AIConfigSchema | null;
     dependencies: string[] | null;
+    target_count?: number | null;
 };
 
 // ============================================
