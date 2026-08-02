@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 // ⚡ IMPORT FIX: Pull the actual initialization and completion actions
-import { initializeCheckoutTransaction, completeMockCheckoutHandshake } from '@/actions/payments';
+import { initializeCheckoutTransaction, completeCheckout } from '@/actions/payments';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader2, Tag, ShoppingBag } from 'lucide-react';
@@ -51,7 +51,7 @@ export default function StandaloneCheckoutPage() {
       }
 
       // Step 2: Fire the success handshake sequence to elevate privileges, provision the bundle, and redirect
-      const completeResult = await completeMockCheckoutHandshake({
+      const completeResult = await completeCheckout({
         transactionId: initResult.data.transaction.id
       });
 

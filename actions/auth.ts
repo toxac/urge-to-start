@@ -96,16 +96,38 @@ export async function completeProfile(userId: string, username: string) {
         onboarding_step: 1,
         accumulated_xp: 0,
         currency: 'INR',
-        capital_available_local: 0.00,
+
         social_profiles: {},
         mentor_metadata: {},
         provider_metadata: {},
-        constraints: {},
+
       });
     if (insertError) throw new Error(insertError.message);
   }
 
   revalidatePath('/', 'layout');
+  return { success: true };
+}
+
+export async function forgotPassword(formData: FormData) {
+  const supabase = await createClient();
+  const email = formData.get('email') as string;
+
+  if (!email) {
+    return { error: 'Email is required.' };
+  }
+
+  // Redirect to the reset password page after email confirmation
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${siteUrl}/auth/reset-password`,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  // Return success (no redirect, so the page can display a success message)
   return { success: true };
 }
 
