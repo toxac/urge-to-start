@@ -68,10 +68,8 @@ export function NavigationHeader() {
 
           {/* Mobile Menu - Fixed: SheetTrigger directly with no nested Button */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger>
-              <button className="md:hidden h-9 w-9 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
-                <Menu className="h-5 w-5" />
-              </button>
+            <SheetTrigger className="md:hidden h-9 w-9 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
+              <Menu className="h-5 w-5" />
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px] p-6">
               <div className="flex flex-col gap-6 mt-8">
