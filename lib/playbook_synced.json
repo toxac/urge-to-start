@@ -1,927 +1,3577 @@
 {
   "mission1": {
-    "id": "mission1",
-    "title": "Get Out of Your Own Head",
-    "sequence": 1,
-    "video_url": "https://urgetostart.com/videos/m1-overview.mp4",
-    "briefing_text": "Before we look at business ideas, we need to focus on you. We're going to break out of the overthinking loop and build the habits you need to actually stick with this in the real world.",
-    "content": "",
+    "id": "mission-1",
+    "title": "Beg. Borrow. Steel.",
+    "content": null,
     "content_path": "content/missions/mission1/mission.md",
-    "prerequisites": [
-      {
-        "item": "Commit to finding at least 3 hours a week.",
-        "promptRawText": "The user is trying to find 3 hours a week while working full-time. Give them a practical strategy to protect three 60-minute blocks without burning out."
-      },
-      {
-        "item": "A reliable computer and a decent internet connection"
-      },
-      {
-        "item": "Willingness to be completely honest with yourself and the system",
-        "promptRawText": "The user is nervous about sharing their ideas. Remind them that starting matters more than keeping secrets, and hiding an idea just keeps them isolated."
-      }
+    "sequence": 1,
+    "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+    "big_question": "Am I ready to start?",
+    "estimated_time_in_days": 14,
+    "context": [
+      "user_profile"
     ],
-    "quests": {
-      "quest1": {
+    "success_message": "You've completed Mission 1: Beg. Borrow. Steel. You defined your 'why,' made a real commitment, mapped your hidden resources, built your support squad, and faced rejection head-on. You're no longer in the 'thinking' phase—you're in the 'doing' phase. The foundation is laid. You are ready for Mission 2.",
+    "quests": [
+      {
         "id": "mission1_quest1",
-        "slug": "starting-your-new-chapter",
-        "title": "Your Fresh Start",
-        "subtitle": "Get real about why you are here, face your roadblocks, and introduce yourself.",
-        "description": "Every great journey begins exactly where you are standing right now. Before we look at business ideas, let's nail down what is driving you to build, map out the real-world boundaries you are working around, and introduce yourself to your fellow founders.",
-        "sequence": 1,
-        "content": "",
-        "estimated_in_app_minutes": 45,
-        "estimated_off_app_minutes": 0,
-        "grant_points_bonus": 50,
-        "is_optional": false,
-        "mission_id": "mission1",
+        "mission_id": "mission-1",
+        "title": "The New Beginning",
         "content_path": "content/missions/mission1/quests/starting-your-new-chapter.md",
-        "persona_name": "The Mirror",
-        "persona_prompt": "You are a grounded advisor and a supportive friend. Review user motivations and roadblocks. Call out vague answers kindly, and help them turn big dreams into everyday actions.",
-        "required_context": [
-          "user_profiles"
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 1,
+        "estimated_in_app_minutes": 30,
+        "estimated_off_app_minutes": 60,
+        "content": null,
+        "context": [
+          "user_profile"
         ],
-        "badge_key_reward": "PATHFINDER",
+        "on_success": {
+          "grant_points": 50,
+          "badge_key": "PATHFINDER"
+        },
+        "notes": [
+          {
+            "title": "Honesty is your compass",
+            "type": "guide",
+            "content": "Resist the urge to edit yourself. These answers are for you, not a potential investor. The strongest businesses are built on personal truth.",
+            "related_url": null
+          },
+          {
+            "title": "This might feel uncomfortable",
+            "type": "nudge",
+            "content": "That's the point. Comfort is where dreams go to die. You're here to build something real.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 1: The New Beginning. You know your 'why,' you've made a commitment, and you've faced your fears. That's more than most people ever do. On to the next quest.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
         "tasks": [
           {
-            "id": "m1_q1_t1_drivers",
-            "title": "Why do you want to start a business?",
+            "id": "mission1_quest1_task1",
+            "title": "Why Start?",
             "sequence": 1,
-            "type": "form",
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "Let's be totally honest. Building a business takes serious energy, and vague goals fade the moment life gets busy. What is the actual change you want to make in your life?",
+            "mission_id": "mission-1",
+            "quest_id": "mission1_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/why-start-matters",
+                "title": "Why Your 'Why' Matters More Than Your Idea"
+              },
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/finding-your-north-star",
+                "title": "Finding Your North Star"
+              },
+              {
+                "type": "youtube",
+                "isInternal": false,
+                "isRequired": false,
+                "url_link": "https://www.youtube.com/watch?v=example",
+                "title": "Simon Sinek: Start With Why"
+              }
+            ],
             "component_key": "MotivationForm",
-            "grant_points": 20,
-            "estimated_minutes": 15,
-            "description": "Let's be totally honest. Building a business takes serious energy, and vague goals fade the moment life gets busy. What is the actual change you want to make in your life?",
-            "mission_id": "mission1",
-            "quest_id": "mission1_quest1",
-            "execution_environment": null,
-            "checkback_delay_days": null,
-            "recurring": null,
-            "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "Finding Your Real Why",
-                  "type": "blog",
-                  "path_or_url": "content/blog/reasons-to-start.md",
-                  "subtitle": "4 min layout read"
-                }
-              ]
+            "reflection_prompt": "Look at your 'why_statement.' Does it resonate with you on a gut level? If not, tweak it now. This will be your anchor.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "HONEST_SELF"
             },
-            "observation_config": null,
-            "metadata_config": {}
+            "challenges": [
+              {
+                "title": "The 5-Minute Timer",
+                "description": "Set a timer for 5 minutes. Write non-stop about why you're starting. Don't edit. Don't judge. Just write.",
+                "link": "/resources/challenges/the-5-minute-timer"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           },
           {
-            "id": "m1_q1_t2_commitments",
-            "title": "Be realistic about your schedule and roadblocks",
+            "id": "mission1_quest1_task2",
+            "title": "Make It Real",
             "sequence": 2,
-            "type": "form",
-            "component_key": "CommitmentForm",
-            "grant_points": 20,
-            "estimated_minutes": 15,
-            "description": "Let's get real about your schedule and the roadblocks you are working around. This is about being honest with yourself so you can actually make progress.",
-            "mission_id": "mission1",
+            "execution_type": "standard-form",
+            "estimated_minutes": 10,
+            "briefing_text": "Big goals require clear constraints. Let's set realistic expectations for your time, money, and launch timeline. Be honest, not aspirational.",
+            "mission_id": "mission-1",
             "quest_id": "mission1_quest1",
             "execution_environment": null,
             "checkback_delay_days": null,
-            "recurring": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "Starting with almost nothing",
-                  "type": "blog",
-                  "path_or_url": "content/blog/starting-with-nothing.md",
-                  "subtitle": "4 min layout read"
-                },
-                {
-                  "title": "Getting Practical",
-                  "type": "blog",
-                  "path_or_url": "content/blog/lets-get-practical.md",
-                  "subtitle": "4 min layout read"
-                }
-              ]
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/the-power-of-constraints",
+                "title": "The Power of Constraints"
+              },
+              {
+                "type": "tools",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/tools/time-audit-template",
+                "title": "Time Audit Template"
+              }
+            ],
+            "component_key": "CommitmentForm",
+            "reflection_prompt": "Look at your weekly hours. Is this a realistic, sustainable commitment for the next few months? If you can only do 2 hours a day, own that and build your plan around it.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "ACTION_COMMITMENT"
             },
-            "observation_config": null,
-            "metadata_config": {}
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           },
           {
-            "id": "m1_q1_t3_profile",
-            "title": "Introduce yourself to the community",
+            "id": "mission1_quest1_task3",
+            "title": "What's Scaring You?",
             "sequence": 3,
-            "type": "form",
-            "component_key": "ProfileSetupForm",
-            "description": "You're not in this alone. Put a face to the name, write a brief bio, and share your links so other people here can see what you're up to.",
-            "grant_points": 10,
+            "execution_type": "standard-form",
             "estimated_minutes": 15,
-            "mission_id": "mission1",
+            "briefing_text": "Acknowledging your fears is a sign of strength, not weakness. Let's get them out in the open. This helps the program tailor its support for you.",
+            "mission_id": "mission-1",
             "quest_id": "mission1_quest1",
             "execution_environment": null,
             "checkback_delay_days": null,
-            "recurring": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "Community Code of Conduct",
-                  "type": "internal_link",
-                  "path_or_url": "app/(marketing)/code-of-conduct"
-                },
-                {
-                  "title": "Explore the Community Board",
-                  "type": "internal_link",
-                  "path_or_url": "/platform/program/community",
-                  "subtitle": "See what others are building"
-                }
-              ]
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/fear-is-data",
+                "title": "Fear is Data"
+              },
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/overcoming-analysis-paralysis",
+                "title": "Overcoming Analysis Paralysis"
+              }
+            ],
+            "component_key": "RoadblockForm",
+            "reflection_prompt": "What's the scariest roadblock on this list? We can help you with that. Let's make a plan.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "ROADBLOCK_ACKNOWLEDGED"
             },
-            "observation_config": null,
-            "metadata_config": {}
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           }
         ]
       },
-      "quest2": {
+      {
         "id": "mission1_quest2",
-        "slug": "asking-for-allies",
-        "title": "Learn to ask",
-        "subtitle": "When you ask you might just get what you want!",
-        "description": "The power of asking lies in its ability to unlock new possibilities, break down social barriers, and accelerate personal and professional growth. By overcoming the fear of rejection, you open yourself to feedback, better opportunities, and deeper connections with others",
+        "mission_id": "mission-1",
+        "title": "What You've Got",
+        "content_path": "content/missions/mission1/quests/your-resources.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 2,
-        "content": "",
+        "estimated_in_app_minutes": 30,
+        "estimated_off_app_minutes": 60,
+        "content": null,
+        "context": [
+          "user_profile"
+        ],
+        "on_success": {
+          "grant_points": 50,
+          "badge_key": "RESOURCEFUL"
+        },
+        "notes": [
+          {
+            "title": "Your network is your net worth",
+            "type": "guide",
+            "content": "Your friends, family, former colleagues, and online networks are powerful assets. Let's map them.",
+            "related_url": null
+          },
+          {
+            "title": "Be generous with yourself",
+            "type": "nudge",
+            "content": "Most people underestimate their skills. If you've done it, even once, it's a skill. List it.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 2: What You've Got. You've mapped your network and skills. You're not starting from zero—you have assets. Now let's put them to work.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
+        "tasks": [
+          {
+            "id": "mission1_quest2_task1",
+            "title": "Map Your Network",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "Who do you know? Your friends, family, former colleagues, and online networks are powerful assets. Let's map your 'social footprint' so you can see how to reach your first customers.",
+            "mission_id": "mission-1",
+            "quest_id": "mission1_quest2",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-network-without-being-creepy",
+                "title": "How to Network Without Being Creepy"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/your-network-is-your-first-sales-channel",
+                "title": "Your Network is Your First Sales Channel"
+              }
+            ],
+            "component_key": "SocialFootprintForm",
+            "reflection_prompt": "Who is the most valuable person in your network right now? Why? Consider reaching out to them casually this week.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "NETWORK_MAPPER"
+            },
+            "challenges": [
+              {
+                "title": "The Connection Challenge",
+                "description": "Find 5 people in your network you haven't talked to in over a year. Send them a message. Ask how they're doing.",
+                "link": "/resources/challenges/connection-challenge"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission1_quest2_task2",
+            "title": "Skill Inventory",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "Business is mostly about problem-solving. What are you good at? List your skills and expertise.",
+            "mission_id": "mission-1",
+            "quest_id": "mission1_quest2",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/skills-are-assets",
+                "title": "Your Skills Are Your Assets"
+              },
+              {
+                "type": "tools",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/tools/skill-assessment-template",
+                "title": "Skill Assessment Template"
+              }
+            ],
+            "component_key": "SkillsForm",
+            "reflection_prompt": "List your top 3 to 5 skills. How could these skills help a potential customer solve their problem?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "SKILL_AUDITOR"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          }
+        ]
+      },
+      {
+        "id": "mission1_quest3",
+        "mission_id": "mission-1",
+        "title": "Start Asking",
+        "content_path": "content/missions/mission1/quests/ask-and-you-shall-receive.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 3,
         "estimated_in_app_minutes": 30,
         "estimated_off_app_minutes": 120,
-        "grant_points_bonus": 50,
-        "is_optional": false,
-        "mission_id": "mission1",
-        "content_path": "content/missions/mission1/quests/art-of-asking.md",
-        "persona_name": "The Editor",
-        "persona_prompt": "You are a helpful copy editor. Review message drafts. Highlight hesitant filler words like 'just checking in' or 'sorry to bother you', and suggest more confident alternatives.",
-        "required_context": [
-          "user_profiles"
+        "content": null,
+        "context": [
+          "user_profile"
         ],
-        "badge_key_reward": "COMMUNICATOR",
-        "tasks": [
+        "on_success": {
+          "grant_points": 60,
+          "badge_key": "ASKER"
+        },
+        "notes": [
           {
-            "id": "m1_q2_t1_ask_sim",
-            "title": "Element of a good ask",
-            "sequence": 1,
-            "type": "simulator",
-            "component_key": "AskSimulator",
-            "grant_points": 30,
-            "estimated_minutes": 15,
-            "description": "Lets practice few asks before you approach people in the real world.",
-            "mission_id": "mission1",
-            "quest_id": "mission1_quest2",
-            "execution_environment": null,
-            "checkback_delay_days": null,
-            "recurring": null,
-            "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "The Art of Asking",
-                  "type": "blog",
-                  "path_or_url": "content/blog/art-of-asking.md"
-                },
-                {
-                  "title": "The Power of Asking",
-                  "type": "youtube",
-                  "path_or_url": "https://www.youtube.com/watch?v=xMj_P_6H69g",
-                  "subtitle": "TED talk by Amanda Palmer"
-                }
-              ]
-            },
-            "observation_config": null,
-            "metadata_config": {}
+            "title": "Start safe, then stretch",
+            "type": "guide",
+            "content": "We're going to start with people who already care about you—your squad. Then we'll stretch to people who don't know you yet.",
+            "related_url": null
           },
           {
-            "id": "m1_q2_t2_known_reachout",
-            "title": "Get your cheer squad",
-            "sequence": 2,
-            "type": "action",
-            "component_key": "KnownReachoutWidget",
-            "grant_points": 20,
-            "estimated_minutes": 60,
-            "description": "Ask people you know to be part of your journey. This could be a friend, a mentor, or a family member. Ask them to give you feedback on your idea, or just to be a cheerleader for your progress.",
-            "mission_id": "mission1",
-            "quest_id": "mission1_quest2",
-            "execution_environment": "off_app",
+            "title": "This will feel uncomfortable",
+            "type": "warning",
+            "content": "That's the point. Asking is a skill, and like any skill, it gets easier with practice. The worst they can say is no.",
+            "related_url": null
+          },
+          {
+            "title": "You're offering something",
+            "type": "guide",
+            "content": "Remember, you're not asking for a favor. You're offering a chance to be part of your journey. People love to help.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 3: Start Asking. You've built your squad, introduced yourself to the community, and asked for a discount. You're now officially an 'asker.' The fear of asking is fading. Next up: chasing rejection.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
+        "tasks": [
+          {
+            "id": "mission1_quest3_task1",
+            "title": "Build Your Squad",
+            "sequence": 1,
+            "execution_type": "off-task-action",
+            "estimated_minutes": 30,
+            "briefing_text": "Your success hinges on a support system. Send a short message to 3-5 people (friends, family, colleagues) and tell them you're starting a business and ask if they'd be part of your 'cheer squad' to follow your progress and hold you accountable. Use the template below—just customize it.\n\nTemplate: Hey [Name], I'm starting a business and I need people in my corner. Would you be willing to be part of my 'cheer squad'? I'll share my weekly progress with you. All you need to do is check in and hold me accountable. No heavy lifting—just your support. Would you be up for that?",
+            "mission_id": "mission-1",
+            "quest_id": "mission1_quest3",
+            "execution_environment": null,
             "checkback_delay_days": 2,
-            "recurring": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "Dealing with Response Anxiety",
-                  "type": "blog",
-                  "path_or_url": "content/blog/managing-responses.md"
-                },
-                {
-                  "title": "Ask for more",
-                  "type": "challenge",
-                  "path_or_url": "content/blog/ask-challenge.md"
-                }
-              ],
-              "reflection_prompt": "Now that you've hit send, did the reality of doing it feel lighter than the anxiety you had beforehand?"
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/your-cheer-squad-matters",
+                "title": "Why Your Cheer Squad Matters"
+              },
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-build-your-support-system",
+                "title": "How to Build Your Support System"
+              },
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-ask-for-anything",
+                "title": "How to Ask for Anything"
+              }
+            ],
+            "component_key": "CheerSquadForm",
+            "reflection_prompt": "Who did you ask? What was their reaction? Having a support network is your secret weapon.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 35,
+              "badge_key": "SQUAD_ASSEMBLED"
             },
-            "observation_config": null,
-            "metadata_config": {}
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           },
           {
-            "id": "m1_q2_t3_digital_presence",
-            "title": "Build your presence",
-            "sequence": 3,
-            "type": "action",
-            "component_key": "DigitalPresenceWidget",
-            "grant_points": 25,
+            "id": "mission1_quest3_task2",
+            "title": "Say Hello",
+            "sequence": 2,
+            "execution_type": "standard-form",
             "estimated_minutes": 15,
-            "description": "Having a digital presence is important for building credibility and trust. It also helps you to be found by people who are interested in your work. Let's make sure you have a basic digital presence set up.",
-            "mission_id": "mission1",
-            "quest_id": "mission1_quest2",
+            "briefing_text": "The Urge community is your tribe. Your first step is to introduce yourself. Share your 'why_statement' and what you're hoping to build.",
+            "mission_id": "mission-1",
+            "quest_id": "mission1_quest3",
             "execution_environment": null,
             "checkback_delay_days": null,
-            "recurring": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "Ways to build a digital presence",
-                  "type": "blog",
-                  "path_or_url": "content/blog/ways-to-build-digital-presence.md"
-                },
-                {
-                  "title": "Gain 100 followers in a week",
-                  "type": "challenge",
-                  "path_or_url": "content/blog/gain-100-followers-challenge.md"
-                }
-              ]
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-introduce-yourself-online",
+                "title": "How to Introduce Yourself Online"
+              }
+            ],
+            "component_key": "CommunityIntroForm",
+            "reflection_prompt": "What is one thing you're most excited to learn from the community?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "COMMUNITY_MEMBER"
             },
-            "observation_config": null,
-            "metadata_config": {}
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission1_quest1_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission1_quest3_task3",
+            "title": "Ask for Something",
+            "sequence": 3,
+            "execution_type": "log_counter",
+            "estimated_minutes": 30,
+            "briefing_text": "Now you're warmed up. Let's make a bigger ask. Find a service, tool, or product you use (or want to use) for your business and ask for a discount or a better deal. This could be a software subscription, a freelance service, or even a coffee shop. Practice asking without hesitation.",
+            "mission_id": "mission-1",
+            "quest_id": "mission1_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": 1,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-ask-for-a-discount",
+                "title": "How to Ask for a Discount"
+              }
+            ],
+            "component_key": "DiscountAskLogger",
+            "reflection_prompt": "How did it feel? What was the response? You've just proven you can ask for something. Now, think about how much easier this will feel next time.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 30,
+              "badge_key": "FIRST_ASK"
+            },
+            "challenges": [
+              {
+                "title": "The 3-Ask Challenge",
+                "description": "Make 3 asks this week. At least 1 should be to someone you don't know well. Track what happens.",
+                "link": "/resources/challenges/the-3-ask-challenge"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [
+              "mission1_quest3_task1"
+            ],
+            "target_count": 1,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           }
         ]
       },
-      "quest3": {
-        "id": "mission1_quest3",
-        "slug": "building-resilience",
-        "title": "Get Used to Hearing No",
-        "subtitle": "Collect a few real-world rejections and see that they won't kill you.",
-        "description": "Hearing 'no' stings at first—that's normal. But here's the thing: it's not about you. It's just feedback. This module is a safe space to practice taking small knocks so you can see they don't actually hurt. By the end, you'll have proof that rejection is just information, not a verdict.",
-        "sequence": 3,
-        "content": "",
-        "estimated_in_app_minutes": 15,
-        "estimated_off_app_minutes": 180,
-        "grant_points_bonus": 100,
-        "is_optional": false,
-        "mission_id": "mission1",
-        "content_path": "content/missions/mission1/quests/building-resilience.md",
-        "persona_name": "The Hype-Man",
-        "persona_prompt": "You are an encouraging coach. The user is logging rejections. Reframe their entries as clean user feedback rather than personal setbacks.",
-        "required_context": [
-          "user_profiles"
+      {
+        "id": "mission1_quest4",
+        "mission_id": "mission-1",
+        "title": "No Is Just Data",
+        "content_path": "content/missions/mission1/quests/hearing-nos.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 4,
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 90,
+        "content": null,
+        "context": [
+          "user_profile"
         ],
-        "badge_key_reward": "FORTRESS",
+        "on_success": {
+          "grant_points": 50,
+          "badge_key": "RESILIENT"
+        },
+        "notes": [
+          {
+            "title": "Rejection is not reflection",
+            "type": "guide",
+            "content": "Rejection is not a reflection of your worth. It's data. A 'no' today is a 'not yet' or a 'not this way.'",
+            "related_url": null
+          },
+          {
+            "title": "The real goal",
+            "type": "guide",
+            "content": "The goal isn't to get a 'yes.' The goal is to get comfortable with asking. The 'yes' will come later.",
+            "related_url": null
+          },
+          {
+            "title": "This will feel uncomfortable",
+            "type": "nudge",
+            "content": "That's the point. Growth lives just outside your comfort zone.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 4: No Is Just Data. You've faced rejection, made bold asks, and survived. You're now more resilient than 99% of people who never ask. You're ready for Mission 2.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
         "tasks": [
           {
-            "id": "m1_q3_t1_rejection_log",
-            "title": "Log 3 minor rejections this week",
+            "id": "mission1_quest4_task1",
+            "title": "Practice Getting Nos",
             "sequence": 1,
-            "type": "log_counter",
-            "component_key": "RejectionCounterForm",
-            "grant_points": 80,
-            "estimated_minutes": 120,
-            "description": "Here's a small experiment: go ask for something small that you expect to be turned down for. Maybe ask a cafe for a discount, or request a favor from someone you don't know well. The goal isn't to get a 'yes'—it's to collect a 'no' on purpose. When it happens, take a breath. Notice that you're okay. That's the whole point.",
-            "mission_id": "mission1",
-            "quest_id": "mission1_quest3",
-            "execution_environment": "off_app",
+            "execution_type": "log_counter",
+            "estimated_minutes": 45,
+            "briefing_text": "Your challenge: Get 2 'No's. This could be from asking people for feedback on an idea, asking for a sale, or any other reasonable request where 'No' is a possible response. The goal is to collect them. Each 'No' is a data point and a step forward.\n\nSuggested scenarios:\n• Ask a stranger for directions to a place you already know (see if they say no)\n• Ask a friend to buy your product/service (even if it doesn't exist yet)\n• Ask a local business if they'd partner with you (without a clear proposal)\n• Ask someone for a big favor (like covering your shift or lending you money)",
+            "mission_id": "mission-1",
+            "quest_id": "mission1_quest4",
+            "execution_environment": null,
             "checkback_delay_days": 3,
-            "recurring": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "Your First No Is the Hardest",
-                  "type": "blog",
-                  "path_or_url": "content/blog/first-no-hardest.md"
-                },
-                {
-                  "title": "Jia Jiang: 100 Days of Rejection",
-                  "type": "youtube",
-                  "path_or_url": "https://www.youtube.com/watch?v=-vZXgApsPCQ",
-                  "subtitle": "Famous TED talk experiment"
-                },
-                {
-                  "title": "Post your experience to the community board",
-                  "type": "challenge",
-                  "path_or_url": "/user/posts"
-                }
-              ],
-              "reflection_prompt": "Now that you've done it—did the rejection actually hurt? Or did it just feel a little awkward and then pass? Write down what happened, how you felt, and what you noticed. This is your proof that you can handle more than you think."
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/why-no-is-better-than-maybe",
+                "title": "Why 'No' Is Better Than 'Maybe'"
+              },
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/handling-rejection-like-a-pro",
+                "title": "Handling Rejection Like a Pro"
+              }
+            ],
+            "component_key": "NoCounter",
+            "reflection_prompt": "What did you learn from each 'No'? Did any of them give you a reason why that could be helpful?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "NO_HUNTER"
             },
-            "observation_config": null,
-            "metadata_config": {}
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": 2,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           },
           {
-            "id": "m1_q3_t2_club_unlock",
-            "title": "See how your peers are doing",
+            "id": "mission1_quest4_task2",
+            "title": "The Bold Ask",
             "sequence": 2,
-            "type": "community",
-            "component_key": "CommunityFeedTeaser",
-            "grant_points": 20,
+            "execution_type": "log_counter",
+            "estimated_minutes": 30,
+            "briefing_text": "Now it's time for the real test. Make a request that you're 95% sure will get a 'no.' Ask for something big, bold, or unreasonable. The goal isn't to get a 'yes'—it's to prove to yourself that rejection won't kill you.\n\n🔥 Examples of bold asks:\n• Ask a celebrity or influencer for a call\n• Ask a company for free lifetime access to their product\n• Ask a local business to give you something for free\n• Ask someone to introduce you to their most valuable contact\n• Ask for a 90% discount on something\n\n💡 The more unreasonable, the better. You're not trying to get a yes. You're trying to get comfortable with rejection.",
+            "mission_id": "mission-1",
+            "quest_id": "mission1_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": 2,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/turning-rejection-into-fuel",
+                "title": "Turning Rejection Into Fuel"
+              },
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/the-art-of-the-bold-ask",
+                "title": "The Art of the Bold Ask"
+              }
+            ],
+            "component_key": "BoldAskLogger",
+            "reflection_prompt": "You just made a bold ask. You probably got a 'no.' And you're still standing. That's the whole point. You're now more resilient than 99% of people who never ask.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 35,
+              "badge_key": "BOLD_ASKER"
+            },
+            "challenges": [
+              {
+                "title": "The Bold Ask",
+                "description": "Make a request that you're 95% sure will get a 'no.' Ask for something big, bold, or unreasonable. Track what you learn.",
+                "link": "/resources/challenges/the-bold-ask"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [
+              "mission1_quest4_task1"
+            ],
+            "target_count": 1,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission1_quest4_task3",
+            "title": "Rejection Mastery",
+            "sequence": 3,
+            "execution_type": "standard-form",
             "estimated_minutes": 15,
-            "description": "Open the community feed. Scroll through what others have posted. You'll see the same awkward moments, the same small rejections, the same 'I survived that' energy. This is your reminder that you're in good company.",
-            "mission_id": "mission1",
-            "quest_id": "mission1_quest3",
+            "briefing_text": "You've done the hard work. You've asked, been rejected, and survived. Now let's reflect on what this means for your journey.",
+            "mission_id": "mission-1",
+            "quest_id": "mission1_quest4",
             "execution_environment": null,
             "checkback_delay_days": null,
-            "recurring": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "You're Not the Only One",
-                  "type": "blog",
-                  "path_or_url": "content/blog/not-alone.md"
-                }
-              ]
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/rejection-is-the-price-of-admission",
+                "title": "Rejection Is the Price of Admission"
+              }
+            ],
+            "component_key": "RejectionReflectionForm",
+            "reflection_prompt": "You've proven something to yourself today. What's the most important thing you learned about rejection? How will this change how you approach your business?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "REJECTION_MASTER"
             },
-            "observation_config": null,
-            "metadata_config": {}
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission1_quest4_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           }
         ]
-      }
-    }
-  },
-  "mission2": {
-    "id": "mission2",
-    "title": "Find Problems Worth Solving",
-    "sequence": 2,
-    "video_url": "https://urgetostart.com/videos/m2-overview.mp4",
-    "briefing_text": "Before you build anything, you need to find a problem worth solving. We're going to start with what you know best—your own frustrations—and gradually expand outward. By the end of this mission, you'll have a real opportunity you can turn into a business.",
-    "content": "",
-    "content_path": "content/mission2/mission.md",
-    "prerequisites": [
-      {
-        "item": "Your observation journal (PDF or physical notebook)",
-        "promptRawText": "You've got your observation journal ready. This is your tool for capturing frustrations and annoyances in real life. Keep it with you—you'll be using it a lot in this mission."
-      },
-      {
-        "item": "Willingness to talk to people about their problems",
-        "promptRawText": "You'll need to have real conversations with people—friends, colleagues, even strangers. This isn't about selling. It's about listening. Remind yourself: you're doing research, not pitching."
-      },
-      {
-        "item": "Patience with the process",
-        "promptRawText": "Finding a good problem takes time. You might feel like you're not making progress. That's normal. Trust the process—every observation is data."
       }
     ],
-    "quests": {
-      "quest1": {
+    "created_at": "2026-08-05T08:27:01.967Z",
+    "updated_at": "2026-08-05T08:27:01.967Z"
+  },
+  "mission2": {
+    "id": "mission-2",
+    "title": "Discovery",
+    "content": null,
+    "content_path": "content/missions/mission2/mission.md",
+    "sequence": 2,
+    "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+    "big_question": "What problem should I solve?",
+    "estimated_time_in_days": 21,
+    "context": [
+      "user_profile",
+      "mission1_data"
+    ],
+    "success_message": "You've completed Mission 2: Discovery. You've mined your own frustrations, observed the people around you, researched the wider world, and picked the best opportunity to pursue. You're no longer searching—you have a direction. Mission 3 awaits.",
+    "quests": [
+      {
         "id": "mission2_quest1",
-        "slug": "your-frustrations",
-        "title": "Your Own Frustrations",
-        "subtitle": "Start with what you know best—your own life",
-        "description": "The best problems to solve are often the ones you experience yourself. You understand them intimately. You know the pain points. You're the expert. In this quest, we're going to mine your own frustrations and skills for business opportunities.",
+        "mission_id": "mission-2",
+        "title": "Mine Yourself",
+        "content_path": "content/missions/mission2/quests/mine-yourself.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 1,
-        "content": "",
-        "estimated_in_app_minutes": 90,
-        "estimated_off_app_minutes": 180,
-        "grant_points_bonus": 50,
-        "is_optional": false,
-        "mission_id": "mission2",
-        "content_path": "content/missions/mission2/quests/your-own-pain-and-skills.md",
-        "persona_name": "The Observer",
-        "persona_prompt": "You are a patient guide helping the user notice patterns in their own frustrations. Ask gentle questions that help them see their problems more clearly. Never dismiss their experiences. Help them connect dots.",
-        "required_context": [
-          "user_profiles"
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 90,
+        "content": null,
+        "context": [
+          "user_profile"
         ],
-        "badge_key_reward": "SELF_AWARE",
-        "tasks": [
+        "on_success": {
+          "grant_points": 60,
+          "badge_key": "SELF_AWARE"
+        },
+        "notes": [
           {
-            "id": "m2_q1_t1_observation_week",
-            "title": "Collect your frustrations and annoyances",
-            "sequence": 1,
-            "type": "observation",
-            "component_key": "ObservationNotepad",
-            "grant_points": 25,
-            "estimated_minutes": 180,
-            "description": "For the next 7 days, keep your observation journal with you. Every time something frustrates you, annoys you, or makes you think 'there has to be a better way'—write it down. Don't judge it. Just collect. Aim for at least 10 entries. Notice patterns. What comes up again and again?",
-            "mission_id": "mission2",
-            "quest_id": "mission2_quest1",
-            "execution_environment": "off_app",
-            "checkback_delay_days": null,
-            "recurring": null,
-            "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "Download Observation Journal (PDF)",
-                  "type": "download",
-                  "path_or_url": "/resources/observation-journal.pdf"
-                },
-                {
-                  "title": "How to Spot Hidden Opportunities in Your Frustrations",
-                  "type": "blog",
-                  "path_or_url": "content/blog/spot-opportunities-in-yourself.md",
-                  "subtitle": "5 min read"
-                }
-              ],
-              "reflection_prompt": "After a week of observing, what patterns have you noticed? What are you most excited to explore further?"
-            },
-            "observation_config": {
-              "briefing_text": "For the next 7 days, keep your observation journal with you. Every time something frustrates you, annoys you, or makes you think 'there has to be a better way'—write it down. Don't judge it. Just collect. Aim for at least 10 entries. Notice patterns. What comes up again and again?",
-              "guide_questions": [
-                "What annoyed you today? Why?",
-                "What made you think 'I wish there was a better way'?",
-                "What did you spend too much time on?",
-                "What did you find yourself explaining to someone else?",
-                "What made you say 'that's just how it is'?"
-              ],
-              "min_observations": 10,
-              "observation_period_days": 7
-            },
-            "metadata_config": {
-              "source_type": "personal_problems"
-            }
+            "title": "Start with yourself",
+            "type": "guide",
+            "content": "The best problems to solve are the ones you understand deeply. Your frustrations are a goldmine.",
+            "related_url": null
           },
           {
-            "id": "m2_q1_t2_skill_reflection",
-            "title": "What are you better at than most people?",
-            "sequence": 2,
-            "type": "observation",
-            "component_key": "ObservationNotepad",
-            "grant_points": 20,
-            "estimated_minutes": 90,
-            "description": "Now let's look at your skills. What do you do better than most people you know? This could be anything—cooking, organizing, explaining, fixing things, making people feel comfortable. Ask 3 people who know you well: 'What am I unusually good at?' And ask yourself: 'Would people pay me to do this for them?'",
-            "mission_id": "mission2",
-            "quest_id": "mission2_quest1",
-            "execution_environment": "off_app",
-            "checkback_delay_days": null,
-            "recurring": null,
-            "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "Skill Reflection Worksheet (PDF)",
-                  "type": "download",
-                  "path_or_url": "/resources/skill-reflection.pdf"
-                },
-                {
-                  "title": "How to Turn Your Skills Into a Business",
-                  "type": "blog",
-                  "path_or_url": "content/blog/skills-to-business.md",
-                  "subtitle": "4 min read"
-                }
-              ],
-              "reflection_prompt": "What did people say you're good at? Did any of their answers surprise you? How might your skills connect to the frustrations you observed?"
-            },
-            "observation_config": {
-              "briefing_text": "Ask 3 people who know you well: 'What am I unusually good at?' And ask yourself: 'Would people pay me to do this for them?'",
-              "guide_questions": [
-                "What do people come to you for help with?",
-                "What do you do that feels effortless to you but hard for others?",
-                "What have you been doing since you were young?",
-                "What do you enjoy doing so much that you lose track of time?",
-                "What do you know more about than the average person?"
-              ],
-              "min_observations": 3,
-              "observation_period_days": 3
-            },
-            "metadata_config": {
-              "source_type": "skills"
-            }
+            "title": "Don't overthink",
+            "type": "nudge",
+            "content": "List everything that annoys you—big or small. We'll filter later.",
+            "related_url": null
           },
           {
-            "id": "m2_q1_t3_enter_opportunities",
-            "title": "Enter your best opportunities",
-            "sequence": 3,
-            "type": "form",
-            "component_key": "OpportunityForm",
-            "grant_points": 25,
-            "estimated_minutes": 30,
-            "description": "Open your observation journal. Pick the 3-5 frustrations that felt most real, most frequent, or most interesting. Also look at your skill reflections. Where do your skills and frustrations intersect? Enter them into the system as opportunities—these are the raw materials for your business.",
-            "mission_id": "mission2",
-            "quest_id": "mission2_quest1",
-            "execution_environment": null,
-            "checkback_delay_days": null,
-            "recurring": null,
-            "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "From Frustration to Business Idea",
-                  "type": "blog",
-                  "path_or_url": "content/blog/frustration-to-business.md"
-                },
-                {
-                  "title": "How to Write a Clear Problem Statement",
-                  "type": "blog",
-                  "path_or_url": "content/blog/problem-statement.md"
-                }
-              ]
-            },
-            "observation_config": null,
-            "metadata_config": {
-              "source_type": "personal_problems",
-              "source_context": "Look at your frustration journal. Pick the 3-5 frustrations that felt most real, most frequent, or most interesting. Also look at your skill reflections. Where do your skills and frustrations intersect? Enter them as opportunities.",
-              "dependencies": [
-                "m2_q1_t1_observation_week",
-                "m2_q1_t2_skill_reflection"
-              ]
-            }
+            "title": "This is not about solutions",
+            "type": "warning",
+            "content": "Don't try to solve anything yet. Just observe and document the problems.",
+            "related_url": null
           }
-        ]
-      },
-      "quest2": {
-        "id": "mission2_quest2",
-        "slug": "people-in-your-circle",
-        "title": "People in Your Circle",
-        "subtitle": "The problems of people you know are the problems you understand best",
-        "description": "Now we're expanding outward. The people you know—friends, family, colleagues, classmates—have problems too. And because you know them, you can observe their frustrations firsthand. This is research you can do without leaving your comfort zone.",
-        "sequence": 2,
-        "content": "",
-        "estimated_in_app_minutes": 60,
-        "estimated_off_app_minutes": 240,
-        "grant_points_bonus": 50,
-        "is_optional": false,
-        "mission_id": "mission2",
-        "content_path": "content/missions/mission2/quests/your-zone-of-influence.md",
-        "persona_name": "The Investigator",
-        "persona_prompt": "You are a curious researcher helping the user observe problems in their social circles. Encourage them to be good listeners. Help them distinguish between minor annoyances and real problems. Remind them: they're doing research, not pitching.",
-        "required_context": [
-          "user_profiles"
         ],
-        "badge_key_reward": "CURIOUS",
+        "success_message": "You've completed Quest 1: Mine Yourself. You've identified problems from your own life and skills. You're building a foundation for your business.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
         "tasks": [
           {
-            "id": "m2_q2_t1_social_observation",
-            "title": "Observe the problems of people around you",
+            "id": "mission2_quest1_task1",
+            "title": "Spot Your Frustrations",
             "sequence": 1,
-            "type": "observation",
-            "component_key": "ObservationNotepad",
-            "grant_points": 25,
-            "estimated_minutes": 180,
-            "description": "Pick 3 people in your life. Could be a friend, a colleague, a family member, someone at your gym. Over the next week, observe them. What are they complaining about? What do they do that seems unnecessarily hard? What do they buy to fix their problems? Don't ask them yet—just watch. Take notes. Notice patterns.",
-            "mission_id": "mission2",
-            "quest_id": "mission2_quest2",
-            "execution_environment": "off_app",
-            "checkback_delay_days": null,
-            "recurring": null,
-            "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "Social Observation Worksheet (PDF)",
-                  "type": "download",
-                  "path_or_url": "/resources/social-observation.pdf"
-                },
-                {
-                  "title": "How to Observe Without Judging",
-                  "type": "blog",
-                  "path_or_url": "content/blog/observing-without-judging.md",
-                  "subtitle": "4 min read"
-                }
-              ],
-              "reflection_prompt": "What surprised you about people's frustrations? Was there a pattern across different people? Which problem seemed most real?"
-            },
-            "observation_config": {
-              "briefing_text": "Pick 3 people in your life. Could be a friend, a colleague, a family member, someone at your gym. Over the next week, observe them. What are they complaining about? What do they do that seems unnecessarily hard? What do they buy to fix their problems? Don't ask them yet—just watch. Take notes. Notice patterns.",
-              "guide_questions": [
-                "What does this person complain about regularly?",
-                "What tasks do they avoid or procrastinate on?",
-                "What do they spend money on to solve problems?",
-                "What do they do that seems inefficient?",
-                "What makes them frustrated or stressed?"
-              ],
-              "min_observations": 5,
-              "observation_period_days": 7
-            },
-            "metadata_config": {
-              "source_type": "zone_of_influence"
-            }
-          },
-          {
-            "id": "m2_q2_t2_add_opportunities",
-            "title": "Add validated opportunities to your list",
-            "sequence": 2,
-            "type": "form",
-            "component_key": "OpportunityForm",
-            "grant_points": 20,
+            "execution_type": "observation-form",
             "estimated_minutes": 20,
-            "description": "Look at your social observations. Which problems seemed most real? Which ones got people excited? Add them as opportunities.",
-            "mission_id": "mission2",
-            "quest_id": "mission2_quest2",
+            "briefing_text": "Your own frustrations are the most accessible problems to solve. What annoys you? What wastes your time? What feels broken? List them all—big and small.",
+            "mission_id": "mission-2",
+            "quest_id": "mission2_quest1",
             "execution_environment": null,
             "checkback_delay_days": null,
-            "recurring": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "From Observation to Opportunity",
-                  "type": "blog",
-                  "path_or_url": "content/blog/observation-to-opportunity.md"
-                }
-              ]
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/your-pain-is-a-goldmine",
+                "title": "Your Pain Is a Goldmine"
+              },
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-spot-frustrations",
+                "title": "How to Spot Frustrations in Your Daily Life"
+              }
+            ],
+            "component_key": "FrustrationObservationForm",
+            "reflection_prompt": "Look at your frustrations. Which one feels the most urgent? Which one do you wish someone would solve?",
+            "observation_context": {
+              "category": "personal_problems",
+              "reference": "user_opportunities"
             },
-            "observation_config": null,
-            "metadata_config": {
-              "source_type": "zone_of_influence",
-              "source_context": "Look at your social observations. Which problems seemed most real? Which ones got people excited? Add them as opportunities.",
-              "dependencies": [
-                "m2_q2_t1_social_observation"
-              ]
-            }
-          }
-        ]
-      },
-      "quest3": {
-        "id": "mission2_quest3",
-        "slug": "the-world-out-there",
-        "title": "The World Out There",
-        "subtitle": "Find problems that are big enough to build a business around",
-        "description": "Now we're looking at the broader market. This is where you find problems that affect enough people to make a real business. You'll use tools like Google Trends, Reddit, Facebook Groups, and marketplaces to see what people are struggling with on a larger scale.",
-        "sequence": 3,
-        "content": "",
-        "estimated_in_app_minutes": 90,
-        "estimated_off_app_minutes": 180,
-        "grant_points_bonus": 75,
-        "is_optional": false,
-        "mission_id": "mission2",
-        "content_path": "content/missions/mission2/quests/the-world-out-there.md",
-        "persona_name": "The Cartographer",
-        "persona_prompt": "You are helping the user map the landscape of problems. Guide them to look for patterns, not just individual complaints. Help them understand the difference between a niche problem and a market opportunity.",
-        "required_context": [
-          "user_profiles",
-          "opportunities"
-        ],
-        "badge_key_reward": "OBSERVER",
-        "tasks": [
-          {
-            "id": "m2_q3_t1_trend_research",
-            "title": "What are people searching for?",
-            "sequence": 1,
-            "type": "action",
-            "component_key": "OpportunityForm",
-            "grant_points": 25,
-            "estimated_minutes": 45,
-            "description": "Open Google Trends. Search 5 terms related to problems you're curious about. Look at related queries—what are people searching for? Also check Reddit: what are people complaining about in subreddits related to your interests? This isn't about copying trends. It's about finding patterns of unmet need.",
-            "mission_id": "mission2",
-            "quest_id": "mission2_quest3",
-            "execution_environment": "off_app",
-            "checkback_delay_days": null,
-            "recurring": null,
-            "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "How to Use Google Trends for Business Ideas",
-                  "type": "blog",
-                  "path_or_url": "content/blog/google-trends-guide.md"
-                },
-                {
-                  "title": "Reddit: The World's Largest Focus Group",
-                  "type": "blog",
-                  "path_or_url": "content/blog/reddit-focus-group.md"
-                }
-              ],
-              "reflection_prompt": "What surprised you in the search results? Was there a problem that seemed more common than you expected?"
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "FRUSTRATION_SPOTTER"
             },
-            "observation_config": null,
-            "metadata_config": {
-              "source_type": "broader_search",
-              "source_context": "What did you find in Google Trends? What related queries came up? What seems to be a growing concern? Add them as opportunities.",
-              "observation_task_ids": []
-            }
+            "challenges": [
+              {
+                "title": "The Frustration Log",
+                "description": "For one week, write down every frustration you encounter. Big or small. At work, at home, in public. Just observe.",
+                "link": "/resources/challenges/frustration-log"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           },
           {
-            "id": "m2_q3_t2_forum_research",
-            "title": "Where do people talk about their problems?",
+            "id": "mission2_quest1_task2",
+            "title": "Turn Frustrations Into Opportunities",
             "sequence": 2,
-            "type": "action",
-            "component_key": "OpportunityForm",
-            "grant_points": 25,
-            "estimated_minutes": 60,
-            "description": "Check Facebook Groups, LinkedIn communities, industry forums. Look for questions that keep coming up. Look for hacks and workarounds. If people are actively discussing a problem, it's worth paying attention to. Join the conversation—ask questions, not pitch.",
-            "mission_id": "mission2",
-            "quest_id": "mission2_quest3",
-            "execution_environment": "off_app",
-            "checkback_delay_days": 2,
-            "recurring": null,
-            "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "Finding Problems in Online Communities",
-                  "type": "blog",
-                  "path_or_url": "content/blog/online-communities-problems.md"
-                },
-                {
-                  "title": "How to Ask Research Questions in Forums",
-                  "type": "blog",
-                  "path_or_url": "content/blog/ask-research-questions.md"
-                }
-              ],
-              "reflection_prompt": "Which community had the most engaged discussions about problems? What does that tell you?"
-            },
-            "observation_config": null,
-            "metadata_config": {
-              "source_type": "broader_search",
-              "source_context": "What problems did you find in forums? What questions keep coming up? Add them as opportunities.",
-              "observation_task_ids": []
-            }
-          },
-          {
-            "id": "m2_q3_t3_marketplace_research",
-            "title": "What's already being sold?",
-            "sequence": 3,
-            "type": "action",
-            "component_key": "OpportunityForm",
-            "grant_points": 25,
-            "estimated_minutes": 45,
-            "description": "Go to Amazon, Etsy, or wherever relevant. Search for products related to your problem area. What do people complain about in the reviews? 'I wish this had...' 'If only it could...' Those complaints are gold. They represent unmet needs that existing products aren't solving.",
-            "mission_id": "mission2",
-            "quest_id": "mission2_quest3",
-            "execution_environment": "off_app",
+            "execution_type": "standard-form",
+            "estimated_minutes": 25,
+            "briefing_text": "Now let's reframe your frustrations as business opportunities. A frustration is just an unsolved problem. An unsolved problem is an opportunity.",
+            "mission_id": "mission-2",
+            "quest_id": "mission2_quest1",
+            "execution_environment": null,
             "checkback_delay_days": null,
-            "recurring": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "Reading Between the Lines of Product Reviews",
-                  "type": "blog",
-                  "path_or_url": "content/blog/product-review-insights.md"
-                },
-                {
-                  "title": "Competitor Analysis for Beginners",
-                  "type": "blog",
-                  "path_or_url": "content/blog/competitor-analysis.md"
-                }
-              ],
-              "reflection_prompt": "What complaints kept coming up? Is there a gap in the market you could fill?"
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-turn-problems-into-opportunities",
+                "title": "How to Turn Problems Into Opportunities"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/why-frustrations-make-the-best-businesses",
+                "title": "Why Frustrations Make the Best Businesses"
+              }
+            ],
+            "component_key": "OpportunityFromFrustrationForm",
+            "reflection_prompt": "Which of your frustrations could someone pay to have solved? Why?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "PROBLEM_REFORMER"
             },
-            "observation_config": null,
-            "metadata_config": {
-              "source_type": "broader_search",
-              "source_context": "What complaints did you find in product reviews? What gaps did you identify? Add them as opportunities.",
-              "observation_task_ids": []
-            }
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission2_quest1_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           },
           {
-            "id": "m2_q3_t4_consolidate_opportunities",
-            "title": "Consolidate your opportunity list",
+            "id": "mission2_quest1_task3",
+            "title": "Audit Your Skills",
+            "sequence": 3,
+            "execution_type": "observation-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Your skills are assets. What are you good at? What do people ask you for help with? What comes naturally to you? These are potential business opportunities.",
+            "mission_id": "mission-2",
+            "quest_id": "mission2_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/skills-are-assets",
+                "title": "Your Skills Are Your Assets"
+              },
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-identify-your-valuable-skills",
+                "title": "How to Identify Your Most Valuable Skills"
+              }
+            ],
+            "component_key": "SkillObservationForm",
+            "reflection_prompt": "Which of your skills could help someone solve a problem? Who needs this skill?",
+            "observation_context": {
+              "category": "skills",
+              "reference": "user_opportunities"
+            },
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "SKILL_AUDITOR"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission2_quest1_task4",
+            "title": "Skills as a Business",
             "sequence": 4,
-            "type": "form",
-            "component_key": "OpportunityListReview",
-            "grant_points": 20,
-            "estimated_minutes": 30,
-            "description": "You've done a lot of research. You've got observations from yourself, from people you know, and from the broader market. Now it's time to review everything. Look at your list. Which problems seem most real? Which affect the most people? Which are you most excited to solve? Add the best ones to your master opportunity list.",
-            "mission_id": "mission2",
-            "quest_id": "mission2_quest3",
+            "execution_type": "standard-form",
+            "estimated_minutes": 25,
+            "briefing_text": "Your skills can be a business. What's a problem you could solve using your skills? Who would pay for that?",
+            "mission_id": "mission-2",
+            "quest_id": "mission2_quest1",
             "execution_environment": null,
             "checkback_delay_days": null,
-            "recurring": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "How to Prioritize Business Ideas",
-                  "type": "blog",
-                  "path_or_url": "content/blog/prioritize-ideas.md"
-                },
-                {
-                  "title": "The Problem Filter: Separating Wheat from Chaff",
-                  "type": "blog",
-                  "path_or_url": "content/blog/problem-filter.md"
-                }
-              ]
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-turn-skills-into-a-business",
+                "title": "How to Turn Your Skills Into a Business"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/what-skills-people-pay-for",
+                "title": "What Skills Are People Willing to Pay For"
+              }
+            ],
+            "component_key": "SkillsOpportunityForm",
+            "reflection_prompt": "How could you package your skills as a service or product? What would be the simplest version?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "SKILL_ENTREPRENEUR"
             },
-            "observation_config": null,
-            "metadata_config": {}
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission2_quest1_task3"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           }
         ]
       },
-      "quest4": {
-        "id": "mission2_quest4",
-        "slug": "pick-your-path",
-        "title": "Pick Your Path",
-        "subtitle": "Validate, score, and commit to one opportunity",
-        "description": "You've explored problems from every angle. You've looked inward, outward, and across the market. Now it's time to validate what's real, score your options, and commit to one. This is the moment of truth.",
-        "sequence": 4,
-        "content": "",
-        "estimated_in_app_minutes": 60,
+      {
+        "id": "mission2_quest2",
+        "mission_id": "mission-2",
+        "title": "People Watching",
+        "content_path": "content/missions/mission2/quests/people-watching.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 2,
+        "estimated_in_app_minutes": 30,
         "estimated_off_app_minutes": 120,
-        "grant_points_bonus": 100,
-        "is_optional": false,
-        "mission_id": "mission2",
-        "content_path": "content/missions/mission2/quests/pick-your-path.md",
-        "persona_name": "The Decider",
-        "persona_prompt": "You are helping the user make a clear decision. Don't let them waffle. Help them weigh the evidence, trust their gut, and commit. Remind them: they can always change direction later. The important thing is to start.",
-        "required_context": [
-          "user_profiles",
-          "opportunities"
+        "content": null,
+        "context": [
+          "user_profile"
         ],
-        "badge_key_reward": "DECIDED",
+        "on_success": {
+          "grant_points": 50,
+          "badge_key": "OBSERVER"
+        },
+        "notes": [
+          {
+            "title": "You are a detective",
+            "type": "guide",
+            "content": "Look at the people around you. What problems do they have? What do they complain about?",
+            "related_url": null
+          },
+          {
+            "title": "Listen more than you talk",
+            "type": "nudge",
+            "content": "The best insights come from listening—not to answers, but to frustrations.",
+            "related_url": null
+          },
+          {
+            "title": "Don't start with solutions",
+            "type": "warning",
+            "content": "Just observe. Don't try to fix anything. You're gathering data.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 2: People Watching. You've observed problems in your immediate circle. These people are your first potential customers.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
         "tasks": [
           {
-            "id": "m2_q4_t1_validate_opportunities",
-            "title": "Validate your opportunities with real people",
+            "id": "mission2_quest2_task1",
+            "title": "Be a Detective",
             "sequence": 1,
-            "type": "form",
-            "component_key": "OpportunityValidator",
-            "grant_points": 30,
-            "estimated_minutes": 60,
-            "description": "Take your top 5-10 opportunities. Go back to potential customers. Ask: 'Is this actually a problem for you? Would you pay for a solution?' This is the moment of truth. Log what you learn.",
-            "mission_id": "mission2",
-            "quest_id": "mission2_quest4",
+            "execution_type": "observation-form",
+            "estimated_minutes": 25,
+            "briefing_text": "Put on your detective hat. Look at the people around you—friends, family, colleagues, neighbors. What problems do they have? What frustrates them? What do they complain about?",
+            "mission_id": "mission-2",
+            "quest_id": "mission2_quest2",
             "execution_environment": null,
-            "checkback_delay_days": 3,
-            "recurring": null,
+            "checkback_delay_days": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "How to Ask 'Would You Pay?' Without Being Pushy",
-                  "type": "blog",
-                  "path_or_url": "content/blog/ask-would-you-pay.md"
-                },
-                {
-                  "title": "The Art of Validation",
-                  "type": "blog",
-                  "path_or_url": "content/blog/art-of-validation.md"
-                }
-              ],
-              "reflection_prompt": "What did people say? Did anyone get genuinely excited? Did anyone tell you they'd pay? That's your signal."
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-observe-problems-in-others",
+                "title": "How to Observe Problems in Others"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/people-are-the-best-problem-sources",
+                "title": "People Are the Best Problem Sources"
+              }
+            ],
+            "component_key": "DetectiveObservationForm",
+            "reflection_prompt": "Look at your observations. Which problem feels the most urgent? Which one do you think you could help solve?",
+            "observation_context": {
+              "category": "zone_of_influence",
+              "reference": "user_opportunities"
             },
-            "observation_config": null,
-            "metadata_config": {}
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "DETECTIVE"
+            },
+            "challenges": [
+              {
+                "title": "The 5 Conversations Challenge",
+                "description": "Have 5 conversations this week where you ask people about their biggest frustrations—and just listen.",
+                "link": "/resources/challenges/5-conversations"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           },
           {
-            "id": "m2_q4_t2_score_opportunities",
-            "title": "Score your opportunities honestly",
+            "id": "mission2_quest2_task2",
+            "title": "Spot the Opportunity",
             "sequence": 2,
-            "type": "form",
-            "component_key": "OpportunityScorer",
-            "grant_points": 30,
-            "estimated_minutes": 30,
-            "description": "Here's the truth: you can't pursue all of them. Let's get real. For each validated opportunity, score it honestly on these 5 criteria:\n\n• **Do I actually care about this problem?** (1-10)\n• **Do I know people who have this problem?** (1-10)\n• **Could I talk to them easily?** (1-10)\n• **Do I have any unfair advantage here?** (1-10)\n• **Is there a clear way I could get paid?** (1-10)",
-            "mission_id": "mission2",
-            "quest_id": "mission2_quest4",
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Now turn your observations into opportunities. For each problem you observed, what could be a solution? Who would pay for it?",
+            "mission_id": "mission-2",
+            "quest_id": "mission2_quest2",
             "execution_environment": null,
             "checkback_delay_days": null,
-            "recurring": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "How to Choose the Right Business Idea",
-                  "type": "blog",
-                  "path_or_url": "content/blog/choose-right-idea.md"
-                },
-                {
-                  "title": "The 5 Tests of a Good Business Opportunity",
-                  "type": "blog",
-                  "path_or_url": "content/blog/5-tests-opportunity.md"
-                }
-              ],
-              "reflection_prompt": "Looking at your scores, which opportunity stands out? Which one would you be most excited to tell people about?"
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/observing-problems-around-you",
+                "title": "Observing Problems Around You"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/opportunities-are-all-around-you",
+                "title": "Opportunities Are All Around You"
+              }
+            ],
+            "component_key": "PeopleOpportunityForm",
+            "reflection_prompt": "Which of these problems could be the foundation of a business? Why?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "OPPORTUNITY_SPOTTER"
             },
-            "observation_config": null,
-            "metadata_config": {}
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission2_quest2_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          }
+        ]
+      },
+      {
+        "id": "mission2_quest3",
+        "mission_id": "mission-2",
+        "title": "The Wider World",
+        "content_path": "content/missions/mission2/quests/the-wider-world.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 3,
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 180,
+        "content": null,
+        "context": [
+          "user_profile"
+        ],
+        "on_success": {
+          "grant_points": 50,
+          "badge_key": "WORLD_READY"
+        },
+        "notes": [
+          {
+            "title": "Think bigger",
+            "type": "guide",
+            "content": "Your immediate circle is just the beginning. The world is full of problems waiting to be solved.",
+            "related_url": null
           },
           {
-            "id": "m2_q4_t3_create_project",
-            "title": "Save your project",
+            "title": "Explore new spaces",
+            "type": "nudge",
+            "content": "Visit forums, read comments, check trends. Problems are everywhere.",
+            "related_url": null
+          },
+          {
+            "title": "Don't get overwhelmed",
+            "type": "warning",
+            "content": "You're exploring. Not committing. Gather as many problems as you can—you'll filter later.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 3: The Wider World. You've discovered problems beyond your immediate circle. Your opportunity set is now diverse.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
+        "tasks": [
+          {
+            "id": "mission2_quest3_task1",
+            "title": "Search the Communities",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 30,
+            "briefing_text": "Online communities are goldmines. Reddit, Facebook Groups, LinkedIn communities, Quora—people are actively discussing their problems. Go find them.",
+            "mission_id": "mission-2",
+            "quest_id": "mission2_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-find-problems-in-online-communities",
+                "title": "How to Find Problems in Online Communities"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/problem-spotting-techniques",
+                "title": "Problem-Spotting Techniques for Founders"
+              }
+            ],
+            "component_key": "CommunityProblemForm",
+            "reflection_prompt": "What's the most common problem you're seeing in these communities? Why do you think it's common?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "COMMUNITY_EXPLORER"
+            },
+            "challenges": [
+              {
+                "title": "The Deep Dive",
+                "description": "Spend 2 hours diving deep into a community or industry you know nothing about. What problems do they discuss?",
+                "link": "/resources/challenges/the-deep-dive"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission2_quest3_task2",
+            "title": "Ride the Trends",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 30,
+            "briefing_text": "Trends are signals. What's changing? What's new? What's growing? These changes create new problems—and new opportunities.",
+            "mission_id": "mission-2",
+            "quest_id": "mission2_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-spot-problems-in-trends",
+                "title": "How to Spot Problems in Trends"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/trends-are-trouble",
+                "title": "Trends Are Trouble (And That's Good)"
+              }
+            ],
+            "component_key": "TrendProblemForm",
+            "reflection_prompt": "What trend is creating new problems? Who is being affected by these changes?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "TREND_SPOTTER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission2_quest3_task3",
+            "title": "The Marketplace Scanner",
             "sequence": 3,
-            "type": "form",
-            "component_key": "ProjectCreationForm",
-            "grant_points": 40,
-            "estimated_minutes": 20,
-            "description": "You've found it. The opportunity that passes the test. Save it as your project. This is your starting point. Everything from here on is about making this real. Congratulations—you've taken the hardest step.",
-            "mission_id": "mission2",
+            "execution_type": "standard-form",
+            "estimated_minutes": 30,
+            "briefing_text": "Marketplaces tell you what people are already paying for. They reveal gaps, complaints, and underserved needs. Go scan Etsy, Fiverr, Upwork, Amazon—what problems are being solved? What's missing?",
+            "mission_id": "mission-2",
+            "quest_id": "mission2_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-spot-opportunities-in-marketplaces",
+                "title": "How to Spot Opportunities in Marketplaces"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/marketplace-love-notes",
+                "title": "Marketplace Love Notes and Breakup Letters"
+              }
+            ],
+            "component_key": "MarketplaceProblemForm",
+            "reflection_prompt": "What's a problem that people are trying to solve but no one is solving well? Where's the gap?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "MARKETPLACE_SCANNER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          }
+        ]
+      },
+      {
+        "id": "mission2_quest4",
+        "mission_id": "mission-2",
+        "title": "The Decision",
+        "content_path": "content/missions/mission2/quests/the-decision.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 4,
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 30,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_opportunities"
+        ],
+        "on_success": {
+          "grant_points": 60,
+          "badge_key": "DECISION_MAKER"
+        },
+        "notes": [
+          {
+            "title": "This is the hard part",
+            "type": "guide",
+            "content": "You've gathered opportunities. Now you must choose. Don't fall in love—evaluate objectively.",
+            "related_url": null
+          },
+          {
+            "title": "Perfect is the enemy of started",
+            "type": "guide",
+            "content": "No opportunity is perfect. Choose the one that's good enough to start.",
+            "related_url": null
+          },
+          {
+            "title": "Trust your gut",
+            "type": "nudge",
+            "content": "The data matters. But so does your instinct. Don't ignore it.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 4: The Decision. You've evaluated your opportunities, picked the best one, and committed to a direction. You're no longer searching—you're building. Mission 3 awaits.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
+        "tasks": [
+          {
+            "id": "mission2_quest4_task1",
+            "title": "Score Your Opportunities",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 30,
+            "briefing_text": "Now it's time to evaluate your opportunities. For each one, score it against 5 criteria. This isn't about finding the 'perfect' opportunity—it's about finding the one that's best for you, right now.\n\nScoring Criteria (1-5):\n• Passion: How excited are you about this problem?\n• Urgency: How badly do people need this solved?\n• Workaround Spend: How much are people already spending to solve this?\n• Unfair Advantage: Do you have a unique edge?\n• MSP Feasibility: Can you build a Minimum Sellable Product quickly?",
+            "mission_id": "mission-2",
             "quest_id": "mission2_quest4",
             "execution_environment": null,
             "checkback_delay_days": null,
-            "recurring": null,
+            "recurring": false,
             "interval": null,
-            "ai_config": {
-              "recommendations": [
-                {
-                  "title": "What to Do After You Pick Your Business Idea",
-                  "type": "blog",
-                  "path_or_url": "content/blog/after-picking-idea.md"
-                },
-                {
-                  "title": "Your First 30 Days as a Founder",
-                  "type": "blog",
-                  "path_or_url": "content/blog/first-30-days.md"
-                }
-              ]
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-score-business-opportunities",
+                "title": "How to Score Business Opportunities"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/the-ideal-opportunity-profile",
+                "title": "The Ideal Opportunity Profile"
+              }
+            ],
+            "component_key": "OpportunityScoringForm",
+            "reflection_prompt": "Look at your highest-scoring opportunity. Why did it score so high? What makes it the most promising?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 30,
+              "badge_key": "SCORER"
             },
-            "observation_config": null,
-            "metadata_config": {}
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission2_quest4_task2",
+            "title": "Pick Your Opportunity",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "You've scored all your opportunities. Now it's time to pick one. Don't overthink—choose the one that feels right based on the scores and your gut.",
+            "mission_id": "mission-2",
+            "quest_id": "mission2_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-commit-to-an-idea",
+                "title": "How to Commit to an Idea"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/analysis-paralysis-kills-ideas",
+                "title": "Analysis Paralysis Kills Ideas"
+              }
+            ],
+            "component_key": "OpportunityPickerForm",
+            "reflection_prompt": "Why did you pick this opportunity? What made it stand out from the others?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 15,
+              "badge_key": "OPPORTUNITY_PICKER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission2_quest4_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission2_quest4_task3",
+            "title": "Make It Official",
+            "sequence": 3,
+            "execution_type": "decision_gate",
+            "estimated_minutes": 10,
+            "briefing_text": "This is it. You're either committing to this opportunity or going back to discover more. There's no wrong choice—but there is a choice.",
+            "mission_id": "mission-2",
+            "quest_id": "mission2_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/commitment-is-the-first-step",
+                "title": "Commitment Is the First Step"
+              }
+            ],
+            "component_key": "DecisionGateForm",
+            "reflection_prompt": "What's your biggest hesitation about this opportunity? Address it now.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 15,
+              "badge_key": "COMMITTED"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission2_quest4_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
           }
         ]
       }
-    }
+    ],
+    "created_at": "2026-08-05T08:27:01.967Z",
+    "updated_at": "2026-08-05T08:27:01.967Z"
+  },
+  "mission3": {
+    "id": "mission-3",
+    "title": "Getting Real",
+    "content": null,
+    "content_path": "content/missions/mission3/mission.md",
+    "sequence": 3,
+    "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+    "big_question": "Is this business worth building?",
+    "estimated_time_in_days": 21,
+    "context": [
+      "user_profile",
+      "user_opportunities",
+      "user_projects"
+    ],
+    "success_message": "You've completed Mission 3: Getting Real. You've validated your problem with real customers, defined your Minimum Sellable Product, understood your environment, and made a conscious decision about your business. You're no longer dreaming—you're building with intention. Mission 4 awaits.",
+    "quests": [
+      {
+        "id": "mission3_quest1",
+        "mission_id": "mission-3",
+        "title": "The Deep Dive",
+        "content_path": "content/missions/mission3/quests/the-deep-dive.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 1,
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 180,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_opportunities",
+          "user_projects"
+        ],
+        "on_success": {
+          "grant_points": 65,
+          "badge_key": "PROBLEM_MASTER"
+        },
+        "notes": [
+          {
+            "title": "From opportunity to problem",
+            "type": "guide",
+            "content": "In Mission 2, you found an opportunity. Now we're turning it into a problem to solve. This shift in perspective is critical.",
+            "related_url": null
+          },
+          {
+            "title": "Details matter",
+            "type": "guide",
+            "content": "The more specific you are about the problem, the easier it will be to build a solution that actually works.",
+            "related_url": null
+          },
+          {
+            "title": "Be specific",
+            "type": "nudge",
+            "content": "If your problem statement could apply to anyone, it applies to no one. Get specific.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 1: The Deep Dive. You now understand your problem intimately—when it happens, who it affects, and what people do about it.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
+        "tasks": [
+          {
+            "id": "mission3_quest1_task1",
+            "title": "Define the Problem",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 25,
+            "briefing_text": "You found an opportunity. Now let's turn it into a clear problem statement. The better you understand the problem, the better your solution will be.",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-write-a-problem-statement",
+                "title": "How to Write a Problem Statement"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/the-problem-is-the-product",
+                "title": "The Problem Is the Product"
+              }
+            ],
+            "component_key": "ProblemDefinitionForm",
+            "reflection_prompt": "Looking at your problem statement, would someone who has this problem recognize themselves in it? If not, go deeper.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "PROBLEM_DEFINER"
+            },
+            "challenges": [
+              {
+                "title": "The 5-Why Challenge",
+                "description": "Ask 'why' 5 times to get to the root cause of your problem. Don't stop at surface-level answers.",
+                "link": "/resources/challenges/the-5-why-challenge"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission3_quest1_task2",
+            "title": "Talk to Customers",
+            "sequence": 2,
+            "execution_type": "log_counter",
+            "estimated_minutes": 45,
+            "briefing_text": "This is the most important task in Mission 3. Talk to 5 real people who have this problem. Don't pitch your solution—just listen. Understand their pain.",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": 3,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-conduct-customer-interviews",
+                "title": "How to Conduct Customer Interviews"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/customer-interviews-are-gold",
+                "title": "Customer Interviews Are Gold"
+              }
+            ],
+            "component_key": "CustomerInterviewLogger",
+            "reflection_prompt": "What surprised you most in these interviews? What did you learn that you didn't expect?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 30,
+              "badge_key": "CUSTOMER_TALKER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest1_task1"
+            ],
+            "target_count": 5,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission3_quest1_task3",
+            "title": "Create Your Customer",
+            "sequence": 3,
+            "execution_type": "standard-form",
+            "estimated_minutes": 25,
+            "briefing_text": "Create one customer persona. Focus on one person who has this problem. The more specific, the better.",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-create-customer-personas",
+                "title": "How to Create Customer Personas"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/one-persona-is-enough",
+                "title": "One Persona Is Enough"
+              }
+            ],
+            "component_key": "CustomerPersonaForm",
+            "reflection_prompt": "Would this person recognize themselves in this persona? If not, go back and add more detail.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "PERSONA_CREATOR"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest1_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          }
+        ]
+      },
+      {
+        "id": "mission3_quest2",
+        "mission_id": "mission-3",
+        "title": "Build to Sell",
+        "content_path": "content/missions/mission3/quests/build-to-sell.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 2,
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 60,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_projects"
+        ],
+        "on_success": {
+          "grant_points": 60,
+          "badge_key": "MSP_DEFINER"
+        },
+        "notes": [
+          {
+            "title": "Build to sell, not to validate",
+            "type": "guide",
+            "content": "Your goal isn't to build something that might work. It's to sell something that does work.",
+            "related_url": null
+          },
+          {
+            "title": "Start small",
+            "type": "guide",
+            "content": "The smallest sellable thing is the fastest path to learning. You can always expand later.",
+            "related_url": null
+          },
+          {
+            "title": "Resist scope creep",
+            "type": "nudge",
+            "content": "Your first version should feel almost embarrassingly small. That's how you know it's right.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 2: Build to Sell. You've defined your Minimum Sellable Product. It's small, focused, and ready to sell.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
+        "tasks": [
+          {
+            "id": "mission3_quest2_task1",
+            "title": "How Will You Solve It?",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 25,
+            "briefing_text": "There are many ways to solve a problem. Let's explore four approaches and pick the one that fits your customer best.",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest2",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/choosing-your-solution-type",
+                "title": "Choosing Your Solution Type"
+              }
+            ],
+            "component_key": "SolutionTypeForm",
+            "reflection_prompt": "Why did you choose this approach? What makes it the best fit for your customer?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "SOLUTION_CHOOSER"
+            },
+            "challenges": [
+              {
+                "title": "The 7-Day Build",
+                "description": "Can you build your MSP in 7 days? If not, it's too big. Cut it down.",
+                "link": "/resources/challenges/the-7-day-build"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest1_task3"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission3_quest2_task2",
+            "title": "Define Your MSP",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "Describe your Minimum Sellable Product in one sentence. The smallest thing you can sell right now.",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest2",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/defining-your-minimum-sellable-product",
+                "title": "Defining Your Minimum Sellable Product"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/what-is-an-msp",
+                "title": "What Is a Minimum Sellable Product?"
+              }
+            ],
+            "component_key": "MSPDefinitionForm",
+            "reflection_prompt": "Is this something you could sell today? If not, it's too big. Cut it down.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 15,
+              "badge_key": "MSP_DESCRIBER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest2_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission3_quest2_task3",
+            "title": "Build Your MSP",
+            "sequence": 3,
+            "execution_type": "standard-form",
+            "estimated_minutes": 25,
+            "briefing_text": "Now let's define everything about your MSP—price, delivery, resources, timeline, and differentiation.",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest2",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/designing-your-minimum-sellable-product",
+                "title": "Designing Your Minimum Sellable Product"
+              }
+            ],
+            "component_key": "MSPBuildForm",
+            "reflection_prompt": "Would you buy this? At this price? For this value? Be honest.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "MSP_BUILDER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest2_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          }
+        ]
+      },
+      {
+        "id": "mission3_quest3",
+        "mission_id": "mission-3",
+        "title": "Know the Battlefield",
+        "content_path": "content/missions/mission3/quests/know-the-battlefield.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 3,
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 60,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_projects"
+        ],
+        "on_success": {
+          "grant_points": 50,
+          "badge_key": "ENVIRONMENT_READY"
+        },
+        "notes": [
+          {
+            "title": "Know your battlefield",
+            "type": "guide",
+            "content": "Understanding the environment is as important as understanding the problem. What's working? What's hard? Where are your customers?",
+            "related_url": null
+          },
+          {
+            "title": "Your real competition",
+            "type": "guide",
+            "content": "Your competition isn't other companies. It's the workaround—people doing it themselves.",
+            "related_url": null
+          },
+          {
+            "title": "Be honest about risks",
+            "type": "nudge",
+            "content": "The biggest risks are the ones you don't see coming. Name them.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 3: Know the Battlefield. You understand the landscape, the trends, and the compliance requirements. You're ready to make an informed decision.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
+        "tasks": [
+          {
+            "id": "mission3_quest3_task1",
+            "title": "Map the Landscape",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 30,
+            "briefing_text": "Let's map the environment. What trends make this problem relevant? Who else solves it? What's working? What's hard? Where are your customers?",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/mapping-the-competitive-landscape",
+                "title": "Mapping the Competitive Landscape"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/the-competition-is-the-workaround",
+                "title": "The Competition Is the Workaround"
+              }
+            ],
+            "component_key": "LandscapeForm",
+            "reflection_prompt": "Looking at this landscape, what's your biggest opportunity? What's your biggest threat?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "LANDSCAPE_MAPPER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest2_task3"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission3_quest3_task2",
+            "title": "Check Your Compliance",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Every business has compliance requirements. Based on your solution type and industry, we'll generate a checklist of what you need to check before you start.",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/business-compliance-basics",
+                "title": "Business Compliance Basics"
+              }
+            ],
+            "component_key": "ComplianceForm",
+            "reflection_prompt": "What's the biggest compliance requirement you need to address before launching?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "COMPLIANCE_CHECKER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest3_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          }
+        ]
+      },
+      {
+        "id": "mission3_quest4",
+        "mission_id": "mission-3",
+        "title": "Go or No-Go",
+        "content_path": "content/missions/mission3/quests/go-or-no-go.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 4,
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 30,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_projects"
+        ],
+        "on_success": {
+          "grant_points": 60,
+          "badge_key": "DECISION_MAKER"
+        },
+        "notes": [
+          {
+            "title": "This is the hardest part",
+            "type": "guide",
+            "content": "Making a conscious decision—yes or no—is harder than building. But it's the most important.",
+            "related_url": null
+          },
+          {
+            "title": "Be honest about the risks",
+            "type": "guide",
+            "content": "If you can't name your biggest risk, you haven't thought it through.",
+            "related_url": null
+          },
+          {
+            "title": "Trust your gut",
+            "type": "nudge",
+            "content": "The data matters. But so does your instinct. Don't ignore it.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Mission 3: Getting Real. You've validated your problem, defined your MSP, understood the environment, and made a conscious decision. You're no longer dreaming—you're building with intention. Mission 4 awaits.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
+        "tasks": [
+          {
+            "id": "mission3_quest4_task1",
+            "title": "Check Your Viability",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Let's do a final viability check. Answer these questions honestly. This isn't about being optimistic—it's about being real.",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/viability-assessment",
+                "title": "Viability Assessment"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/how-to-know-if-your-idea-is-good",
+                "title": "How to Know If Your Idea Is Good"
+              }
+            ],
+            "component_key": "ViabilityCheckForm",
+            "reflection_prompt": "If this didn't work out, what would you regret more—starting or not starting?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "VIABILITY_CHECKER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest3_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission3_quest4_task2",
+            "title": "Face the Worst Case",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "Let's face the worst-case scenario. What if this doesn't work? What if you build it and no one buys? The goal isn't to scare yourself—it's to prepare yourself.",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/facing-failure-builds-resilience",
+                "title": "Facing Failure Builds Resilience"
+              }
+            ],
+            "component_key": "WorstCaseForm",
+            "reflection_prompt": "What's the worst that could happen? And what would you do next?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "REALIST"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest4_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission3_quest4_task3",
+            "title": "Make the Call",
+            "sequence": 3,
+            "execution_type": "decision_gate",
+            "estimated_minutes": 10,
+            "briefing_text": "This is it. Based on everything you've learned—the problem, the customer interviews, the MSP, the landscape, the viability check—make a conscious decision.",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/making-the-go-no-go-decision",
+                "title": "Making the Go/No-Go Decision"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/the-decision-that-matters",
+                "title": "The Decision That Matters"
+              }
+            ],
+            "component_key": "DecisionGateForm",
+            "reflection_prompt": "What's the one thing that pushed you to this decision?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 15,
+              "badge_key": "DECISION_COMMITTED"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest4_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          }
+        ]
+      }
+    ],
+    "created_at": "2026-08-05T08:27:01.967Z",
+    "updated_at": "2026-08-05T08:27:01.967Z"
+  },
+  "mission4": {
+    "id": "mission-4",
+    "title": "The Business Engine",
+    "content": null,
+    "content_path": "content/missions/mission4/mission.md",
+    "sequence": 4,
+    "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+    "big_question": "How will you make money?",
+    "estimated_time_in_days": 21,
+    "context": [
+      "user_profile",
+      "user_projects"
+    ],
+    "success_message": "You've completed Mission 4: The Business Engine. You've defined your offer, set your price, built your acquisition plan, run the numbers, and made a conscious decision. You know exactly how your business makes money—or if it can at all. Mission 5 awaits.",
+    "quests": [
+      {
+        "id": "mission4_quest1",
+        "mission_id": "mission-4",
+        "title": "Shape Your Offer",
+        "content_path": "content/missions/mission4/quests/shape-your-offer.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 1,
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 30,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_projects"
+        ],
+        "on_success": {
+          "grant_points": 60,
+          "badge_key": "OFFER_DEFINER"
+        },
+        "notes": [
+          {
+            "title": "Your offer is your promise",
+            "type": "guide",
+            "content": "Your offer isn't just a list of features. It's a promise to solve a problem. Get the promise right, and the features follow.",
+            "related_url": null
+          },
+          {
+            "title": "Start with the customer",
+            "type": "nudge",
+            "content": "What does your customer actually want? Not what you want to build. What they want to buy.",
+            "related_url": null
+          },
+          {
+            "title": "Resist the temptation to add more",
+            "type": "warning",
+            "content": "A clear offer beats a complicated one every time. The best offers are simple.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 1: Shape Your Offer. You have a clear value proposition, a focused feature set, and a mapped customer experience. You know what you're selling.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
+        "tasks": [
+          {
+            "id": "mission4_quest1_task1",
+            "title": "Your Promise",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "What's the core promise you're making to your customer? What's the one thing they get that they can't get elsewhere? Your value proposition is the heartbeat of your offer.",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-write-a-value-proposition",
+                "title": "How to Write a Value Proposition"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/the-value-proposition-is-not-the-features",
+                "title": "The Value Proposition Is Not the Features"
+              }
+            ],
+            "component_key": "ValuePropositionForm",
+            "reflection_prompt": "If your customer could only remember one thing about your offer, what should it be? That's your value proposition.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "VALUE_PROMISE"
+            },
+            "challenges": [
+              {
+                "title": "The 2-Minute Test",
+                "description": "Can you explain your offer in 2 minutes to a stranger? Practice until they say 'I get it.'",
+                "link": "/resources/challenges/the-2-minute-test"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest4_task3"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission4_quest1_task2",
+            "title": "What's In, What's Out",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Brain dump all the features your solution could have. Don't filter, don't prioritize. Just list everything you can imagine. We'll filter in the next task.",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/feature-brainstorming",
+                "title": "Feature Brainstorming"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/mvp-means-elimination",
+                "title": "MVP Means Elimination"
+              }
+            ],
+            "component_key": "FeatureBrainstormForm",
+            "reflection_prompt": "Look at your list. What features are you most excited about? Which ones are you dreading? That's a signal.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 15,
+              "badge_key": "FEATURE_BRAINSTORMER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest1_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission4_quest1_task3",
+            "title": "Pick Your Focus",
+            "sequence": 3,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Now let's be ruthless. From your brainstorm, pick 3 must-have features for your first version. Then list what you explicitly won't include. This is where the magic happens.",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/prioritizing-features",
+                "title": "Prioritizing Features"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/you-are-not-your-features",
+                "title": "You Are Not Your Features"
+              }
+            ],
+            "component_key": "FeaturePrioritizationForm",
+            "reflection_prompt": "You're saying 'no' to features. How does that feel? The best founders get comfortable with saying 'no' to good ideas so they can say 'yes' to great ones.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "FEATURE_PRIORITIZER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest1_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission4_quest1_task4",
+            "title": "The Journey",
+            "sequence": 4,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "Map the customer experience from payment to delivery. What happens after they give you money? Walk through each step.",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/mapping-the-customer-journey",
+                "title": "Mapping the Customer Journey"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/customer-experience-is-the-product",
+                "title": "Customer Experience Is the Product"
+              }
+            ],
+            "component_key": "CustomerExperienceForm",
+            "reflection_prompt": "Put yourself in your customer's shoes. What are they feeling at each step? Where does the anxiety or confusion happen?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "EXPERIENCE_MAPPER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest1_task3"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          }
+        ]
+      },
+      {
+        "id": "mission4_quest2",
+        "mission_id": "mission-4",
+        "title": "Price It Right",
+        "content_path": "content/missions/mission4/quests/price-it-right.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 2,
+        "estimated_in_app_minutes": 30,
+        "estimated_off_app_minutes": 20,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_projects"
+        ],
+        "on_success": {
+          "grant_points": 50,
+          "badge_key": "PRICE_SETTER"
+        },
+        "notes": [
+          {
+            "title": "Price is a statement",
+            "type": "guide",
+            "content": "Your price says something about your product. Too cheap and it feels low-quality. Too expensive and it feels out of reach.",
+            "related_url": null
+          },
+          {
+            "title": "Value first, cost second",
+            "type": "guide",
+            "content": "The right price is what your customer would willingly pay for the value they receive. Not what you need to survive.",
+            "related_url": null
+          },
+          {
+            "title": "Don't underprice",
+            "type": "nudge",
+            "content": "First-time founders almost always underprice. You can always go down. Going up is much harder.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 2: Price It Right. You have a confident price based on value, not fear.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.967Z",
+        "tasks": [
+          {
+            "id": "mission4_quest2_task1",
+            "title": "Name Your Number",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Let's set your price. Start with what the problem costs your customer, then what they pay for alternatives, then name your number.",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest2",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-price-your-offer",
+                "title": "How to Price Your Offer"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/price-is-value-perceived",
+                "title": "Price Is Value Perceived"
+              }
+            ],
+            "component_key": "PriceSettingForm",
+            "reflection_prompt": "If you were your customer, would you pay this price? Why or why not?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "PRICE_NAMER"
+            },
+            "challenges": [
+              {
+                "title": "The $1,000 Test",
+                "description": "If your customer had $1,000 to spend on solving this problem, what would they spend it on? Are you in the top 3 choices?",
+                "link": "/resources/challenges/the-1000-test"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest1_task4"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          },
+          {
+            "id": "mission4_quest2_task2",
+            "title": "Test Your Price",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "Now let's stress-test your price. Would customers pay double? Is it fair? Does it feel trustworthy?",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest2",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/price-assessment",
+                "title": "Price Assessment"
+              }
+            ],
+            "component_key": "PriceAssessmentForm",
+            "reflection_prompt": "If your price feels 'too cheap,' you might be sending the wrong signal. What would make it feel premium?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "PRICE_ASSESSOR"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest2_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.967Z",
+            "updated_at": "2026-08-05T08:27:01.967Z"
+          }
+        ]
+      },
+      {
+        "id": "mission4_quest3",
+        "mission_id": "mission-4",
+        "title": "Find Your Customers",
+        "content_path": "content/missions/mission4/quests/find-your-customers.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 3,
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 60,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_projects"
+        ],
+        "on_success": {
+          "grant_points": 60,
+          "badge_key": "ACQUISITION_PLANNER"
+        },
+        "notes": [
+          {
+            "title": "Focus is everything",
+            "type": "guide",
+            "content": "First-time founders die by trying five channels at once. Pick ONE channel and master it.",
+            "related_url": null
+          },
+          {
+            "title": "Your first 10 customers",
+            "type": "guide",
+            "content": "If you can't name where you'll find your first 10 customers, you don't have a channel.",
+            "related_url": null
+          },
+          {
+            "title": "Start small",
+            "type": "nudge",
+            "content": "You don't need a website. You need one customer. Start there.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 3: Find Your Customers. You have a focused channel, a clear message, and a realistic acquisition plan.",
+        "created_at": "2026-08-05T08:27:01.967Z",
+        "updated_at": "2026-08-05T08:27:01.968Z",
+        "tasks": [
+          {
+            "id": "mission4_quest3_task1",
+            "title": "Pick Your Channel",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Where do your first 10 customers come from? Be specific. If you can't name the place, you don't have a channel.",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/choosing-your-first-channel",
+                "title": "Choosing Your First Channel"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/one-channel-first",
+                "title": "One Channel First"
+              }
+            ],
+            "component_key": "ChannelSelectionForm",
+            "reflection_prompt": "Why did you pick this channel over all others? What makes it your best first bet?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "CHANNEL_CHOOSER"
+            },
+            "challenges": [
+              {
+                "title": "The 1-Customer Challenge",
+                "description": "Try to get just one customer this week. Not 10. Not 100. Just one.",
+                "link": "/resources/challenges/the-1-customer-challenge"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest2_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          },
+          {
+            "id": "mission4_quest3_task2",
+            "title": "Craft Your Message",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "What will you say? What's your exact offer or message? Why should they stop scrolling and buy today?",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/crafting-your-first-message",
+                "title": "Crafting Your First Message"
+              }
+            ],
+            "component_key": "MessagingForm",
+            "reflection_prompt": "Would you respond to this message? If not, rewrite it until you would.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 15,
+              "badge_key": "MESSAGE_CRAFTER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest3_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          },
+          {
+            "id": "mission4_quest3_task3",
+            "title": "Assess Your Plan",
+            "sequence": 3,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "Now let's be realistic. How many people do you need to reach for one sale? How many hours will you spend? What do you need to start?",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/acquisition-math",
+                "title": "Acquisition Math"
+              }
+            ],
+            "component_key": "AcquisitionAssessmentForm",
+            "reflection_prompt": "If this acquisition plan fails, what's your backup plan? Always have a Plan B.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "ACQUISITION_ASSESSOR"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest3_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          }
+        ]
+      },
+      {
+        "id": "mission4_quest4",
+        "mission_id": "mission-4",
+        "title": "The Financials",
+        "content_path": "content/missions/mission4/quests/the-financials.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 4,
+        "estimated_in_app_minutes": 60,
+        "estimated_off_app_minutes": 90,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_projects"
+        ],
+        "on_success": {
+          "grant_points": 65,
+          "badge_key": "FINANCIAL_MASTER"
+        },
+        "notes": [
+          {
+            "title": "Use the Excel template",
+            "type": "guide",
+            "content": "We've provided an Excel template to help you work through the numbers. Use it alongside the app to do the detailed work.",
+            "related_url": null
+          },
+          {
+            "title": "The math doesn't lie",
+            "type": "guide",
+            "content": "If the numbers don't work, the business doesn't work. Don't ignore the math.",
+            "related_url": null
+          },
+          {
+            "title": "Be honest with yourself",
+            "type": "nudge",
+            "content": "First-time founders often underestimate costs and overestimate sales. Be brutal about the numbers.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 4: The Financials. You understand your costs, your unit economics, and your profitability. The numbers tell a story—are you listening?",
+        "created_at": "2026-08-05T08:27:01.968Z",
+        "updated_at": "2026-08-05T08:27:01.968Z",
+        "tasks": [
+          {
+            "id": "mission4_quest4_task1",
+            "title": "What Does It Cost?",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 25,
+            "briefing_text": "Let's get real about costs. Don't guess—estimate as accurately as you can. We'll use these numbers to see if your business can make money.",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/understanding-business-costs",
+                "title": "Understanding Business Costs"
+              }
+            ],
+            "component_key": "CostStructureForm",
+            "reflection_prompt": "Look at your costs. What surprised you? What could you reduce or eliminate?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "COST_ANALYZER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest3_task3"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          },
+          {
+            "id": "mission4_quest4_task2",
+            "title": "Understand Your Costs",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Now let's look at your costs differently. Fixed vs variable. What happens when you sell more?",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/fixed-vs-variable-costs",
+                "title": "Fixed vs Variable Costs"
+              }
+            ],
+            "component_key": "CostAnalysisForm",
+            "reflection_prompt": "If you had to cut your costs in half, how would you do it? Would the customer experience suffer?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "COST_UNDERSTANDER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest4_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          },
+          {
+            "id": "mission4_quest4_task3",
+            "title": "Does the Math Work?",
+            "sequence": 3,
+            "execution_type": "standard-form",
+            "estimated_minutes": 25,
+            "briefing_text": "The moment of truth. Does your business make money? Let's run the numbers.",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/unit-economics",
+                "title": "Unit Economics"
+              }
+            ],
+            "component_key": "ProfitabilityCheckForm",
+            "reflection_prompt": "If you're not making a profit, what would need to change? More sales? Higher price? Lower costs? Be specific.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "PROFITABILITY_CHECKER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest4_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          }
+        ]
+      },
+      {
+        "id": "mission4_quest5",
+        "mission_id": "mission-4",
+        "title": "Go or No-Go",
+        "content_path": "content/missions/mission4/quests/go-or-no-go.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 5,
+        "estimated_in_app_minutes": 20,
+        "estimated_off_app_minutes": 10,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_projects"
+        ],
+        "on_success": {
+          "grant_points": 40,
+          "badge_key": "FINAL_DECISION"
+        },
+        "notes": [
+          {
+            "title": "The numbers don't lie",
+            "type": "guide",
+            "content": "This is the moment of truth. If the numbers don't work, the business doesn't work. Be honest with yourself.",
+            "related_url": null
+          },
+          {
+            "title": "Iteration is okay",
+            "type": "guide",
+            "content": "If the numbers don't quite work, you can iterate. Change the price, change the MSP, change the channel. Just be specific about what you'll change.",
+            "related_url": null
+          },
+          {
+            "title": "No-Go is a win too",
+            "type": "nudge",
+            "content": "Saying 'no' to a bad business is a win. You've saved yourself time, money, and stress. Take what you've learned to the next opportunity.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Mission 4: The Business Engine. You've made a conscious decision based on real numbers. This is what building a real business looks like.",
+        "created_at": "2026-08-05T08:27:01.968Z",
+        "updated_at": "2026-08-05T08:27:01.968Z",
+        "tasks": [
+          {
+            "id": "mission4_quest5_task1",
+            "title": "Make the Call",
+            "sequence": 1,
+            "execution_type": "decision_gate",
+            "estimated_minutes": 20,
+            "briefing_text": "You've done the work. You have the numbers. Now make a decision. No overthinking. Just pick.",
+            "mission_id": "mission-4",
+            "quest_id": "mission4_quest5",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/making-the-call",
+                "title": "Making the Call"
+              }
+            ],
+            "component_key": "FinalDecisionForm",
+            "reflection_prompt": "What did you learn from this financial exercise? If you're saying 'no' to this business, what did you learn that you'll take to the next one?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "DECISION_MAKER"
+            },
+            "challenges": null,
+            "ai_config": {
+              "role": "Financial Decision Advisor",
+              "persona_name": "The Numbers Coach",
+              "persona_prompt": "You are a pragmatic business coach who helps founders make decisions based on numbers. You're direct, honest, and focused on what the data says. You don't sugarcoat—you tell founders what they need to hear, not what they want to hear.",
+              "required_context": [
+                "user_profile",
+                "financial_blueprint"
+              ]
+            },
+            "dependencies": [
+              "mission4_quest4_task3"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          }
+        ]
+      }
+    ],
+    "created_at": "2026-08-05T08:27:01.968Z",
+    "updated_at": "2026-08-05T08:27:01.968Z"
+  },
+  "mission5": {
+    "id": "mission-5",
+    "title": "Build & Launch",
+    "content": null,
+    "content_path": "content/missions/mission5/mission.md",
+    "sequence": 5,
+    "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+    "big_question": "Can you actually build this?",
+    "estimated_time_in_days": 30,
+    "context": [
+      "user_profile",
+      "user_projects",
+      "user_builds",
+      "user_contacts"
+    ],
+    "success_message": "You've completed Mission 5: Build & Launch. You planned your build, executed your plan, gathered testers, validated your product, and launched. You're no longer a person with an idea—you're a founder with a live business. Welcome to the other side. 🎉",
+    "quests": [
+      {
+        "id": "mission5_quest1",
+        "mission_id": "mission-5",
+        "title": "Plan the Build",
+        "content_path": "content/missions/mission5/quests/plan-the-build.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 1,
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 60,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_projects"
+        ],
+        "on_success": {
+          "grant_points": 60,
+          "badge_key": "BUILD_PLANNER"
+        },
+        "notes": [
+          {
+            "title": "Plan, but don't overplan",
+            "type": "guide",
+            "content": "A good plan gives you direction. A perfect plan keeps you from starting. Get it good enough and start building.",
+            "related_url": null
+          },
+          {
+            "title": "Start with the end in mind",
+            "type": "nudge",
+            "content": "What does 'done' look like? Work backwards from launch.",
+            "related_url": null
+          },
+          {
+            "title": "Resources are real",
+            "type": "guide",
+            "content": "Your time, money, and tools are limited. Plan accordingly.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 1: Plan the Build. You have a timeline, a resource plan, and a build checklist. Now it's time to execute.",
+        "created_at": "2026-08-05T08:27:01.968Z",
+        "updated_at": "2026-08-05T08:27:01.968Z",
+        "tasks": [
+          {
+            "id": "mission5_quest1_task1",
+            "title": "Plan Your Timeline",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Let's set your build timeline. We'll generate suggested dates based on your project type, and you can adjust them. Remember: this is your roadmap, not a prison.",
+            "mission_id": "mission-5",
+            "quest_id": "mission5_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/creating-a-build-timeline",
+                "title": "Creating a Build Timeline"
+              }
+            ],
+            "component_key": "BuildTimelineForm",
+            "reflection_prompt": "What's the most ambitious but realistic date you could launch? What would make that possible?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "TIMELINE_SETTER"
+            },
+            "challenges": [
+              {
+                "title": "The 30-Day Sprint",
+                "description": "Can you build and launch in 30 days? If not, what's the smallest version you can build in that time?",
+                "link": "/resources/challenges/the-30-day-sprint"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [
+              "mission4_quest5_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          },
+          {
+            "id": "mission5_quest1_task2",
+            "title": "What Do You Need?",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Let's get real about what you need to build. What do you already have? What do you need to buy? What's your budget?",
+            "mission_id": "mission-5",
+            "quest_id": "mission5_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/build-resource-planning",
+                "title": "Resource Planning for Your Build"
+              }
+            ],
+            "component_key": "BuildResourcesForm",
+            "reflection_prompt": "What's the one resource you're missing that would make this 10x easier? Can you get it?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "RESOURCE_PLANNER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission5_quest1_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          },
+          {
+            "id": "mission5_quest1_task3",
+            "title": "Build Your Checklist",
+            "sequence": 3,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "Now let's break down the build into actionable tasks. We'll auto-generate tasks from your features and milestones, and you can add your own.",
+            "mission_id": "mission-5",
+            "quest_id": "mission5_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/breaking-down-the-build",
+                "title": "Breaking Down the Build"
+              }
+            ],
+            "component_key": "BuildTasksForm",
+            "reflection_prompt": "What's the first thing you'll build? Start there.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "TASK_CREATOR"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission5_quest1_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          }
+        ]
+      },
+      {
+        "id": "mission5_quest2",
+        "mission_id": "mission-5",
+        "title": "Build Dashboard",
+        "content_path": "content/missions/mission5/quests/build-dashboard.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 2,
+        "estimated_in_app_minutes": 5,
+        "estimated_off_app_minutes": 0,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_builds",
+          "build_tasks"
+        ],
+        "on_success": {
+          "grant_points": 70,
+          "badge_key": "BUILDER"
+        },
+        "notes": [
+          {
+            "title": "Build every day",
+            "type": "guide",
+            "content": "Even 15 minutes a day keeps the momentum going. Show up every day.",
+            "related_url": null
+          },
+          {
+            "title": "Stay focused",
+            "type": "guide",
+            "content": "Don't add features. Don't change direction. Build the MSP and nothing else.",
+            "related_url": null
+          },
+          {
+            "title": "Share your progress",
+            "type": "nudge",
+            "content": "Post build logs on social media. The more people watching, the more accountable you'll be.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 2: The Build. You've built your product, tracked your costs, and have something testers can test. The foundation is solid.",
+        "created_at": "2026-08-05T08:27:01.968Z",
+        "updated_at": "2026-08-05T08:27:01.968Z",
+        "tasks": [
+          {
+            "id": "mission5_quest2_task1",
+            "title": "Build Dashboard",
+            "sequence": 1,
+            "execution_type": "dashboard-view",
+            "estimated_minutes": 0,
+            "briefing_text": "Welcome to your Build Dashboard. This is where you'll manage everything—tasks, progress, costs, and milestones. Use this until you have something testers can test. Come back to the program when your POC is ready.\n\nDashboard Features:\n• Overview: Project status, progress, days until launch\n• Task Board: Simple Kanban (To Do, In Progress, Done, Blocked)\n• Progress: Timeline with milestones, days ahead/behind\n• Costs: Budget vs actual, breakdown by category\n• POC Check: Feature completion, cost check, viability\n• Build Log: Share progress, export summary, take notes",
+            "mission_id": "mission-5",
+            "quest_id": "mission5_quest2",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [],
+            "component_key": "BuildDashboard",
+            "reflection_prompt": "What's the one thing you're most excited to build? What's the one thing you're most nervous about?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 15,
+              "badge_key": "DASHBOARD_VIEWER"
+            },
+            "challenges": [
+              {
+                "title": "The Daily Build Challenge",
+                "description": "Build something every day for 7 days. Even if it's just 15 minutes. Report your progress.",
+                "link": "/resources/challenges/the-daily-build"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [
+              "mission5_quest1_task3"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          }
+        ]
+      },
+      {
+        "id": "mission5_quest3",
+        "mission_id": "mission-5",
+        "title": "Get Testers",
+        "content_path": "content/missions/mission5/quests/get-testers.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 3,
+        "estimated_in_app_minutes": 45,
+        "estimated_off_app_minutes": 60,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_contacts",
+          "user_builds"
+        ],
+        "on_success": {
+          "grant_points": 60,
+          "badge_key": "TESTER_HUNTER"
+        },
+        "notes": [
+          {
+            "title": "Testers are gold",
+            "type": "guide",
+            "content": "Real feedback from real users is the most valuable thing you can get. Don't waste it.",
+            "related_url": null
+          },
+          {
+            "title": "Listen to understand, not to defend",
+            "type": "guide",
+            "content": "When testers give feedback, don't defend your product. Just listen.",
+            "related_url": null
+          },
+          {
+            "title": "Start with your squad",
+            "type": "nudge",
+            "content": "Your cheer squad from Mission 1 is the perfect place to start. They already want you to succeed.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 3: Get Testers. You've recruited, onboarded, and collected feedback from testers. You have real data to work with.",
+        "created_at": "2026-08-05T08:27:01.968Z",
+        "updated_at": "2026-08-05T08:27:01.968Z",
+        "tasks": [
+          {
+            "id": "mission5_quest3_task1",
+            "title": "Find Your Testers",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "Who will test your product? You need real people who have the problem you're solving. Start with your squad, then expand.",
+            "mission_id": "mission-5",
+            "quest_id": "mission5_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/recruiting-testers",
+                "title": "Recruiting Testers"
+              }
+            ],
+            "component_key": "TesterRecruitmentForm",
+            "reflection_prompt": "What's the best place to find people who have this problem? That's where your testers are.",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 15,
+              "badge_key": "TESTER_RECRUITER"
+            },
+            "challenges": [
+              {
+                "title": "The 5-Tester Challenge",
+                "description": "Get 5 people to test your product. Not friends and family—real potential customers.",
+                "link": "/resources/challenges/the-5-tester-challenge"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [
+              "mission5_quest2_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          },
+          {
+            "id": "mission5_quest3_task2",
+            "title": "Onboard Your Testers",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "How will you onboard testers? What instructions will you give them? How will they know what to do?",
+            "mission_id": "mission-5",
+            "quest_id": "mission5_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/onboarding-testers",
+                "title": "Onboarding Testers"
+              }
+            ],
+            "component_key": "TesterOnboardingForm",
+            "reflection_prompt": "Put yourself in your tester's shoes. What would you need to know to give helpful feedback?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "TESTER_ONBOARDER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission5_quest3_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          },
+          {
+            "id": "mission5_quest3_task3",
+            "title": "Collect Feedback",
+            "sequence": 3,
+            "execution_type": "standard-form",
+            "estimated_minutes": 20,
+            "briefing_text": "What did your testers say? What did you learn? What surprised you? What are you going to change?",
+            "mission_id": "mission-5",
+            "quest_id": "mission5_quest3",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/feedback-is-a-gift",
+                "title": "Feedback Is a Gift"
+              }
+            ],
+            "component_key": "FeedbackCollectionForm",
+            "reflection_prompt": "What was the most surprising piece of feedback? What will you do with it?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "FEEDBACK_COLLECTOR"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission5_quest3_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          }
+        ]
+      },
+      {
+        "id": "mission5_quest4",
+        "mission_id": "mission-5",
+        "title": "Validate & Tweak",
+        "content_path": "content/missions/mission5/quests/validate-and-tweak.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 4,
+        "estimated_in_app_minutes": 30,
+        "estimated_off_app_minutes": 30,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_builds"
+        ],
+        "on_success": {
+          "grant_points": 50,
+          "badge_key": "VALIDATOR"
+        },
+        "notes": [
+          {
+            "title": "Validation is not perfection",
+            "type": "guide",
+            "content": "You're not looking for perfection. You're looking for 'good enough to launch.'",
+            "related_url": null
+          },
+          {
+            "title": "Listen to the patterns",
+            "type": "guide",
+            "content": "If one tester says something, it's an opinion. If three testers say it, it's a pattern. Act on patterns.",
+            "related_url": null
+          },
+          {
+            "title": "Don't over-iterate",
+            "type": "nudge",
+            "content": "You can always improve after launch. Don't let perfect be the enemy of launched.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Quest 4: Validate & Tweak. You've validated your product with real users and made meaningful improvements. You're ready to launch.",
+        "created_at": "2026-08-05T08:27:01.968Z",
+        "updated_at": "2026-08-05T08:27:01.968Z",
+        "tasks": [
+          {
+            "id": "mission5_quest4_task1",
+            "title": "Validation Check",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "Based on tester feedback, is your product ready? Do people want this? Would they pay for it? Let's check.",
+            "mission_id": "mission-5",
+            "quest_id": "mission5_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/validation-check",
+                "title": "Validation Check"
+              }
+            ],
+            "component_key": "ValidationCheckForm",
+            "reflection_prompt": "If you had to launch today, would you? Why or why not?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "VALIDATION_CHECKER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission5_quest3_task3"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          },
+          {
+            "id": "mission5_quest4_task2",
+            "title": "Final Tweaks Plan",
+            "sequence": 2,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "What changes are you making before launch? Be specific. What will you change, and how long will it take?",
+            "mission_id": "mission-5",
+            "quest_id": "mission5_quest4",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/final-tweaks",
+                "title": "Final Tweaks"
+              }
+            ],
+            "component_key": "FinalTweaksForm",
+            "reflection_prompt": "What's the smallest change that would make the biggest difference?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "FINAL_TWEAKER"
+            },
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission5_quest4_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          }
+        ]
+      },
+      {
+        "id": "mission5_quest5",
+        "mission_id": "mission-5",
+        "title": "Launch",
+        "content_path": "content/missions/mission5/quests/launch.md",
+        "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+        "sequence": 5,
+        "estimated_in_app_minutes": 30,
+        "estimated_off_app_minutes": 30,
+        "content": null,
+        "context": [
+          "user_profile",
+          "user_builds"
+        ],
+        "on_success": {
+          "grant_points": 60,
+          "badge_key": "LAUNCHER"
+        },
+        "notes": [
+          {
+            "title": "Launch is not the end",
+            "type": "guide",
+            "content": "Launch is the beginning. Your real work starts when people start buying.",
+            "related_url": null
+          },
+          {
+            "title": "Perfect is the enemy of launched",
+            "type": "guide",
+            "content": "If you're waiting for perfect, you'll never launch. Good enough is good enough.",
+            "related_url": null
+          },
+          {
+            "title": "Celebrate this moment",
+            "type": "nudge",
+            "content": "You're about to do what most people never do: launch a real business. Be proud.",
+            "related_url": null
+          }
+        ],
+        "success_message": "You've completed Mission 5: Build & Launch. You've launched your business. You're no longer a person with an idea—you're a founder with a live business. Welcome to the other side. 🎉",
+        "created_at": "2026-08-05T08:27:01.968Z",
+        "updated_at": "2026-08-05T08:27:01.968Z",
+        "tasks": [
+          {
+            "id": "mission5_quest5_task1",
+            "title": "Launch Checklist",
+            "sequence": 1,
+            "execution_type": "standard-form",
+            "estimated_minutes": 15,
+            "briefing_text": "Before you launch, let's run through the checklist. Is everything ready?",
+            "mission_id": "mission-5",
+            "quest_id": "mission5_quest5",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/launch-checklist",
+                "title": "Launch Checklist"
+              }
+            ],
+            "component_key": "LaunchChecklistForm",
+            "reflection_prompt": "If you had to launch right now, what would you be worried about?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 20,
+              "badge_key": "LAUNCH_CHECKER"
+            },
+            "challenges": [
+              {
+                "title": "The First Sale Challenge",
+                "description": "Launch and get your first real customer. Not a friend, not family—a real customer.",
+                "link": "/resources/challenges/the-first-sale"
+              }
+            ],
+            "ai_config": null,
+            "dependencies": [
+              "mission5_quest4_task2"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          },
+          {
+            "id": "mission5_quest5_task2",
+            "title": "Launch Decision",
+            "sequence": 2,
+            "execution_type": "decision_gate",
+            "estimated_minutes": 15,
+            "briefing_text": "It's time. Is your product ready to launch? Make the call.",
+            "mission_id": "mission-5",
+            "quest_id": "mission5_quest5",
+            "execution_environment": null,
+            "checkback_delay_days": null,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/launch-decision",
+                "title": "Launch Decision"
+              }
+            ],
+            "component_key": "LaunchDecisionForm",
+            "reflection_prompt": "What's the scariest part of launching? What excites you the most?",
+            "observation_context": null,
+            "on_success": {
+              "grant_points": 25,
+              "badge_key": "LAUNCH_DECISION"
+            },
+            "challenges": null,
+            "ai_config": {
+              "role": "Launch Advisor",
+              "persona_name": "The Launch Coach",
+              "persona_prompt": "You are a pragmatic launch coach who helps founders make the final decision to launch. You focus on readiness signals, not fear. You help founders recognize that 'good enough' is the right time to launch. You remind them that launch is the beginning, not the end.",
+              "required_context": [
+                "user_profile",
+                "user_builds",
+                "user_projects"
+              ]
+            },
+            "dependencies": [
+              "mission5_quest5_task1"
+            ],
+            "target_count": null,
+            "created_at": "2026-08-05T08:27:01.968Z",
+            "updated_at": "2026-08-05T08:27:01.968Z"
+          }
+        ]
+      }
+    ],
+    "created_at": "2026-08-05T08:27:01.968Z",
+    "updated_at": "2026-08-05T08:27:01.968Z"
   }
 }
