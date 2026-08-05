@@ -16,31 +16,24 @@ export default function ProgramDashboardPage() {
   const playbook = useStore($playbookStore);
   const progress = useStore($progressStore);
 
-  // 1. Trigger the Global Kip Concierge state for the Dashboard on mount
+  // 1. Trigger the Global Companion state for the Dashboard on mount
   useEffect(() => {
     setCompanionFocus({ pageType: 'dashboard' });
   }, []);
 
-  // 2. Transform the raw playbook mapping into a clean ordered tracking stack
-  const missions = Object.entries(playbook || {})
-    .map(([id, data]) => {
-      const { id: _, ...rest } = data; // omit any existing 'id'
-      return { id, ...rest };
-    })
-    .sort((a, b) => a.sequence - b.sequence);
+  // 2. Transform the playbook into an ordered array of missions
+  const missions = Object.values(playbook || {}).sort((a, b) => a.sequence - b.sequence);
 
-  // 3. Find the exact mission the user is currently working on
+  // 3. Find the active mission the user is currently working on
   const activeMission = missions.find((mission) => {
-    const quests = Object.values(mission.quests || {});
-    return quests.some((quest: any) =>
-      quest.tasks?.some((task: any) => progress[task.id]?.status !== 'completed')
+    return mission.quests?.some((quest) =>
+      quest.tasks?.some((task) => progress[task.id]?.status !== 'completed')
     );
   }) || missions[0];
 
-  // 4. Calculate overarching program metrics to show progress
+  // 4. Calculate total completed tasks
   const totalCompletedTasks = Object.values(progress || {}).filter(p => p.status === 'completed').length;
 
-  // ⚡ PROTECTION LAYER: If state stores are empty, show a loading block instead of a broken page
   if (missions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center space-y-3 py-32 animate-in fade-in duration-200">
@@ -53,15 +46,15 @@ export default function ProgramDashboardPage() {
   }
 
   return (
-    <div className="w-full space-y-10 animate-in fade-in duration-300">
+    <div className="w-full space-y-10 animate-in fade-in duration-300 text-left">
 
-      {/* Streamlined Workspace Title Section */}
+      {/* Workspace Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div className="space-y-1">
           <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-primary">
             Start
           </span>
-          <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
             Your Missions
           </h1>
           <p className="text-xs text-muted-foreground font-medium max-w-md leading-relaxed">
@@ -69,14 +62,13 @@ export default function ProgramDashboardPage() {
           </p>
         </div>
 
-        {/* Simple Progress Telemetry Component */}
-        <div className="bg-muted/50 border border-border px-3 py-1.5 rounded-xl shrink-0 text-left md:text-right">
+        <div className="bg-muted/50 border border-border px-3.5 py-2 rounded-xl shrink-0 text-left md:text-right">
           <span className="text-[10px] font-sans font-bold text-muted-foreground uppercase tracking-wider block">Tasks Mastered</span>
-          <span className="text-sm font-serif font-black text-foreground">{totalCompletedTasks}</span>
+          <span className="text-base font-heading font-black text-foreground">{totalCompletedTasks}</span>
         </div>
       </div>
 
-      {/* ─── ENHANCED FOCUS AREA: Active Target Card ─── */}
+      {/* Active Target Mission Banner */}
       {activeMission && (
         <div className="p-8 border border-primary/20 bg-card rounded-2xl shadow-sm space-y-6 relative overflow-hidden transition hover:border-primary/30">
           <div className="absolute right-4 top-4 text-primary/5 select-none pointer-events-none">
@@ -84,15 +76,17 @@ export default function ProgramDashboardPage() {
           </div>
 
           <div className="space-y-1.5 relative z-10">
-            <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-md">
+            <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-md">
               Current Target — Mission 0{activeMission.sequence}
             </span>
             <h2 className="text-xl font-bold text-foreground tracking-tight pt-2">
               {activeMission.title}
             </h2>
-            <p className="text-xs text-muted-foreground leading-relaxed max-w-xl font-medium pt-1">
-              {activeMission.briefing_text}
-            </p>
+            {activeMission.big_question && (
+              <p className="text-xs text-muted-foreground leading-relaxed max-w-xl font-medium pt-1 italic">
+                "{activeMission.big_question}"
+              </p>
+            )}
           </div>
 
           <div className="pt-2 relative z-10">
@@ -103,11 +97,9 @@ export default function ProgramDashboardPage() {
                 });
               }}
               disabled={isPending}
-              className="h-10 px-5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-sans text-xs font-bold tracking-wider uppercase transition shadow-md shadow-primary/10 flex items-center"
+              className="h-10 px-5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-sans text-xs font-bold tracking-wider uppercase transition shadow-md shadow-primary/10 flex items-center cursor-pointer"
             >
-              {isPending ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" />
-              ) : null}
+              {isPending && <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" />}
               Continue Quests
               <ArrowRight className="w-3.5 h-3.5 ml-2" />
             </Button>
@@ -115,9 +107,9 @@ export default function ProgramDashboardPage() {
         </div>
       )}
 
-      {/* ─── THE ROADMAP SEQUENCE STACK ─── */}
+      {/* Missions Sequence Stack */}
       <div className="space-y-4">
-        <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted-foreground tracking-wider pb-2 border-b border-border/60">
+        <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted-foreground pb-2 border-b border-border/60">
           The Roadmap
         </h3>
 
@@ -125,21 +117,21 @@ export default function ProgramDashboardPage() {
           {missions.map((m) => {
             const isCurrent = activeMission?.id === m.id;
 
-            // Calculate completions safely across inner collections
-            const totalTasks = Object.values(m.quests || {}).reduce((acc: number, q: any) => acc + (q.tasks?.length || 0), 0);
-            const completedTasks = Object.values(m.quests || {}).reduce((acc: number, q: any) => {
-              return acc + (q.tasks?.filter((t: any) => progress[t.id]?.status === 'completed').length || 0);
-            }, 0);
+            const totalTasks = m.quests?.reduce((acc, q) => acc + (q.tasks?.length || 0), 0) || 0;
+            const completedTasks = m.quests?.reduce((acc, q) => {
+              return acc + (q.tasks?.filter((t) => progress[t.id]?.status === 'completed').length || 0);
+            }, 0) || 0;
             const isFinished = totalTasks > 0 && completedTasks === totalTasks;
 
             return (
               <div
                 key={m.id}
                 onClick={() => router.push(`/program/mission/${m.id}`)}
-                className={`p-4 border rounded-xl flex items-center justify-between transition group cursor-pointer ${isCurrent
+                className={`p-4 border rounded-xl flex items-center justify-between transition group cursor-pointer ${
+                  isCurrent
                     ? 'border-primary/30 bg-primary/5 font-semibold shadow-sm'
-                    : 'border-border bg-card/40 opacity-75 hover:opacity-100 hover:border-border-hover'
-                  }`}
+                    : 'border-border bg-card/40 opacity-80 hover:opacity-100 hover:border-border/80'
+                }`}
               >
                 <div className="flex items-center gap-4 min-w-0">
                   <span className={`text-xs font-sans font-bold shrink-0 ${isCurrent ? 'text-primary' : 'text-muted-foreground'}`}>

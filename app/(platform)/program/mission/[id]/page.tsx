@@ -1,31 +1,36 @@
-'use client';
 // app/(platform)/program/mission/[id]/page.tsx
-import React, { useEffect, useState, useTransition } from 'react';
+'use client';
+
+import React, { use, useEffect, useState, useTransition } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useStore } from '@nanostores/react';
 import { $playbookStore, setCompanionFocus } from '@/lib/stores/companionStore';
 import { $progressStore } from '@/lib/stores/progressStore';
-import { Button } from '@/components/ui/button';
-import {MissionHeader} from '@/components/layout/MissionHeader';
-import { ChevronLeft, PlayCircle, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
+import { MissionHeader } from '@/components/layout/MissionHeader';
+import { ChevronLeft, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
 
+export default function MissionRoadmapPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  // ⚡ Next.js 15+ / React 19: Unwrapping params Promise using React.use()
+  const resolvedParams = use(params);
+  const missionId = resolvedParams.id;
 
-export default function MissionRoadmapPage() {
-  const params = useParams();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const playbook = useStore($playbookStore);
   const progress = useStore($progressStore);
 
-  const missionId = params.id as string;
   const currentMission = playbook[missionId];
 
   // State for markdown content
   const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
   const [loadingMarkdown, setLoadingMarkdown] = useState(false);
 
-  // 1. Sync Companion
+  // 1. Sync Companion Context
   useEffect(() => {
     if (currentMission) {
       setCompanionFocus({
@@ -60,30 +65,27 @@ export default function MissionRoadmapPage() {
       <div className="flex flex-col items-center justify-center space-y-3 py-32 animate-in fade-in duration-200">
         <Loader2 className="w-5 h-5 animate-spin text-primary" />
         <span className="text-xs font-sans font-medium text-muted-foreground tracking-wide">
-          Fetching mission details ...
+          Fetching mission details...
         </span>
       </div>
     );
   }
 
-  // 3. Convert quests
-  const quests = Object.entries(currentMission.quests || {})
-    .map(([key, data]) => ({ key, ...data }))
-    .sort((a, b) => a.sequence - b.sequence);
+  const quests = currentMission.quests || [];
 
   return (
-    <div className="w-full space-y-10 animate-in fade-in duration-300">
+    <div className="w-full space-y-10 animate-in fade-in duration-300 text-left">
 
-      {/* Back Header */}
+      {/* Navigation Header */}
       <div className="flex items-center justify-between border-b border-border/60 pb-5">
         <button
           onClick={() => {
             startTransition(() => {
-              router.push('/platform/program');
+              router.push('/program');
             });
           }}
           disabled={isPending}
-          className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition flex-row"
+          className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition cursor-pointer"
         >
           <ChevronLeft className="h-4 w-4" />
           Back to Roadmap
@@ -93,12 +95,17 @@ export default function MissionRoadmapPage() {
         </span>
       </div>
 
-      {/* Header & Video */}
-      <div className="pt-4">
+      {/* Mission Title Header */}
+      <div className="pt-2">
         <MissionHeader
           sequence={currentMission.sequence}
           title={currentMission.title}
         />
+        {currentMission.big_question && (
+          <p className="text-sm font-medium text-muted-foreground italic pt-2">
+            "{currentMission.big_question}"
+          </p>
+        )}
       </div>
 
       {/* Video Player */}
@@ -118,28 +125,23 @@ export default function MissionRoadmapPage() {
 
       {/* Markdown Content */}
       {loadingMarkdown && (
-        <div className="py-8 text-center text-muted-foreground">
-          <Loader2 className="w-5 h-5 animate-spin inline-block mr-2" />
+        <div className="py-8 text-center text-muted-foreground text-xs">
+          <Loader2 className="w-4 h-4 animate-spin inline-block mr-2" />
           Loading mission content...
         </div>
       )}
       {markdownHtml && !loadingMarkdown && (
         <div
-          className="prose prose-lg max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:text-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground prose-ul:text-muted-foreground prose-li:text-muted-foreground"
+          className="prose prose-sm md:prose-base max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:text-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground"
           dangerouslySetInnerHTML={{ __html: markdownHtml }}
         />
-      )}
-      {!markdownHtml && !loadingMarkdown && (
-        <div className="py-8 text-center text-muted-foreground text-sm">
-          No additional content available for this mission.
-        </div>
       )}
 
       {/* Quests List */}
       <div className="space-y-4 pt-4">
         <div className="pb-2 border-b border-border/60">
-          <h3 className="text-lg font-sans font-bold uppercase tracking-widest text-muted-foreground tracking-wider">
-            Quests 
+          <h3 className="text-sm font-sans font-bold uppercase tracking-widest text-muted-foreground">
+            Quests Included
           </h3>
         </div>
 
@@ -152,9 +154,9 @@ export default function MissionRoadmapPage() {
 
             return (
               <div
-                key={quest.key}
-                onClick={() => router.push(`/program/quest/${quest.slug}`)}
-                className="group bg-card/40 border border-primary/30 rounded-2xl p-6 shadow-sm hover:border-primary/80 transition duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden"
+                key={quest.id}
+                onClick={() => router.push(`/program/quest/${quest.id}`)}
+                className="group bg-card/40 border border-border hover:border-primary/60 rounded-2xl p-6 shadow-sm transition duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden"
               >
                 <div className="space-y-1.5 flex-1 text-left">
                   <div className="flex items-center gap-2.5">
@@ -176,13 +178,10 @@ export default function MissionRoadmapPage() {
                   <h3 className="text-base font-bold text-foreground tracking-tight group-hover:text-primary transition-colors">
                     {quest.title}
                   </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed max-w-md font-medium">
-                    {quest.subtitle}
-                  </p>
                 </div>
 
                 <div className="shrink-0 flex items-center justify-start sm:justify-end text-xs font-bold text-primary group-hover:translate-x-0.5 transition pr-1">
-                  <span>{isCompleted ? 'Review Logs' : 'Start Quest'}</span>
+                  <span>{isCompleted ? 'Review Work' : 'Start Quest'}</span>
                   <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                 </div>
               </div>
