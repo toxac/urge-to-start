@@ -1,12 +1,23 @@
-Most programs let you watch videos and feel productive without actually doing anything. This isn't that; think of this as a live workspace. Before we get into business shapes, software choices, or talking to customers, we have to look honestly at you. Starting a business will test you in ways that are hard to predict, and the people who make it through aren't always the smartest or the most prepared—they're the ones who kept going when it got tough.
+You're about to start something real. Not a pitch deck. Not a dream. A business.
 
-### How this works
+Most people never get this far. They get stuck in "research mode" or wait for the "perfect idea." You're different. You're here. And that means you're ready to move.
 
-You will move through this mission one focused Quest at a time. 
-*   **The Blueprint:** Read the brief introduction at the top of each screen to understand the strategy.
-*   **The Execution:** Fill out the forms, run the simulators, and log your real data directly inside the dashboard cards.
-*   **The Gate:** Future Quests remain locked until your current workspace checklist is fully marked complete by the Conductor.
+This mission is called "Beg. Borrow. Steel." because it's about one thing: **resourcefulness.**
 
-Messy is fine. A rough, honest, half-formed answer that is true is worth ten times more than a polished non-answer. Don't overthink the input fields. Trust the sequence, skip the logo design or legal registration worries for now, and focus entirely on the single action item directly in front of your face.
+You don't need millions. You don't need a perfect plan. You need:
 
-Watch the overview video above, and let's unlock your first Quest below.
+- **Clarity** on why you're doing this
+- **Commitment** to make it happen
+- **Resources** you already have (your network, your skills)
+- **Courage** to ask for what you need
+- **Resilience** when you hear "no"
+
+By the end of this mission, you'll have:
+
+- A clear "why" that will anchor you
+- A realistic commitment plan
+- A map of your network and skills
+- Asked for discounts and support (and survived!)
+- Collected your first "Nos" like badges of honor
+
+Let's start. Not tomorrow. Now.
