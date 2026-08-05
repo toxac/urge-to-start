@@ -1,9 +1,17 @@
-Proving that a problem exists in the world is a great start, but it is not the same thing as proving that a viable business model exists. 
+In Mission 2, you found an opportunity. Now we're turning it into a business.
 
-In Mission 2, you filtered through your raw observations, rated the severity of real-world pain points, and locked in the single project you want to focus on. Now, it is time to put that chosen problem through a reality check. 
+This is where most founders fail. They fall in love with their solution before validating the problem. They build something nobody wants.
 
-In this mission, you are going to define your exact target buyer, choose a specific format to package and deliver your solution, map out exactly where your early adopters hang out, and run the direct, unvarnished sales math. 
+Not you.
 
-We are not looking for global, multi-billion-dollar market reports here. We are looking for an explicit, realistic roadmap to find your first 10 paying customers. Pay close attention to the math. If the numbers or the customer profiles show that your idea cannot sustain itself within your time and budget limits, do not panic. The platform will safely pause your progress and help you pull your next archived idea back into the workspace to evaluate a pivot. 
+You're going to:
 
-Watch the overview video above, and let's check your project's viability.
+1. **Understand the problem** — Who has it? When? Where? Why?
+2. **Talk to customers** — Real people who have this problem
+3. **Define your Minimum Sellable Product** — The smallest thing you can sell
+4. **Understand the environment** — Who else solves this? What's working?
+5. **Make a decision** — Go, pivot, or no-go
+
+This mission is called "Getting Real" because that's exactly what you're going to do.
+
+**Let's get real.**

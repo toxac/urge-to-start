@@ -1,7 +1,0 @@
-Most early-stage projects fail because the founder builds an abstract product inside an isolated room with no practical strategy to find users. Stating that your marketing plan is "paid social ads" or "going viral" is an aspiration, not an execution step. In the early days, you need something much scrappier: a physical or digital watering hole where your specific audience already congregates.
-
-Before you spend a single dollar building a solution or writing complex software code, look at the bottom-up math of reality. We multiply your target price by a highly conservative conversion baseline to outline your exact outreach goals. This math tells you exactly what slice of the market you can realistically win in the next 12 months based entirely on the hours and resources you have right now. 
-
-If your target revenue goal requires you to manually message 400 people this year to secure 20 clients, that comes down to just 8 direct, unscalable outreaches a week. That is an actionable, highly realistic roadmap that removes the mystery from customer acquisition. 
-
-Run your launch math calculations below. If your projected revenue ceiling matches your personal constraint limits, you will officially mint your active project workspace. If the math reveals a broken model, the Conductor will pause this workspace, help you review your data, and smoothly route you back to pick another archived opportunity log to iterate.
