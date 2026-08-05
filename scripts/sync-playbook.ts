@@ -8,17 +8,18 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import * as fs from 'fs';
 import * as path from 'path';
 
-function readMarkdownSafe(filePath: string): string {
+function readMarkdownSafe(filePath: string): string | null {
   try {
+    if (!filePath) return null;
     const fullPath = path.resolve(process.cwd(), filePath);
     if (fs.existsSync(fullPath)) {
       return fs.readFileSync(fullPath, 'utf8');
     }
     console.warn(`⚠️ File trace missing at local path target: -> ${filePath}`);
-    return '';
+    return null;
   } catch (error) {
     console.error(`❌ IO fault encountered reading target markdown file: ${filePath}`, error);
-    return '';
+    return null;
   }
 }
 
@@ -27,7 +28,7 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
   const supabase = await createAdminClient();
 
   // 1. CLEAR STALE CONFIGURATIONS
-  console.log('🧹 sweep: Emptying stale system rows across tables...');
+  console.log('🧹 Sweep: Emptying stale system rows across tables...');
   
   const { error: clearTasksErr } = await supabase.from('tasks').delete().neq('id', 'placeholder_dummy_row_token');
   if (clearTasksErr) console.warn('Note on task clear run execution:', clearTasksErr.message);
@@ -42,24 +43,24 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
 
   // 2. MASTER ENTRY ALIGNMENT SEED LOOP
   for (const [missionKey, mission] of Object.entries(config)) {
-    const missionFolderPath = `content/missions/${missionKey}`;
-    const missionMarkdownPath = `${missionFolderPath}/mission.md`;
-
-    const markdownContent = readMarkdownSafe(missionMarkdownPath);
+    const missionMarkdownContent = readMarkdownSafe(mission.content_path);
     
     console.log(`\n📦 Processing Mission: ${mission.title} (Sequence ${mission.sequence})`);
 
-    // ⚡ Use mission.id from playbook (e.g., "mission1")
     const { data: dbMission, error: missionError } = await supabase
       .from('missions')
       .upsert({
-        id: mission.id, // ✅ Already has the correct ID from playbook
+        id: mission.id,
         title: mission.title,
+        content_path: mission.content_path,
+        content: missionMarkdownContent || mission.content || null,
         sequence: mission.sequence,
         video_url: mission.video_url,
-        content: markdownContent || mission.briefing_text || '',
-        briefing_text: mission.briefing_text || null,
-        prerequisites: mission.prerequisites as any || null,
+        big_question: mission.big_question,
+        estimated_time_in_days: mission.estimated_time_in_days,
+        context: mission.context as any,
+        success_message: mission.success_message,
+        updated_at: new Date().toISOString()
       })
       .select('id')
       .single();
@@ -71,34 +72,29 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
 
     const missionDbId = dbMission.id;
 
-    for (const [questKey, quest] of Object.entries(mission.quests)) {
-      // ⚡ Use quest.id from playbook (e.g., "mission1_quest1")
+    for (const quest of mission.quests) {
       const questId = quest.id;
-      const strictPhysicalPath = quest.content_path || `content/missions/${missionKey}/quests/${quest.slug}.md`;
-      
-      const markdownContent = readMarkdownSafe(strictPhysicalPath);
+      const questMarkdownContent = readMarkdownSafe(quest.content_path);
 
       const { data: dbQuest, error: questError } = await supabase
         .from('quests')
         .upsert({
-          id: questId, // ✅ Already has the correct ID from playbook
+          id: questId,
           mission_id: missionDbId,
-          slug: quest.slug,
           title: quest.title,
-          subtitle: quest.subtitle,
-          description: quest.description || '',
+          content_path: quest.content_path,
+          video_url: quest.video_url,
           sequence: quest.sequence,
-          content: markdownContent || quest.content || '',
-          is_optional: quest.is_optional || false,
-          persona_name: quest.persona_name,
-          persona_prompt: quest.persona_prompt,
-          required_context: quest.required_context || [],
-          grant_points_bonus: quest.grant_points_bonus || 0,
-          badge_key_reward: quest.badge_key_reward || null,
-          estimated_in_app_minutes: quest.estimated_in_app_minutes || 0,
-          estimated_off_app_minutes: quest.estimated_off_app_minutes || 0,
+          estimated_in_app_minutes: quest.estimated_in_app_minutes,
+          estimated_off_app_minutes: quest.estimated_off_app_minutes,
+          content: questMarkdownContent || quest.content || null,
+          context: quest.context as any,
+          on_success: quest.on_success as any,
+          notes: quest.notes as any,
+          success_message: quest.success_message,
+          updated_at: new Date().toISOString()
         })
-        .select('id, badge_key_reward')
+        .select('id')
         .single();
 
       if (questError || !dbQuest) {
@@ -109,27 +105,31 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
       const questDbId = dbQuest.id;
 
       for (const task of quest.tasks) {
-        // ⚡ Use task.id from playbook (e.g., "m1_q1_t1_drivers")
         const { data: dbTask, error: taskError } = await supabase
           .from('tasks')
           .upsert({
-            id: task.id, // ✅ Already has the correct ID from playbook
-            mission_id: missionDbId,
+            id: task.id,
             quest_id: questDbId,
+            mission_id: missionDbId,
             title: task.title,
-            type: task.type,
-            component_key: task.component_key,
             sequence: task.sequence,
-            estimated_minutes: task.estimated_minutes || 0,
-            grant_points: task.grant_points,
-            description: task.description || '',
-            execution_environment: task.execution_environment || null,
-            checkback_delay_days: task.checkback_delay_days || null,
-            recurring: task.recurring || null,
-            interval: task.interval || null,
-            ai_config: task.ai_config as any || null,
-            observation_config: task.observation_config as any || null,
-            metadata_config: task.metadata_config as any || {},
+            execution_type: task.execution_type,
+            estimated_minutes: task.estimated_minutes,
+            briefing_text: task.briefing_text,
+            execution_environment: task.execution_environment,
+            checkback_delay_days: task.checkback_delay_days,
+            recurring: task.recurring,
+            interval: task.interval,
+            resources: task.resources as any,
+            component_key: task.component_key,
+            reflection_prompt: task.reflection_prompt,
+            observation_context: task.observation_context as any,
+            on_success: task.on_success as any,
+            challenges: task.challenges as any,
+            ai_config: task.ai_config as any,
+            dependencies: task.dependencies,
+            target_count: task.target_count,
+            updated_at: new Date().toISOString()
           })
           .select('id')
           .single();
@@ -139,7 +139,7 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
           continue;
         }
       }
-      console.log(`   ✅ Synced Chapter: "${quest.title}" with [${quest.tasks.length}] sub-tasks mapping smoothly.`);
+      console.log(`   ✅ Synced Quest: "${quest.title}" with [${quest.tasks.length}] tasks.`);
     }
   }
 
@@ -155,7 +155,7 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
     console.log(`💾 Synced matrix cache successfully output to disk at: ${targetOutputPath}`);
     process.exit(0);
   } catch (error) {
-    console.error('💥 CRITICAL SCHEMA SYNC EXCEPTION UNENCOUNTERED:', error);
+    console.error('💥 CRITICAL SCHEMA SYNC EXCEPTION ENCOUNTERED:', error);
     process.exit(1);
   }
 })();
