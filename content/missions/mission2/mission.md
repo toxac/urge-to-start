@@ -1,7 +1,15 @@
-The most common mistake first-time founders make is sitting in a room trying to invent a brilliant, original idea out of thin air. When you try to solve an abstract problem for an audience you don't actually know, you are running on pure guesswork and assumptions. 
+You've built the foundation. You know why you're starting, you've mapped your resources, and you've learned to ask. Now it's time to find something worth building.
 
-The best businesses aren't invented; they are noticed. 
+This mission is called "Discovery" because that's exactly what you're going to do—discover a real problem worth solving.
 
-In this mission, you are switching your brain from "inventor mode" to "detective mode." You are going to stop looking for moonshots and start training your eyes to spot the everyday friction, messy workarounds, and unvarnished complaints that are happening right around you. A validated problem is the raw target data we need before we write a single line of code or spend a single dollar building a product.
+Most founders fail here. They fall in love with their solution before they understand the problem. They build something nobody wants. Not you.
 
-Watch the overview video above, and let's head out on your first discovery hunt.
+You're going to find problems from three places:
+
+1. **Mine Yourself** — Your own frustrations and skills
+2. **Observe Others** — Problems in your immediate circle
+3. **Broader Search** — Problems in the wider world
+
+Then you're going to pick the best one and commit to it.
+
+**Let's find your problem.**

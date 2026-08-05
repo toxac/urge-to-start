@@ -1,7 +1,0 @@
-When used incorrectly, the internet is an endless distraction engine. When used as a research workspace, it becomes the largest open database of customer pain in human history. 
-
-We are going to avoid high-level industry hype articles and look explicitly at the spaces where buyers gather to vent. Look at marketplace product reviews—specifically the **three-star ratings**. Five-star reviews are often marketing copy; one-star reviews are raw, emotional anger; three-star reviews contain the precise structural gaps where current products fail. Look for the pattern where a buyer writes: *"I love this product, BUT..."* The *but* is where your opening lives.
-
-Consider the story of a founder who read the comments on a highly popular, expensive yoga mat advertisement. Dozens of buyers complained that the mat was too heavy to carry comfortably and the branded strap cut into their shoulder. The company ignored them. She sourced a wide, padded carry strap designed to fit that specific mat and sold it directly to the people complaining in the comments. She didn't build a new product from scratch—she just read what people were already asking for.
-
-Set a strict 15-minute timer. Scan an online community or review channel you naturally use and pull out two verbatim complaint strings. Don't interpret them yet; just capture the raw data.
