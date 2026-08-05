@@ -17,7 +17,7 @@
         "id": "mission1_quest1",
         "mission_id": "mission-1",
         "title": "The New Beginning",
-        "content_path": "content/missions/mission1/quests/starting-your-new-chapter.md",
+        "content_path": "content/missions/mission1/quests/q1.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 1,
         "estimated_in_app_minutes": 30,
@@ -45,8 +45,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: The New Beginning. You know your 'why,' you've made a commitment, and you've faced your fears. That's more than most people ever do. On to the next quest.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.595Z",
+        "updated_at": "2026-08-05T16:05:27.595Z",
         "tasks": [
           {
             "id": "mission1_quest1_task1",
@@ -101,8 +101,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           },
           {
             "id": "mission1_quest1_task2",
@@ -144,8 +144,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           },
           {
             "id": "mission1_quest1_task3",
@@ -187,8 +187,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           }
         ]
       },
@@ -196,7 +196,7 @@
         "id": "mission1_quest2",
         "mission_id": "mission-1",
         "title": "What You've Got",
-        "content_path": "content/missions/mission1/quests/your-resources.md",
+        "content_path": "content/missions/mission1/quests/q2.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 2,
         "estimated_in_app_minutes": 30,
@@ -224,8 +224,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: What You've Got. You've mapped your network and skills. You're not starting from zero—you have assets. Now let's put them to work.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.595Z",
+        "updated_at": "2026-08-05T16:05:27.595Z",
         "tasks": [
           {
             "id": "mission1_quest2_task1",
@@ -273,8 +273,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           },
           {
             "id": "mission1_quest2_task2",
@@ -316,8 +316,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           }
         ]
       },
@@ -325,7 +325,7 @@
         "id": "mission1_quest3",
         "mission_id": "mission-1",
         "title": "Start Asking",
-        "content_path": "content/missions/mission1/quests/ask-and-you-shall-receive.md",
+        "content_path": "content/missions/mission1/quests/q3.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 3,
         "estimated_in_app_minutes": 30,
@@ -359,8 +359,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: Start Asking. You've built your squad, introduced yourself to the community, and asked for a discount. You're now officially an 'asker.' The fear of asking is fading. Next up: chasing rejection.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.595Z",
+        "updated_at": "2026-08-05T16:05:27.595Z",
         "tasks": [
           {
             "id": "mission1_quest3_task1",
@@ -409,8 +409,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           },
           {
             "id": "mission1_quest3_task2",
@@ -447,8 +447,8 @@
               "mission1_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           },
           {
             "id": "mission1_quest3_task3",
@@ -491,8 +491,8 @@
               "mission1_quest3_task1"
             ],
             "target_count": 1,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           }
         ]
       },
@@ -500,7 +500,7 @@
         "id": "mission1_quest4",
         "mission_id": "mission-1",
         "title": "No Is Just Data",
-        "content_path": "content/missions/mission1/quests/hearing-nos.md",
+        "content_path": "content/missions/mission1/quests/q4.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 4,
         "estimated_in_app_minutes": 45,
@@ -534,8 +534,8 @@
           }
         ],
         "success_message": "You've completed Quest 4: No Is Just Data. You've faced rejection, made bold asks, and survived. You're now more resilient than 99% of people who never ask. You're ready for Mission 2.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.595Z",
+        "updated_at": "2026-08-05T16:05:27.595Z",
         "tasks": [
           {
             "id": "mission1_quest4_task1",
@@ -577,8 +577,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": 2,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           },
           {
             "id": "mission1_quest4_task2",
@@ -628,8 +628,8 @@
               "mission1_quest4_task1"
             ],
             "target_count": 1,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           },
           {
             "id": "mission1_quest4_task3",
@@ -666,14 +666,14 @@
               "mission1_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-05T08:27:01.967Z",
-    "updated_at": "2026-08-05T08:27:01.967Z"
+    "created_at": "2026-08-05T16:05:27.595Z",
+    "updated_at": "2026-08-05T16:05:27.595Z"
   },
   "mission2": {
     "id": "mission-2",
@@ -694,7 +694,7 @@
         "id": "mission2_quest1",
         "mission_id": "mission-2",
         "title": "Mine Yourself",
-        "content_path": "content/missions/mission2/quests/mine-yourself.md",
+        "content_path": "content/missions/mission2/quests/q1.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 1,
         "estimated_in_app_minutes": 45,
@@ -728,8 +728,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: Mine Yourself. You've identified problems from your own life and skills. You're building a foundation for your business.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.595Z",
+        "updated_at": "2026-08-05T16:05:27.595Z",
         "tasks": [
           {
             "id": "mission2_quest1_task1",
@@ -780,8 +780,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           },
           {
             "id": "mission2_quest1_task2",
@@ -825,8 +825,8 @@
               "mission2_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.595Z",
+            "updated_at": "2026-08-05T16:05:27.595Z"
           },
           {
             "id": "mission2_quest1_task3",
@@ -871,8 +871,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission2_quest1_task4",
@@ -916,8 +916,8 @@
               "mission2_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -925,7 +925,7 @@
         "id": "mission2_quest2",
         "mission_id": "mission-2",
         "title": "People Watching",
-        "content_path": "content/missions/mission2/quests/people-watching.md",
+        "content_path": "content/missions/mission2/quests/q2.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 2,
         "estimated_in_app_minutes": 30,
@@ -959,8 +959,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: People Watching. You've observed problems in your immediate circle. These people are your first potential customers.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission2_quest2_task1",
@@ -1011,8 +1011,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission2_quest2_task2",
@@ -1056,8 +1056,8 @@
               "mission2_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -1065,7 +1065,7 @@
         "id": "mission2_quest3",
         "mission_id": "mission-2",
         "title": "The Wider World",
-        "content_path": "content/missions/mission2/quests/the-wider-world.md",
+        "content_path": "content/missions/mission2/quests/q3.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 3,
         "estimated_in_app_minutes": 45,
@@ -1099,8 +1099,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: The Wider World. You've discovered problems beyond your immediate circle. Your opportunity set is now diverse.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission2_quest3_task1",
@@ -1148,8 +1148,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission2_quest3_task2",
@@ -1191,8 +1191,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission2_quest3_task3",
@@ -1234,8 +1234,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -1243,7 +1243,7 @@
         "id": "mission2_quest4",
         "mission_id": "mission-2",
         "title": "The Decision",
-        "content_path": "content/missions/mission2/quests/the-decision.md",
+        "content_path": "content/missions/mission2/quests/q4.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 4,
         "estimated_in_app_minutes": 45,
@@ -1278,8 +1278,8 @@
           }
         ],
         "success_message": "You've completed Quest 4: The Decision. You've evaluated your opportunities, picked the best one, and committed to a direction. You're no longer searching—you're building. Mission 3 awaits.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission2_quest4_task1",
@@ -1321,8 +1321,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission2_quest4_task2",
@@ -1366,8 +1366,8 @@
               "mission2_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission2_quest4_task3",
@@ -1404,14 +1404,14 @@
               "mission2_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-05T08:27:01.967Z",
-    "updated_at": "2026-08-05T08:27:01.967Z"
+    "created_at": "2026-08-05T16:05:27.596Z",
+    "updated_at": "2026-08-05T16:05:27.596Z"
   },
   "mission3": {
     "id": "mission-3",
@@ -1433,7 +1433,7 @@
         "id": "mission3_quest1",
         "mission_id": "mission-3",
         "title": "The Deep Dive",
-        "content_path": "content/missions/mission3/quests/the-deep-dive.md",
+        "content_path": "content/missions/mission3/quests/q1.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 1,
         "estimated_in_app_minutes": 45,
@@ -1469,8 +1469,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: The Deep Dive. You now understand your problem intimately—when it happens, who it affects, and what people do about it.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission3_quest1_task1",
@@ -1518,8 +1518,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission3_quest1_task2",
@@ -1563,8 +1563,8 @@
               "mission3_quest1_task1"
             ],
             "target_count": 5,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission3_quest1_task3",
@@ -1608,8 +1608,8 @@
               "mission3_quest1_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -1617,7 +1617,7 @@
         "id": "mission3_quest2",
         "mission_id": "mission-3",
         "title": "Build to Sell",
-        "content_path": "content/missions/mission3/quests/build-to-sell.md",
+        "content_path": "content/missions/mission3/quests/q2.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 2,
         "estimated_in_app_minutes": 45,
@@ -1652,8 +1652,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: Build to Sell. You've defined your Minimum Sellable Product. It's small, focused, and ready to sell.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission3_quest2_task1",
@@ -1696,8 +1696,8 @@
               "mission3_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission3_quest2_task2",
@@ -1741,8 +1741,8 @@
               "mission3_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission3_quest2_task3",
@@ -1779,8 +1779,8 @@
               "mission3_quest2_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -1788,7 +1788,7 @@
         "id": "mission3_quest3",
         "mission_id": "mission-3",
         "title": "Know the Battlefield",
-        "content_path": "content/missions/mission3/quests/know-the-battlefield.md",
+        "content_path": "content/missions/mission3/quests/q3.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 3,
         "estimated_in_app_minutes": 45,
@@ -1823,8 +1823,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: Know the Battlefield. You understand the landscape, the trends, and the compliance requirements. You're ready to make an informed decision.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission3_quest3_task1",
@@ -1868,8 +1868,8 @@
               "mission3_quest2_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission3_quest3_task2",
@@ -1906,8 +1906,8 @@
               "mission3_quest3_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -1915,7 +1915,7 @@
         "id": "mission3_quest4",
         "mission_id": "mission-3",
         "title": "Go or No-Go",
-        "content_path": "content/missions/mission3/quests/go-or-no-go.md",
+        "content_path": "content/missions/mission3/quests/q4.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 4,
         "estimated_in_app_minutes": 45,
@@ -1950,8 +1950,8 @@
           }
         ],
         "success_message": "You've completed Mission 3: Getting Real. You've validated your problem, defined your MSP, understood the environment, and made a conscious decision. You're no longer dreaming—you're building with intention. Mission 4 awaits.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission3_quest4_task1",
@@ -1995,8 +1995,8 @@
               "mission3_quest3_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission3_quest4_task2",
@@ -2033,8 +2033,8 @@
               "mission3_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission3_quest4_task3",
@@ -2078,14 +2078,14 @@
               "mission3_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-05T08:27:01.967Z",
-    "updated_at": "2026-08-05T08:27:01.967Z"
+    "created_at": "2026-08-05T16:05:27.596Z",
+    "updated_at": "2026-08-05T16:05:27.596Z"
   },
   "mission4": {
     "id": "mission-4",
@@ -2106,7 +2106,7 @@
         "id": "mission4_quest1",
         "mission_id": "mission-4",
         "title": "Shape Your Offer",
-        "content_path": "content/missions/mission4/quests/shape-your-offer.md",
+        "content_path": "content/missions/mission4/quests/q1.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 1,
         "estimated_in_app_minutes": 45,
@@ -2141,8 +2141,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: Shape Your Offer. You have a clear value proposition, a focused feature set, and a mapped customer experience. You know what you're selling.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission4_quest1_task1",
@@ -2192,8 +2192,8 @@
               "mission3_quest4_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission4_quest1_task2",
@@ -2237,8 +2237,8 @@
               "mission4_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission4_quest1_task3",
@@ -2282,8 +2282,8 @@
               "mission4_quest1_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission4_quest1_task4",
@@ -2327,8 +2327,8 @@
               "mission4_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -2336,7 +2336,7 @@
         "id": "mission4_quest2",
         "mission_id": "mission-4",
         "title": "Price It Right",
-        "content_path": "content/missions/mission4/quests/price-it-right.md",
+        "content_path": "content/missions/mission4/quests/q2.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 2,
         "estimated_in_app_minutes": 30,
@@ -2371,8 +2371,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: Price It Right. You have a confident price based on value, not fear.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.967Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission4_quest2_task1",
@@ -2422,8 +2422,8 @@
               "mission4_quest1_task4"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission4_quest2_task2",
@@ -2460,8 +2460,8 @@
               "mission4_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.967Z",
-            "updated_at": "2026-08-05T08:27:01.967Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -2469,7 +2469,7 @@
         "id": "mission4_quest3",
         "mission_id": "mission-4",
         "title": "Find Your Customers",
-        "content_path": "content/missions/mission4/quests/find-your-customers.md",
+        "content_path": "content/missions/mission4/quests/q3.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 3,
         "estimated_in_app_minutes": 45,
@@ -2504,8 +2504,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: Find Your Customers. You have a focused channel, a clear message, and a realistic acquisition plan.",
-        "created_at": "2026-08-05T08:27:01.967Z",
-        "updated_at": "2026-08-05T08:27:01.968Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission4_quest3_task1",
@@ -2555,8 +2555,8 @@
               "mission4_quest2_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission4_quest3_task2",
@@ -2593,8 +2593,8 @@
               "mission4_quest3_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission4_quest3_task3",
@@ -2631,8 +2631,8 @@
               "mission4_quest3_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -2640,7 +2640,7 @@
         "id": "mission4_quest4",
         "mission_id": "mission-4",
         "title": "The Financials",
-        "content_path": "content/missions/mission4/quests/the-financials.md",
+        "content_path": "content/missions/mission4/quests/q4.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 4,
         "estimated_in_app_minutes": 60,
@@ -2675,8 +2675,8 @@
           }
         ],
         "success_message": "You've completed Quest 4: The Financials. You understand your costs, your unit economics, and your profitability. The numbers tell a story—are you listening?",
-        "created_at": "2026-08-05T08:27:01.968Z",
-        "updated_at": "2026-08-05T08:27:01.968Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission4_quest4_task1",
@@ -2713,8 +2713,8 @@
               "mission4_quest3_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission4_quest4_task2",
@@ -2751,8 +2751,8 @@
               "mission4_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission4_quest4_task3",
@@ -2789,8 +2789,8 @@
               "mission4_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -2798,7 +2798,7 @@
         "id": "mission4_quest5",
         "mission_id": "mission-4",
         "title": "Go or No-Go",
-        "content_path": "content/missions/mission4/quests/go-or-no-go.md",
+        "content_path": "content/missions/mission4/quests/q5.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 5,
         "estimated_in_app_minutes": 20,
@@ -2833,8 +2833,8 @@
           }
         ],
         "success_message": "You've completed Mission 4: The Business Engine. You've made a conscious decision based on real numbers. This is what building a real business looks like.",
-        "created_at": "2026-08-05T08:27:01.968Z",
-        "updated_at": "2026-08-05T08:27:01.968Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission4_quest5_task1",
@@ -2879,14 +2879,14 @@
               "mission4_quest4_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-05T08:27:01.968Z",
-    "updated_at": "2026-08-05T08:27:01.968Z"
+    "created_at": "2026-08-05T16:05:27.596Z",
+    "updated_at": "2026-08-05T16:05:27.596Z"
   },
   "mission5": {
     "id": "mission-5",
@@ -2909,7 +2909,7 @@
         "id": "mission5_quest1",
         "mission_id": "mission-5",
         "title": "Plan the Build",
-        "content_path": "content/missions/mission5/quests/plan-the-build.md",
+        "content_path": "content/missions/mission5/quests/q1.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 1,
         "estimated_in_app_minutes": 45,
@@ -2944,8 +2944,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: Plan the Build. You have a timeline, a resource plan, and a build checklist. Now it's time to execute.",
-        "created_at": "2026-08-05T08:27:01.968Z",
-        "updated_at": "2026-08-05T08:27:01.968Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission5_quest1_task1",
@@ -2988,8 +2988,8 @@
               "mission4_quest5_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission5_quest1_task2",
@@ -3026,8 +3026,8 @@
               "mission5_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission5_quest1_task3",
@@ -3064,8 +3064,8 @@
               "mission5_quest1_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -3073,7 +3073,7 @@
         "id": "mission5_quest2",
         "mission_id": "mission-5",
         "title": "Build Dashboard",
-        "content_path": "content/missions/mission5/quests/build-dashboard.md",
+        "content_path": "content/missions/mission5/quests/q2.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 2,
         "estimated_in_app_minutes": 5,
@@ -3109,8 +3109,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: The Build. You've built your product, tracked your costs, and have something testers can test. The foundation is solid.",
-        "created_at": "2026-08-05T08:27:01.968Z",
-        "updated_at": "2026-08-05T08:27:01.968Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission5_quest2_task1",
@@ -3145,8 +3145,8 @@
               "mission5_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -3154,7 +3154,7 @@
         "id": "mission5_quest3",
         "mission_id": "mission-5",
         "title": "Get Testers",
-        "content_path": "content/missions/mission5/quests/get-testers.md",
+        "content_path": "content/missions/mission5/quests/q3.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 3,
         "estimated_in_app_minutes": 45,
@@ -3190,8 +3190,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: Get Testers. You've recruited, onboarded, and collected feedback from testers. You have real data to work with.",
-        "created_at": "2026-08-05T08:27:01.968Z",
-        "updated_at": "2026-08-05T08:27:01.968Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission5_quest3_task1",
@@ -3234,8 +3234,8 @@
               "mission5_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission5_quest3_task2",
@@ -3272,8 +3272,8 @@
               "mission5_quest3_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission5_quest3_task3",
@@ -3310,8 +3310,8 @@
               "mission5_quest3_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -3319,7 +3319,7 @@
         "id": "mission5_quest4",
         "mission_id": "mission-5",
         "title": "Validate & Tweak",
-        "content_path": "content/missions/mission5/quests/validate-and-tweak.md",
+        "content_path": "content/missions/mission5/quests/q4.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 4,
         "estimated_in_app_minutes": 30,
@@ -3354,8 +3354,8 @@
           }
         ],
         "success_message": "You've completed Quest 4: Validate & Tweak. You've validated your product with real users and made meaningful improvements. You're ready to launch.",
-        "created_at": "2026-08-05T08:27:01.968Z",
-        "updated_at": "2026-08-05T08:27:01.968Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission5_quest4_task1",
@@ -3392,8 +3392,8 @@
               "mission5_quest3_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission5_quest4_task2",
@@ -3430,8 +3430,8 @@
               "mission5_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       },
@@ -3439,7 +3439,7 @@
         "id": "mission5_quest5",
         "mission_id": "mission-5",
         "title": "Launch",
-        "content_path": "content/missions/mission5/quests/launch.md",
+        "content_path": "content/missions/mission5/quests/q5.md",
         "video_url": "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
         "sequence": 5,
         "estimated_in_app_minutes": 30,
@@ -3474,8 +3474,8 @@
           }
         ],
         "success_message": "You've completed Mission 5: Build & Launch. You've launched your business. You're no longer a person with an idea—you're a founder with a live business. Welcome to the other side. 🎉",
-        "created_at": "2026-08-05T08:27:01.968Z",
-        "updated_at": "2026-08-05T08:27:01.968Z",
+        "created_at": "2026-08-05T16:05:27.596Z",
+        "updated_at": "2026-08-05T16:05:27.596Z",
         "tasks": [
           {
             "id": "mission5_quest5_task1",
@@ -3518,8 +3518,8 @@
               "mission5_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           },
           {
             "id": "mission5_quest5_task2",
@@ -3565,13 +3565,13 @@
               "mission5_quest5_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T08:27:01.968Z",
-            "updated_at": "2026-08-05T08:27:01.968Z"
+            "created_at": "2026-08-05T16:05:27.596Z",
+            "updated_at": "2026-08-05T16:05:27.596Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-05T08:27:01.968Z",
-    "updated_at": "2026-08-05T08:27:01.968Z"
+    "created_at": "2026-08-05T16:05:27.596Z",
+    "updated_at": "2026-08-05T16:05:27.596Z"
   }
 }
