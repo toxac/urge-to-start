@@ -1,9 +1,17 @@
-A business is not an isolated product or a simple list of software features. A business is an interconnected money system where every piece has to support the other. If you write great software but have no clear route to acquire users, your system breaks down. If you find plenty of users but underprice your work out of fear, your engine starves.
+You have a validated problem. You have a Minimum Sellable Product. Now you need to figure out how to make money.
 
-Before you write a single line of code or set up a web layout page, you need to map out the blueprint of this system.
+This mission is called "The Business Engine" because that's exactly what you're building—the engine that will generate revenue.
 
-In this mission, you are going to design your overall business canvas, split across five clear steps. You will map out your exact messaging hooks, lock in your customer relationship styles, inventory your essential daily work, calculate your raw profit margins, and identify your baseline platform allies. By thinking through these steps now, you protect your velocity and guarantee your business model is balanced before you launch.
+You're going to:
 
-Watch the overview video above, and let's build your money system.
+1. **Shape your offer** — What exactly are you selling?
+2. **Price it right** — What is it worth and what will you charge?
+3. **Find your customers** — How will you find them?
+4. **Run the numbers** — Does the math work?
+5. **Make the call** — Go, no-go, or iterate?
+
+This is where you turn your idea into a real, profitable business.
+
+**Let's build the engine.**
 
 
