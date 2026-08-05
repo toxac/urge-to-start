@@ -1,585 +1,761 @@
 // lib/playbook/mission2.ts
-import { Mission } from "@/types/playbook";
+import { MissionSchema } from '@/types/playbook';
 
-export const mission2: Mission = {
-  id: "mission2",
-  title: "Find Problems Worth Solving",
-  sequence: 2,
-  video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
-  briefing_text: "Before you build anything, you need to find a problem worth solving. We're going to start with what you know best—your own frustrations—and gradually expand outward. By the end of this mission, you'll have a real opportunity you can turn into a business.",
-  content: "",
-  content_path: "content/mission2/mission.md",
-  prerequisites: [
-    {
-      item: "Your observation journal (PDF or physical notebook)",
-      promptRawText: "You've got your observation journal ready. This is your tool for capturing frustrations and annoyances in real life. Keep it with you—you'll be using it a lot in this mission."
-    },
-    {
-      item: "Willingness to talk to people about their problems",
-      promptRawText: "You'll need to have real conversations with people—friends, colleagues, even strangers. This isn't about selling. It's about listening. Remind yourself: you're doing research, not pitching."
-    },
-    {
-      item: "Patience with the process",
-      promptRawText: "Finding a good problem takes time. You might feel like you're not making progress. That's normal. Trust the process—every observation is data."
-    }
-  ],
-  quests: {
-    quest1: {
-      id: "mission2_quest1",
-      slug: "your-frustrations",
-      title: "Your Own Frustrations",
-      subtitle: "Start with what you know best—your own life",
-      description: "The best problems to solve are often the ones you experience yourself. You understand them intimately. You know the pain points. You're the expert. In this quest, we're going to mine your own frustrations and skills for business opportunities.",
-      sequence: 1,
-      content: "",
-      estimated_in_app_minutes: 90,
-      estimated_off_app_minutes: 180,
-      is_optional: false,
-      mission_id: "mission2",
-      content_path: "content/missions/mission2/quests/your-own-pain-and-skills.md",
-      // ✅ Nested ai_config
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Observer",
-        persona_prompt: "You are a patient guide helping the user notice patterns in their own frustrations. Ask gentle questions that help them see their problems more clearly. Never dismiss their experiences. Help them connect dots.",
-        required_context: ["user_profiles"],
-        on_success: {
-          grant_points: 50,
-          badge_key: "SELF_AWARE"
-        }
-      },
-      tasks: [
+const mission2: MissionSchema = {
+    id: "mission-2",
+    title: "Discovery",
+    content: null,
+    content_path: "content/missions/mission2/mission.md",
+    sequence: 2,
+    video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+    big_question: "What problem should I solve?",
+    estimated_time_in_days: 21,
+    context: ["user_profile", "mission1_data"],
+    success_message: "You've completed Mission 2: Discovery. You've mined your own frustrations, observed the people around you, researched the wider world, and picked the best opportunity to pursue. You're no longer searching—you have a direction. Mission 3 awaits.",
+
+    quests: [
+        // ============================================
+        // QUEST 1: Mine Yourself
+        // ============================================
         {
-          id: "m2_q1_t1_observation_week",
-          title: "Collect your frustrations and annoyances",
-          sequence: 1,
-          type: "observation",
-          component_key: "ObservationNotepad",
-          grant_points: 25,
-          estimated_minutes: 180,
-          description: "For the next 7 days, keep your observation journal with you. Every time something frustrates you, annoys you, or makes you think 'there has to be a better way'—write it down. Don't judge it. Just collect. Aim for at least 10 entries. Notice patterns. What comes up again and again?",
-          mission_id: "mission2",
-          quest_id: "mission2_quest1",
-          execution_environment: "off_app",
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "Download Observation Journal (PDF)", 
-                type: "download", 
-                path_or_url: "/resources/observation-journal.pdf" 
-              },
-              { 
-                title: "How to Spot Hidden Opportunities in Your Frustrations", 
-                type: "blog", 
-                path_or_url: "content/blog/spot-opportunities-in-yourself.md",
-                subtitle: "5 min read"
-              }
+            id: "mission2_quest1",
+            mission_id: "mission-2",
+            title: "Mine Yourself",
+            content_path: "content/missions/mission2/quests/mine-yourself.md",
+            video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+            sequence: 1,
+            estimated_in_app_minutes: 45,
+            estimated_off_app_minutes: 90,
+            content: null,
+            context: ["user_profile"],
+            on_success: {
+                grant_points: 60,
+                badge_key: "SELF_AWARE"
+            },
+            notes: [
+                {
+                    title: "Start with yourself",
+                    type: "guide",
+                    content: "The best problems to solve are the ones you understand deeply. Your frustrations are a goldmine.",
+                    related_url: null
+                },
+                {
+                    title: "Don't overthink",
+                    type: "nudge",
+                    content: "List everything that annoys you—big or small. We'll filter later.",
+                    related_url: null
+                },
+                {
+                    title: "This is not about solutions",
+                    type: "warning",
+                    content: "Don't try to solve anything yet. Just observe and document the problems.",
+                    related_url: null
+                }
             ],
-            reflection_prompt: "After a week of observing, what patterns have you noticed? What are you most excited to explore further?"
-          },
-          observation_config: {
-            briefing_text: "For the next 7 days, keep your observation journal with you. Every time something frustrates you, annoys you, or makes you think 'there has to be a better way'—write it down. Don't judge it. Just collect. Aim for at least 10 entries. Notice patterns. What comes up again and again?",
-            guide_questions: [
-              "What annoyed you today? Why?",
-              "What made you think 'I wish there was a better way'?",
-              "What did you spend too much time on?",
-              "What did you find yourself explaining to someone else?",
-              "What made you say 'that's just how it is'?"
-            ],
-            min_observations: 10,
-            observation_period_days: 7
-          },
-          metadata_config: {
-            source_type: "personal_problems"
-          }
-        },
-        {
-          id: "m2_q1_t2_skill_reflection",
-          title: "What are you better at than most people?",
-          sequence: 2,
-          type: "observation",
-          component_key: "ObservationNotepad",
-          grant_points: 20,
-          estimated_minutes: 90,
-          description: "Now let's look at your skills. What do you do better than most people you know? This could be anything—cooking, organizing, explaining, fixing things, making people feel comfortable. Ask 3 people who know you well: 'What am I unusually good at?' And ask yourself: 'Would people pay me to do this for them?'",
-          mission_id: "mission2",
-          quest_id: "mission2_quest1",
-          execution_environment: "off_app",
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "Skill Reflection Worksheet (PDF)", 
-                type: "download", 
-                path_or_url: "/resources/skill-reflection.pdf" 
-              },
-              { 
-                title: "How to Turn Your Skills Into a Business", 
-                type: "blog", 
-                path_or_url: "content/blog/skills-to-business.md",
-                subtitle: "4 min read"
-              }
-            ],
-            reflection_prompt: "What did people say you're good at? Did any of their answers surprise you? How might your skills connect to the frustrations you observed?"
-          },
-          observation_config: {
-            briefing_text: "Ask 3 people who know you well: 'What am I unusually good at?' And ask yourself: 'Would people pay me to do this for them?'",
-            guide_questions: [
-              "What do people come to you for help with?",
-              "What do you do that feels effortless to you but hard for others?",
-              "What have you been doing since you were young?",
-              "What do you enjoy doing so much that you lose track of time?",
-              "What do you know more about than the average person?"
-            ],
-            min_observations: 3,
-            observation_period_days: 3
-          },
-          metadata_config: {
-            source_type: "skills"
-          }
-        },
-        {
-          id: "m2_q1_t3_enter_opportunities",
-          title: "Enter your best opportunities",
-          sequence: 3,
-          type: "form",
-          component_key: "OpportunityForm",
-          grant_points: 25,
-          estimated_minutes: 30,
-          description: "Open your observation journal. Pick the 3-5 frustrations that felt most real, most frequent, or most interesting. Also look at your skill reflections. Where do your skills and frustrations intersect? Enter them into the system as opportunities—these are the raw materials for your business.",
-          mission_id: "mission2",
-          quest_id: "mission2_quest1",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "From Frustration to Business Idea", 
-                type: "blog", 
-                path_or_url: "content/blog/frustration-to-business.md" 
-              },
-              { 
-                title: "How to Write a Clear Problem Statement", 
-                type: "blog", 
-                path_or_url: "content/blog/problem-statement.md" 
-              }
+            success_message: "You've completed Quest 1: Mine Yourself. You've identified problems from your own life and skills. You're building a foundation for your business.",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+
+            tasks: [
+                // Task 1.1: Observe What Frustrates You
+                {
+                    id: "mission2_quest1_task1",
+                    title: "Spot Your Frustrations",
+                    sequence: 1,
+                    execution_type: "observation-form",
+                    estimated_minutes: 20,
+                    briefing_text: "Your own frustrations are the most accessible problems to solve. What annoys you? What wastes your time? What feels broken? List them all—big and small.",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest1",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/your-pain-is-a-goldmine",
+                            title: "Your Pain Is a Goldmine"
+                        },
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-spot-frustrations",
+                            title: "How to Spot Frustrations in Your Daily Life"
+                        }
+                    ],
+                    component_key: "FrustrationObservationForm",
+                    reflection_prompt: "Look at your frustrations. Which one feels the most urgent? Which one do you wish someone would solve?",
+                    observation_context: {
+                        category: "personal_problems",
+                        reference: "user_opportunities"
+                    },
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "FRUSTRATION_SPOTTER"
+                    },
+                    challenges: [
+                        {
+                            title: "The Frustration Log",
+                            description: "For one week, write down every frustration you encounter. Big or small. At work, at home, in public. Just observe.",
+                            link: "/resources/challenges/frustration-log"
+                        }
+                    ],
+                    ai_config: null,
+                    dependencies: [],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 1.2: Your Problems as Opportunities
+                {
+                    id: "mission2_quest1_task2",
+                    title: "Turn Frustrations Into Opportunities",
+                    sequence: 2,
+                    execution_type: "standard-form",
+                    estimated_minutes: 25,
+                    briefing_text: "Now let's reframe your frustrations as business opportunities. A frustration is just an unsolved problem. An unsolved problem is an opportunity.",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest1",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-turn-problems-into-opportunities",
+                            title: "How to Turn Problems Into Opportunities"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/why-frustrations-make-the-best-businesses",
+                            title: "Why Frustrations Make the Best Businesses"
+                        }
+                    ],
+                    component_key: "OpportunityFromFrustrationForm",
+                    reflection_prompt: "Which of your frustrations could someone pay to have solved? Why?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "PROBLEM_REFORMER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission2_quest1_task1"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 1.3: Skill Observation
+                {
+                    id: "mission2_quest1_task3",
+                    title: "Audit Your Skills",
+                    sequence: 3,
+                    execution_type: "observation-form",
+                    estimated_minutes: 20,
+                    briefing_text: "Your skills are assets. What are you good at? What do people ask you for help with? What comes naturally to you? These are potential business opportunities.",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest1",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/skills-are-assets",
+                            title: "Your Skills Are Your Assets"
+                        },
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-identify-your-valuable-skills",
+                            title: "How to Identify Your Most Valuable Skills"
+                        }
+                    ],
+                    component_key: "SkillObservationForm",
+                    reflection_prompt: "Which of your skills could help someone solve a problem? Who needs this skill?",
+                    observation_context: {
+                        category: "skills",
+                        reference: "user_opportunities"
+                    },
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "SKILL_AUDITOR"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: [],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 1.4: Add Skills as Opportunities
+                {
+                    id: "mission2_quest1_task4",
+                    title: "Skills as a Business",
+                    sequence: 4,
+                    execution_type: "standard-form",
+                    estimated_minutes: 25,
+                    briefing_text: "Your skills can be a business. What's a problem you could solve using your skills? Who would pay for that?",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest1",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-turn-skills-into-a-business",
+                            title: "How to Turn Your Skills Into a Business"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/what-skills-people-pay-for",
+                            title: "What Skills Are People Willing to Pay For"
+                        }
+                    ],
+                    component_key: "SkillsOpportunityForm",
+                    reflection_prompt: "How could you package your skills as a service or product? What would be the simplest version?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "SKILL_ENTREPRENEUR"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission2_quest1_task3"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }
             ]
-          },
-          observation_config: null,
-          metadata_config: {
-            source_type: "personal_problems",
-            source_context: "Look at your frustration journal. Pick the 3-5 frustrations that felt most real, most frequent, or most interesting. Also look at your skill reflections. Where do your skills and frustrations intersect? Enter them as opportunities.",
-            dependencies: ["m2_q1_t1_observation_week", "m2_q1_t2_skill_reflection"]
-          }
-        }
-      ]
-    },
-    quest2: {
-      id: "mission2_quest2",
-      slug: "people-in-your-circle",
-      title: "People in Your Circle",
-      subtitle: "The problems of people you know are the problems you understand best",
-      description: "Now we're expanding outward. The people you know—friends, family, colleagues, classmates—have problems too. And because you know them, you can observe their frustrations firsthand. This is research you can do without leaving your comfort zone.",
-      sequence: 2,
-      content: "",
-      estimated_in_app_minutes: 60,
-      estimated_off_app_minutes: 240,
-      is_optional: false,
-      mission_id: "mission2",
-      content_path: "content/missions/mission2/quests/your-zone-of-influence.md",
-      // ✅ Nested ai_config
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Investigator",
-        persona_prompt: "You are a curious researcher helping the user observe problems in their social circles. Encourage them to be good listeners. Help them distinguish between minor annoyances and real problems. Remind them: they're doing research, not pitching.",
-        required_context: ["user_profiles"],
-        on_success: {
-          grant_points: 50,
-          badge_key: "CURIOUS"
-        }
-      },
-      tasks: [
-        {
-          id: "m2_q2_t1_social_observation",
-          title: "Observe the problems of people around you",
-          sequence: 1,
-          type: "observation",
-          component_key: "ObservationNotepad",
-          grant_points: 25,
-          estimated_minutes: 180,
-          description: "Pick 3 people in your life. Could be a friend, a colleague, a family member, someone at your gym. Over the next week, observe them. What are they complaining about? What do they do that seems unnecessarily hard? What do they buy to fix their problems? Don't ask them yet—just watch. Take notes. Notice patterns.",
-          mission_id: "mission2",
-          quest_id: "mission2_quest2",
-          execution_environment: "off_app",
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "Social Observation Worksheet (PDF)", 
-                type: "download", 
-                path_or_url: "/resources/social-observation.pdf" 
-              },
-              { 
-                title: "How to Observe Without Judging", 
-                type: "blog", 
-                path_or_url: "content/blog/observing-without-judging.md",
-                subtitle: "4 min read"
-              }
-            ],
-            reflection_prompt: "What surprised you about people's frustrations? Was there a pattern across different people? Which problem seemed most real?"
-          },
-          observation_config: {
-            briefing_text: "Pick 3 people in your life. Could be a friend, a colleague, a family member, someone at your gym. Over the next week, observe them. What are they complaining about? What do they do that seems unnecessarily hard? What do they buy to fix their problems? Don't ask them yet—just watch. Take notes. Notice patterns.",
-            guide_questions: [
-              "What does this person complain about regularly?",
-              "What tasks do they avoid or procrastinate on?",
-              "What do they spend money on to solve problems?",
-              "What do they do that seems inefficient?",
-              "What makes them frustrated or stressed?"
-            ],
-            min_observations: 5,
-            observation_period_days: 7
-          },
-          metadata_config: {
-            source_type: "zone_of_influence"
-          }
         },
+
+        // ============================================
+        // QUEST 2: Observe People Around You
+        // ============================================
         {
-          id: "m2_q2_t2_add_opportunities",
-          title: "Add validated opportunities to your list",
-          sequence: 2,
-          type: "form",
-          component_key: "OpportunityForm",
-          grant_points: 20,
-          estimated_minutes: 20,
-          description: "Look at your social observations. Which problems seemed most real? Which ones got people excited? Add them as opportunities.",
-          mission_id: "mission2",
-          quest_id: "mission2_quest2",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "From Observation to Opportunity", 
-                type: "blog", 
-                path_or_url: "content/blog/observation-to-opportunity.md" 
-              }
+            id: "mission2_quest2",
+            mission_id: "mission-2",
+            title: "People Watching",
+            content_path: "content/missions/mission2/quests/people-watching.md",
+            video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+            sequence: 2,
+            estimated_in_app_minutes: 30,
+            estimated_off_app_minutes: 120,
+            content: null,
+            context: ["user_profile"],
+            on_success: {
+                grant_points: 50,
+                badge_key: "OBSERVER"
+            },
+            notes: [
+                {
+                    title: "You are a detective",
+                    type: "guide",
+                    content: "Look at the people around you. What problems do they have? What do they complain about?",
+                    related_url: null
+                },
+                {
+                    title: "Listen more than you talk",
+                    type: "nudge",
+                    content: "The best insights come from listening—not to answers, but to frustrations.",
+                    related_url: null
+                },
+                {
+                    title: "Don't start with solutions",
+                    type: "warning",
+                    content: "Just observe. Don't try to fix anything. You're gathering data.",
+                    related_url: null
+                }
+            ],
+            success_message: "You've completed Quest 2: People Watching. You've observed problems in your immediate circle. These people are your first potential customers.",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+
+            tasks: [
+                // Task 2.1: You Are a Detective
+                {
+                    id: "mission2_quest2_task1",
+                    title: "Be a Detective",
+                    sequence: 1,
+                    execution_type: "observation-form",
+                    estimated_minutes: 25,
+                    briefing_text: "Put on your detective hat. Look at the people around you—friends, family, colleagues, neighbors. What problems do they have? What frustrates them? What do they complain about?",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest2",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-observe-problems-in-others",
+                            title: "How to Observe Problems in Others"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/people-are-the-best-problem-sources",
+                            title: "People Are the Best Problem Sources"
+                        }
+                    ],
+                    component_key: "DetectiveObservationForm",
+                    reflection_prompt: "Look at your observations. Which problem feels the most urgent? Which one do you think you could help solve?",
+                    observation_context: {
+                        category: "zone_of_influence",
+                        reference: "user_opportunities"
+                    },
+                    on_success: {
+                        grant_points: 25,
+                        badge_key: "DETECTIVE"
+                    },
+                    challenges: [
+                        {
+                            title: "The 5 Conversations Challenge",
+                            description: "Have 5 conversations this week where you ask people about their biggest frustrations—and just listen.",
+                            link: "/resources/challenges/5-conversations"
+                        }
+                    ],
+                    ai_config: null,
+                    dependencies: [],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 2.2: People's Problems as Opportunities
+                {
+                    id: "mission2_quest2_task2",
+                    title: "Spot the Opportunity",
+                    sequence: 2,
+                    execution_type: "standard-form",
+                    estimated_minutes: 20,
+                    briefing_text: "Now turn your observations into opportunities. For each problem you observed, what could be a solution? Who would pay for it?",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest2",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/observing-problems-around-you",
+                            title: "Observing Problems Around You"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/opportunities-are-all-around-you",
+                            title: "Opportunities Are All Around You"
+                        }
+                    ],
+                    component_key: "PeopleOpportunityForm",
+                    reflection_prompt: "Which of these problems could be the foundation of a business? Why?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 25,
+                        badge_key: "OPPORTUNITY_SPOTTER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission2_quest2_task1"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }
             ]
-          },
-          observation_config: null,
-          metadata_config: {
-            source_type: "zone_of_influence",
-            source_context: "Look at your social observations. Which problems seemed most real? Which ones got people excited? Add them as opportunities.",
-            dependencies: ["m2_q2_t1_social_observation"]
-          }
-        }
-      ]
-    },
-    quest3: {
-      id: "mission2_quest3",
-      slug: "the-world-out-there",
-      title: "The World Out There",
-      subtitle: "Find problems that are big enough to build a business around",
-      description: "Now we're looking at the broader market. This is where you find problems that affect enough people to make a real business. You'll use tools like Google Trends, Reddit, Facebook Groups, and marketplaces to see what people are struggling with on a larger scale.",
-      sequence: 3,
-      content: "",
-      estimated_in_app_minutes: 90,
-      estimated_off_app_minutes: 180,
-      is_optional: false,
-      mission_id: "mission2",
-      content_path: "content/missions/mission2/quests/the-world-out-there.md",
-      // ✅ Nested ai_config
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Cartographer",
-        persona_prompt: "You are helping the user map the landscape of problems. Guide them to look for patterns, not just individual complaints. Help them understand the difference between a niche problem and a market opportunity.",
-        required_context: ["user_profiles", "opportunities"],
-        on_success: {
-          grant_points: 75,
-          badge_key: "OBSERVER"
-        }
-      },
-      tasks: [
-        {
-          id: "m2_q3_t1_trend_research",
-          title: "What are people searching for?",
-          sequence: 1,
-          type: "action",
-          component_key: "OpportunityForm",
-          grant_points: 25,
-          estimated_minutes: 45,
-          description: "Open Google Trends. Search 5 terms related to problems you're curious about. Look at related queries—what are people searching for? Also check Reddit: what are people complaining about in subreddits related to your interests? This isn't about copying trends. It's about finding patterns of unmet need.",
-          mission_id: "mission2",
-          quest_id: "mission2_quest3",
-          execution_environment: "off_app",
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Use Google Trends for Business Ideas", 
-                type: "blog", 
-                path_or_url: "content/blog/google-trends-guide.md" 
-              },
-              { 
-                title: "Reddit: The World's Largest Focus Group", 
-                type: "blog", 
-                path_or_url: "content/blog/reddit-focus-group.md" 
-              }
-            ],
-            reflection_prompt: "What surprised you in the search results? Was there a problem that seemed more common than you expected?"
-          },
-          observation_config: null,
-          metadata_config: {
-            source_type: "broader_search",
-            source_context: "What did you find in Google Trends? What related queries came up? What seems to be a growing concern? Add them as opportunities.",
-            observation_task_ids: []
-          }
         },
+
+        // ============================================
+        // QUEST 3: Broader Search
+        // ============================================
         {
-          id: "m2_q3_t2_forum_research",
-          title: "Where do people talk about their problems?",
-          sequence: 2,
-          type: "action",
-          component_key: "OpportunityForm",
-          grant_points: 25,
-          estimated_minutes: 60,
-          description: "Check Facebook Groups, LinkedIn communities, industry forums. Look for questions that keep coming up. Look for hacks and workarounds. If people are actively discussing a problem, it's worth paying attention to. Join the conversation—ask questions, not pitch.",
-          mission_id: "mission2",
-          quest_id: "mission2_quest3",
-          execution_environment: "off_app",
-          checkback_delay_days: 2,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "Finding Problems in Online Communities", 
-                type: "blog", 
-                path_or_url: "content/blog/online-communities-problems.md" 
-              },
-              { 
-                title: "How to Ask Research Questions in Forums", 
-                type: "blog", 
-                path_or_url: "content/blog/ask-research-questions.md" 
-              }
+            id: "mission2_quest3",
+            mission_id: "mission-2",
+            title: "The Wider World",
+            content_path: "content/missions/mission2/quests/the-wider-world.md",
+            video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+            sequence: 3,
+            estimated_in_app_minutes: 45,
+            estimated_off_app_minutes: 180,
+            content: null,
+            context: ["user_profile"],
+            on_success: {
+                grant_points: 50,
+                badge_key: "WORLD_READY"
+            },
+            notes: [
+                {
+                    title: "Think bigger",
+                    type: "guide",
+                    content: "Your immediate circle is just the beginning. The world is full of problems waiting to be solved.",
+                    related_url: null
+                },
+                {
+                    title: "Explore new spaces",
+                    type: "nudge",
+                    content: "Visit forums, read comments, check trends. Problems are everywhere.",
+                    related_url: null
+                },
+                {
+                    title: "Don't get overwhelmed",
+                    type: "warning",
+                    content: "You're exploring. Not committing. Gather as many problems as you can—you'll filter later.",
+                    related_url: null
+                }
             ],
-            reflection_prompt: "Which community had the most engaged discussions about problems? What does that tell you?"
-          },
-          observation_config: null,
-          metadata_config: {
-            source_type: "broader_search",
-            source_context: "What problems did you find in forums? What questions keep coming up? Add them as opportunities.",
-            observation_task_ids: []
-          }
-        },
-        {
-          id: "m2_q3_t3_marketplace_research",
-          title: "What's already being sold?",
-          sequence: 3,
-          type: "action",
-          component_key: "OpportunityForm",
-          grant_points: 25,
-          estimated_minutes: 45,
-          description: "Go to Amazon, Etsy, or wherever relevant. Search for products related to your problem area. What do people complain about in the reviews? 'I wish this had...' 'If only it could...' Those complaints are gold. They represent unmet needs that existing products aren't solving.",
-          mission_id: "mission2",
-          quest_id: "mission2_quest3",
-          execution_environment: "off_app",
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "Reading Between the Lines of Product Reviews", 
-                type: "blog", 
-                path_or_url: "content/blog/product-review-insights.md" 
-              },
-              { 
-                title: "Competitor Analysis for Beginners", 
-                type: "blog", 
-                path_or_url: "content/blog/competitor-analysis.md" 
-              }
-            ],
-            reflection_prompt: "What complaints kept coming up? Is there a gap in the market you could fill?"
-          },
-          observation_config: null,
-          metadata_config: {
-            source_type: "broader_search",
-            source_context: "What complaints did you find in product reviews? What gaps did you identify? Add them as opportunities.",
-            observation_task_ids: []
-          }
-        },
-        {
-          id: "m2_q3_t4_consolidate_opportunities",
-          title: "Consolidate your opportunity list",
-          sequence: 4,
-          type: "form",
-          component_key: "OpportunityListReview",
-          grant_points: 20,
-          estimated_minutes: 30,
-          description: "You've done a lot of research. You've got observations from yourself, from people you know, and from the broader market. Now it's time to review everything. Look at your list. Which problems seem most real? Which affect the most people? Which are you most excited to solve? Add the best ones to your master opportunity list.",
-          mission_id: "mission2",
-          quest_id: "mission2_quest3",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Prioritize Business Ideas", 
-                type: "blog", 
-                path_or_url: "content/blog/prioritize-ideas.md" 
-              },
-              { 
-                title: "The Problem Filter: Separating Wheat from Chaff", 
-                type: "blog", 
-                path_or_url: "content/blog/problem-filter.md" 
-              }
+            success_message: "You've completed Quest 3: The Wider World. You've discovered problems beyond your immediate circle. Your opportunity set is now diverse.",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+
+            tasks: [
+                // Task 3.1: Discover Problems Through Online Communities
+                {
+                    id: "mission2_quest3_task1",
+                    title: "Search the Communities",
+                    sequence: 1,
+                    execution_type: "standard-form",
+                    estimated_minutes: 30,
+                    briefing_text: "Online communities are goldmines. Reddit, Facebook Groups, LinkedIn communities, Quora—people are actively discussing their problems. Go find them.",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest3",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-find-problems-in-online-communities",
+                            title: "How to Find Problems in Online Communities"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/problem-spotting-techniques",
+                            title: "Problem-Spotting Techniques for Founders"
+                        }
+                    ],
+                    component_key: "CommunityProblemForm",
+                    reflection_prompt: "What's the most common problem you're seeing in these communities? Why do you think it's common?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "COMMUNITY_EXPLORER"
+                    },
+                    challenges: [
+                        {
+                            title: "The Deep Dive",
+                            description: "Spend 2 hours diving deep into a community or industry you know nothing about. What problems do they discuss?",
+                            link: "/resources/challenges/the-deep-dive"
+                        }
+                    ],
+                    ai_config: null,
+                    dependencies: [],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 3.2: Discover Problems Through Trends
+                {
+                    id: "mission2_quest3_task2",
+                    title: "Ride the Trends",
+                    sequence: 2,
+                    execution_type: "standard-form",
+                    estimated_minutes: 30,
+                    briefing_text: "Trends are signals. What's changing? What's new? What's growing? These changes create new problems—and new opportunities.",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest3",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-spot-problems-in-trends",
+                            title: "How to Spot Problems in Trends"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/trends-are-trouble",
+                            title: "Trends Are Trouble (And That's Good)"
+                        }
+                    ],
+                    component_key: "TrendProblemForm",
+                    reflection_prompt: "What trend is creating new problems? Who is being affected by these changes?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "TREND_SPOTTER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: [],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 3.3: Discover Problems Through Marketplaces
+                {
+                    id: "mission2_quest3_task3",
+                    title: "The Marketplace Scanner",
+                    sequence: 3,
+                    execution_type: "standard-form",
+                    estimated_minutes: 30,
+                    briefing_text: "Marketplaces tell you what people are already paying for. They reveal gaps, complaints, and underserved needs. Go scan Etsy, Fiverr, Upwork, Amazon—what problems are being solved? What's missing?",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest3",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-spot-opportunities-in-marketplaces",
+                            title: "How to Spot Opportunities in Marketplaces"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/marketplace-love-notes",
+                            title: "Marketplace Love Notes and Breakup Letters"
+                        }
+                    ],
+                    component_key: "MarketplaceProblemForm",
+                    reflection_prompt: "What's a problem that people are trying to solve but no one is solving well? Where's the gap?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "MARKETPLACE_SCANNER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: [],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }
             ]
-          },
-          observation_config: null,
-          metadata_config: {}
-        }
-      ]
-    },
-    quest4: {
-      id: "mission2_quest4",
-      slug: "pick-your-path",
-      title: "Pick Your Path",
-      subtitle: "Validate, score, and commit to one opportunity",
-      description: "You've explored problems from every angle. You've looked inward, outward, and across the market. Now it's time to validate what's real, score your options, and commit to one. This is the moment of truth.",
-      sequence: 4,
-      content: "",
-      estimated_in_app_minutes: 60,
-      estimated_off_app_minutes: 120,
-      is_optional: false,
-      mission_id: "mission2",
-      content_path: "content/missions/mission2/quests/pick-your-path.md",
-      // ✅ Nested ai_config
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Decider",
-        persona_prompt: "You are helping the user make a clear decision. Don't let them waffle. Help them weigh the evidence, trust their gut, and commit. Remind them: they can always change direction later. The important thing is to start.",
-        required_context: ["user_profiles", "opportunities"],
-        on_success: {
-          grant_points: 100,
-          badge_key: "DECIDED"
-        }
-      },
-      tasks: [
-        {
-          id: "m2_q4_t1_validate_opportunities",
-          title: "Validate your opportunities with real people",
-          sequence: 1,
-          type: "form",
-          component_key: "OpportunityValidator",
-          grant_points: 30,
-          estimated_minutes: 60,
-          description: "Take your top 5-10 opportunities. Go back to potential customers. Ask: 'Is this actually a problem for you? Would you pay for a solution?' This is the moment of truth. Log what you learn.",
-          mission_id: "mission2",
-          quest_id: "mission2_quest4",
-          execution_environment: null,
-          checkback_delay_days: 3,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Ask 'Would You Pay?' Without Being Pushy", 
-                type: "blog", 
-                path_or_url: "content/blog/ask-would-you-pay.md" 
-              },
-              { 
-                title: "The Art of Validation", 
-                type: "blog", 
-                path_or_url: "content/blog/art-of-validation.md" 
-              }
-            ],
-            reflection_prompt: "What did people say? Did anyone get genuinely excited? Did anyone tell you they'd pay? That's your signal."
-          },
-          observation_config: null,
-          metadata_config: {}
         },
+
+        // ============================================
+        // QUEST 4: Pick the Best Opportunity
+        // ============================================
         {
-          id: "m2_q4_t2_score_opportunities",
-          title: "Score your opportunities honestly",
-          sequence: 2,
-          type: "form",
-          component_key: "OpportunityScorer",
-          grant_points: 30,
-          estimated_minutes: 30,
-          description: "Here's the truth: you can't pursue all of them. Let's get real. For each validated opportunity, score it honestly on these 5 criteria:\n\n• **Do I actually care about this problem?** (1-10)\n• **Do I know people who have this problem?** (1-10)\n• **Could I talk to them easily?** (1-10)\n• **Do I have any unfair advantage here?** (1-10)\n• **Is there a clear way I could get paid?** (1-10)",
-          mission_id: "mission2",
-          quest_id: "mission2_quest4",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Choose the Right Business Idea", 
-                type: "blog", 
-                path_or_url: "content/blog/choose-right-idea.md" 
-              },
-              { 
-                title: "The 5 Tests of a Good Business Opportunity", 
-                type: "blog", 
-                path_or_url: "content/blog/5-tests-opportunity.md" 
-              }
+            id: "mission2_quest4",
+            mission_id: "mission-2",
+            title: "The Decision",
+            content_path: "content/missions/mission2/quests/the-decision.md",
+            video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+            sequence: 4,
+            estimated_in_app_minutes: 45,
+            estimated_off_app_minutes: 30,
+            content: null,
+            context: ["user_profile", "user_opportunities"],
+            on_success: {
+                grant_points: 60,
+                badge_key: "DECISION_MAKER"
+            },
+            notes: [
+                {
+                    title: "This is the hard part",
+                    type: "guide",
+                    content: "You've gathered opportunities. Now you must choose. Don't fall in love—evaluate objectively.",
+                    related_url: null
+                },
+                {
+                    title: "Perfect is the enemy of started",
+                    type: "guide",
+                    content: "No opportunity is perfect. Choose the one that's good enough to start.",
+                    related_url: null
+                },
+                {
+                    title: "Trust your gut",
+                    type: "nudge",
+                    content: "The data matters. But so does your instinct. Don't ignore it.",
+                    related_url: null
+                }
             ],
-            reflection_prompt: "Looking at your scores, which opportunity stands out? Which one would you be most excited to tell people about?"
-          },
-          observation_config: null,
-          metadata_config: {}
-        },
-        {
-          id: "m2_q4_t3_create_project",
-          title: "Save your project",
-          sequence: 3,
-          type: "form",
-          component_key: "ProjectCreationForm",
-          grant_points: 40,
-          estimated_minutes: 20,
-          description: "You've found it. The opportunity that passes the test. Save it as your project. This is your starting point. Everything from here on is about making this real. Congratulations—you've taken the hardest step.",
-          mission_id: "mission2",
-          quest_id: "mission2_quest4",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "What to Do After You Pick Your Business Idea", 
-                type: "blog", 
-                path_or_url: "content/blog/after-picking-idea.md" 
-              },
-              { 
-                title: "Your First 30 Days as a Founder", 
-                type: "blog", 
-                path_or_url: "content/blog/first-30-days.md" 
-              }
+            success_message: "You've completed Quest 4: The Decision. You've evaluated your opportunities, picked the best one, and committed to a direction. You're no longer searching—you're building. Mission 3 awaits.",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+
+            tasks: [
+                // Task 4.1: Scoring and Assessment
+                {
+                    id: "mission2_quest4_task1",
+                    title: "Score Your Opportunities",
+                    sequence: 1,
+                    execution_type: "standard-form",
+                    estimated_minutes: 30,
+                    briefing_text: "Now it's time to evaluate your opportunities. For each one, score it against 5 criteria. This isn't about finding the 'perfect' opportunity—it's about finding the one that's best for you, right now.\n\nScoring Criteria (1-5):\n• Passion: How excited are you about this problem?\n• Urgency: How badly do people need this solved?\n• Workaround Spend: How much are people already spending to solve this?\n• Unfair Advantage: Do you have a unique edge?\n• MSP Feasibility: Can you build a Minimum Sellable Product quickly?",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest4",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-score-business-opportunities",
+                            title: "How to Score Business Opportunities"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/the-ideal-opportunity-profile",
+                            title: "The Ideal Opportunity Profile"
+                        }
+                    ],
+                    component_key: "OpportunityScoringForm",
+                    reflection_prompt: "Look at your highest-scoring opportunity. Why did it score so high? What makes it the most promising?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 30,
+                        badge_key: "SCORER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: [],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 4.2: Rank and Pick One
+                {
+                    id: "mission2_quest4_task2",
+                    title: "Pick Your Opportunity",
+                    sequence: 2,
+                    execution_type: "standard-form",
+                    estimated_minutes: 15,
+                    briefing_text: "You've scored all your opportunities. Now it's time to pick one. Don't overthink—choose the one that feels right based on the scores and your gut.",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest4",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-commit-to-an-idea",
+                            title: "How to Commit to an Idea"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/analysis-paralysis-kills-ideas",
+                            title: "Analysis Paralysis Kills Ideas"
+                        }
+                    ],
+                    component_key: "OpportunityPickerForm",
+                    reflection_prompt: "Why did you pick this opportunity? What made it stand out from the others?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 15,
+                        badge_key: "OPPORTUNITY_PICKER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission2_quest4_task1"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 4.3: Decision Gate
+                {
+                    id: "mission2_quest4_task3",
+                    title: "Make It Official",
+                    sequence: 3,
+                    execution_type: "decision_gate",
+                    estimated_minutes: 10,
+                    briefing_text: "This is it. You're either committing to this opportunity or going back to discover more. There's no wrong choice—but there is a choice.",
+                    mission_id: "mission-2",
+                    quest_id: "mission2_quest4",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/commitment-is-the-first-step",
+                            title: "Commitment Is the First Step"
+                        }
+                    ],
+                    component_key: "DecisionGateForm",
+                    reflection_prompt: "What's your biggest hesitation about this opportunity? Address it now.",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 15,
+                        badge_key: "COMMITTED"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission2_quest4_task2"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }
             ]
-          },
-          observation_config: null,
-          metadata_config: {}
         }
-      ]
-    }
-  }
+    ],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
 };
+
+export default mission2;

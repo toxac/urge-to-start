@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.15"
   }
   public: {
     Tables: {
@@ -515,37 +515,46 @@ export type Database = {
       }
       missions: {
         Row: {
-          briefing_text: string | null
-          content: string
+          big_question: string | null
+          content: string | null
+          content_path: string
+          context: Json
           created_at: string
+          estimated_time_in_days: number
           id: string
-          prerequisites: Json | null
           sequence: number
+          success_message: string
           title: string
           updated_at: string
-          video_url: string
+          video_url: string | null
         }
         Insert: {
-          briefing_text?: string | null
-          content: string
+          big_question?: string | null
+          content?: string | null
+          content_path: string
+          context?: Json
           created_at?: string
+          estimated_time_in_days?: number
           id: string
-          prerequisites?: Json | null
           sequence: number
+          success_message: string
           title: string
           updated_at?: string
-          video_url: string
+          video_url?: string | null
         }
         Update: {
-          briefing_text?: string | null
-          content?: string
+          big_question?: string | null
+          content?: string | null
+          content_path?: string
+          context?: Json
           created_at?: string
+          estimated_time_in_days?: number
           id?: string
-          prerequisites?: Json | null
           sequence?: number
+          success_message?: string
           title?: string
           updated_at?: string
-          video_url?: string
+          video_url?: string | null
         }
         Relationships: []
       }
@@ -873,56 +882,59 @@ export type Database = {
       }
       quests: {
         Row: {
-          ai_config: Json
-          content: string
+          content: string | null
+          content_path: string
+          context: Json | null
           created_at: string
-          description: string | null
-          estimated_in_app_minutes: number | null
-          estimated_off_app_minutes: number | null
+          estimated_in_app_minutes: number
+          estimated_off_app_minutes: number
           id: string
-          is_optional: boolean
           mission_id: string
+          notes: Json | null
+          on_success: Json
           sequence: number
-          slug: string
-          subtitle: string
+          success_message: string
           title: string
           updated_at: string
+          video_url: string | null
         }
         Insert: {
-          ai_config: Json
-          content: string
+          content?: string | null
+          content_path: string
+          context?: Json | null
           created_at?: string
-          description?: string | null
-          estimated_in_app_minutes?: number | null
-          estimated_off_app_minutes?: number | null
+          estimated_in_app_minutes?: number
+          estimated_off_app_minutes?: number
           id: string
-          is_optional?: boolean
           mission_id: string
+          notes?: Json | null
+          on_success?: Json
           sequence: number
-          slug: string
-          subtitle: string
+          success_message: string
           title: string
           updated_at?: string
+          video_url?: string | null
         }
         Update: {
-          ai_config?: Json
-          content?: string
+          content?: string | null
+          content_path?: string
+          context?: Json | null
           created_at?: string
-          description?: string | null
-          estimated_in_app_minutes?: number | null
-          estimated_off_app_minutes?: number | null
+          estimated_in_app_minutes?: number
+          estimated_off_app_minutes?: number
           id?: string
-          is_optional?: boolean
           mission_id?: string
+          notes?: Json | null
+          on_success?: Json
           sequence?: number
-          slug?: string
-          subtitle?: string
+          success_message?: string
           title?: string
           updated_at?: string
+          video_url?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "fk_quests_mission"
+            foreignKeyName: "quests_mission_id_fkey"
             columns: ["mission_id"]
             isOneToOne: false
             referencedRelation: "missions"
@@ -962,77 +974,89 @@ export type Database = {
       tasks: {
         Row: {
           ai_config: Json | null
+          briefing_text: string
+          challenges: Json | null
           checkback_delay_days: number | null
           component_key: string
           created_at: string
-          description: string
+          dependencies: string[] | null
           estimated_minutes: number
           execution_environment: string | null
-          grant_points: number
+          execution_type: Database["public"]["Enums"]["execution_type"]
           id: string
-          interval: Database["public"]["Enums"]["recurrence_interval"] | null
-          metadata_config: Json
+          interval: number | null
           mission_id: string
-          observation_config: Json | null
+          observation_context: Json | null
+          on_success: Json
           quest_id: string
           recurring: boolean | null
+          reflection_prompt: string | null
+          resources: Json | null
           sequence: number
+          target_count: number | null
           title: string
-          type: Database["public"]["Enums"]["task_execution_type"]
           updated_at: string
         }
         Insert: {
           ai_config?: Json | null
+          briefing_text: string
+          challenges?: Json | null
           checkback_delay_days?: number | null
           component_key: string
           created_at?: string
-          description?: string
+          dependencies?: string[] | null
           estimated_minutes?: number
           execution_environment?: string | null
-          grant_points?: number
+          execution_type: Database["public"]["Enums"]["execution_type"]
           id: string
-          interval?: Database["public"]["Enums"]["recurrence_interval"] | null
-          metadata_config?: Json
+          interval?: number | null
           mission_id: string
-          observation_config?: Json | null
+          observation_context?: Json | null
+          on_success?: Json
           quest_id: string
           recurring?: boolean | null
+          reflection_prompt?: string | null
+          resources?: Json | null
           sequence: number
+          target_count?: number | null
           title: string
-          type: Database["public"]["Enums"]["task_execution_type"]
           updated_at?: string
         }
         Update: {
           ai_config?: Json | null
+          briefing_text?: string
+          challenges?: Json | null
           checkback_delay_days?: number | null
           component_key?: string
           created_at?: string
-          description?: string
+          dependencies?: string[] | null
           estimated_minutes?: number
           execution_environment?: string | null
-          grant_points?: number
+          execution_type?: Database["public"]["Enums"]["execution_type"]
           id?: string
-          interval?: Database["public"]["Enums"]["recurrence_interval"] | null
-          metadata_config?: Json
+          interval?: number | null
           mission_id?: string
-          observation_config?: Json | null
+          observation_context?: Json | null
+          on_success?: Json
           quest_id?: string
           recurring?: boolean | null
+          reflection_prompt?: string | null
+          resources?: Json | null
           sequence?: number
+          target_count?: number | null
           title?: string
-          type?: Database["public"]["Enums"]["task_execution_type"]
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "fk_tasks_mission"
+            foreignKeyName: "tasks_mission_id_fkey"
             columns: ["mission_id"]
             isOneToOne: false
             referencedRelation: "missions"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fk_tasks_quest"
+            foreignKeyName: "tasks_quest_id_fkey"
             columns: ["quest_id"]
             isOneToOne: false
             referencedRelation: "quests"
@@ -1299,31 +1323,10 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "user_progress_mission_id_fkey"
-            columns: ["mission_id"]
-            isOneToOne: false
-            referencedRelation: "missions"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "user_progress_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_progress_quest_id_fkey"
-            columns: ["quest_id"]
-            isOneToOne: false
-            referencedRelation: "quests"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_progress_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "tasks"
             referencedColumns: ["id"]
           },
         ]
@@ -1405,6 +1408,14 @@ export type Database = {
         | "launch"
         | "networking"
         | "program_based"
+      execution_type:
+        | "standard-form"
+        | "simulator"
+        | "off-task-action"
+        | "observation-form"
+        | "dashboard-view"
+        | "log_counter"
+        | "decision_gate"
       flag_reason:
         | "broken_link"
         | "misleading_offer"
@@ -1426,6 +1437,7 @@ export type Database = {
         | "approved"
         | "rejected"
         | "expired"
+      note_type: "requirement" | "warning" | "guide" | "nudge"
       offering_type:
         | "program"
         | "membership"
@@ -1452,7 +1464,7 @@ export type Database = {
         | "resource_share"
         | "project_launch"
       program_item_type: "mission" | "quest" | "task"
-      progress_status: "not_started" | "in_progress" | "completed"
+      progress_status: "not_started" | "in_progress" | "completed" | "repeat"
       question_status:
         | "pending"
         | "answered_by_ai"
@@ -1467,6 +1479,14 @@ export type Database = {
         | "challenge"
         | "download"
       recurrence_interval: "daily" | "weekly" | "monthly" | "quarterly"
+      reference_type:
+        | "insights"
+        | "guide"
+        | "tools"
+        | "youtube"
+        | "podcast"
+        | "book"
+        | "other"
       task_execution_type:
         | "form"
         | "simulator"
@@ -1640,6 +1660,15 @@ export const Constants = {
         "networking",
         "program_based",
       ],
+      execution_type: [
+        "standard-form",
+        "simulator",
+        "off-task-action",
+        "observation-form",
+        "dashboard-view",
+        "log_counter",
+        "decision_gate",
+      ],
       flag_reason: [
         "broken_link",
         "misleading_offer",
@@ -1664,6 +1693,7 @@ export const Constants = {
         "rejected",
         "expired",
       ],
+      note_type: ["requirement", "warning", "guide", "nudge"],
       offering_type: [
         "program",
         "membership",
@@ -1694,7 +1724,7 @@ export const Constants = {
         "project_launch",
       ],
       program_item_type: ["mission", "quest", "task"],
-      progress_status: ["not_started", "in_progress", "completed"],
+      progress_status: ["not_started", "in_progress", "completed", "repeat"],
       question_status: [
         "pending",
         "answered_by_ai",
@@ -1711,6 +1741,15 @@ export const Constants = {
         "download",
       ],
       recurrence_interval: ["daily", "weekly", "monthly", "quarterly"],
+      reference_type: [
+        "insights",
+        "guide",
+        "tools",
+        "youtube",
+        "podcast",
+        "book",
+        "other",
+      ],
       task_execution_type: [
         "form",
         "simulator",

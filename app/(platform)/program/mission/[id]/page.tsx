@@ -1,5 +1,5 @@
 'use client';
-
+// app/(platform)/program/mission/[id]/page.tsx
 import React, { useEffect, useState, useTransition } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useStore } from '@nanostores/react';

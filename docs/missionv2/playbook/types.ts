@@ -42,7 +42,6 @@ export type QuestSchema = {
         badge_key: string;
     };
     notes: NoteSchema[] | null;
-    challenges: ChallengeSchema[] | null;
     tasks: TaskSchema[];
     success_message: string;
 };
@@ -93,6 +92,7 @@ export type TaskSchema = {
         grant_points: number;
         badge_key: string;
     };
+    challenges: ChallengeSchema[] | null;
     ai_config: AIConfigSchema | null;
     dependencies: string[] | null;
     target_count?: number | null;
@@ -108,7 +108,8 @@ export type ExecutionType =
     | "off-task-action" 
     | "observation-form" 
     | "dashboard-view"
-    | "log_counter";
+    | "log_counter"
+    | "decision_gate";
 
 
 // ============================================

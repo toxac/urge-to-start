@@ -1,741 +1,805 @@
 // lib/playbook/mission4.ts
-import { Mission } from "@/types/playbook";
+import { MissionSchema } from '@/types/playbook';
 
-export const mission4: Mission = {
-  id: "mission4",
-  title: "How Will You Make Money?",
-  sequence: 4,
-  video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
-  briefing_text: "You've validated the problem, the customer, and the solution. Now let's figure out if this can actually be a business. We'll explore pricing models, go-to-market channels, partnerships, costs, and finally check if the math works. By the end of this mission, you'll know if you have a viable business—or if you need to go back to the drawing board.",
-  content: "",
-  content_path: "content/mission4/mission.md",
-  prerequisites: [
-    {
-      item: "A validated project from Mission 3",
-      promptRawText: "You should have completed Mission 3 and have a project that passed the viability check. If not, go back to Mission 3 and complete it first."
-    },
-    {
-      item: "Customer contacts ready to talk",
-      promptRawText: "You'll need to talk to potential customers about pricing and willingness to pay. Make sure you have at least 3-5 contacts from Mission 3 who you can reach out to."
-    },
-    {
-      item: "Openness to changing your idea",
-      promptRawText: "This mission might reveal that your idea doesn't work as a business. That's okay! It's better to know now than after you've built it. Be open to pivoting or going back to Mission 2."
-    }
-  ],
-  quests: {
-    quest1: {
-      id: "mission4_quest1",
-      slug: "what-will-you-charge",
-      title: "What Will You Charge?",
-      subtitle: "Define your pricing model and price points",
-      description: "Your pricing model shapes everything—how customers perceive your value, how much revenue you can generate, and how your business grows. In this quest, you'll explore different pricing models, talk to customers about what they'd pay, and set your initial price.",
-      sequence: 1,
-      content: "",
-      estimated_in_app_minutes: 90,
-      estimated_off_app_minutes: 120,
-      is_optional: false,
-      mission_id: "mission4",
-      content_path: "content/mission4/quests/what-will-you-charge.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Economist",
-        persona_prompt: "You are a pricing strategist. Help the user think through their pricing model and price points. Challenge them to think about value, not just cost. Help them talk to customers about price without being pushy.",
-        required_context: ["user_profiles", "projects"],
-        on_success: {
-          grant_points: 75,
-          badge_key: "PRICE_SETTER"
-        }
-      },
-      tasks: [
+const mission4: MissionSchema = {
+    id: "mission-4",
+    title: "The Business Engine",
+    content: null,
+    content_path: "content/missions/mission4/mission.md",
+    sequence: 4,
+    video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+    big_question: "How will you make money?",
+    estimated_time_in_days: 21,
+    context: ["user_profile", "user_projects"],
+    success_message: "You've completed Mission 4: The Business Engine. You've defined your offer, set your price, built your acquisition plan, run the numbers, and made a conscious decision. You know exactly how your business makes money—or if it can at all. Mission 5 awaits.",
+
+    quests: [
+        // ============================================
+        // QUEST 1: Shape Your Offer
+        // ============================================
         {
-          id: "m4_q1_t1_pricing_models",
-          title: "Explore pricing models",
-          sequence: 1,
-          type: "form",
-          component_key: "PricingModelsForm",
-          grant_points: 25,
-          estimated_minutes: 30,
-          description: "How will you charge? One-time payment? Subscription? Usage-based? Freemium? Tiered? Each model has different implications for your business. Explore what fits your product and your customers.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest1",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "The 5 Most Common Pricing Models", 
-                type: "blog", 
-                path_or_url: "content/blog/pricing-models-guide.md", 
-                subtitle: "6 min read" 
-              },
-              { 
-                title: "Subscription vs. One-Time: Which Is Right for You?", 
-                type: "blog", 
-                path_or_url: "content/blog/subscription-vs-one-time.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "Pricing Model Decision Matrix", 
-                type: "download", 
-                path_or_url: "/resources/pricing-matrix.xlsx" 
-              }
-            ]
-          },
-          observation_config: null,
-          metadata_config: {}
-        },
-        {
-          id: "m4_q1_t2_willingness_to_pay",
-          title: "Ask customers what they'd pay",
-          sequence: 2,
-          type: "action",
-          component_key: "SimpleActionWidget",
-          grant_points: 30,
-          estimated_minutes: 90,
-          description: "This is the most important conversation you'll have. Reach out to your customer contacts and ask: 'What would you pay for a solution to this problem?' Don't lead them—listen. If they say 'nothing,' that's valuable data. If they name a price, that's gold.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest1",
-          execution_environment: "off_app",
-          checkback_delay_days: 3,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Ask About Pricing Without Being Awkward", 
-                type: "blog", 
-                path_or_url: "content/blog/ask-about-pricing.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "The One Question That Tells You If You Have a Business", 
-                type: "blog", 
-                path_or_url: "content/blog/the-one-question.md", 
-                subtitle: "4 min read" 
-              },
-              { 
-                title: "Pricing Interview Template", 
-                type: "download", 
-                path_or_url: "/resources/pricing-interview-template.pdf" 
-              }
+            id: "mission4_quest1",
+            mission_id: "mission-4",
+            title: "Shape Your Offer",
+            content_path: "content/missions/mission4/quests/shape-your-offer.md",
+            video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+            sequence: 1,
+            estimated_in_app_minutes: 45,
+            estimated_off_app_minutes: 30,
+            content: null,
+            context: ["user_profile", "user_projects"],
+            on_success: {
+                grant_points: 60,
+                badge_key: "OFFER_DEFINER"
+            },
+            notes: [
+                {
+                    title: "Your offer is your promise",
+                    type: "guide",
+                    content: "Your offer isn't just a list of features. It's a promise to solve a problem. Get the promise right, and the features follow.",
+                    related_url: null
+                },
+                {
+                    title: "Start with the customer",
+                    type: "nudge",
+                    content: "What does your customer actually want? Not what you want to build. What they want to buy.",
+                    related_url: null
+                },
+                {
+                    title: "Resist the temptation to add more",
+                    type: "warning",
+                    content: "A clear offer beats a complicated one every time. The best offers are simple.",
+                    related_url: null
+                }
             ],
-            reflection_prompt: "What did customers say they'd pay? Did anyone name a price without hesitation? Did anyone say 'it depends'? What surprised you most about these conversations?"
-          },
-          observation_config: null,
-          metadata_config: {}
-        },
-        {
-          id: "m4_q1_t3_set_your_price",
-          title: "Set your price",
-          sequence: 3,
-          type: "form",
-          component_key: "SetPriceForm",
-          grant_points: 20,
-          estimated_minutes: 20,
-          description: "Based on your research, set your price. Compare to competitors. Consider what customers said. Trust your gut. Remember: you can always change it later. The important thing is to pick a number and move forward.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest1",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Pick Your First Price", 
-                type: "blog", 
-                path_or_url: "content/blog/pick-your-first-price.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "The Psychology of Pricing", 
-                type: "blog", 
-                path_or_url: "content/blog/psychology-of-pricing.md", 
-                subtitle: "6 min read" 
-              },
-              { 
-                title: "Price as a Signal of Quality", 
-                type: "blog", 
-                path_or_url: "content/blog/price-as-signal.md", 
-                subtitle: "4 min read" 
-              }
+            success_message: "You've completed Quest 1: Shape Your Offer. You have a clear value proposition, a focused feature set, and a mapped customer experience. You know what you're selling.",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+
+            tasks: [
+                // Task 1.1: Value Proposition
+                {
+                    id: "mission4_quest1_task1",
+                    title: "Your Promise",
+                    sequence: 1,
+                    execution_type: "standard-form",
+                    estimated_minutes: 20,
+                    briefing_text: "What's the core promise you're making to your customer? What's the one thing they get that they can't get elsewhere? Your value proposition is the heartbeat of your offer.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest1",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-write-a-value-proposition",
+                            title: "How to Write a Value Proposition"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/the-value-proposition-is-not-the-features",
+                            title: "The Value Proposition Is Not the Features"
+                        }
+                    ],
+                    component_key: "ValuePropositionForm",
+                    reflection_prompt: "If your customer could only remember one thing about your offer, what should it be? That's your value proposition.",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "VALUE_PROMISE"
+                    },
+                    challenges: [
+                        {
+                            title: "The 2-Minute Test",
+                            description: "Can you explain your offer in 2 minutes to a stranger? Practice until they say 'I get it.'",
+                            link: "/resources/challenges/the-2-minute-test"
+                        }
+                    ],
+                    ai_config: null,
+                    dependencies: ["mission3_quest4_task3"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 1.2: Feature Set
+                {
+                    id: "mission4_quest1_task2",
+                    title: "What's In, What's Out",
+                    sequence: 2,
+                    execution_type: "standard-form",
+                    estimated_minutes: 20,
+                    briefing_text: "Brain dump all the features your solution could have. Don't filter, don't prioritize. Just list everything you can imagine. We'll filter in the next task.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest1",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/feature-brainstorming",
+                            title: "Feature Brainstorming"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/mvp-means-elimination",
+                            title: "MVP Means Elimination"
+                        }
+                    ],
+                    component_key: "FeatureBrainstormForm",
+                    reflection_prompt: "Look at your list. What features are you most excited about? Which ones are you dreading? That's a signal.",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 15,
+                        badge_key: "FEATURE_BRAINSTORMER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission4_quest1_task1"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 1.3: Feature Prioritization
+                {
+                    id: "mission4_quest1_task3",
+                    title: "Pick Your Focus",
+                    sequence: 3,
+                    execution_type: "standard-form",
+                    estimated_minutes: 20,
+                    briefing_text: "Now let's be ruthless. From your brainstorm, pick 3 must-have features for your first version. Then list what you explicitly won't include. This is where the magic happens.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest1",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/prioritizing-features",
+                            title: "Prioritizing Features"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/you-are-not-your-features",
+                            title: "You Are Not Your Features"
+                        }
+                    ],
+                    component_key: "FeaturePrioritizationForm",
+                    reflection_prompt: "You're saying 'no' to features. How does that feel? The best founders get comfortable with saying 'no' to good ideas so they can say 'yes' to great ones.",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "FEATURE_PRIORITIZER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission4_quest1_task2"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 1.4: Customer Experience
+                {
+                    id: "mission4_quest1_task4",
+                    title: "The Journey",
+                    sequence: 4,
+                    execution_type: "standard-form",
+                    estimated_minutes: 15,
+                    briefing_text: "Map the customer experience from payment to delivery. What happens after they give you money? Walk through each step.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest1",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/mapping-the-customer-journey",
+                            title: "Mapping the Customer Journey"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/customer-experience-is-the-product",
+                            title: "Customer Experience Is the Product"
+                        }
+                    ],
+                    component_key: "CustomerExperienceForm",
+                    reflection_prompt: "Put yourself in your customer's shoes. What are they feeling at each step? Where does the anxiety or confusion happen?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "EXPERIENCE_MAPPER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission4_quest1_task3"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }
             ]
-          },
-          observation_config: null,
-          metadata_config: {}
-        }
-      ]
-    },
-    quest2: {
-      id: "mission4_quest2",
-      slug: "how-will-you-reach-them",
-      title: "How Will You Reach Them?",
-      subtitle: "Define your go-to-market channels",
-      description: "Having a great product means nothing if people don't know about it. How will you reach your customers? In this quest, you'll explore different channels, design a small experiment to test one or two, and estimate how much it'll cost to acquire a customer.",
-      sequence: 2,
-      content: "",
-      estimated_in_app_minutes: 75,
-      estimated_off_app_minutes: 120,
-      is_optional: false,
-      mission_id: "mission4",
-      content_path: "content/mission4/quests/how-will-you-reach-them.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Marketer",
-        persona_prompt: "You are a practical marketing strategist. Help the user think through how to reach their customers. Encourage them to start small and test cheaply. Help them think about cost per acquisition and what's sustainable.",
-        required_context: ["user_profiles", "projects"],
-        on_success: {
-          grant_points: 50,
-          badge_key: "MARKET_STRATEGIST"
-        }
-      },
-      tasks: [
-        {
-          id: "m4_q2_t1_channel_exploration",
-          title: "Explore your channels",
-          sequence: 1,
-          type: "form",
-          component_key: "ChannelExplorationForm",
-          grant_points: 20,
-          estimated_minutes: 30,
-          description: "How will you reach your customers? Direct sales, content marketing, paid ads, partnerships, marketplaces, referrals, social media, cold outreach, SEO, events. Each channel works differently. Which ones fit your customer, your product, and your skills?",
-          mission_id: "mission4",
-          quest_id: "mission4_quest2",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "The 10 Most Common Acquisition Channels", 
-                type: "blog", 
-                path_or_url: "content/blog/acquisition-channels.md", 
-                subtitle: "7 min read" 
-              },
-              { 
-                title: "How to Choose Your First Channel", 
-                type: "blog", 
-                path_or_url: "content/blog/choose-first-channel.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "Channel Fit: What Works for Your Customer", 
-                type: "blog", 
-                path_or_url: "content/blog/channel-fit.md", 
-                subtitle: "4 min read" 
-              }
-            ]
-          },
-          observation_config: null,
-          metadata_config: {}
         },
+
+        // ============================================
+        // QUEST 2: Price It Right
+        // ============================================
         {
-          id: "m4_q2_t2_channel_experiment",
-          title: "Design a channel experiment",
-          sequence: 2,
-          type: "action",
-          component_key: "SimpleActionWidget",
-          grant_points: 25,
-          estimated_minutes: 60,
-          description: "Pick 1-2 channels that seem most promising. Design a small, cheap experiment to test them. Could you reach out to 20 people directly? Post 10 times on social media? Run a $50 ad test? The goal is to learn, not to succeed.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest2",
-          execution_environment: "off_app",
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Run a Marketing Experiment", 
-                type: "blog", 
-                path_or_url: "content/blog/marketing-experiment.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "The $50 Marketing Test", 
-                type: "blog", 
-                path_or_url: "content/blog/50-dollar-test.md", 
-                subtitle: "4 min read" 
-              },
-              { 
-                title: "Experiment Tracker Template", 
-                type: "download", 
-                path_or_url: "/resources/experiment-tracker.xlsx" 
-              }
+            id: "mission4_quest2",
+            mission_id: "mission-4",
+            title: "Price It Right",
+            content_path: "content/missions/mission4/quests/price-it-right.md",
+            video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+            sequence: 2,
+            estimated_in_app_minutes: 30,
+            estimated_off_app_minutes: 20,
+            content: null,
+            context: ["user_profile", "user_projects"],
+            on_success: {
+                grant_points: 50,
+                badge_key: "PRICE_SETTER"
+            },
+            notes: [
+                {
+                    title: "Price is a statement",
+                    type: "guide",
+                    content: "Your price says something about your product. Too cheap and it feels low-quality. Too expensive and it feels out of reach.",
+                    related_url: null
+                },
+                {
+                    title: "Value first, cost second",
+                    type: "guide",
+                    content: "The right price is what your customer would willingly pay for the value they receive. Not what you need to survive.",
+                    related_url: null
+                },
+                {
+                    title: "Don't underprice",
+                    type: "nudge",
+                    content: "First-time founders almost always underprice. You can always go down. Going up is much harder.",
+                    related_url: null
+                }
             ],
-            reflection_prompt: "What channel are you most excited about? What worries you about it? What would make you consider this experiment a success?"
-          },
-          observation_config: null,
-          metadata_config: {}
-        },
-        {
-          id: "m4_q2_t3_acquisition_cost",
-          title: "Estimate your acquisition cost",
-          sequence: 3,
-          type: "form",
-          component_key: "AcquisitionCostForm",
-          grant_points: 20,
-          estimated_minutes: 20,
-          description: "Based on your channel experiments (or your best guess), what will it cost to acquire a customer? Time, money, and effort. Compare this to what they'll pay. If the numbers don't work, that's good to know now.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest2",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Calculate Customer Acquisition Cost", 
-                type: "blog", 
-                path_or_url: "content/blog/calculate-cac.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "The Relationship Between CAC and LTV", 
-                type: "blog", 
-                path_or_url: "content/blog/cac-ltv.md", 
-                subtitle: "6 min read" 
-              },
-              { 
-                title: "When Is a Channel Worth Pursuing?", 
-                type: "blog", 
-                path_or_url: "content/blog/when-is-channel-worth-it.md", 
-                subtitle: "4 min read" 
-              }
+            success_message: "You've completed Quest 2: Price It Right. You have a confident price based on value, not fear.",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+
+            tasks: [
+                // Task 2.1: Set the Price
+                {
+                    id: "mission4_quest2_task1",
+                    title: "Name Your Number",
+                    sequence: 1,
+                    execution_type: "standard-form",
+                    estimated_minutes: 20,
+                    briefing_text: "Let's set your price. Start with what the problem costs your customer, then what they pay for alternatives, then name your number.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest2",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-price-your-offer",
+                            title: "How to Price Your Offer"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/price-is-value-perceived",
+                            title: "Price Is Value Perceived"
+                        }
+                    ],
+                    component_key: "PriceSettingForm",
+                    reflection_prompt: "If you were your customer, would you pay this price? Why or why not?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 25,
+                        badge_key: "PRICE_NAMER"
+                    },
+                    challenges: [
+                        {
+                            title: "The $1,000 Test",
+                            description: "If your customer had $1,000 to spend on solving this problem, what would they spend it on? Are you in the top 3 choices?",
+                            link: "/resources/challenges/the-1000-test"
+                        }
+                    ],
+                    ai_config: null,
+                    dependencies: ["mission4_quest1_task4"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 2.2: Price Assessment
+                {
+                    id: "mission4_quest2_task2",
+                    title: "Test Your Price",
+                    sequence: 2,
+                    execution_type: "standard-form",
+                    estimated_minutes: 15,
+                    briefing_text: "Now let's stress-test your price. Would customers pay double? Is it fair? Does it feel trustworthy?",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest2",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/price-assessment",
+                            title: "Price Assessment"
+                        }
+                    ],
+                    component_key: "PriceAssessmentForm",
+                    reflection_prompt: "If your price feels 'too cheap,' you might be sending the wrong signal. What would make it feel premium?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 25,
+                        badge_key: "PRICE_ASSESSOR"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission4_quest2_task1"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }
             ]
-          },
-          observation_config: null,
-          metadata_config: {}
-        }
-      ]
-    },
-    quest3: {
-      id: "mission4_quest3",
-      slug: "who-can-help-you-sell",
-      title: "Who Can Help You Sell?",
-      subtitle: "Identify partners and channels",
-      description: "You don't have to do everything yourself. Partners can help you reach customers faster, cheaper, and more effectively. In this quest, you'll map potential partners, reach out to a few, and explore what a partnership might look like.",
-      sequence: 3,
-      content: "",
-      estimated_in_app_minutes: 45,
-      estimated_off_app_minutes: 90,
-      is_optional: false,
-      mission_id: "mission4",
-      content_path: "content/mission4/quests/who-can-help-you-sell.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Connector",
-        persona_prompt: "You help founders think about partnerships and distribution. Help them identify potential partners who already have access to their customers. Encourage them to think creatively—partners don't have to be formal, they can be complementary businesses, influencers, or even customers.",
-        required_context: ["user_profiles", "projects"],
-        on_success: {
-          grant_points: 50,
-          badge_key: "PARTNERSHIP_BUILDER"
-        }
-      },
-      tasks: [
-        {
-          id: "m4_q3_t1_partner_mapping",
-          title: "Map potential partners",
-          sequence: 1,
-          type: "form",
-          component_key: "PartnerMappingForm",
-          grant_points: 20,
-          estimated_minutes: 25,
-          description: "Who already has access to your customers? Complementary businesses? Influencers? Community leaders? Other service providers? Industry associations? Make a list. Think creatively—partners can be anyone who can refer customers to you.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest3",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Find Business Partners", 
-                type: "blog", 
-                path_or_url: "content/blog/find-business-partners.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "The Art of the Partnership Ask", 
-                type: "blog", 
-                path_or_url: "content/blog/art-of-partnership-ask.md", 
-                subtitle: "4 min read" 
-              },
-              { 
-                title: "Partnership Models That Work", 
-                type: "blog", 
-                path_or_url: "content/blog/partnership-models.md", 
-                subtitle: "6 min read" 
-              }
-            ]
-          },
-          observation_config: null,
-          metadata_config: {}
         },
+
+        // ============================================
+        // QUEST 3: Find Your Customers
+        // ============================================
         {
-          id: "m4_q3_t2_partner_outreach",
-          title: "Reach out to potential partners",
-          sequence: 2,
-          type: "action",
-          component_key: "SimpleActionWidget",
-          grant_points: 30,
-          estimated_minutes: 60,
-          description: "Reach out to 3 potential partners. Ask: 'I'm building [solution] for [customer]. You already work with these people. Would you be interested in exploring how we could help each other?' Keep it simple. No pressure. Just a conversation.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest3",
-          execution_environment: "off_app",
-          checkback_delay_days: 3,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Approach a Potential Partner", 
-                type: "blog", 
-                path_or_url: "content/blog/approach-partner.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "What to Ask in a Partnership Conversation", 
-                type: "blog", 
-                path_or_url: "content/blog/partnership-conversation.md", 
-                subtitle: "4 min read" 
-              },
-              { 
-                title: "Partnership Outreach Template", 
-                type: "download", 
-                path_or_url: "/resources/partnership-template.pdf" 
-              }
+            id: "mission4_quest3",
+            mission_id: "mission-4",
+            title: "Find Your Customers",
+            content_path: "content/missions/mission4/quests/find-your-customers.md",
+            video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+            sequence: 3,
+            estimated_in_app_minutes: 45,
+            estimated_off_app_minutes: 60,
+            content: null,
+            context: ["user_profile", "user_projects"],
+            on_success: {
+                grant_points: 60,
+                badge_key: "ACQUISITION_PLANNER"
+            },
+            notes: [
+                {
+                    title: "Focus is everything",
+                    type: "guide",
+                    content: "First-time founders die by trying five channels at once. Pick ONE channel and master it.",
+                    related_url: null
+                },
+                {
+                    title: "Your first 10 customers",
+                    type: "guide",
+                    content: "If you can't name where you'll find your first 10 customers, you don't have a channel.",
+                    related_url: null
+                },
+                {
+                    title: "Start small",
+                    type: "nudge",
+                    content: "You don't need a website. You need one customer. Start there.",
+                    related_url: null
+                }
             ],
-            reflection_prompt: "How did partners respond? What surprised you? What did you learn about how your business fits into the ecosystem?"
-          },
-          observation_config: null,
-          metadata_config: {}
+            success_message: "You've completed Quest 3: Find Your Customers. You have a focused channel, a clear message, and a realistic acquisition plan.",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+
+            tasks: [
+                // Task 3.1: Choose Your Channel
+                {
+                    id: "mission4_quest3_task1",
+                    title: "Pick Your Channel",
+                    sequence: 1,
+                    execution_type: "standard-form",
+                    estimated_minutes: 20,
+                    briefing_text: "Where do your first 10 customers come from? Be specific. If you can't name the place, you don't have a channel.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest3",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/choosing-your-first-channel",
+                            title: "Choosing Your First Channel"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/one-channel-first",
+                            title: "One Channel First"
+                        }
+                    ],
+                    component_key: "ChannelSelectionForm",
+                    reflection_prompt: "Why did you pick this channel over all others? What makes it your best first bet?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "CHANNEL_CHOOSER"
+                    },
+                    challenges: [
+                        {
+                            title: "The 1-Customer Challenge",
+                            description: "Try to get just one customer this week. Not 10. Not 100. Just one.",
+                            link: "/resources/challenges/the-1-customer-challenge"
+                        }
+                    ],
+                    ai_config: null,
+                    dependencies: ["mission4_quest2_task2"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 3.2: Craft Your Message
+                {
+                    id: "mission4_quest3_task2",
+                    title: "Craft Your Message",
+                    sequence: 2,
+                    execution_type: "standard-form",
+                    estimated_minutes: 15,
+                    briefing_text: "What will you say? What's your exact offer or message? Why should they stop scrolling and buy today?",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest3",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/crafting-your-first-message",
+                            title: "Crafting Your First Message"
+                        }
+                    ],
+                    component_key: "MessagingForm",
+                    reflection_prompt: "Would you respond to this message? If not, rewrite it until you would.",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 15,
+                        badge_key: "MESSAGE_CRAFTER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission4_quest3_task1"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 3.3: Acquisition Assessment
+                {
+                    id: "mission4_quest3_task3",
+                    title: "Assess Your Plan",
+                    sequence: 3,
+                    execution_type: "standard-form",
+                    estimated_minutes: 15,
+                    briefing_text: "Now let's be realistic. How many people do you need to reach for one sale? How many hours will you spend? What do you need to start?",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest3",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/acquisition-math",
+                            title: "Acquisition Math"
+                        }
+                    ],
+                    component_key: "AcquisitionAssessmentForm",
+                    reflection_prompt: "If this acquisition plan fails, what's your backup plan? Always have a Plan B.",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 25,
+                        badge_key: "ACQUISITION_ASSESSOR"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission4_quest3_task2"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }
+            ]
         },
+
+        // ============================================
+        // QUEST 4: The Financials
+        // ============================================
         {
-          id: "m4_q3_t3_partnership_plan",
-          title: "Plan your partnership strategy",
-          sequence: 3,
-          type: "form",
-          component_key: "PartnershipPlanForm",
-          grant_points: 15,
-          estimated_minutes: 15,
-          description: "Based on your research and conversations, what's your partnership strategy? Which partners are most promising? What would a win-win partnership look like?",
-          mission_id: "mission4",
-          quest_id: "mission4_quest3",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Structure a Partnership", 
-                type: "blog", 
-                path_or_url: "content/blog/structure-partnership.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "The 3 Types of Partnerships", 
-                type: "blog", 
-                path_or_url: "content/blog/3-types-partnerships.md", 
-                subtitle: "4 min read" 
-              }
+            id: "mission4_quest4",
+            mission_id: "mission-4",
+            title: "The Financials",
+            content_path: "content/missions/mission4/quests/the-financials.md",
+            video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+            sequence: 4,
+            estimated_in_app_minutes: 60,
+            estimated_off_app_minutes: 90,
+            content: null,
+            context: ["user_profile", "user_projects"],
+            on_success: {
+                grant_points: 65,
+                badge_key: "FINANCIAL_MASTER"
+            },
+            notes: [
+                {
+                    title: "Use the Excel template",
+                    type: "guide",
+                    content: "We've provided an Excel template to help you work through the numbers. Use it alongside the app to do the detailed work.",
+                    related_url: null
+                },
+                {
+                    title: "The math doesn't lie",
+                    type: "guide",
+                    content: "If the numbers don't work, the business doesn't work. Don't ignore the math.",
+                    related_url: null
+                },
+                {
+                    title: "Be honest with yourself",
+                    type: "nudge",
+                    content: "First-time founders often underestimate costs and overestimate sales. Be brutal about the numbers.",
+                    related_url: null
+                }
+            ],
+            success_message: "You've completed Quest 4: The Financials. You understand your costs, your unit economics, and your profitability. The numbers tell a story—are you listening?",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+
+            tasks: [
+                // Task 4.1: Cost Structure
+                {
+                    id: "mission4_quest4_task1",
+                    title: "What Does It Cost?",
+                    sequence: 1,
+                    execution_type: "standard-form",
+                    estimated_minutes: 25,
+                    briefing_text: "Let's get real about costs. Don't guess—estimate as accurately as you can. We'll use these numbers to see if your business can make money.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest4",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/understanding-business-costs",
+                            title: "Understanding Business Costs"
+                        }
+                    ],
+                    component_key: "CostStructureForm",
+                    reflection_prompt: "Look at your costs. What surprised you? What could you reduce or eliminate?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "COST_ANALYZER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission4_quest3_task3"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 4.2: Cost Analysis
+                {
+                    id: "mission4_quest4_task2",
+                    title: "Understand Your Costs",
+                    sequence: 2,
+                    execution_type: "standard-form",
+                    estimated_minutes: 20,
+                    briefing_text: "Now let's look at your costs differently. Fixed vs variable. What happens when you sell more?",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest4",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/fixed-vs-variable-costs",
+                            title: "Fixed vs Variable Costs"
+                        }
+                    ],
+                    component_key: "CostAnalysisForm",
+                    reflection_prompt: "If you had to cut your costs in half, how would you do it? Would the customer experience suffer?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 20,
+                        badge_key: "COST_UNDERSTANDER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission4_quest4_task1"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 4.3: Profitability Check
+                {
+                    id: "mission4_quest4_task3",
+                    title: "Does the Math Work?",
+                    sequence: 3,
+                    execution_type: "standard-form",
+                    estimated_minutes: 25,
+                    briefing_text: "The moment of truth. Does your business make money? Let's run the numbers.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest4",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/unit-economics",
+                            title: "Unit Economics"
+                        }
+                    ],
+                    component_key: "ProfitabilityCheckForm",
+                    reflection_prompt: "If you're not making a profit, what would need to change? More sales? Higher price? Lower costs? Be specific.",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 25,
+                        badge_key: "PROFITABILITY_CHECKER"
+                    },
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission4_quest4_task2"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }
             ]
-          },
-          observation_config: null,
-          metadata_config: {}
-        }
-      ]
-    },
-    quest4: {
-      id: "mission4_quest4",
-      slug: "what-will-it-cost-you",
-      title: "What Will It Cost You?",
-      subtitle: "Understand your costs",
-      description: "You know what you'll charge. You know how you'll reach customers. Now let's understand what it'll cost you to deliver. In this quest, you'll map your fixed and variable costs, calculate your unit economics, and see if the numbers work.",
-      sequence: 4,
-      content: "",
-      estimated_in_app_minutes: 45,
-      estimated_off_app_minutes: 30,
-      is_optional: false,
-      mission_id: "mission4",
-      content_path: "content/mission4/quests/what-will-it-cost-you.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Accountant",
-        persona_prompt: "You are a practical financial advisor. Help the user think through their costs and unit economics. Don't scare them with complexity—help them see the simple picture. Help them distinguish between necessary and nice-to-have costs.",
-        required_context: ["user_profiles", "projects"],
-        on_success: {
-          grant_points: 50,
-          badge_key: "COST_AWARE"
-        }
-      },
-      tasks: [
-        {
-          id: "m4_q4_t1_cost_mapping",
-          title: "Map your costs",
-          sequence: 1,
-          type: "form",
-          component_key: "CostMappingForm",
-          grant_points: 20,
-          estimated_minutes: 25,
-          description: "What does it cost to deliver your solution? Fixed costs (rent, software, salaries), variable costs (materials, payment processing, delivery), one-time setup costs. Be honest. Include everything. Don't forget your time.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest4",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Calculate Business Costs", 
-                type: "blog", 
-                path_or_url: "content/blog/calculate-business-costs.md", 
-                subtitle: "6 min read" 
-              },
-              { 
-                title: "Fixed vs. Variable Costs: What's the Difference?", 
-                type: "blog", 
-                path_or_url: "content/blog/fixed-vs-variable.md", 
-                subtitle: "4 min read" 
-              },
-              { 
-                title: "Cost Mapping Template", 
-                type: "download", 
-                path_or_url: "/resources/cost-mapping-template.xlsx" 
-              }
-            ]
-          },
-          observation_config: null,
-          metadata_config: {}
         },
+
+        // ============================================
+        // QUEST 5: Go or No-Go
+        // ============================================
         {
-          id: "m4_q4_t2_unit_economics",
-          title: "Calculate your unit economics",
-          sequence: 2,
-          type: "form",
-          component_key: "UnitEconomicsForm",
-          grant_points: 25,
-          estimated_minutes: 25,
-          description: "For each unit you sell (product, service, subscription, etc.), what's the revenue? What's the cost? What's the margin? This is the most important number in your business. If the margin doesn't work, nothing else matters.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest4",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "Unit Economics for Beginners", 
-                type: "blog", 
-                path_or_url: "content/blog/unit-economics-beginners.md", 
-                subtitle: "6 min read" 
-              },
-              { 
-                title: "How to Improve Your Unit Economics", 
-                type: "blog", 
-                path_or_url: "content/blog/improve-unit-economics.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "Unit Economics Calculator", 
-                type: "download", 
-                path_or_url: "/resources/unit-economics-calculator.xlsx" 
-              }
+            id: "mission4_quest5",
+            mission_id: "mission-4",
+            title: "Go or No-Go",
+            content_path: "content/missions/mission4/quests/go-or-no-go.md",
+            video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+            sequence: 5,
+            estimated_in_app_minutes: 20,
+            estimated_off_app_minutes: 10,
+            content: null,
+            context: ["user_profile", "user_projects"],
+            on_success: {
+                grant_points: 40,
+                badge_key: "FINAL_DECISION"
+            },
+            notes: [
+                {
+                    title: "The numbers don't lie",
+                    type: "guide",
+                    content: "This is the moment of truth. If the numbers don't work, the business doesn't work. Be honest with yourself.",
+                    related_url: null
+                },
+                {
+                    title: "Iteration is okay",
+                    type: "guide",
+                    content: "If the numbers don't quite work, you can iterate. Change the price, change the MSP, change the channel. Just be specific about what you'll change.",
+                    related_url: null
+                },
+                {
+                    title: "No-Go is a win too",
+                    type: "nudge",
+                    content: "Saying 'no' to a bad business is a win. You've saved yourself time, money, and stress. Take what you've learned to the next opportunity.",
+                    related_url: null
+                }
+            ],
+            success_message: "You've completed Mission 4: The Business Engine. You've made a conscious decision based on real numbers. This is what building a real business looks like.",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+
+            tasks: [
+                // Task 5.1: Make the Call
+                {
+                    id: "mission4_quest5_task1",
+                    title: "Make the Call",
+                    sequence: 1,
+                    execution_type: "decision_gate",
+                    estimated_minutes: 20,
+                    briefing_text: "You've done the work. You have the numbers. Now make a decision. No overthinking. Just pick.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest5",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/making-the-call",
+                            title: "Making the Call"
+                        }
+                    ],
+                    component_key: "FinalDecisionForm",
+                    reflection_prompt: "What did you learn from this financial exercise? If you're saying 'no' to this business, what did you learn that you'll take to the next one?",
+                    observation_context: null,
+                    on_success: {
+                        grant_points: 25,
+                        badge_key: "DECISION_MAKER"
+                    },
+                    challenges: null,
+                    ai_config: {
+                        role: "Financial Decision Advisor",
+                        persona_name: "The Numbers Coach",
+                        persona_prompt: "You are a pragmatic business coach who helps founders make decisions based on numbers. You're direct, honest, and focused on what the data says. You don't sugarcoat—you tell founders what they need to hear, not what they want to hear.",
+                        required_context: ["user_profile", "financial_blueprint"]
+                    },
+                    dependencies: ["mission4_quest4_task3"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }
             ]
-          },
-          observation_config: null,
-          metadata_config: {}
-        },
-        {
-          id: "m4_q4_t3_cost_reality_check",
-          title: "Cost reality check",
-          sequence: 3,
-          type: "form",
-          component_key: "CostRealityForm",
-          grant_points: 15,
-          estimated_minutes: 15,
-          description: "Look at all your costs. What's absolutely necessary? What could be reduced or eliminated? What could be delayed until later? This is your 'minimum viable cost' exercise—what's the cheapest way to deliver value?",
-          mission_id: "mission4",
-          quest_id: "mission4_quest4",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "The Minimum Viable Cost", 
-                type: "blog", 
-                path_or_url: "content/blog/minimum-viable-cost.md", 
-                subtitle: "4 min read" 
-              },
-              { 
-                title: "How to Reduce Business Costs Without Hurting Quality", 
-                type: "blog", 
-                path_or_url: "content/blog/reduce-costs.md", 
-                subtitle: "5 min read" 
-              }
-            ]
-          },
-          observation_config: null,
-          metadata_config: {}
         }
-      ]
-    },
-    quest5: {
-      id: "mission4_quest5",
-      slug: "does-the-math-work",
-      title: "Does the Math Work?",
-      subtitle: "Final economics check",
-      description: "You've done the work. You know what you'll charge, how you'll reach customers, and what it'll cost. Now let's put it all together and see if the numbers work. If they do, you have a business. If they don't, you have a hobby—and that's okay too.",
-      sequence: 5,
-      content: "",
-      estimated_in_app_minutes: 60,
-      estimated_off_app_minutes: 0,
-      is_optional: false,
-      mission_id: "mission4",
-      content_path: "content/mission4/quests/does-the-math-work.md",
-      ai_config: {
-        role: "SYSTEM_CONDUCTOR",
-        persona_name: "The Realist",
-        persona_prompt: "You are a grounded advisor who helps founders make hard decisions. Don't be a cheerleader. Challenge their assumptions. Ask the tough questions. Help them see if this is truly viable. If the math doesn't work, help them accept that and move on.",
-        required_context: ["user_profiles", "projects"],
-        on_success: {
-          grant_points: 100,
-          badge_key: "ECONOMICS_VERIFIED"
-        }
-      },
-      tasks: [
-        {
-          id: "m4_q5_t1_breakeven_analysis",
-          title: "Calculate your break-even point",
-          sequence: 1,
-          type: "form",
-          component_key: "BreakevenForm",
-          grant_points: 25,
-          estimated_minutes: 25,
-          description: "How many customers do you need to cover your costs? At what price? How long will it take to get there? This is the most important number for your business. If you can't see a path to breaking even, it's time to reconsider.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest5",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Calculate Break-Even Point", 
-                type: "blog", 
-                path_or_url: "content/blog/breakeven-calculator.md", 
-                subtitle: "6 min read" 
-              },
-              { 
-                title: "What If You Never Break Even?", 
-                type: "blog", 
-                path_or_url: "content/blog/never-breakeven.md", 
-                subtitle: "4 min read" 
-              },
-              { 
-                title: "Break-Even Calculator Template", 
-                type: "download", 
-                path_or_url: "/resources/breakeven-calculator.xlsx" 
-              }
-            ]
-          },
-          observation_config: null,
-          metadata_config: {}
-        },
-        {
-          id: "m4_q5_t2_scenario_planning",
-          title: "Scenario planning",
-          sequence: 2,
-          type: "form",
-          component_key: "ScenarioPlanningForm",
-          grant_points: 20,
-          estimated_minutes: 20,
-          description: "Best case: everything goes right. Worst case: everything goes wrong. Expected case: probably somewhere in between. Run all three. If the worst case is survivable and the expected case is good, you have a business.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest5",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Scenario Plan Your Business", 
-                type: "blog", 
-                path_or_url: "content/blog/scenario-planning.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "The Worst Case Test", 
-                type: "blog", 
-                path_or_url: "content/blog/worst-case-test.md", 
-                subtitle: "4 min read" 
-              },
-              { 
-                title: "Scenario Planning Template", 
-                type: "download", 
-                path_or_url: "/resources/scenario-planning.xlsx" 
-              }
-            ]
-          },
-          observation_config: null,
-          metadata_config: {}
-        },
-        {
-          id: "m4_q5_t3_final_economics_decision",
-          title: "The final economics decision",
-          sequence: 3,
-          type: "form",
-          component_key: "FinalEconomicsForm",
-          grant_points: 25,
-          estimated_minutes: 15,
-          description: "Look at everything: Pricing, channels, partnerships, costs, break-even, scenarios. Does the math work? Are you excited? Is this worth your time? If yes, you have a viable business. If no, that's okay—go back to Mission 2 and pick a different opportunity.",
-          mission_id: "mission4",
-          quest_id: "mission4_quest5",
-          execution_environment: null,
-          checkback_delay_days: null,
-          recurring: null,
-          interval: null,
-          ai_config: {
-            recommendations: [
-              { 
-                title: "How to Know If You Have a Business", 
-                type: "blog", 
-                path_or_url: "content/blog/know-if-you-have-business.md", 
-                subtitle: "5 min read" 
-              },
-              { 
-                title: "The $100 Test: Is Your Idea Viable?", 
-                type: "blog", 
-                path_or_url: "content/blog/100-dollar-test.md", 
-                subtitle: "4 min read" 
-              },
-              { 
-                title: "When to Quit and When to Persevere", 
-                type: "blog", 
-                path_or_url: "content/blog/when-to-quit.md", 
-                subtitle: "6 min read" 
-              }
-            ]
-          },
-          observation_config: null,
-          metadata_config: {}
-        }
-      ]
-    }
-  }
+    ],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
 };
+
+export default mission4;
