@@ -6,6 +6,8 @@ import { MotivationForm } from './mission1/MotivationForm';
 import { CommitmentForm } from './mission1/CommitmentForm';
 import { RoadblockForm } from './mission1/RoadblockForm';
 import { SocialFootprintAForm } from './mission1/SocialFootprintAForm';
+import { SkillsForm } from './mission1/SkillsForm';
+import { CheerSquadForm } from './mission1/CheerSquadForm';
 
 
 
@@ -16,6 +18,8 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   CommitmentForm: CommitmentForm,
   RoadblockForm: RoadblockForm, 
   SocialFootprintAForm: SocialFootprintAForm,
+  SkillsForm: SkillsForm,
+  CheerSquadForm: CheerSquadForm,
 
 };
 
