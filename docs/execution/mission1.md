@@ -43,7 +43,8 @@
 ## Questions
 1. Do you want me to give you each task config from playbook for each task?
 2. Are you clear about the implementation?
-3. What woudl be the best and most valuable approach to integrating AI in the form components? Inside the component, Have a button which opens up a dialog? etc..
+3. What woudl be the best and most valuable approach to integrating AI in the form components? Inside the component, Have a button which opens up a dialog? 
+4. Ask me if you have any clarification or you want to see any file/code
 
 
 ## Relevant Context
