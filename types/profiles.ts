@@ -2,14 +2,62 @@
 import { Database } from './supabase';
 import { z } from 'zod';
 
-// =========================================================================
-// 1. Extract the raw generated row type directly from Supabase's schema definitions
-// =========================================================================
-type BaseProfile = Database['public']['Tables']['profiles']['Row'];
+
 
 // =========================================================================
-// 2. Define strict contracts for your flexible JSONB metadata containers
+// 1. ENUMS & EXTRACTED SUPABASE TYPES
 // =========================================================================
+export type EducationLevel = Database['public']['Enums']['education_level'];
+
+export type UserRole = Database['public']['Enums']['user_platform_role'] ;
+
+export type UserAgeGroup = Database['public']['Enums']['user_age_group'] ;
+
+
+// =========================================================================
+// 2. TYPED JSON SCHEMAS FOR STRUCTURED PROFILE COLUMNS
+// =========================================================================
+export type ProfileSkills = {
+  category: string;
+  title: string;
+  level: string;
+};
+
+export type ProfileMotivationSchema = {
+  push: string;
+  push_other: string | null;
+  pull: string;
+  pull_other: string | null;
+  urgency: string;
+  urgency_other: string | null;
+  why_statement: string;
+};
+
+export type ProfileCommitmentSchema = {
+  time_to_launch: number; // in months
+  weekly_hours: number;
+  capital: number | null;
+};
+
+export type ProfileRoadblockSchema = {
+  roadblocks: string[] | null;
+  roadblocks_other: string | null;
+};
+
+export type ProfileSocialFootprintSchema = {
+  type: "platform" | "clubs" | "professional" | "network" | "other";
+  name: string;
+  profile_link_url: string;
+  total_connections: number | null;
+};
+
+export type ProfileAssessmentSchema = {
+  assessment_type: string;
+  observation: string;
+  recommendation: string[];
+  score: number;
+};
+
 export interface MentorMetadata {
   bio?: string;
   about_markdown?: string;
@@ -27,35 +75,25 @@ export interface ProviderMetadata {
   industry_sector?: string;
 }
 
-export interface ConstraintFormInputs {
-  weekly_hours: '2_5_hours' | '5_10_hours' | '10_20_hours' | '20_plus';
-  time_slot: 'evenings' | 'weekends' | 'scraps';
-  money_budget: number;
-}
-
-export interface CoreDriver {
-  core_focus?: string;
-  freedom_metric?: string;
-  anti_goal?: string;
-}
-
-// Define the allowed roles type from your schema
-export type UserRole = 'base' | 'enrolled' | 'member' | 'provider' | 'mentor' | 'superadmin' | 'admin_marketing' | 'admin_accounts';
-
 // =========================================================================
-// 3. Profile type that merges BaseProfile with custom types
+// 3. MERGED PROFILE TYPES & SERVER ACTION RESPONSE CONTRACTS
 // =========================================================================
-export type Profile = Omit<BaseProfile, 'mentor_metadata' | 'provider_metadata'> & {
-  mentor_metadata: MentorMetadata;
-  provider_metadata: ProviderMetadata;
-  constraints?: ConstraintFormInputs;
-  core_driver?: CoreDriver;
+type BaseProfile = Database['public']['Tables']['profiles']['Row'];
+
+export type ProfileRow = Omit<
+  BaseProfile,
+  'motivations' | 'commitment' | 'roadblocks' | 'social_footprint' | 'skills' | 'assessment' | 'mentor_profile' | 'provider_metadata'
+> & {
+  motivations?: ProfileMotivationSchema | null;
+  commitment?: ProfileCommitmentSchema | null;
+  roadblocks?: ProfileRoadblockSchema | null;
+  social_footprint?: ProfileSocialFootprintSchema[] | null;
+  skills?: ProfileSkills[] | null;
+  assessment?: ProfileAssessmentSchema[] | null;
+  mentor_profile?: MentorMetadata | null;
+  provider_metadata?: ProviderMetadata | null;
 };
 
-// =========================================================================
-// 4. Type aliases for server action responses
-// =========================================================================
-export type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 export type ProfileUpdate = Database['public']['Tables']['profiles']['Update'];
 
 export type ActionResponse<T> = 
@@ -63,34 +101,41 @@ export type ActionResponse<T> =
   | { success: false; error: string };
 
 // =========================================================================
-// 5. Export profile-related Zod schemas
+// 4. ZOD VALIDATION SCHEMAS (Centralized for Action Imports)
 // =========================================================================
 export const UpdateProfileSchema = z.object({
-  full_name: z.string().min(1).max(100).trim().optional(),
+  fullname: z.string().min(1).max(100).trim().optional(),
   username: z.string().min(3).max(30).trim().regex(/^[a-zA-Z0-9_]+$/, {
     message: "Username can only contain letters, numbers, and underscores"
   }).optional(),
-  avatar_url: z.string().url().optional().nullable(),
-  city: z.string().max(100).trim().optional().nullable(),
-  country: z.string().min(2).max(100).trim().optional(),
-  description: z.string().max(1000).trim().optional().nullable(),
-  core_driver: z.string().max(255).trim().optional().nullable(),
-  social_profiles: z.record(z.string(), z.string().url().or(z.string())).optional(),
-  constraints: z.object({
-    weekly_hours: z.enum(['2_5_hours', '5_10_hours', '10_20_hours', '20_plus']).optional(),
-    time_slot: z.enum(['evenings', 'weekends', 'scraps']).optional(),
-    money_budget: z.number().min(0).optional(),
-  }).optional(),
+  bio: z.string().max(1000).trim().nullable().optional(),
+  country: z.string().min(2).max(100).trim().nullable().optional(),
+  city: z.string().max(100).trim().nullable().optional(),
+  avatar_url: z.string().url().nullable().optional(),
+  gender: z.string().nullable().optional(),
+  currency: z.string().nullable().optional(),
+  age_group: z.enum(['under_18', '18_24', '25_34', '35_44', '45_54', '55_plus']).nullable().optional(),
+  highest_education_level: z.enum(['high_school', 'undergraduate_degree', 'postgraduate_degree', 'self_taught']).nullable().optional(),
+  
+  // JSONB Schema Fields
+  motivations: z.record(z.string(), z.any()).nullable().optional(),
+  commitment: z.record(z.string(), z.any()).nullable().optional(),
+  roadblocks: z.record(z.string(), z.any()).nullable().optional(),
+  social_footprint: z.array(z.record(z.string(), z.any())).nullable().optional(),
+  skills: z.array(z.record(z.string(), z.any())).nullable().optional(),
+  assessment: z.array(z.record(z.string(), z.any())).nullable().optional(),
+  integrations: z.record(z.string(), z.any()).nullable().optional(),
 });
 
 export const AdvanceOnboardingSchema = z.object({
-  step: z.number().int().min(1).max(10),
+  step: z.string().or(z.number()),
 });
 
 export const AdminSyncRoleSchema = z.object({
   userId: z.string().uuid(),
   role: z.enum([
     'base',
+    'trial',
     'enrolled', 
     'member', 
     'provider', 

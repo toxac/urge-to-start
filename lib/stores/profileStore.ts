@@ -1,19 +1,7 @@
+// lib/stores/profileStore.ts
 import { atom } from 'nanostores';
-import { Database } from '@/types/supabase';
+import { ProfileRow } from '@/types/profiles';
 
-export interface ProfileConstraintsPayload {
-  weekly_hours?: '2_5_hours' | '5_10_hours' | '10_20_hours' | '20_plus';
-  time_slot?: 'evenings' | 'weekends' | 'scraps';
-  money_budget?: number;
-}
-
-// Tie directly to your database types, explicitly defining the JSON columns
-export type ProfileRow = Database['public']['Tables']['profiles']['Row'] & {
-  constraints?: ProfileConstraintsPayload;
-  core_driver?: Record<string, any>;
-};
-
-// Initialize the store as null until populated by layout hydration
 export const $profileStore = atom<ProfileRow | null>(null);
 
 /**

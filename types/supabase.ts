@@ -721,78 +721,96 @@ export type Database = {
           accumulated_xp: number
           address: string | null
           age_group: Database["public"]["Enums"]["user_age_group"] | null
+          assessment: Json | null
           avatar_url: string | null
+          bio: string | null
           city: string | null
+          commitment: Json | null
           country: string | null
-          created_at: string | null
+          created_at: string
           currency: string | null
-          description: string | null
-          full_name: string | null
+          fullname: string | null
           gender: string | null
-          highest_education:
-            | Database["public"]["Enums"]["education_tier"]
+          highest_education_level:
+            | Database["public"]["Enums"]["education_level"]
             | null
           id: string
-          mentor_metadata: Json
-          onboarding_step: number
-          persona: Json | null
-          provider_metadata: Json
+          integrations: Json | null
+          mentor_profile: Json | null
+          motivations: Json | null
+          onboarding_step: string | null
+          provider_metadata: Json | null
+          roadblocks: Json | null
           roles: Database["public"]["Enums"]["user_platform_role"][]
-          schedule_config: Json | null
-          social_profiles: Json
-          updated_at: string | null
+          skills: Json | null
+          social_footprint: Json | null
+          status: string | null
+          updated_at: string
+          user_id: string
           username: string
         }
         Insert: {
           accumulated_xp?: number
           address?: string | null
           age_group?: Database["public"]["Enums"]["user_age_group"] | null
+          assessment?: Json | null
           avatar_url?: string | null
+          bio?: string | null
           city?: string | null
+          commitment?: Json | null
           country?: string | null
-          created_at?: string | null
+          created_at?: string
           currency?: string | null
-          description?: string | null
-          full_name?: string | null
+          fullname?: string | null
           gender?: string | null
-          highest_education?:
-            | Database["public"]["Enums"]["education_tier"]
+          highest_education_level?:
+            | Database["public"]["Enums"]["education_level"]
             | null
           id: string
-          mentor_metadata?: Json
-          onboarding_step?: number
-          persona?: Json | null
-          provider_metadata?: Json
+          integrations?: Json | null
+          mentor_profile?: Json | null
+          motivations?: Json | null
+          onboarding_step?: string | null
+          provider_metadata?: Json | null
+          roadblocks?: Json | null
           roles?: Database["public"]["Enums"]["user_platform_role"][]
-          schedule_config?: Json | null
-          social_profiles?: Json
-          updated_at?: string | null
+          skills?: Json | null
+          social_footprint?: Json | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
           username: string
         }
         Update: {
           accumulated_xp?: number
           address?: string | null
           age_group?: Database["public"]["Enums"]["user_age_group"] | null
+          assessment?: Json | null
           avatar_url?: string | null
+          bio?: string | null
           city?: string | null
+          commitment?: Json | null
           country?: string | null
-          created_at?: string | null
+          created_at?: string
           currency?: string | null
-          description?: string | null
-          full_name?: string | null
+          fullname?: string | null
           gender?: string | null
-          highest_education?:
-            | Database["public"]["Enums"]["education_tier"]
+          highest_education_level?:
+            | Database["public"]["Enums"]["education_level"]
             | null
           id?: string
-          mentor_metadata?: Json
-          onboarding_step?: number
-          persona?: Json | null
-          provider_metadata?: Json
+          integrations?: Json | null
+          mentor_profile?: Json | null
+          motivations?: Json | null
+          onboarding_step?: string | null
+          provider_metadata?: Json | null
+          roadblocks?: Json | null
           roles?: Database["public"]["Enums"]["user_platform_role"][]
-          schedule_config?: Json | null
-          social_profiles?: Json
-          updated_at?: string | null
+          skills?: Json | null
+          social_footprint?: Json | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
           username?: string
         }
         Relationships: []
@@ -870,15 +888,7 @@ export type Database = {
           validation_data?: Json
           viability_check?: Json
         }
-        Relationships: [
-          {
-            foreignKeyName: "projects_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       quests: {
         Row: {
@@ -961,15 +971,7 @@ export type Database = {
           supporter_email?: string
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "squad_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       tasks: {
         Row: {
@@ -1206,15 +1208,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "user_plans_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       user_posts: {
         Row: {
@@ -1371,15 +1365,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "user_questions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
@@ -1395,6 +1381,11 @@ export type Database = {
         | "engagement"
         | "launch_tier"
       discount_type: "percentage" | "fixed_amount"
+      education_level:
+        | "high_school"
+        | "undergraduate_degree"
+        | "postgraduate_degree"
+        | "self_taught"
       education_tier:
         | "high_school"
         | "undergraduate_degree"
@@ -1463,6 +1454,7 @@ export type Database = {
         | "ask_for_help"
         | "resource_share"
         | "project_launch"
+        | "introduction"
       program_item_type: "mission" | "quest" | "task"
       progress_status: "not_started" | "in_progress" | "completed" | "repeat"
       question_status:
@@ -1504,6 +1496,7 @@ export type Database = {
         | "55_plus"
       user_platform_role:
         | "base"
+        | "trial"
         | "enrolled"
         | "member"
         | "provider"
@@ -1645,6 +1638,12 @@ export const Constants = {
         "launch_tier",
       ],
       discount_type: ["percentage", "fixed_amount"],
+      education_level: [
+        "high_school",
+        "undergraduate_degree",
+        "postgraduate_degree",
+        "self_taught",
+      ],
       education_tier: [
         "high_school",
         "undergraduate_degree",
@@ -1722,6 +1721,7 @@ export const Constants = {
         "ask_for_help",
         "resource_share",
         "project_launch",
+        "introduction",
       ],
       program_item_type: ["mission", "quest", "task"],
       progress_status: ["not_started", "in_progress", "completed", "repeat"],
@@ -1769,6 +1769,7 @@ export const Constants = {
       ],
       user_platform_role: [
         "base",
+        "trial",
         "enrolled",
         "member",
         "provider",

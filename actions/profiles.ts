@@ -1,3 +1,4 @@
+// actions/profiles.ts
 'use server';
 
 import { revalidatePath } from 'next/cache';
@@ -18,19 +19,14 @@ import {
 // Helper to safely cast to UserRole[]
 function asUserRoles(roles: string[]): UserRole[] {
   const validRoles: UserRole[] = [
-    'base', 'enrolled', 'member', 'provider', 'mentor', 
+    'base', 'trial', 'enrolled', 'member', 'provider', 'mentor', 
     'superadmin', 'admin_marketing', 'admin_accounts'
   ];
   return roles.filter((r): r is UserRole => validRoles.includes(r as UserRole));
 }
 
-// =========================================================================
-// SERVER ACTIONS LAYER
-// =========================================================================
-
 /**
  * PATCH: Safely updates the user's personal profile card fields.
- * Aligns custom dictionary mappings cleanly with Supabase Json interfaces.
  */
 export async function updateMyProfile(
   rawInput: z.infer<typeof UpdateProfileSchema>
@@ -46,7 +42,13 @@ export async function updateMyProfile(
 
     const profileUpdatePayload: ProfileUpdate = {
       ...validated,
-      social_profiles: validated.social_profiles as Json,
+      motivations: validated.motivations as Json,
+      commitment: validated.commitment as Json,
+      roadblocks: validated.roadblocks as Json,
+      social_footprint: validated.social_footprint as Json,
+      skills: validated.skills as Json,
+      assessment: validated.assessment as Json,
+      integrations: validated.integrations as Json,
       updated_at: new Date().toISOString(),
     };
 
@@ -60,7 +62,7 @@ export async function updateMyProfile(
     if (error || !data) throw error;
 
     revalidatePath(`/dashboard/profile`);
-    return { success: true, data };
+    return { success: true, data: data as ProfileRow };
   } catch (err: any) {
     if (err.code === '23505') {
       return { success: false, error: 'This username is already claimed by another platform member' };
@@ -74,7 +76,7 @@ export async function updateMyProfile(
  */
 export async function advanceOnboardingStep(
   rawInput: z.infer<typeof AdvanceOnboardingSchema>
-): Promise<ActionResponse<{ step: number }>> {
+): Promise<ActionResponse<{ step: string | number }>> {
   try {
     const { step } = AdvanceOnboardingSchema.parse(rawInput);
     const supabase = await createClient();
@@ -87,7 +89,7 @@ export async function advanceOnboardingStep(
     const { error } = await supabase
       .from('profiles')
       .update({ 
-        onboarding_step: step, 
+        onboarding_step: String(step), 
         updated_at: new Date().toISOString() 
       })
       .eq('id', user.id);
@@ -102,7 +104,6 @@ export async function advanceOnboardingStep(
 
 /**
  * PATCH: Safely manages specialized unstructured role details inside role-restricted JSONB columns.
- * Checks if the user has the required role in their roles array before allowing metadata updates.
  */
 export async function updateRoleMetadata(
   type: 'mentor' | 'provider',
@@ -117,10 +118,9 @@ export async function updateRoleMetadata(
       return { success: false, error: 'Authentication credentials not verified' };
     }
 
-    // Fetch the user's profile with roles and existing metadata
     const { data: profile, error: fetchErr } = await supabase
       .from('profiles')
-      .select('roles, mentor_metadata, provider_metadata')
+      .select('roles, mentor_profile, provider_metadata')
       .eq('id', user.id)
       .single();
 
@@ -128,11 +128,8 @@ export async function updateRoleMetadata(
       return { success: false, error: 'User workspace profile not found' };
     }
 
-    // Check if user has the required role
     const userRoles = asUserRoles(profile.roles || []);
     const hasRequiredRole = userRoles.includes(type as UserRole);
-    
-    // Admin can update any role
     const isAdmin = userRoles.includes('superadmin');
 
     if (type === 'mentor') {
@@ -143,9 +140,9 @@ export async function updateRoleMetadata(
         };
       }
       
-      const currentMeta = (profile.mentor_metadata as Record<string, any>) || {};
+      const currentMeta = (profile.mentor_profile as Record<string, any>) || {};
       const updatePayload: ProfileUpdate = {
-        mentor_metadata: { ...currentMeta, ...metadata } as Json,
+        mentor_profile: { ...currentMeta, ...metadata } as Json,
         updated_at: new Date().toISOString()
       };
 
@@ -159,9 +156,8 @@ export async function updateRoleMetadata(
       if (error || !data) throw error;
 
       revalidatePath(`/dashboard/settings`);
-      return { success: true, data };
+      return { success: true, data: data as ProfileRow };
     } 
-    
     else if (type === 'provider') {
       if (!hasRequiredRole && !isAdmin) {
         return { 
@@ -186,7 +182,7 @@ export async function updateRoleMetadata(
       if (error || !data) throw error;
 
       revalidatePath(`/dashboard/settings`);
-      return { success: true, data };
+      return { success: true, data: data as ProfileRow };
     }
 
     return { success: false, error: 'Invalid metadata type specified' };
@@ -197,7 +193,6 @@ export async function updateRoleMetadata(
 
 /**
  * PATCH: Secure administrative action handler to sync user roles.
- * Allows admins to add or remove roles from a user's roles array.
  */
 export async function syncUserRoleAdmin(
   rawInput: z.infer<typeof AdminSyncRoleSchema>
@@ -206,7 +201,6 @@ export async function syncUserRoleAdmin(
     const validated = AdminSyncRoleSchema.parse(rawInput);
     const supabase = await createClient();
 
-    // Verify the caller is an admin
     const { data: { user: callerUser } } = await supabase.auth.getUser();
     if (!callerUser) {
       return { success: false, error: 'Authentication required' };
@@ -222,7 +216,6 @@ export async function syncUserRoleAdmin(
       return { success: false, error: 'Access Denied: Super Admin authority credentials required' };
     }
 
-    // Get the target user's current roles
     const { data: targetProfile, error: fetchError } = await supabase
       .from('profiles')
       .select('roles')
@@ -236,9 +229,7 @@ export async function syncUserRoleAdmin(
     const currentRoles = asUserRoles(targetProfile.roles || []);
     let updatedRoles: UserRole[];
 
-    // Handle the role assignment based on the operation
     if (validated.operation === 'add') {
-      // Add role if not already present
       if (currentRoles.includes(validated.role as UserRole)) {
         return { 
           success: false, 
@@ -247,7 +238,6 @@ export async function syncUserRoleAdmin(
       }
       updatedRoles = [...currentRoles, validated.role as UserRole];
     } else if (validated.operation === 'remove') {
-      // Remove role if present
       if (!currentRoles.includes(validated.role as UserRole)) {
         return { 
           success: false, 
@@ -256,11 +246,9 @@ export async function syncUserRoleAdmin(
       }
       updatedRoles = currentRoles.filter(r => r !== validated.role);
     } else {
-      // Replace operation (default) - set exactly this role
       updatedRoles = [validated.role as UserRole];
     }
 
-    // Update the user's roles
     const { error: updateError } = await supabase
       .from('profiles')
       .update({ 
