@@ -5,6 +5,7 @@ import { BaseTaskComponentProps } from './types';
 import { MotivationForm } from './mission1/MotivationForm';
 import { CommitmentForm } from './mission1/CommitmentForm';
 import { RoadblockForm } from './mission1/RoadblockForm';
+import { SocialFootprintAForm } from './mission1/SocialFootprintAForm';
 
 
 
@@ -14,6 +15,7 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   MotivationForm: MotivationForm,
   CommitmentForm: CommitmentForm,
   RoadblockForm: RoadblockForm, 
+  SocialFootprintAForm: SocialFootprintAForm,
 
 };
 
