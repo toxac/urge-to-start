@@ -1168,6 +1168,95 @@ export type Database = {
           },
         ]
       }
+      user_contacts: {
+        Row: {
+          categories: Database["public"]["Enums"]["user_contact_category"][]
+          company: string | null
+          created_at: string
+          email: string | null
+          first_name: string | null
+          id: string
+          instagram_username: string | null
+          job_title: string | null
+          last_contacted_at: string | null
+          last_name: string | null
+          linkedin_url: string | null
+          metadata: Json | null
+          next_follow_up_at: string | null
+          note: string | null
+          notes: string[] | null
+          opted_in_newsletter: boolean | null
+          phone: string | null
+          project_id: string | null
+          source: Database["public"]["Enums"]["user_contact_source"]
+          stage: Database["public"]["Enums"]["user_contact_stage"] | null
+          status: Database["public"]["Enums"]["user_contact_status"]
+          twitter_handle: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          categories?: Database["public"]["Enums"]["user_contact_category"][]
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          instagram_username?: string | null
+          job_title?: string | null
+          last_contacted_at?: string | null
+          last_name?: string | null
+          linkedin_url?: string | null
+          metadata?: Json | null
+          next_follow_up_at?: string | null
+          note?: string | null
+          notes?: string[] | null
+          opted_in_newsletter?: boolean | null
+          phone?: string | null
+          project_id?: string | null
+          source?: Database["public"]["Enums"]["user_contact_source"]
+          stage?: Database["public"]["Enums"]["user_contact_stage"] | null
+          status?: Database["public"]["Enums"]["user_contact_status"]
+          twitter_handle?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          categories?: Database["public"]["Enums"]["user_contact_category"][]
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          instagram_username?: string | null
+          job_title?: string | null
+          last_contacted_at?: string | null
+          last_name?: string | null
+          linkedin_url?: string | null
+          metadata?: Json | null
+          next_follow_up_at?: string | null
+          note?: string | null
+          notes?: string[] | null
+          opted_in_newsletter?: boolean | null
+          phone?: string | null
+          project_id?: string | null
+          source?: Database["public"]["Enums"]["user_contact_source"]
+          stage?: Database["public"]["Enums"]["user_contact_stage"] | null
+          status?: Database["public"]["Enums"]["user_contact_status"]
+          twitter_handle?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_contacts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_plans: {
         Row: {
           created_at: string | null
@@ -1494,6 +1583,31 @@ export type Database = {
         | "35_44"
         | "45_54"
         | "55_plus"
+      user_contact_category:
+        | "squad"
+        | "partner"
+        | "tester"
+        | "presales"
+        | "customer"
+      user_contact_source:
+        | "personal_network"
+        | "social_media"
+        | "website_form"
+        | "referral"
+        | "outbound"
+        | "customer_interview"
+        | "partnership_outreach"
+        | "urge_community"
+        | "other"
+      user_contact_stage:
+        | "lead"
+        | "engaged"
+        | "pre_sale"
+        | "customer"
+        | "advocate"
+        | "cold"
+        | "nurturing"
+      user_contact_status: "active" | "inactive" | "lost" | "unconfirmed"
       user_platform_role:
         | "base"
         | "trial"
@@ -1767,6 +1881,34 @@ export const Constants = {
         "45_54",
         "55_plus",
       ],
+      user_contact_category: [
+        "squad",
+        "partner",
+        "tester",
+        "presales",
+        "customer",
+      ],
+      user_contact_source: [
+        "personal_network",
+        "social_media",
+        "website_form",
+        "referral",
+        "outbound",
+        "customer_interview",
+        "partnership_outreach",
+        "urge_community",
+        "other",
+      ],
+      user_contact_stage: [
+        "lead",
+        "engaged",
+        "pre_sale",
+        "customer",
+        "advocate",
+        "cold",
+        "nurturing",
+      ],
+      user_contact_status: ["active", "inactive", "lost", "unconfirmed"],
       user_platform_role: [
         "base",
         "trial",

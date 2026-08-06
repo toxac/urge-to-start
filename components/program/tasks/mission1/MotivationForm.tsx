@@ -15,7 +15,8 @@ import { updateProfileStoreFields, $profileStore } from '@/lib/stores/profileSto
 import { useStore } from '@nanostores/react';
 import { BaseTaskComponentProps } from '../types';
 import { ProfileMotivationSchema } from '@/types/profiles';
-import { Loader2, Edit2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ReferenceSchema } from '@/types/playbook';
+import { Loader2, Edit2, CheckCircle2, AlertCircle, BookOpen, ExternalLink } from 'lucide-react';
 
 export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const profile = useStore($profileStore);
@@ -24,6 +25,9 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
 
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
+
+  // Extract REQUIRED resources to display at the top of the form
+  const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
   // Pre-fill hierarchy: Task Execution Payload -> Profile Store Column -> Empty Defaults
   const preSavedMotivation: ProfileMotivationSchema =
@@ -168,6 +172,30 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         </div>
       )}
 
+      {/* REQUIRED RESOURCES BANNER */}
+      {requiredResources.length > 0 && (
+        <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
+          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+            <BookOpen className="w-3.5 h-3.5" />
+            Required Action Guides (Read First)
+          </span>
+          <div className="space-y-1.5">
+            {requiredResources.map((res, idx) => (
+              <a
+                key={idx}
+                href={res.url_link}
+                target="_blank"
+                rel="noreferrer"
+                className="p-2.5 rounded-lg border bg-card hover:bg-muted/30 transition flex items-center justify-between text-xs font-semibold text-foreground group"
+              >
+                <span>{res.title}</span>
+                <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
 
         {/* Question 1: Push Driver */}
@@ -176,8 +204,8 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
             1. What are you running from? (Your Push Driver) *
           </Label>
           <Select
-            value={selectedPush}
-            onValueChange={(val) => setValue('push', val as string, { shouldValidate: true })}
+            value={selectedPush || undefined}
+            onValueChange={(val) => setValue('push', (val as string) || '', { shouldValidate: true })}
           >
             <SelectTrigger className="w-full text-xs h-10">
               <SelectValue placeholder="Select what is pushing you to start..." />
@@ -208,9 +236,9 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
             2. What are you running toward? (Your Pull Vision) *
           </Label>
           <Select
-  value={selectedPull}
-  onValueChange={(val) => setValue('pull', val as string, { shouldValidate: true })}
->
+            value={selectedPull || undefined}
+            onValueChange={(val) => setValue('pull', (val as string) || '', { shouldValidate: true })}
+          >
             <SelectTrigger className="w-full text-xs h-10">
               <SelectValue placeholder="Select what is pulling you forward..." />
             </SelectTrigger>
@@ -240,9 +268,9 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
             3. Why now? (Your Catalyst) *
           </Label>
           <Select
-  value={selectedUrgency}
-  onValueChange={(val) => setValue('urgency', val as string, { shouldValidate: true })}
->
+            value={selectedUrgency || undefined}
+            onValueChange={(val) => setValue('urgency', (val as string) || '', { shouldValidate: true })}
+          >
             <SelectTrigger className="w-full text-xs h-10">
               <SelectValue placeholder="Select your urgency catalyst..." />
             </SelectTrigger>
