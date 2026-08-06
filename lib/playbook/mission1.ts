@@ -661,7 +661,7 @@ const mission1: MissionSchema = {
                     sequence: 3,
                     execution_type: "standard-form",
                     estimated_minutes: 15,
-                    briefing_text: "You've done the hard work. You've asked, been rejected, and survived. Now let's reflect on what this means for your journey.",
+                    briefing_text: "You've done the hard work. You've asked, been rejected, and survived. Now let's turn those experiences into fuel by defining your next milestone targets.",
                     mission_id: "mission-1",
                     quest_id: "mission1_quest4",
                     execution_environment: null,
@@ -677,8 +677,8 @@ const mission1: MissionSchema = {
                             title: "Rejection Is the Price of Admission"
                         }
                     ],
-                    component_key: "RejectionReflectionForm",
-                    reflection_prompt: "You've proven something to yourself today. What's the most important thing you learned about rejection? How will this change how you approach your business?",
+                    component_key: "AuditForm",
+                    reflection_prompt: "You've proven something to yourself today. Looking at the growth goals you just set, what is the most important mindset shift you need to achieve them?",
                     observation_context: null,
                     on_success: {
                         grant_points: 20,

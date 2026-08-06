@@ -1168,6 +1168,72 @@ export type Database = {
           },
         ]
       }
+      user_actions: {
+        Row: {
+          action_type: Database["public"]["Enums"]["user_action_type"]
+          checkback_delay_days: number
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_at: string | null
+          id: string
+          metadata: Json | null
+          project_id: string | null
+          status: Database["public"]["Enums"]["user_action_status"]
+          task_id: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action_type?: Database["public"]["Enums"]["user_action_type"]
+          checkback_delay_days?: number
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          metadata?: Json | null
+          project_id?: string | null
+          status?: Database["public"]["Enums"]["user_action_status"]
+          task_id?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action_type?: Database["public"]["Enums"]["user_action_type"]
+          checkback_delay_days?: number
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          metadata?: Json | null
+          project_id?: string | null
+          status?: Database["public"]["Enums"]["user_action_status"]
+          task_id?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_actions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_actions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_contacts: {
         Row: {
           categories: Database["public"]["Enums"]["user_contact_category"][]
@@ -1579,6 +1645,8 @@ export type Database = {
         | "community"
         | "observation"
       transaction_status: "pending" | "completed" | "failed" | "refunded"
+      user_action_status: "pending" | "in_progress" | "completed" | "dismissed"
+      user_action_type: "program" | "general" | "system"
       user_age_group:
         | "under_18"
         | "18_24"
@@ -1876,6 +1944,8 @@ export const Constants = {
         "observation",
       ],
       transaction_status: ["pending", "completed", "failed", "refunded"],
+      user_action_status: ["pending", "in_progress", "completed", "dismissed"],
+      user_action_type: ["program", "general", "system"],
       user_age_group: [
         "under_18",
         "18_24",

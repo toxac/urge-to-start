@@ -10,6 +10,7 @@ import { SkillsForm } from './mission1/SkillsForm';
 import { CheerSquadForm } from './mission1/CheerSquadForm';
 import { CommunityIntroForm } from './mission1/CommunityIntroForm';
 import { OffAppActionForm } from './common/OffAppActionForm';
+import { AuditForm } from './mission1/AuditForm';
 
 
 
@@ -25,6 +26,7 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   SkillsForm: SkillsForm,
   CheerSquadForm: CheerSquadForm,
   CommunityIntroForm: CommunityIntroForm,
+  AuditForm: AuditForm,
 
 
 };
