@@ -384,7 +384,7 @@ const mission1: MissionSchema = {
                     id: "mission1_quest3_task1",
                     title: "Build Your Squad",
                     sequence: 1,
-                    execution_type: "off-task-action",
+                    execution_type: "standard-form",
                     estimated_minutes: 30,
                     briefing_text: "Your success hinges on a support system. Send a short message to 3-5 people (friends, family, colleagues) and tell them you're starting a business and ask if they'd be part of your 'cheer squad' to follow your progress and hold you accountable. Use the template below—just customize it.\n\nTemplate: Hey [Name], I'm starting a business and I need people in my corner. Would you be willing to be part of my 'cheer squad'? I'll share my weekly progress with you. All you need to do is check in and hold me accountable. No heavy lifting—just your support. Would you be up for that?",
                     mission_id: "mission-1",
@@ -474,7 +474,7 @@ const mission1: MissionSchema = {
                     id: "mission1_quest3_task3",
                     title: "Ask for Something",
                     sequence: 3,
-                    execution_type: "log_counter",
+                    execution_type: "off-task-action",
                     estimated_minutes: 30,
                     briefing_text: "Now you're warmed up. Let's make a bigger ask. Find a service, tool, or product you use (or want to use) for your business and ask for a discount or a better deal. This could be a software subscription, a freelance service, or even a coffee shop. Practice asking without hesitation.",
                     mission_id: "mission-1",
@@ -492,7 +492,7 @@ const mission1: MissionSchema = {
                             title: "How to Ask for a Discount"
                         }
                     ],
-                    component_key: "DiscountAskLogger",
+                    component_key: "OffAppActionForm",
                     reflection_prompt: "How did it feel? What was the response? You've just proven you can ask for something. Now, think about how much easier this will feel next time.",
                     observation_context: null,
                     on_success: {
@@ -563,7 +563,7 @@ const mission1: MissionSchema = {
                     id: "mission1_quest4_task1",
                     title: "Practice Getting Nos",
                     sequence: 1,
-                    execution_type: "log_counter",
+                    execution_type: "off-task-action",
                     estimated_minutes: 45,
                     briefing_text: "Your challenge: Get 2 'No's. This could be from asking people for feedback on an idea, asking for a sale, or any other reasonable request where 'No' is a possible response. The goal is to collect them. Each 'No' is a data point and a step forward.\n\nSuggested scenarios:\n• Ask a stranger for directions to a place you already know (see if they say no)\n• Ask a friend to buy your product/service (even if it doesn't exist yet)\n• Ask a local business if they'd partner with you (without a clear proposal)\n• Ask someone for a big favor (like covering your shift or lending you money)",
                     mission_id: "mission-1",
@@ -588,7 +588,7 @@ const mission1: MissionSchema = {
                             title: "Handling Rejection Like a Pro"
                         }
                     ],
-                    component_key: "NoCounter",
+                    component_key: "OffAppActionForm",
                     reflection_prompt: "What did you learn from each 'No'? Did any of them give you a reason why that could be helpful?",
                     observation_context: null,
                     on_success: {
@@ -608,7 +608,7 @@ const mission1: MissionSchema = {
                     id: "mission1_quest4_task2",
                     title: "The Bold Ask",
                     sequence: 2,
-                    execution_type: "log_counter",
+                    execution_type: "off-task-action",
                     estimated_minutes: 30,
                     briefing_text: "Now it's time for the real test. Make a request that you're 95% sure will get a 'no.' Ask for something big, bold, or unreasonable. The goal isn't to get a 'yes'—it's to prove to yourself that rejection won't kill you.\n\n🔥 Examples of bold asks:\n• Ask a celebrity or influencer for a call\n• Ask a company for free lifetime access to their product\n• Ask a local business to give you something for free\n• Ask someone to introduce you to their most valuable contact\n• Ask for a 90% discount on something\n\n💡 The more unreasonable, the better. You're not trying to get a yes. You're trying to get comfortable with rejection.",
                     mission_id: "mission-1",
@@ -633,7 +633,7 @@ const mission1: MissionSchema = {
                             title: "The Art of the Bold Ask"
                         }
                     ],
-                    component_key: "BoldAskLogger",
+                    component_key: "OffAppActionForm",
                     reflection_prompt: "You just made a bold ask. You probably got a 'no.' And you're still standing. That's the whole point. You're now more resilient than 99% of people who never ask.",
                     observation_context: null,
                     on_success: {
@@ -686,7 +686,7 @@ const mission1: MissionSchema = {
                     },
                     challenges: null,
                     ai_config: null,
-                    dependencies: ["mission1_quest4_task2"],
+                    dependencies: ["mission1_quest4_task2", "mission1_quest4_task1"],
                     target_count: null,
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
