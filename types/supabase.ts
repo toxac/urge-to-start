@@ -1370,6 +1370,7 @@ export type Database = {
           mission_id: string | null
           project_id: string | null
           quest_id: string | null
+          reflections: Json
           saved_payload: Json
           status: Database["public"]["Enums"]["progress_status"]
           task_id: string | null
@@ -1384,6 +1385,7 @@ export type Database = {
           mission_id?: string | null
           project_id?: string | null
           quest_id?: string | null
+          reflections?: Json
           saved_payload?: Json
           status?: Database["public"]["Enums"]["progress_status"]
           task_id?: string | null
@@ -1398,6 +1400,7 @@ export type Database = {
           mission_id?: string | null
           project_id?: string | null
           quest_id?: string | null
+          reflections?: Json
           saved_payload?: Json
           status?: Database["public"]["Enums"]["progress_status"]
           task_id?: string | null
