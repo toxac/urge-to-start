@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { checkUsernameAvailability, signup } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Loader2, CheckCircle2, XCircle, MailCheck } from 'lucide-react';
 
 export function SignupCard() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [emailSentTo, setEmailSentTo] = useState<string | null>(null);
@@ -59,6 +61,14 @@ export function SignupCard() {
       return;
     }
 
+    // ⚡ If userId is returned and user is authenticated (Confirm Email disabled), redirect straight to /setup
+    if (result?.userId) {
+      router.push(`/setup?id=${result.userId}`);
+      router.refresh();
+      return;
+    }
+
+    // Otherwise, show email confirmation instructions
     setEmailSentTo(formEmail);
     setLoading(false);
   };
@@ -88,14 +98,13 @@ export function SignupCard() {
           </div>
         )}
 
-        {/* Username Input with Live Status Badge */}
+        {/* Username Input */}
         <div className="space-y-1.5 relative">
           <div className="flex items-center justify-between">
             <Label htmlFor="signup-username" className="text-muted-foreground font-bold text-[10px] uppercase tracking-wider">
               Choose Unique Handle
             </Label>
             
-            {/* Live Indicator */}
             {usernameLoading && (
               <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                 <Loader2 className="w-3 h-3 animate-spin" /> Checking...

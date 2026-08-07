@@ -1,6 +1,6 @@
 // app/(onboarding)/setup/page.tsx
 import { createClient } from '@/lib/supabase/server';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,21 +9,22 @@ import { submitProfileSetup } from '@/actions/onboarding-setup';
 import { COUNTRY_LABELS } from '@/constants/countries';
 import { USER_AGE_GROUP_OPTIONS, EDUCATION_TIER_OPTIONS } from '@/constants/enums';
 
-
-interface PageProps {
-  searchParams: Promise<{ id?: string }>;
-}
-
-export default async function ProfileSettingsPage({ searchParams }: PageProps) {
-  const sParams = await searchParams;
-  const id = sParams.id;
-
-  if (!id) notFound();
-
+export default async function ProfileSettingsPage() {
   const supabase = await createClient();
-  const { data: profile } = await supabase.from('profiles').select('*').eq('id', id).single();
-  if (!profile) notFound();
 
+  // Get user directly from authenticated server session
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/auth');
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single();
+
+  if (!profile) redirect('/auth');
+
+  // Read intent token from cookie
   const cookieStore = await cookies();
   const savedIntent = cookieStore.get('urge_signup_intent')?.value;
   const isFreeTrial = savedIntent === 'free';
@@ -41,8 +42,6 @@ export default async function ProfileSettingsPage({ searchParams }: PageProps) {
 
       <div className="bg-card border border-border rounded-2xl p-8 shadow-lg">
         <form action={submitProfileSetup} className="space-y-4 text-xs">
-          <input type="hidden" name="userId" value={profile.id} />
-
           {/* Username & Full Name */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">

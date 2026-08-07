@@ -1,23 +1,23 @@
 // app/auth/page.tsx
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { LoginCard } from '@/components/auth/LoginCard';
 import { SignupCard } from '@/components/auth/SignupCard';
+import { Loader2 } from 'lucide-react';
 
-export default function AuthenticatePage() {
+function AuthenticateContent() {
   const searchParams = useSearchParams();
   const [isSignUp, setIsSignUp] = useState(false);
 
   useEffect(() => {
-    // 1. Store intent cookie if passed in URL (?intent=free or ?intent=member)
+    // 1. Read query parameters synchronously via hook
     const urlIntent = searchParams.get('intent');
     if (urlIntent) {
       document.cookie = `urge_signup_intent=${urlIntent}; path=/; max-age=1800; SameSite=Strict`;
     }
-    
-    // 2. Automatically default to signup if view=signup or intent is present
+
     const viewParam = searchParams.get('view');
     if (viewParam === 'signup' || urlIntent) {
       setIsSignUp(true);
@@ -28,7 +28,7 @@ export default function AuthenticatePage() {
 
   return (
     <div className="w-full max-w-sm mx-auto space-y-6">
-      {/* Dynamic Header Message */}
+      {/* Dynamic Header */}
       <div className="text-center space-y-1 max-w-sm mx-auto">
         {!isSignUp ? (
           <>
@@ -78,5 +78,22 @@ export default function AuthenticatePage() {
         {!isSignUp ? <LoginCard /> : <SignupCard />}
       </div>
     </div>
+  );
+}
+
+export default function AuthenticatePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex flex-col items-center justify-center p-12 space-y-2 animate-pulse">
+          <Loader2 className="w-5 h-5 animate-spin text-primary" />
+          <span className="text-[10px] font-mono tracking-widest uppercase text-muted-foreground">
+            Initializing Auth Portal...
+          </span>
+        </div>
+      }
+    >
+      <AuthenticateContent />
+    </Suspense>
   );
 }

@@ -43,6 +43,7 @@ export async function signup(formData: FormData) {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
+  // 1. Register Auth User
   const { data: authData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
@@ -57,8 +58,33 @@ export async function signup(formData: FormData) {
 
   if (signUpError) return { error: signUpError.message };
 
+  const userId = authData.user?.id;
+
+  // 2. Create Profile row manually if user ID was returned
+  if (userId) {
+    const cleanUsername = username.toLowerCase().trim();
+
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .insert({
+        id: userId,
+        user_id: userId,
+        username: cleanUsername,
+        fullname: cleanUsername,
+        roles: ['trial' as any],
+        onboarding_step: '1',
+        accumulated_xp: 0,
+        currency: 'INR',
+        country: 'IN',
+      });
+
+    if (profileError && profileError.code !== '23505') { // Ignore if row already created
+      console.error('Failed to create initial profile row:', profileError.message);
+    }
+  }
+
   revalidatePath('/', 'layout');
-  return { userId: authData.user?.id, profileCreated: true };
+  return { userId, profileCreated: true };
 }
 
 export async function completeProfile(userId: string, username: string) {
