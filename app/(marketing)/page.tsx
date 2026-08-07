@@ -1,7 +1,15 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowRight, Users, Target, Compass, Zap, Shield, ShoppingBag, TestTube, ChevronRight } from 'lucide-react';
+import { 
+  ArrowRight, 
+  Users, 
+  Target, 
+  Compass, 
+  ShoppingBag, 
+  TestTube, 
+  ChevronRight 
+} from 'lucide-react';
 
 export default function Homepage() {
   return (
@@ -30,20 +38,20 @@ export default function Homepage() {
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="px-8 py-6 text-sm font-semibold rounded-xl shadow-lg shadow-primary/20">
-              <Link href="/auth">Start Building</Link>
+              <Link href="/auth?view=signup&intent=free">Start Mission 1 Free</Link>
             </Button>
             <Button size="lg" variant="outline" className="px-8 py-6 text-sm font-semibold rounded-xl">
-              <Link href="/auth">Try Quest 1 Free</Link>
+              <Link href="/auth?view=signup&intent=member">Enroll Full Program</Link>
             </Button>
           </div>
 
           <p className="mt-6 text-sm text-muted-foreground">
-            No card required. No commitment. Just the first step.
+            No credit card required for trial. Just the first step.
           </p>
         </div>
       </section>
 
-      {/* THE PROBLEM – BOLDER FRAMING */}
+      {/* THE PROBLEM */}
       <section className="border-t border-border/40 bg-card/20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20">
           <div className="max-w-3xl mx-auto">
@@ -109,7 +117,7 @@ export default function Homepage() {
                 <p className="text-base text-muted-foreground mt-2">
                   It gets fixed by doing <span className="text-foreground font-semibold">one small thing</span> that moves you forward.
                   <br />
-                  With someone watching your back.
+                  With a dedicated workspace watching your back.
                 </p>
               </div>
             </div>
@@ -117,7 +125,7 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* WHAT WE BELIEVE – EFFORT + MANIFESTO MERGED */}
+      {/* WHAT WE BELIEVE */}
       <section className="border-t border-border/40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20">
           <div className="text-center mb-14">
@@ -180,7 +188,7 @@ export default function Homepage() {
 
           <div className="mt-10 text-center">
             <p className="text-sm text-muted-foreground font-medium">
-              This isn't a trend. This isn't a fad. This is the hard work of building something real.
+              This isn't a trend. This is the disciplined work of building something real.
             </p>
           </div>
         </div>
@@ -199,8 +207,8 @@ export default function Homepage() {
               </h2>
             </div>
             <Button variant="ghost" className="text-sm font-medium hidden sm:flex">
-              <Link href="/how-it-works/program">
-                See all →
+              <Link href="/program">
+                Explore Curriculum →
               </Link>
             </Button>
           </div>
@@ -213,10 +221,10 @@ export default function Homepage() {
               </div>
               <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">Build Your Founder Mindset</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Before we look at business, we look at you. Overthinking, time management, asking for support—the foundations.
+                Before we look at business, we look at you. Overthinking, time management, skill alignment—the foundations.
               </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border/40">
-                <span className="inline-flex items-center gap-1 text-primary font-medium">✨ Quest 1 free</span>
+                <span className="inline-flex items-center gap-1 text-primary font-medium">✨ Mission 1 Free Access</span>
               </div>
             </Card>
 
@@ -230,7 +238,7 @@ export default function Homepage() {
                 Start with your frustrations, then talk to real people. Build a list of real problems people will pay to solve.
               </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border/40">
-                4 quests · Real-world research
+                Qualitative Research & Pain Scores
               </div>
             </Card>
 
@@ -241,25 +249,25 @@ export default function Homepage() {
               </div>
               <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">Test if It Actually Works</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Talk to customers, understand the competition, define what you'll build. Make sure it makes sense before you invest time.
+                Conduct interviews, understand the competition, and map your core offer before investing time or money.
               </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border/40">
-                5 quests · Customer validation
+                Customer Validation & Interviews
               </div>
             </Card>
           </div>
 
           <div className="text-center mt-8 md:hidden">
             <Button variant="ghost" className="text-sm font-medium">
-              <Link href="/how-it-works/program">
-                See all missions →
+              <Link href="/program">
+                Explore Curriculum →
               </Link>
             </Button>
           </div>
         </div>
       </section>
 
-      {/* THE NETWORK – EXPANDED */}
+      {/* THE NETWORK */}
       <section className="border-t border-border/40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20">
           <div className="text-center mb-14">
@@ -270,7 +278,7 @@ export default function Homepage() {
               You don't build alone.
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-              When you join Urge, you get access to a community, a marketplace, and a testing ground. All designed to help you succeed.
+              When you join Urge, you get access to a community, a marketplace, and a testing ground.
             </p>
           </div>
 
@@ -295,11 +303,7 @@ export default function Homepage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                  <span><span className="text-foreground font-medium">Your cheer squad</span> — A small group that holds you accountable</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                  <span><span className="text-foreground font-medium">Investors</span> — For when you're ready to scale</span>
+                  <span><span className="text-foreground font-medium">Your squad</span> — A dedicated group that holds you accountable</span>
                 </li>
               </ul>
             </Card>
@@ -319,11 +323,7 @@ export default function Homepage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                  <span><span className="text-foreground font-medium">Vetted providers</span> — Only the best, curated for founders</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                  <span><span className="text-foreground font-medium">Special offers</span> — Tailored packages for early-stage startups</span>
+                  <span><span className="text-foreground font-medium">Vetted providers</span> — Curated service providers for early startups</span>
                 </li>
               </ul>
             </Card>
@@ -339,15 +339,11 @@ export default function Homepage() {
               <ul className="space-y-3 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                  <span><span className="text-foreground font-medium">Early validation</span> — Test your product with real users</span>
+                  <span><span className="text-foreground font-medium">Early validation</span> — Test your product with peer builders</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                   <span><span className="text-foreground font-medium">Internal launch</span> — Get feedback before going public</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                  <span><span className="text-foreground font-medium">Early customers</span> — Build momentum and confidence</span>
                 </li>
               </ul>
             </Card>
@@ -355,15 +351,6 @@ export default function Homepage() {
           </div>
         </div>
       </section>
-
-      {/* SOCIAL PROOF */}
-      <div className="border-t border-border/40 bg-card/10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            Join <span className="text-foreground font-semibold">200+</span> founders already building their first business.
-          </p>
-        </div>
-      </div>
 
       {/* FINAL CTA */}
       <section className="border-t border-border/40">
@@ -376,28 +363,24 @@ export default function Homepage() {
             </span>
           </h2>
           <p className="mt-4 text-lg text-muted-foreground max-w-lg mx-auto">
-            Quest 1 of Mission 1 is free. No card. No onboarding. Just the first honest step.
+            Mission 1 is completely free. No card required to get started.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="px-8 py-6 text-sm font-semibold rounded-xl shadow-lg shadow-primary/20">
-              <Link href="/auth">Start Quest 1</Link>
+              <Link href="/auth?view=signup&intent=free">Start Mission 1 Free</Link>
             </Button>
             <Button size="lg" variant="outline" className="px-8 py-6 text-sm font-semibold rounded-xl">
-              <Link href="/checkout/full-access-membership">Enroll in Program</Link>
+              <Link href="/auth?view=signup&intent=member">Enroll Full Program</Link>
             </Button>
           </div>
 
-          <p className="mt-4 text-sm text-muted-foreground">
-            Includes 1 year of network membership.
-          </p>
-
           <div className="mt-8">
             <Link
-              href="/auth?optin=newsletter"
+              href="/auth?view=signup&intent=free"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
             >
-              Not ready yet? Get one real idea a week, no fluff
+              Ready to stop overthinking?
               <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>

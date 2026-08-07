@@ -11,21 +11,44 @@ export default async function PlatformLayout({
 }) {
   const supabase = await createClient();
 
+  // 1. Authenticate user session
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     redirect('/auth');
   }
 
+  // 2. Fetch profile and progress concurrently
   const [profileResponse, progressResponse] = await Promise.all([
     supabase.from('profiles').select('*').eq('id', user.id).single(),
     supabase.from('user_progress').select('*').eq('user_id', user.id)
   ]);
 
+  const profile = profileResponse.data;
+
+  if (!profile) {
+    redirect('/auth');
+  }
+
+  // 3. Onboarding Guard: Redirect to setup if not finished
+  if (profile.onboarding_step !== 'completed') {
+    redirect(`/setup?id=${user.id}`);
+  }
+
+  // 4. Role Authorization: Must have 'trial', 'member', 'mentor', or 'superadmin'
+  const userRoles = (profile.roles as string[]) || [];
+  const hasAccess = userRoles.some((role) =>
+    ['trial', 'member', 'mentor', 'superadmin'].includes(role)
+  );
+
+  if (!hasAccess) {
+    redirect('/payment');
+  }
+
   return (
     <div className="w-full h-screen flex bg-background text-foreground antialiased overflow-hidden relative">
       <StoreHydrator 
         initialProgress={(progressResponse.data as any) || []} 
-        initialProfile={profileResponse.data as any} 
+        initialProfile={profile as any} 
       />
 
       {/* Main Left Navigation */}

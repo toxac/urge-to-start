@@ -41,7 +41,6 @@ export async function signup(formData: FormData) {
     return { error: "This username handle is already claimed." };
   }
 
-  // Determine site root origin safely using your environment profile contracts
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
   const { data: authData, error: signUpError } = await supabase.auth.signUp({
@@ -59,7 +58,6 @@ export async function signup(formData: FormData) {
   if (signUpError) return { error: signUpError.message };
 
   revalidatePath('/', 'layout');
-  // ⚡ The DB trigger guarantees the initial profile exists with roles: ['base']
   return { userId: authData.user?.id, profileCreated: true };
 }
 
@@ -89,18 +87,17 @@ export async function completeProfile(userId: string, username: string) {
       .from('profiles')
       .insert({
         id: userId,
+        user_id: userId, // ⚡ Added required user_id field
         username: username.toLowerCase().trim(),
-        full_name: username.toLowerCase().trim(),
+        fullname: username.toLowerCase().trim(),
         country: 'IN',
-        roles: ['base'], // Array formatting fix
-        onboarding_step: 1,
+        roles: ['trial' as any],
+        onboarding_step: '1',
         accumulated_xp: 0,
         currency: 'INR',
-
-        social_profiles: {},
-        mentor_metadata: {},
+        social_footprint: {},
+        mentor_profile: {},
         provider_metadata: {},
-
       });
     if (insertError) throw new Error(insertError.message);
   }
@@ -117,7 +114,6 @@ export async function forgotPassword(formData: FormData) {
     return { error: 'Email is required.' };
   }
 
-  // Redirect to the reset password page after email confirmation
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${siteUrl}/auth/reset-password`,
@@ -127,16 +123,12 @@ export async function forgotPassword(formData: FormData) {
     return { error: error.message };
   }
 
-  // Return success (no redirect, so the page can display a success message)
   return { success: true };
 }
 
 export async function logout() {
   const supabase = await createClient();
 
-  // Sign out across all active context headers
   await supabase.auth.signOut();
-
-  // Clear tracking routes and drop them at the entry screen
   redirect('/login');
 }

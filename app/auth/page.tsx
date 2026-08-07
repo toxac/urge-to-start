@@ -1,3 +1,4 @@
+// app/auth/page.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -6,25 +7,28 @@ import { LoginCard } from '@/components/auth/LoginCard';
 import { SignupCard } from '@/components/auth/SignupCard';
 
 export default function AuthenticatePage() {
-  const [isSignUp, setIsSignUp] = useState(false);
-  
-  // ⚡ Completely synchronous read — NO await required here!
   const searchParams = useSearchParams();
+  const [isSignUp, setIsSignUp] = useState(false);
 
   useEffect(() => {
+    // 1. Store intent cookie if passed in URL (?intent=free or ?intent=member)
     const urlIntent = searchParams.get('intent');
     if (urlIntent) {
       document.cookie = `urge_signup_intent=${urlIntent}; path=/; max-age=1800; SameSite=Strict`;
     }
     
-    if (searchParams.get('view') === 'signup') {
+    // 2. Automatically default to signup if view=signup or intent is present
+    const viewParam = searchParams.get('view');
+    if (viewParam === 'signup' || urlIntent) {
       setIsSignUp(true);
+    } else if (viewParam === 'login') {
+      setIsSignUp(false);
     }
   }, [searchParams]);
 
   return (
     <div className="w-full max-w-sm mx-auto space-y-6">
-      {/* Header Message */}
+      {/* Dynamic Header Message */}
       <div className="text-center space-y-1 max-w-sm mx-auto">
         {!isSignUp ? (
           <>
@@ -41,25 +45,27 @@ export default function AuthenticatePage() {
               Stop overthinking and just start.
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed font-normal px-4">
-              You’re joining a group of tinkerers and doers who are tired of waiting for permission. No pitch decks and endless analysis, you will find and solve problems and sell it to real customers.
+              Join a group of doers who are tired of waiting for permission. Find real problems and sell to real customers.
             </p>
           </>
         )}
       </div>
 
-      {/* Asymmetrical Tab Selector */}
+      {/* Tab Switcher */}
       <div className="flex border-b border-border/40 text-xs font-bold tracking-wider max-w-xs mx-auto">
         <button
+          type="button"
           onClick={() => setIsSignUp(false)}
-          className={`w-1/2 pb-3 text-center transition-all ${
+          className={`w-1/2 pb-3 text-center transition-all cursor-pointer ${
             !isSignUp ? 'text-foreground border-b-2 border-primary' : 'text-muted-foreground opacity-60'
           }`}
         >
           Sign In
         </button>
         <button
+          type="button"
           onClick={() => setIsSignUp(true)}
-          className={`w-1/2 pb-3 text-center transition-all ${
+          className={`w-1/2 pb-3 text-center transition-all cursor-pointer ${
             isSignUp ? 'text-foreground border-b-2 border-primary' : 'text-muted-foreground opacity-60'
           }`}
         >
@@ -67,7 +73,7 @@ export default function AuthenticatePage() {
         </button>
       </div>
 
-      {/* Dynamic Client Switching Engine */}
+      {/* Auth Card View */}
       <div className="transition-all duration-300 ease-in-out">
         {!isSignUp ? <LoginCard /> : <SignupCard />}
       </div>

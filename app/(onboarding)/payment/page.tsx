@@ -1,3 +1,4 @@
+// app/(onboarding)/payment/page.tsx
 'use client';
 
 import React, { useState, useEffect, useTransition } from 'react';
@@ -30,7 +31,6 @@ export default function PaywallPage() {
   const [loadingPage, setLoadingPage] = useState(true);
 
   // Discount UI States
-  const [showPromoInput, setShowPromoInput] = useState(false);
   const [promoCodeInput, setPromoCodeInput] = useState('');
   const [isVerifyingCode, setIsVerifyingCode] = useState(false);
   const [promoError, setPromoError] = useState<string | null>(null);
@@ -40,10 +40,11 @@ export default function PaywallPage() {
     async function fetchProduct() {
       try {
         const supabase = createClient();
+        // ⚡ UPDATED: Fetch 'program-membership' instead of 'program-enrollment'
         const { data, error } = await supabase
           .from('offerings')
           .select('id, title, prices')
-          .eq('slug', 'program-enrollment')
+          .eq('slug', 'program-membership')
           .eq('is_active', true)
           .maybeSingle();
 
@@ -84,7 +85,6 @@ export default function PaywallPage() {
           finalPrice: response.data.finalPrice
         });
         setPromoCodeInput('');
-        setShowPromoInput(false);
       } else {
         setPromoError(response.error);
       }
@@ -95,19 +95,16 @@ export default function PaywallPage() {
     }
   };
 
-  // Remove Applied Promo Code
   const handleRemovePromo = () => {
     setAppliedDiscount(null);
     setPromoError(null);
   };
 
-  // Checkout Execution Handler
   const handlePaymentSubmit = () => {
     if (!programOffering) return;
 
     startTransition(async () => {
       try {
-        // Pass the optional coupon code to your initialization transaction builder
         const initResult = await initializeCheckoutTransaction({
           offeringId: programOffering.id,
           currency: 'INR',
@@ -150,18 +147,16 @@ export default function PaywallPage() {
   if (!programOffering) {
     return (
       <div className="text-center p-6 text-sm text-muted-foreground font-medium">
-        ⚠️ Offering catalog item not found. Please verify your database rows.
+        ⚠️ Offering catalog item not found. Please verify database offerings table.
       </div>
     );
   }
 
-  // Base pricing calculations
-  const basePriceINR = 8000;
+  const basePriceINR = (programOffering.prices as any)?.INR || 8000;
   const standardDisplayPrice = appliedDiscount ? appliedDiscount.finalPrice : basePriceINR;
 
   return (
     <div className="w-full max-w-md mx-auto space-y-6 animate-in fade-in duration-200">
-
       <div className="text-center space-y-1">
         <h1 className="text-lg font-bold tracking-tight text-foreground">
           Ready to jump in?
@@ -173,18 +168,18 @@ export default function PaywallPage() {
 
       <div className="bg-card border border-border rounded-2xl p-8 shadow-lg space-y-6">
 
-        {/* Dynamic Pricing Layout Frame */}
+        {/* Pricing Summary */}
         <div className="p-5 border border-border bg-muted/40 rounded-xl flex items-center justify-between text-xs relative overflow-hidden">
           <div className="space-y-0.5 text-left">
-            <span className="font-bold text-foreground block">Urge Start Enrollment</span>
-            <p className="text-[11px] text-muted-foreground font-medium">Includes 1 year of community membership</p>
+            <span className="font-bold text-foreground block">Urge Program Membership</span>
+            <p className="text-[11px] text-muted-foreground font-medium">Full access to all sprints & community</p>
           </div>
           <div className="text-right shrink-0">
             {appliedDiscount ? (
               <div className="flex flex-col items-end">
                 <span className="text-xs text-muted-foreground line-through font-medium">₹{basePriceINR}</span>
                 <span className="text-2xl font-serif font-black text-primary">
-                  {standardDisplayPrice === 0 ? 'Free' : `Extra text ₹${standardDisplayPrice}`}
+                  {standardDisplayPrice === 0 ? 'Free' : `₹${standardDisplayPrice}`}
                 </span>
               </div>
             ) : (
@@ -196,12 +191,12 @@ export default function PaywallPage() {
           </div>
         </div>
 
-        {/* Promo Code Input  */}
+        {/* Promo Code Input */}
         <div className="space-y-2 border-t border-b border-border/40 py-4 text-xs">
           {!appliedDiscount ? (
             <div className="space-y-1.5">
               <label htmlFor="promoCode" className="text-muted-foreground font-semibold text-[11px] ml-1">
-                Have a promo or student code?
+                Have a promo code?
               </label>
               <div className="flex gap-2">
                 <div className="relative flex-1">
@@ -209,7 +204,7 @@ export default function PaywallPage() {
                   <Input
                     id="promoCode"
                     type="text"
-                    placeholder="e.g., EARLYTESTER"
+                    placeholder="e.g., EARLYBUILDER"
                     value={promoCodeInput}
                     onChange={(e) => setPromoCodeInput(e.target.value)}
                     className="h-9 text-xs uppercase font-medium bg-background border-input rounded-xl pl-9"
@@ -227,7 +222,6 @@ export default function PaywallPage() {
               </div>
             </div>
           ) : (
-            /* Applied Coupon Status Badge */
             <div className="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 p-2.5 rounded-xl animate-in fade-in duration-150">
               <div className="flex items-center gap-2 font-medium text-[11px]">
                 <Ticket className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
@@ -246,7 +240,6 @@ export default function PaywallPage() {
             </div>
           )}
 
-          {/* Real-time Inline Error Validation Feedback */}
           {promoError && (
             <p className="text-[11px] text-destructive font-medium mt-1 ml-1 animate-in fade-in duration-150">
               ⚠️ {promoError}
@@ -254,13 +247,12 @@ export default function PaywallPage() {
           )}
         </div>
 
-        {/* Clear Bullet Points */}
+        {/* Feature List */}
         <div className="text-left space-y-3 pt-1">
           {[
             "Full access to all program sprints and milestones",
-            "A dedicated place to share your work and get feedback from other builders",
-            "1 year of our annual network membership included for free (usually ₹4,000/yr)",
-            "No boring video lectures—just action-oriented tasks to help you ship"
+            "Dedicated builder community & feedback channels",
+            "Action-oriented tasks to help you validate and ship"
           ].map((text, idx) => (
             <div key={idx} className="flex items-start gap-2.5 text-xs text-muted-foreground font-medium leading-normal">
               <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
@@ -269,7 +261,7 @@ export default function PaywallPage() {
           ))}
         </div>
 
-        {/* Unified Submit Row */}
+        {/* Submit */}
         <div className="pt-2 border-t border-border/40">
           <Button
             type="button"
@@ -280,11 +272,11 @@ export default function PaywallPage() {
             {isPending ? (
               <>
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                <span>Initializing secure checkout...</span>
+                <span>Processing payment...</span>
               </>
             ) : (
               <span>
-                {standardDisplayPrice === 0 ? 'Claim Free Access & Start Journey' : 'Pay Now & Start Your Journey'}
+                {standardDisplayPrice === 0 ? 'Claim Access & Start Journey' : 'Pay Now & Start Your Journey'}
               </span>
             )}
           </Button>
@@ -293,7 +285,6 @@ export default function PaywallPage() {
             Payments are safe, encrypted, and processed instantly.
           </p>
         </div>
-
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
+// actions/payments.ts
 'use server';
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { Database } from '@/types/supabase';
-import { Constants } from '@/types/supabase'; // ⚡ Your real runtime enums object
+import { Database, Constants } from '@/types/supabase';
 import { createClient } from '@/lib/supabase/server'; 
 import { 
   ValidateDiscountSchema, 
@@ -12,7 +12,6 @@ import {
   CompleteCheckoutSchema 
 } from '@/types/payments';
 
-// Extract strict database interfaces from your schema definition contract
 type DiscountRow = Database['public']['Tables']['discounts']['Row'];
 type TransactionRow = Database['public']['Tables']['transactions']['Row'];
 type TransactionInsert = Database['public']['Tables']['transactions']['Insert'];
@@ -221,6 +220,7 @@ export async function completeCheckout(
       redirect('/program');
     }
 
+    // 1. Mark transaction as completed
     await supabase
       .from('transactions')
       .update({
@@ -231,82 +231,55 @@ export async function completeCheckout(
       })
       .eq('id', transaction.id);
 
+    // 2. Increment coupon uses count if discount was applied
+    if (transaction.discount_id) {
+      const { data: discountRow } = await supabase
+        .from('discounts')
+        .select('uses_count')
+        .eq('id', transaction.discount_id)
+        .single();
+
+      if (discountRow) {
+        await supabase
+          .from('discounts')
+          .update({
+            uses_count: (discountRow.uses_count || 0) + 1,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', transaction.discount_id);
+      }
+    }
+
+    // 3. Grant 'member' role and set onboarding_step to 'completed'
     const offeringData = transaction.offerings as any;
     
     if (
-      offeringData?.type === Constants.public.Enums.offering_type[0] || // 'program'
-      offeringData?.slug === 'program-enrollment'
+      offeringData?.type === Constants.public.Enums.offering_type[0] || 
+      offeringData?.slug === 'program-membership'
     ) {
-      const expirationDate = new Date();
-      expirationDate.setFullYear(expirationDate.getFullYear() + 1);
-
-      const { error: networkMembershipErr } = await supabase
-        .from('network_memberships')
-        .insert({
-          user_id: user.id,
-          status: 'active',
-          expires_at: expirationDate.toISOString()
-        });
-
-      if (networkMembershipErr) {
-        throw new Error(`Failed to provision bundled membership: ${networkMembershipErr.message}`);
-      }
-
-      const { data: annualMembershipOffering } = await supabase
-        .from('offerings')
-        .select('id')
-        .eq('slug', 'annual-membership')
-        .maybeSingle();
-
-      if (annualMembershipOffering) {
-        const { data: bundledDiscount } = await supabase
-          .from('discounts')
-          .select('id')
-          .eq('code', 'PROGRAM_BUNDLED_MEMBERSHIP')
-          .maybeSingle();
-
-        await supabase
-          .from('transactions')
-          .insert({
-            user_id: user.id,
-            offering_id: annualMembershipOffering.id,
-            discount_id: bundledDiscount?.id || null,
-            amount_paid: 0.00,
-            currency: transaction.currency,
-            provider: 'internal_bundle',
-            provider_order_id: `bundle_${transaction.provider_order_id}`,
-            status: Constants.public.Enums.transaction_status[1], // 'completed'
-            updated_at: new Date().toISOString()
-          });
-      }
-
       const { data: currentProfile } = await supabase
         .from('profiles')
         .select('roles')
         .eq('id', user.id)
         .single();
 
-      const currentRoles = currentProfile?.roles || ['base'];
+      const currentRoles = (currentProfile?.roles as string[]) || [];
       
-      const targetRolesToGrant = [
-        Constants.public.Enums.user_platform_role[1], // 'enrolled'
-        Constants.public.Enums.user_platform_role[2]  // 'member'
-      ];
-
-      const updatedRoles = Array.from(
-        new Set([...currentRoles, ...targetRolesToGrant])
-      ) as Database["public"]["Enums"]["user_platform_role"][];
+      // Remove 'trial' and append 'member'
+      const filteredRoles = currentRoles.filter((r) => r !== 'trial');
+      const updatedRoles = Array.from(new Set([...filteredRoles, 'member']));
 
       const { error: profileUpdateErr } = await supabase
         .from('profiles')
         .update({ 
-          roles: updatedRoles,
-          onboarding_step: 2
+          roles: updatedRoles as any,
+          onboarding_step: 'completed',
+          updated_at: new Date().toISOString()
         })
         .eq('id', user.id);
 
       if (profileUpdateErr) {
-        throw new Error(`Profile role sync broke: ${profileUpdateErr.message}`);
+        throw new Error(`Profile role sync failed: ${profileUpdateErr.message}`);
       }
     }
 
