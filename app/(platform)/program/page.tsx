@@ -4,7 +4,8 @@
 import React, { useEffect, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useStore } from '@nanostores/react';
-import { $playbookStore, setCompanionFocus } from '@/lib/stores/companionStore';
+import { $playbookStore } from '@/lib/stores/playbookStore';
+import { setCompanionFocus } from '@/lib/stores/companionStore';
 import { $progressStore } from '@/lib/stores/progressStore';
 import { Button } from '@/components/ui/button';
 import { ShieldAlert, ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
