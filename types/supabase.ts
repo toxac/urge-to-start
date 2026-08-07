@@ -359,160 +359,6 @@ export type Database = {
         }
         Relationships: []
       }
-      marketplace_flags: {
-        Row: {
-          created_at: string
-          details: string | null
-          id: string
-          is_resolved: boolean
-          listing_id: string
-          reason: Database["public"]["Enums"]["flag_reason"]
-          resolved_at: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          details?: string | null
-          id?: string
-          is_resolved?: boolean
-          listing_id: string
-          reason: Database["public"]["Enums"]["flag_reason"]
-          resolved_at?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          details?: string | null
-          id?: string
-          is_resolved?: boolean
-          listing_id?: string
-          reason?: Database["public"]["Enums"]["flag_reason"]
-          resolved_at?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_flags_listing"
-            columns: ["listing_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_listings"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      marketplace_listings: {
-        Row: {
-          ai_audit_notes: string | null
-          ai_verification_score: number
-          avg_rating: number
-          category: string
-          created_at: string
-          creator_id: string
-          cta_type: string
-          cta_url: string
-          description: string
-          flags_count: number
-          id: string
-          listing_type: Database["public"]["Enums"]["marketplace_listing_type"]
-          price_display: string
-          promo_code: string | null
-          reviewed_at: string | null
-          reviewed_by: string | null
-          reviews_count: number
-          slug: string
-          status: Database["public"]["Enums"]["marketplace_status"]
-          tagline: string
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          ai_audit_notes?: string | null
-          ai_verification_score?: number
-          avg_rating?: number
-          category: string
-          created_at?: string
-          creator_id: string
-          cta_type?: string
-          cta_url: string
-          description: string
-          flags_count?: number
-          id?: string
-          listing_type: Database["public"]["Enums"]["marketplace_listing_type"]
-          price_display?: string
-          promo_code?: string | null
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          reviews_count?: number
-          slug: string
-          status?: Database["public"]["Enums"]["marketplace_status"]
-          tagline: string
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          ai_audit_notes?: string | null
-          ai_verification_score?: number
-          avg_rating?: number
-          category?: string
-          created_at?: string
-          creator_id?: string
-          cta_type?: string
-          cta_url?: string
-          description?: string
-          flags_count?: number
-          id?: string
-          listing_type?: Database["public"]["Enums"]["marketplace_listing_type"]
-          price_display?: string
-          promo_code?: string | null
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          reviews_count?: number
-          slug?: string
-          status?: Database["public"]["Enums"]["marketplace_status"]
-          tagline?: string
-          title?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      marketplace_reviews: {
-        Row: {
-          comment: string
-          created_at: string
-          id: string
-          listing_id: string
-          rating: number
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          comment: string
-          created_at?: string
-          id?: string
-          listing_id: string
-          rating: number
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          comment?: string
-          created_at?: string
-          id?: string
-          listing_id?: string
-          rating?: number
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_reviews_listing"
-            columns: ["listing_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_listings"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       missions: {
         Row: {
           big_question: string | null
@@ -555,33 +401,6 @@ export type Database = {
           title?: string
           updated_at?: string
           video_url?: string | null
-        }
-        Relationships: []
-      }
-      network_memberships: {
-        Row: {
-          created_at: string | null
-          expires_at: string
-          id: string
-          started_at: string | null
-          status: string
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          expires_at: string
-          id?: string
-          started_at?: string | null
-          status?: string
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          expires_at?: string
-          id?: string
-          started_at?: string | null
-          status?: string
-          user_id?: string | null
         }
         Relationships: []
       }
@@ -741,7 +560,7 @@ export type Database = {
           onboarding_step: string | null
           provider_metadata: Json | null
           roadblocks: Json | null
-          roles: Database["public"]["Enums"]["user_platform_role"][]
+          roles: Database["public"]["Enums"]["user_role"][]
           skills: Json | null
           social_footprint: Json | null
           status: string | null
@@ -773,7 +592,7 @@ export type Database = {
           onboarding_step?: string | null
           provider_metadata?: Json | null
           roadblocks?: Json | null
-          roles?: Database["public"]["Enums"]["user_platform_role"][]
+          roles?: Database["public"]["Enums"]["user_role"][]
           skills?: Json | null
           social_footprint?: Json | null
           status?: string | null
@@ -805,7 +624,7 @@ export type Database = {
           onboarding_step?: string | null
           provider_metadata?: Json | null
           roadblocks?: Json | null
-          roles?: Database["public"]["Enums"]["user_platform_role"][]
+          roles?: Database["public"]["Enums"]["user_role"][]
           skills?: Json | null
           social_footprint?: Json | null
           status?: string | null
@@ -1323,48 +1142,6 @@ export type Database = {
           },
         ]
       }
-      user_plans: {
-        Row: {
-          created_at: string | null
-          end_time: string
-          id: string
-          item_id: string
-          item_type: string
-          metadata: Json | null
-          reminder_sent: boolean | null
-          start_time: string
-          status: Database["public"]["Enums"]["plan_status"] | null
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          end_time: string
-          id?: string
-          item_id: string
-          item_type: string
-          metadata?: Json | null
-          reminder_sent?: boolean | null
-          start_time: string
-          status?: Database["public"]["Enums"]["plan_status"] | null
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          end_time?: string
-          id?: string
-          item_id?: string
-          item_type?: string
-          metadata?: Json | null
-          reminder_sent?: boolean | null
-          start_time?: string
-          status?: Database["public"]["Enums"]["plan_status"] | null
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
       user_posts: {
         Row: {
           category: Database["public"]["Enums"]["post_category"]
@@ -1679,16 +1456,14 @@ export type Database = {
         | "cold"
         | "nurturing"
       user_contact_status: "active" | "inactive" | "lost" | "unconfirmed"
-      user_platform_role:
-        | "base"
+      user_role:
         | "trial"
-        | "enrolled"
         | "member"
-        | "provider"
         | "mentor"
         | "superadmin"
         | "admin_marketing"
         | "admin_accounts"
+        | "squad"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1982,16 +1757,14 @@ export const Constants = {
         "nurturing",
       ],
       user_contact_status: ["active", "inactive", "lost", "unconfirmed"],
-      user_platform_role: [
-        "base",
+      user_role: [
         "trial",
-        "enrolled",
         "member",
-        "provider",
         "mentor",
         "superadmin",
         "admin_marketing",
         "admin_accounts",
+        "squad",
       ],
     },
   },
