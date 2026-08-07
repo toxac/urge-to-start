@@ -4,12 +4,12 @@
 import React, { use, useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useStore } from '@nanostores/react';
-import { $playbookStore, setCompanionFocus, setPlaybookStore } from '@/lib/stores/companionStore';
+import { $playbookStore, getMissionFromStore } from '@/lib/stores/playbookStore';
 import { $progressStore } from '@/lib/stores/progressStore';
+import { setCompanionFocus } from '@/lib/stores/companionStore';
 import { MissionHeader } from '@/components/layout/MissionHeader';
-import { createClient } from '@/lib/supabase/client';
 import { ChevronLeft, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
-import { MissionSchema, QuestSchema, TaskSchema } from '@/types/playbook';
+import { QuestSchema, TaskSchema } from '@/types/playbook';
 
 export default function MissionRoadmapPage({
   params,
@@ -22,72 +22,18 @@ export default function MissionRoadmapPage({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const playbook = useStore($playbookStore);
+  // Subscribe to Nanostores
+  useStore($playbookStore);
   const progress = useStore($progressStore);
-  const [fetchingFallback, setFetchingFallback] = useState(false);
 
-  // Resilient mission lookup across UUID, sequence, and slug
-  const currentMission: MissionSchema | undefined =
-  playbook[missionIdParam] ||
-  Object.values(playbook || {}).find(
-    (m: MissionSchema) => m.id === missionIdParam
-  );
+  // Retrieve mission directly from memory
+  const currentMission = getMissionFromStore(missionIdParam);
 
   // Markdown Content State
   const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
   const [loadingMarkdown, setLoadingMarkdown] = useState(false);
 
-  // Client-Side Fallback Fetch if Playbook Store is empty on direct page navigation
-  useEffect(() => {
-    if (!currentMission && Object.keys(playbook || {}).length === 0 && !fetchingFallback) {
-      setFetchingFallback(true);
-      const supabase = createClient();
-
-      async function loadPlaybookFallback() {
-        try {
-          const [mRes, qRes, tRes] = await Promise.all([
-            supabase.from('missions').select('*').order('mission_number', { ascending: true }),
-            supabase.from('quests').select('*').order('sequence', { ascending: true }),
-            supabase.from('tasks').select('*').order('sequence', { ascending: true }),
-          ]);
-
-          const missions = mRes.data || [];
-          const quests = qRes.data || [];
-          const tasks = tRes.data || [];
-
-          const playbookMap: Record<string, MissionSchema> = {};
-          missions.forEach((m: any) => {
-            const mQuests: QuestSchema[] = quests
-              .filter((q: any) => q.mission_id === m.id)
-              .map((q: any) => ({
-                ...q,
-                tasks: tasks.filter((t: any) => t.quest_id === q.id)
-              }));
-
-            const missionPayload: MissionSchema = {
-              ...m,
-              sequence: m.mission_number || m.sequence || 1,
-              quests: mQuests
-            };
-
-            playbookMap[m.id] = missionPayload;
-            if (m.mission_number) playbookMap[String(m.mission_number)] = missionPayload;
-            if (m.slug) playbookMap[m.slug] = missionPayload;
-          });
-
-          setPlaybookStore(playbookMap);
-        } catch (err) {
-          console.error('Fallback playbook load error:', err);
-        } finally {
-          setFetchingFallback(false);
-        }
-      }
-
-      loadPlaybookFallback();
-    }
-  }, [currentMission, playbook, fetchingFallback]);
-
-  // Sync Companion Context
+  // Sync Companion Focus for AI Assistant
   useEffect(() => {
     if (currentMission) {
       setCompanionFocus({
@@ -97,7 +43,7 @@ export default function MissionRoadmapPage({
     }
   }, [currentMission]);
 
-  // Fetch Markdown Content when Mission is resolved
+  // Fetch Markdown Briefing Content when Mission is resolved
   useEffect(() => {
     if (currentMission?.content_path) {
       setLoadingMarkdown(true);
@@ -106,9 +52,7 @@ export default function MissionRoadmapPage({
           if (!res.ok) throw new Error('Failed to load markdown');
           return res.text();
         })
-        .then(html => {
-          setMarkdownHtml(html);
-        })
+        .then(html => setMarkdownHtml(html))
         .catch(err => {
           console.error('Error loading markdown:', err);
           setMarkdownHtml(null);
@@ -122,7 +66,7 @@ export default function MissionRoadmapPage({
       <div className="flex flex-col items-center justify-center space-y-3 py-32 animate-in fade-in duration-200">
         <Loader2 className="w-5 h-5 animate-spin text-primary" />
         <span className="text-xs font-sans font-medium text-muted-foreground tracking-wide">
-          Fetching mission details...
+          Loading mission workspace...
         </span>
       </div>
     );

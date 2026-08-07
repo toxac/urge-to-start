@@ -4,9 +4,10 @@
 import React, { use, useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useStore } from '@nanostores/react';
-import { $playbookStore, setCompanionFocus } from '@/lib/stores/companionStore';
+import { $playbookStore } from '@/lib/stores/playbookStore';
 import { $progressStore } from '@/lib/stores/progressStore';
 import { $profileStore } from '@/lib/stores/profileStore'; 
+import { setCompanionFocus } from '@/lib/stores/companionStore';
 import { TaskFormRegistry } from '@/components/program/TaskFormRegistry'; 
 import { ChevronLeft, CheckCircle2, Lock, Eye, Play, Loader2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -56,7 +57,7 @@ export default function QuestActionCenterPage({
         pageType: 'quest',
         activeMissionId,
         activeQuestId: currentQuest.id,
-        activeTaskId: activeTaskId,
+        activeTaskId,
       });
     }
   }, [activeTaskId, activeMissionId, currentQuest]);

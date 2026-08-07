@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { StoreHydrator } from '@/components/providers/StoreHydrator';
 import { SidebarComponent } from '@/components/layout/Sidebar'; 
+import { urgePlaybook } from '@/lib/playbook';
 
 export default async function PlatformLayout({
   children,
@@ -16,19 +17,17 @@ export default async function PlatformLayout({
     redirect('/auth');
   }
 
-  const [profileResponse, progressResponse] = await Promise.all([
+  // Fetch only dynamic user profile & progress records from Supabase
+  const [profileRes, progressRes] = await Promise.all([
     supabase.from('profiles').select('*').eq('id', user.id).single(),
-    supabase.from('user_progress').select('*').eq('user_id', user.id)
+    supabase.from('user_progress').select('*').eq('user_id', user.id),
   ]);
 
-  const profile = profileResponse.data;
-
-  if (!profile) {
-    redirect('/auth');
-  }
+  const profile = profileRes.data;
+  if (!profile) redirect('/auth');
 
   if (profile.onboarding_step !== 'completed') {
-    redirect(`/setup`);
+    redirect('/setup');
   }
 
   const userRoles = (profile.roles as string[]) || [];
@@ -36,21 +35,21 @@ export default async function PlatformLayout({
     ['trial', 'member', 'mentor', 'superadmin'].includes(role)
   );
 
-  if (!hasAccess) {
-    redirect('/payment');
-  }
+  if (!hasAccess) redirect('/payment');
 
   return (
     <div className="w-full h-screen flex bg-background text-foreground antialiased overflow-hidden relative">
+      {/* Hydrates progress, profile, and static playbook instantly into client memory */}
       <StoreHydrator 
-        initialProgress={(progressResponse.data as any) || []} 
-        initialProfile={profile as any} 
+        initialProgress={(progressRes.data as any) || []} 
+        initialProfile={profile as any}
+        initialPlaybook={urgePlaybook}
       />
 
-      {/* Main Left Navigation */}
+      {/* Main Navigation Sidebar */}
       <SidebarComponent />
 
-      {/* CENTER & RIGHT VIEWPORT AREA - Full Width */}
+      {/* Center & Right Viewport Area */}
       <div className="flex-1 h-full overflow-y-auto flex flex-col min-w-0">
         <main className="flex-1 w-full h-full">
           {children}
