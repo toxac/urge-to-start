@@ -10,14 +10,13 @@ import { $profileStore } from '@/lib/stores/profileStore';
 import { TaskFormRegistry } from '@/components/program/TaskFormRegistry'; 
 import { ChevronLeft, CheckCircle2, Lock, Eye, Play, Loader2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { TaskSchema } from '@/types/playbook';
+import { MissionSchema, QuestSchema, TaskSchema } from '@/types/playbook';
 
 export default function QuestActionCenterPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  // ⚡ Next.js 15+ / React 19: Unwrapping params Promise using React.use()
   const resolvedParams = use(params);
   const questParamId = resolvedParams.id;
 
@@ -30,24 +29,25 @@ export default function QuestActionCenterPage({
 
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
 
+  // Strongly typed matching for active mission and quest
   let activeMissionId = '';
-  let currentQuest: any = null;
+  let currentQuest: QuestSchema | null = null;
 
-  // Search across playbook missions to find matching quest by ID
-  Object.entries(playbook || {}).forEach(([mId, mission]) => {
-    const foundQuest = mission.quests?.find((q) => q.id === questParamId);
+  for (const [mId, mission] of Object.entries(playbook || {}) as [string, MissionSchema][]) {
+    const foundQuest = mission.quests?.find((q: QuestSchema) => q.id === questParamId);
     if (foundQuest) {
-      activeMissionId = mId;
+      activeMissionId = mission.id || mId;
       currentQuest = foundQuest;
+      break;
     }
-  });
+  }
 
   const tasks: TaskSchema[] = currentQuest?.tasks || [];
   const currentUserId = profile?.id || '';
 
-  const completedCount = tasks.filter((t) => progress[t.id]?.status === 'completed').length;
+  const completedCount = tasks.filter((t: TaskSchema) => progress[t.id]?.status === 'completed').length;
   const progressRatioPercentage = tasks.length > 0 ? Math.min(100, Math.floor((completedCount / tasks.length) * 100)) : 0;
-  const nextIncompleteTask = tasks.find((t) => progress[t.id]?.status !== 'completed');
+  const nextIncompleteTask = tasks.find((t: TaskSchema) => progress[t.id]?.status !== 'completed');
 
   // Sync Companion Focus
   useEffect(() => {
@@ -120,7 +120,7 @@ export default function QuestActionCenterPage({
       {activeTaskId ? (
         /* TASK EXECUTION BUBBLE VIEW */
         (() => {
-          const activeTask = tasks.find((t) => t.id === activeTaskId);
+          const activeTask = tasks.find((t: TaskSchema) => t.id === activeTaskId);
           const activeTaskProgress = progress[activeTaskId];
           
           if (!activeTask) return null;
@@ -164,7 +164,7 @@ export default function QuestActionCenterPage({
             </h3>
           </div>
 
-          {tasks.map((task, index) => {
+          {tasks.map((task: TaskSchema, index: number) => {
             const taskProgress = progress[task.id];
             const isTaskCompleted = taskProgress?.status === 'completed';
 
@@ -238,7 +238,7 @@ export default function QuestActionCenterPage({
           {/* Quick Callout */}
           {nextIncompleteTask && (
             <div className="p-4 border rounded-xl bg-muted/20 border-dashed text-left flex items-center justify-between text-xs text-muted-foreground font-medium">
-              <span>Next step: <strong>"{nextIncompleteTask.title}"</strong>.</span>
+              <span>Next step: <strong>&ldquo;{nextIncompleteTask.title}&rdquo;</strong>.</span>
               <ArrowRight className="w-4 h-4 text-muted-foreground animate-pulse" />
             </div>
           )}

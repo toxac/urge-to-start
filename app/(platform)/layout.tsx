@@ -11,13 +11,11 @@ export default async function PlatformLayout({
 }) {
   const supabase = await createClient();
 
-  // 1. Authenticate user session
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     redirect('/auth');
   }
 
-  // 2. Fetch profile and progress concurrently
   const [profileResponse, progressResponse] = await Promise.all([
     supabase.from('profiles').select('*').eq('id', user.id).single(),
     supabase.from('user_progress').select('*').eq('user_id', user.id)
@@ -29,12 +27,10 @@ export default async function PlatformLayout({
     redirect('/auth');
   }
 
-  // 3. Onboarding Guard: Redirect to setup if not finished
   if (profile.onboarding_step !== 'completed') {
-    redirect(`/setup?id=${user.id}`);
+    redirect(`/setup`);
   }
 
-  // 4. Role Authorization: Must have 'trial', 'member', 'mentor', or 'superadmin'
   const userRoles = (profile.roles as string[]) || [];
   const hasAccess = userRoles.some((role) =>
     ['trial', 'member', 'mentor', 'superadmin'].includes(role)
@@ -54,9 +50,9 @@ export default async function PlatformLayout({
       {/* Main Left Navigation */}
       <SidebarComponent />
 
-      {/* CENTER VIEWPORT AREA */}
-      <div className="flex-1 h-full overflow-y-auto flex flex-col min-w-0 pt-14 md:pt-0">
-        <main className="flex-1 p-5 md:p-10 max-w-5xl w-full mx-auto pb-24">
+      {/* CENTER & RIGHT VIEWPORT AREA - Full Width */}
+      <div className="flex-1 h-full overflow-y-auto flex flex-col min-w-0">
+        <main className="flex-1 w-full h-full">
           {children}
         </main>
       </div>

@@ -3,25 +3,27 @@
 
 import { useEffect } from 'react';
 import { hydrateProgressStore, ProgressRow } from '@/lib/stores/progressStore';
-import { setProfileStore, ProfileRow } from '@/lib/stores/profileStore';
-import { hydratePlaybookStore } from '@/lib/stores/companionStore';
-import { urgePlaybook } from '@/lib/playbook'; // ⚡ Import static blueprint directly
+import { setProfileStore} from '@/lib/stores/profileStore';
+import { ProfileRow } from '@/types/profiles';
+import { setPlaybookStore } from '@/lib/stores/playbookStore';
+import { urgePlaybook } from '@/lib/playbook';
+import { PlaybookConfig } from '@/types/playbook';
 
 interface StoreHydratorProps {
   initialProgress: ProgressRow[];
   initialProfile?: ProfileRow | null;
+  initialPlaybook?: PlaybookConfig;
 }
 
-export function StoreHydrator({ initialProgress, initialProfile }: StoreHydratorProps) {
-  // 1. Run immediate client-side store hydration on mount
+export function StoreHydrator({ initialProgress, initialProfile, initialPlaybook }: StoreHydratorProps) {
   useEffect(() => {
     hydrateProgressStore(initialProgress);
-    hydratePlaybookStore(urgePlaybook); // ⚡ Load the static playbook file directly into the store atom
+    setPlaybookStore(initialPlaybook || urgePlaybook);
     
     if (initialProfile) {
       setProfileStore(initialProfile);
     }
-  }, [initialProgress, initialProfile]);
+  }, [initialProgress, initialProfile, initialPlaybook]);
 
   return null;
 }

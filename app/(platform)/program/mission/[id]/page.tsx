@@ -2,45 +2,102 @@
 'use client';
 
 import React, { use, useEffect, useState, useTransition } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useStore } from '@nanostores/react';
-import { $playbookStore, setCompanionFocus } from '@/lib/stores/companionStore';
+import { $playbookStore, setCompanionFocus, setPlaybookStore } from '@/lib/stores/companionStore';
 import { $progressStore } from '@/lib/stores/progressStore';
 import { MissionHeader } from '@/components/layout/MissionHeader';
+import { createClient } from '@/lib/supabase/client';
 import { ChevronLeft, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
+import { MissionSchema, QuestSchema, TaskSchema } from '@/types/playbook';
 
 export default function MissionRoadmapPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  // ⚡ Next.js 15+ / React 19: Unwrapping params Promise using React.use()
   const resolvedParams = use(params);
-  const missionId = resolvedParams.id;
+  const missionIdParam = resolvedParams.id;
 
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const playbook = useStore($playbookStore);
   const progress = useStore($progressStore);
+  const [fetchingFallback, setFetchingFallback] = useState(false);
 
-  const currentMission = playbook[missionId];
+  // Resilient mission lookup across UUID, sequence, and slug
+  const currentMission: MissionSchema | undefined =
+  playbook[missionIdParam] ||
+  Object.values(playbook || {}).find(
+    (m: MissionSchema) => m.id === missionIdParam
+  );
 
-  // State for markdown content
+  // Markdown Content State
   const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
   const [loadingMarkdown, setLoadingMarkdown] = useState(false);
 
-  // 1. Sync Companion Context
+  // Client-Side Fallback Fetch if Playbook Store is empty on direct page navigation
+  useEffect(() => {
+    if (!currentMission && Object.keys(playbook || {}).length === 0 && !fetchingFallback) {
+      setFetchingFallback(true);
+      const supabase = createClient();
+
+      async function loadPlaybookFallback() {
+        try {
+          const [mRes, qRes, tRes] = await Promise.all([
+            supabase.from('missions').select('*').order('mission_number', { ascending: true }),
+            supabase.from('quests').select('*').order('sequence', { ascending: true }),
+            supabase.from('tasks').select('*').order('sequence', { ascending: true }),
+          ]);
+
+          const missions = mRes.data || [];
+          const quests = qRes.data || [];
+          const tasks = tRes.data || [];
+
+          const playbookMap: Record<string, MissionSchema> = {};
+          missions.forEach((m: any) => {
+            const mQuests: QuestSchema[] = quests
+              .filter((q: any) => q.mission_id === m.id)
+              .map((q: any) => ({
+                ...q,
+                tasks: tasks.filter((t: any) => t.quest_id === q.id)
+              }));
+
+            const missionPayload: MissionSchema = {
+              ...m,
+              sequence: m.mission_number || m.sequence || 1,
+              quests: mQuests
+            };
+
+            playbookMap[m.id] = missionPayload;
+            if (m.mission_number) playbookMap[String(m.mission_number)] = missionPayload;
+            if (m.slug) playbookMap[m.slug] = missionPayload;
+          });
+
+          setPlaybookStore(playbookMap);
+        } catch (err) {
+          console.error('Fallback playbook load error:', err);
+        } finally {
+          setFetchingFallback(false);
+        }
+      }
+
+      loadPlaybookFallback();
+    }
+  }, [currentMission, playbook, fetchingFallback]);
+
+  // Sync Companion Context
   useEffect(() => {
     if (currentMission) {
       setCompanionFocus({
         pageType: 'mission',
-        activeMissionId: missionId,
+        activeMissionId: currentMission.id,
       });
     }
-  }, [currentMission, missionId]);
+  }, [currentMission]);
 
-  // 2. Fetch markdown content when mission loads
+  // Fetch Markdown Content when Mission is resolved
   useEffect(() => {
     if (currentMission?.content_path) {
       setLoadingMarkdown(true);
@@ -71,7 +128,7 @@ export default function MissionRoadmapPage({
     );
   }
 
-  const quests = currentMission.quests || [];
+  const quests: QuestSchema[] = currentMission.quests || [];
 
   return (
     <div className="w-full space-y-10 animate-in fade-in duration-300 text-left">
@@ -103,7 +160,7 @@ export default function MissionRoadmapPage({
         />
         {currentMission.big_question && (
           <p className="text-sm font-medium text-muted-foreground italic pt-2">
-            "{currentMission.big_question}"
+            &ldquo;{currentMission.big_question}&rdquo;
           </p>
         )}
       </div>
@@ -146,9 +203,10 @@ export default function MissionRoadmapPage({
         </div>
 
         <div className="grid grid-cols-1 gap-3">
-          {quests.map((quest) => {
-            const totalTasks = quest.tasks?.length || 0;
-            const completedTasks = quest.tasks?.filter(t => progress[t.id]?.status === 'completed').length || 0;
+          {quests.map((quest: QuestSchema) => {
+            const questTasks: TaskSchema[] = quest.tasks || [];
+            const totalTasks = questTasks.length;
+            const completedTasks = questTasks.filter((t: TaskSchema) => progress[t.id]?.status === 'completed').length;
             const isCompleted = totalTasks > 0 && completedTasks === totalTasks;
             const isStarted = completedTasks > 0 && completedTasks < totalTasks;
 

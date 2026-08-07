@@ -15,28 +15,28 @@ export async function submitProfileSetup(formData: FormData) {
 
   // 1. Authenticate user session
   const { data: { user }, error: authErr } = await supabase.auth.getUser();
-  if (authErr || !user) {
-    throw new Error('Unauthorized identity validation session.');
-  }
+  if (authErr || !user) throw new Error('Unauthorized session.');
 
-  // 2. Parse form inputs
+  // 2. Extract form payload
   const fullName = formData.get('fullName') as string;
+  const avatarUrl = formData.get('avatarUrl') as string;
   const ageGroup = formData.get('ageGroup') as AgeGroup;
   const highestEducation = formData.get('highestEducation') as EducationLevel;
   const city = formData.get('city') as string;
-  const country = formData.get('country') as string;
-  const currency = (formData.get('currency') as string) || 'INR';
+  const country = (formData.get('country') as string || 'IN').toLowerCase();
+  const currency = formData.get('currency') as string || 'INR';
 
-  // Read intent flag from cookie ('free' vs 'member')
+  // Read intent from cookie set on landing page or auth page
   const savedIntent = cookieStore.get('urge_signup_intent')?.value || 'free';
 
-  // 3. Update Profile row with onboarding coordinates
+  // 3. Update Profile record with clean schema fields
   const updatePayload: Database['public']['Tables']['profiles']['Update'] = {
     fullname: fullName,
+    avatar_url: avatarUrl || null,
     age_group: ageGroup,
     highest_education_level: highestEducation,
     city,
-    country,
+    country: country.toUpperCase(),
     currency,
     updated_at: new Date().toISOString(),
   };
@@ -46,24 +46,21 @@ export async function submitProfileSetup(formData: FormData) {
     .update(updatePayload)
     .eq('id', user.id);
 
-  if (profileErr) {
-    throw new Error(`Profile setup failed: ${profileErr.message}`);
-  }
+  if (profileErr) throw new Error(`Setup failed: ${profileErr.message}`);
 
-  // Clear intent token cookie
+  // Clear intent cookie
   cookieStore.delete('urge_signup_intent');
 
-  // 4. ROUTING BRANCH: Trial vs. Paid Checkout
+  // 4. Handle intent branching
   if (savedIntent === 'free') {
-    // Fetch Free Trial Offering
+    // Record ₹0 trial transaction for tracking
     const { data: trialOffering } = await supabase
       .from('offerings')
       .select('id')
       .eq('slug', 'mission-1-trial')
-      .single();
+      .maybeSingle();
 
     if (trialOffering) {
-      // Record ₹0 transaction for trial
       await supabase.from('transactions').insert({
         user_id: user.id,
         offering_id: trialOffering.id,
@@ -77,7 +74,7 @@ export async function submitProfileSetup(formData: FormData) {
       });
     }
 
-    // Set role to 'trial' and complete onboarding step
+    // Grant 'trial' role & complete onboarding
     await supabase
       .from('profiles')
       .update({
@@ -89,7 +86,7 @@ export async function submitProfileSetup(formData: FormData) {
 
     redirect('/program');
   } else {
-    // Paid Member route: set step to checkout and route to /payment
+    // Member intent: set onboarding step to checkout & redirect to paywall
     await supabase
       .from('profiles')
       .update({
