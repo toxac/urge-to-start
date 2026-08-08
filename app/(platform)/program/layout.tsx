@@ -10,7 +10,7 @@ export default function ProgramSubLayout({
   return (
     <div className="w-full h-full flex min-w-0 relative">
       {/* Program Main Work Area */}
-      <div className="flex-1 h-full min-w-0">
+      <div className="flex-1 h-full min-w-0 px-10 lg:max-w-5xl mx-auto">
         {children}
       </div>
 

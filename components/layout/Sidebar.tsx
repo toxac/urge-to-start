@@ -136,7 +136,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           >
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold truncate tracking-tight text-foreground group-hover:text-primary transition-colors">
-                {profile.full_name || 'Anonymous Builder'}
+                {profile.fullname || 'Anonymous Builder'}
               </span>
               <span className="text-[10px] text-muted-foreground font-serif">⚙</span>
             </div>
