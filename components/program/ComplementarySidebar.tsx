@@ -7,17 +7,17 @@ import { $companionFocus } from '@/lib/stores/companionStore';
 import { $progressStore } from '@/lib/stores/progressStore';
 import { $profileStore } from '@/lib/stores/profileStore';
 import { urgePlaybook } from '@/lib/playbook';
-import { 
-  BookOpen, 
-  Trophy, 
-  ExternalLink, 
-  Zap, 
-  AlertTriangle, 
-  Info, 
-  HelpCircle, 
+import {
+  BookOpen,
+  Trophy,
+  ExternalLink,
+  Zap,
+  AlertTriangle,
+  Info,
+  HelpCircle,
   Bell,
   Sparkles,
-  Flame
+  Flame,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -33,12 +33,8 @@ export function ComplementarySidebar() {
   const activeTaskId = focus.activeTaskId || null;
 
   const mission = missionId ? urgePlaybook[missionId] : null;
-  const quest = (mission && questId) 
-    ? mission.quests.find((q) => q.id === questId) 
-    : null;
-  const task = (quest && activeTaskId) 
-    ? quest.tasks.find((t) => t.id === activeTaskId) 
-    : null;
+  const quest = mission && questId ? mission.quests.find((q) => q.id === questId) : null;
+  const task = quest && activeTaskId ? quest.tasks.find((t) => t.id === activeTaskId) : null;
 
   // Helper to render Note type icons
   const renderNoteIcon = (type: string) => {
@@ -62,7 +58,6 @@ export function ComplementarySidebar() {
 
       return (
         <div className="space-y-6 text-xs text-left animate-in fade-in duration-200">
-          {/* Active Task Name */}
           <div className="border-b pb-3 space-y-1">
             <span className="text-[10px] font-bold text-primary uppercase tracking-wider">
               Step Context
@@ -70,7 +65,6 @@ export function ComplementarySidebar() {
             <h3 className="text-sm font-bold text-foreground">{task.title}</h3>
           </div>
 
-          {/* Task Challenges */}
           {taskChallenges.length > 0 && (
             <div className="space-y-2">
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
@@ -79,16 +73,16 @@ export function ComplementarySidebar() {
               </span>
               <div className="space-y-2">
                 {taskChallenges.map((challenge, idx) => (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     className="p-3 rounded-xl border bg-orange-500/5 border-orange-500/20 space-y-1"
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-foreground">{challenge.title}</span>
                       {challenge.link && (
-                        <a 
-                          href={challenge.link} 
-                          target="_blank" 
+                        <a
+                          href={challenge.link}
+                          target="_blank"
                           rel="noreferrer"
                           className="text-primary hover:underline flex items-center gap-0.5 text-[10px]"
                         >
@@ -105,7 +99,6 @@ export function ComplementarySidebar() {
             </div>
           )}
 
-          {/* References & Links (Only non-required ones) */}
           {optionalResources.length > 0 && (
             <div className="space-y-2">
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
@@ -131,7 +124,6 @@ export function ComplementarySidebar() {
             </div>
           )}
 
-          {/* Reflection Prompt Reminder */}
           {task.reflection_prompt && (
             <div className="p-3 border rounded-xl bg-primary/5 border-primary/20 space-y-1">
               <span className="text-[10px] font-bold uppercase text-primary tracking-wider block">
@@ -159,7 +151,6 @@ export function ComplementarySidebar() {
             <h3 className="text-sm font-bold text-foreground">{quest.title}</h3>
           </div>
 
-          {/* Quest Notes */}
           {notes.length > 0 ? (
             <div className="space-y-2">
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
@@ -203,7 +194,6 @@ export function ComplementarySidebar() {
             )}
           </div>
 
-          {/* User Progress Stats & Rewards */}
           <div className="p-4 rounded-2xl border bg-card/60 shadow-sm space-y-3">
             <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
               Your Stats
@@ -245,19 +235,23 @@ export function ComplementarySidebar() {
 
   return (
     <>
-      {/* DESKTOP PANEL */}
-      <aside className="hidden xl:flex w-80 h-full border-l border-border bg-card flex-col overflow-hidden shrink-0 shadow-sm relative z-20">
+      {/* DESKTOP PANEL – visible from lg upward */}
+      <aside className="hidden lg:flex w-80 h-full border-l border-border bg-card flex-col overflow-hidden shrink-0 shadow-sm relative z-20">
         <div className="p-4 border-b border-border bg-muted/20 flex items-center justify-between shrink-0">
           <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
             <BookOpen className="w-4 h-4 text-primary" />
-            {activeTaskId ? 'Task Resources' : (focus.pageType === 'quest' ? 'Quest Context' : 'Mission Info')}
+            {activeTaskId
+              ? 'Task Resources'
+              : focus.pageType === 'quest'
+                ? 'Quest Context'
+                : 'Mission Info'}
           </span>
         </div>
         <div className="flex-1 overflow-y-auto p-4">{renderContent()}</div>
       </aside>
 
-      {/* TABLET OVERLAY */}
-      <div className="hidden md:flex xl:hidden fixed right-5 bottom-5 z-40">
+      {/* TABLET OVERLAY – visible only on md, hidden on lg+ and below sm */}
+      <div className="hidden md:flex lg:hidden fixed right-5 bottom-5 z-40">
         <Sheet>
           <SheetTrigger className={triggerStyles}>
             <BookOpen className="w-5 h-5" />
@@ -273,7 +267,7 @@ export function ComplementarySidebar() {
         </Sheet>
       </div>
 
-      {/* MOBILE BOTTOM DRAWER */}
+      {/* MOBILE BOTTOM DRAWER – visible only below md */}
       <div className="md:hidden fixed bottom-5 right-5 z-40">
         <Drawer>
           <DrawerTrigger className={triggerStyles}>
