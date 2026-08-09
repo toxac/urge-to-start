@@ -1199,6 +1199,36 @@ export default function ProgramDashboardPage() {
 ```
 
 
+Server Console log:
+```bash
+ POST /program/quest/mission1_quest1 200 in 12.4s (next.js: 62ms, proxy.ts: 3.1s, application-code: 9.2s)
+  └─ ƒ updateMyProfile({"motivations":{"pull":"meaning","pull_other":"","push":"potential","...":"4 items not stringified"}}) in 4472ms actions/profiles.ts
+ POST /program/quest/mission1_quest1 200 in 5.1s (next.js: 42ms, proxy.ts: 4.3s, application-code: 731ms)
+  └─ ƒ completeTaskExecution({"savedPayload":{"formData":"[Object]"},"taskId":"mission1_quest1_task1"}) in 542ms actions/progress.ts
+ GET /api/markdown?path=content%2Fmissions%2Fmission1%2Fquests%2Fq1.md 200 in 69ms (next.js: 7ms, proxy.ts: 50ms, application-code: 12ms)
+[browser] ⚠️ Cannot commit row update to store: missing target task_id, quest_id, or mission_id identifier. (lib/stores/progressStore.ts:68:13)
+✓ Compiled in 82ms
+```
+user_progress table schema
+```ts
+user_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          item_type: Database["public"]["Enums"]["program_item_type"]
+          mission_id: string | null
+          project_id: string | null
+          quest_id: string | null
+          reflections: Json
+          saved_payload: Json
+          status: Database["public"]["Enums"]["progress_status"]
+          task_id: string | null
+          updated_at: string
+          user_id: string
+        }
+```
+
 
 
 

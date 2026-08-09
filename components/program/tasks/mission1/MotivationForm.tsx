@@ -106,7 +106,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         <div className="flex items-center justify-between pb-3 border-b border-border/50">
           <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 uppercase tracking-wider">
             <CheckCircle2 className="w-4 h-4" />
-            Core Drivers Saved
+            Motivations Saved
           </span>
           <Button
             variant="outline"
@@ -122,7 +122,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         <div className="space-y-4 text-xs leading-relaxed">
           <div className="p-4 rounded-xl bg-card border border-border/60 space-y-1">
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-              Your North Star Anchor
+              Your Anchor
             </span>
             <p className="text-sm font-bold text-foreground italic">
               "{preSavedMotivation.why_statement}"
@@ -132,7 +132,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="p-3 rounded-xl bg-card border border-border/60">
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-                Running From (Push)
+                Running From 
               </span>
               <p className="text-xs font-medium text-foreground capitalize mt-0.5">
                 {preSavedMotivation.push === 'other' ? preSavedMotivation.push_other : preSavedMotivation.push}
@@ -141,7 +141,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
 
             <div className="p-3 rounded-xl bg-card border border-border/60">
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-                Running Toward (Pull)
+                Running Toward 
               </span>
               <p className="text-xs font-medium text-foreground capitalize mt-0.5">
                 {preSavedMotivation.pull === 'other' ? preSavedMotivation.pull_other : preSavedMotivation.pull}
@@ -150,7 +150,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
 
             <div className="p-3 rounded-xl bg-card border border-border/60">
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-                Urgency (Why Now)
+                Urgency 
               </span>
               <p className="text-xs font-medium text-foreground capitalize mt-0.5">
                 {preSavedMotivation.urgency === 'other' ? preSavedMotivation.urgency_other : preSavedMotivation.urgency}
@@ -201,7 +201,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         {/* Question 1: Push Driver */}
         <div className="space-y-2">
           <Label className="text-xs font-bold text-foreground block">
-            1. What are you running from? (Your Push Driver) *
+            1. What are you running from? *
           </Label>
           <Select
             value={selectedPush || undefined}
@@ -233,7 +233,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         {/* Question 2: Pull Driver */}
         <div className="space-y-2">
           <Label className="text-xs font-bold text-foreground block">
-            2. What are you running toward? (Your Pull Vision) *
+            2. What are you running toward?*
           </Label>
           <Select
             value={selectedPull || undefined}
@@ -265,7 +265,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         {/* Question 3: Urgency */}
         <div className="space-y-2">
           <Label className="text-xs font-bold text-foreground block">
-            3. Why now? (Your Catalyst) *
+            3. Why do you want to start now?*
           </Label>
           <Select
             value={selectedUrgency || undefined}
@@ -297,7 +297,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         {/* Question 4: Why Statement */}
         <div className="space-y-2">
           <Label className="text-xs font-bold text-foreground block">
-            4. Your 1-Sentence "Why Statement" (Anchor) *
+            4. In one sentence write why do you want to start*
           </Label>
 
           <Textarea
@@ -335,9 +335,9 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
                 Saving...
               </span>
             ) : isInitiallyCompleted ? (
-              'Update Core Drivers'
+              'Update Motivation'
             ) : (
-              `Lock in Drivers & Earn +${task.grant_points} XP`
+              `Save Motivation & Complete Task`
             )}
           </Button>
         </div>
