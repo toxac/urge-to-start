@@ -11,9 +11,10 @@ type ProgressRow = Database['public']['Tables']['user_progress']['Row'];
 type ProgressInsert = Database['public']['Tables']['user_progress']['Insert'];
 type ProgressStatus = Database['public']['Enums']['progress_status'];
 
-type ActionResponse<T> = 
-  | { success: true; data: T } 
-  | { success: false; error: string };
+// ⚡ EXPORTED & ROBUST ACTION RESPONSE TYPE
+export type ActionResponse<T> = 
+  | { success: true; data: T; error?: string } 
+  | { success: false; error: string; data?: T };
 
 // =========================================================================
 // ZOD SCHEMAS
@@ -28,7 +29,7 @@ const RecordProgressSchema = z.object({
 });
 
 // =========================================================================
-// SINGLE RESPONSIBILITY SERVER ACTIONS (user_progress Table Only)
+// SERVER ACTIONS
 // =========================================================================
 
 /**
@@ -49,7 +50,6 @@ export async function recordTaskProgressAction(
     const now = new Date().toISOString();
     const progressStatus = validated.status as ProgressStatus;
 
-    // Fetch existing row if present for idempotency/status checks
     const { data: existingProgress } = await supabase
       .from('user_progress')
       .select('*')
@@ -124,7 +124,6 @@ export async function logTaskReflectionAction(
       return { success: false, error: 'Authentication required' };
     }
 
-    // Fetch task details to obtain task, mission, and quest keys
     const { data: taskData, error: taskErr } = await supabase
       .from('tasks')
       .select('*')
@@ -137,7 +136,6 @@ export async function logTaskReflectionAction(
 
     const task = taskData as Record<string, any>;
 
-    // Fetch current user progress row for this task
     const { data: existingProgress } = await supabase
       .from('user_progress')
       .select('*')

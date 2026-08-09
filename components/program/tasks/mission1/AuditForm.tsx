@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { runAIAssessmentAction } from '@/actions/profile-assessment';
+import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { updateProfileStoreFields, $profileStore } from '@/lib/stores/profileStore';
 import { useStore } from '@nanostores/react';
 import { BaseTaskComponentProps } from '../types';
@@ -40,9 +41,9 @@ export function AuditForm({ task, existingProgress, onSuccess }: BaseTaskCompone
     setErrorMessage(null);
 
     try {
+      // 1. Run AI Assessment Action
       const res = await runAIAssessmentAction(task.id);
 
-      // Check success state properly to allow TypeScript union narrowing
       if (!res.success) {
         setErrorMessage(res.error);
         setIsSubmitting(false);
@@ -51,6 +52,18 @@ export function AuditForm({ task, existingProgress, onSuccess }: BaseTaskCompone
 
       setAssessment(res.data.assessment);
       updateProfileStoreFields({ assessment: res.data.assessment } as any);
+
+      // 2. Process Task Completion & Award XP
+      const taskResult = await processTaskCompletion({
+        task,
+        savedPayload: { assessment: res.data.assessment },
+      });
+
+      if (!taskResult.success) {
+        setErrorMessage(taskResult.error || 'Failed to record task completion');
+        setIsSubmitting(false);
+        return;
+      }
 
       if (onSuccess) onSuccess();
     } catch (err: any) {

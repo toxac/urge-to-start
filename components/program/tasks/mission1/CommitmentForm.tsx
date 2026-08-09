@@ -8,8 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { updateMyProfile } from '@/actions/profiles';
-import { completeTaskExecution } from '@/actions/progress';
-import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { updateProfileStoreFields, $profileStore } from '@/lib/stores/profileStore';
 import { useStore } from '@nanostores/react';
 import { BaseTaskComponentProps } from '../types';
@@ -72,20 +71,17 @@ export function CommitmentForm({ task, existingProgress, onSuccess }: BaseTaskCo
         updateProfileStoreFields(profileSync.data as any);
       }
 
-      // 2. Complete Task Execution
-      const progressSync = await completeTaskExecution({
-        taskId: task.id,
+      // 2. Process Task Completion & XP Award
+      const taskResult = await processTaskCompletion({
+        task,
         savedPayload: { formData: parsedData }
       });
 
-      if (progressSync.success) {
-        if (progressSync.data) {
-          setProgressStoreRow(progressSync.data as any);
-        }
+      if (taskResult.success) {
         setIsEditing(false);
         if (onSuccess) onSuccess();
       } else {
-        setErrorMessage(progressSync.error || 'Failed to mark commitment task complete');
+        setErrorMessage(taskResult.error || 'Failed to mark commitment task complete');
       }
     } catch (err: any) {
       setErrorMessage(err.message || 'An unexpected error occurred');

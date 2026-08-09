@@ -8,8 +8,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { createCommunityPostAction } from '@/actions/posts';
-import { completeTaskExecution } from '@/actions/progress';
-import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { processTaskCompletion } from '@/lib/utils/taskExecution';
+import { recordAccomplishment } from '@/actions/accomplishments';
+import { setAccomplishmentStoreRow } from '@/lib/stores/accomplishmentStore';
 import { useStore } from '@nanostores/react';
 import { $profileStore } from '@/lib/stores/profileStore';
 import { BaseTaskComponentProps } from '../types';
@@ -67,9 +68,22 @@ export function CommunityIntroForm({ task, existingProgress, onSuccess }: BaseTa
         return;
       }
 
-      // 2. Complete Task Execution
-      const progressSync = await completeTaskExecution({
-        taskId: task.id,
+      // 2. Award Bonus XP for Non-Program Engagement (Community Post)
+      const postAccomplishment = await recordAccomplishment({
+        awardedFor: 'post',
+        relatedTable: 'posts',
+        relatedReferenceId: postSync.data?.id,
+        title: 'Published Community Introduction',
+        pointsGranted: 10,
+      });
+
+      if (postAccomplishment.success && postAccomplishment.accomplishmentRow) {
+        setAccomplishmentStoreRow(postAccomplishment.accomplishmentRow);
+      }
+
+      // 3. Process Program Task Completion
+      const taskResult = await processTaskCompletion({
+        task,
         savedPayload: {
           headline: formData.headline,
           intro_content: formData.intro_content,
@@ -78,14 +92,11 @@ export function CommunityIntroForm({ task, existingProgress, onSuccess }: BaseTa
         }
       });
 
-      if (progressSync.success) {
-        if (progressSync.data) {
-          setProgressStoreRow(progressSync.data as any);
-        }
+      if (taskResult.success) {
         setIsEditing(false);
         if (onSuccess) onSuccess();
       } else {
-        setErrorMessage(progressSync.error || 'Failed to mark task complete');
+        setErrorMessage(taskResult.error || 'Failed to mark task complete');
       }
     } catch (err: any) {
       setErrorMessage(err.message || 'An unexpected error occurred');

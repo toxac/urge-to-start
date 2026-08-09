@@ -8,7 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { logTaskReflectionAction } from '@/actions/progress';
+import { recordAccomplishment } from '@/actions/accomplishments';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { setAccomplishmentStoreRow } from '@/lib/stores/accomplishmentStore';
 import { BaseTaskComponentProps } from '../types';
 import { ReferenceSchema } from '@/types/playbook';
 import { 
@@ -32,7 +34,6 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
 
   const targetCount = task.target_count && task.target_count > 0 ? task.target_count : 1;
   
-  // FIXED: Cast existingProgress to any before accessing .reflections
   const existingReflections: Array<{ id: string; count_index: number; reflection_text: string; logged_at: string }> = 
     ((existingProgress as any)?.reflections as any) || [];
 
@@ -51,25 +52,36 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
     setErrorMessage(null);
 
     try {
+      // 1. Log reflection entry into user_progress
       const res = await logTaskReflectionAction({
         taskId: task.id,
         reflectionText: formData.reflection_text,
         targetCount
       });
 
-      if (!res.success) {
+      if (!res.success || !res.data) {
         setErrorMessage(res.error || 'Failed to log reflection');
         setIsSubmitting(false);
         return;
       }
 
-      if (res.data?.progressRow) {
-        setProgressStoreRow(res.data.progressRow as any);
-      }
-
+      setProgressStoreRow(res.data.progressRow as any);
       reset();
-      
-      if (res.data?.isCompleted) {
+
+      // 2. Award Task XP when rep target count is reached
+      if (res.data.isCompleted) {
+        const accomplishmentRes = await recordAccomplishment({
+          awardedFor: 'task',
+          relatedTable: 'tasks',
+          relatedReferenceId: task.id,
+          title: `Completed ${task.title}`,
+          pointsGranted: task.grant_points || 25,
+        });
+
+        if (accomplishmentRes.success && accomplishmentRes.accomplishmentRow) {
+          setAccomplishmentStoreRow(accomplishmentRes.accomplishmentRow);
+        }
+
         setIsAddingNew(false);
         if (onSuccess) onSuccess();
       }

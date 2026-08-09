@@ -9,8 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { addSquadContactsAction, getSquadContactsAction, deleteSquadContactAction } from '@/actions/contacts';
-import { completeTaskExecution } from '@/actions/progress';
-import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { BaseTaskComponentProps } from '../types';
 import { ReferenceSchema } from '@/types/playbook';
 import { UserContactRow } from '@/types/contacts';
@@ -144,23 +143,20 @@ export function CheerSquadForm({ task, existingProgress, onSuccess }: BaseTaskCo
         setSquadList((prev) => [...newlySaved, ...prev]);
       }
 
-      // 2. Complete Task Execution
-      const progressSync = await completeTaskExecution({
-        taskId: task.id,
+      // 2. Process Program Task Completion
+      const taskResult = await processTaskCompletion({
+        task,
         savedPayload: { 
           squad_count: squadList.length + newlySaved.length,
           updated_at: new Date().toISOString()
         }
       });
 
-      if (progressSync.success) {
-        if (progressSync.data) {
-          setProgressStoreRow(progressSync.data as any);
-        }
+      if (taskResult.success) {
         setIsEditing(false);
         if (onSuccess) onSuccess();
       } else {
-        setErrorMessage(progressSync.error || 'Failed to mark squad task complete');
+        setErrorMessage(taskResult.error || 'Failed to mark squad task complete');
       }
     } catch (err: any) {
       setErrorMessage(err.message || 'An unexpected error occurred');

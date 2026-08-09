@@ -8,8 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { updateMyProfile } from '@/actions/profiles';
-import { completeTaskExecution } from '@/actions/progress';
-import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { updateProfileStoreFields, $profileStore } from '@/lib/stores/profileStore';
 import { useStore } from '@nanostores/react';
 import { BaseTaskComponentProps } from '../types';
@@ -41,7 +40,7 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
 
   // Extract REQUIRED resources to display at the top of the form
-  const requiredResources : ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
+  const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
   // Pre-fill hierarchy: Task Execution Payload -> Profile Store Column -> Default 1 item
   const savedList: ProfileSocialFootprintSchema[] = 
@@ -94,20 +93,17 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
         updateProfileStoreFields(profileSync.data as any);
       }
 
-      // 2. Complete Task Execution
-      const progressSync = await completeTaskExecution({
-        taskId: task.id,
+      // 2. Process Program Task Completion & XP Award
+      const taskResult = await processTaskCompletion({
+        task,
         savedPayload: { formData: { items: formattedItems } }
       });
 
-      if (progressSync.success) {
-        if (progressSync.data) {
-          setProgressStoreRow(progressSync.data as any);
-        }
+      if (taskResult.success) {
         setIsEditing(false);
         if (onSuccess) onSuccess();
       } else {
-        setErrorMessage(progressSync.error || 'Failed to mark task complete');
+        setErrorMessage(taskResult.error || 'Failed to mark task complete');
       }
     } catch (err: any) {
       setErrorMessage(err.message || 'An unexpected error occurred');
