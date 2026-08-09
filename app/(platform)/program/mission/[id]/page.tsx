@@ -7,7 +7,7 @@ import { useStore } from '@nanostores/react';
 import { $playbookStore, getMissionFromStore } from '@/lib/stores/playbookStore';
 import { $progressStore } from '@/lib/stores/progressStore';
 import { setCompanionFocus } from '@/lib/stores/companionStore';
-import { MissionHeader } from '@/components/layout/MissionHeader';
+import { ProgramHeader } from '@/components/program/ProgramHeader'; // 👈 new import
 import { ChevronLeft, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
 import { QuestSchema, TaskSchema } from '@/types/playbook';
 
@@ -22,18 +22,12 @@ export default function MissionRoadmapPage({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  // Subscribe to Nanostores
-  useStore($playbookStore);
   const progress = useStore($progressStore);
-
-  // Retrieve mission directly from memory
   const currentMission = getMissionFromStore(missionIdParam);
 
-  // Markdown Content State
   const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
   const [loadingMarkdown, setLoadingMarkdown] = useState(false);
 
-  // Sync Companion Focus for AI Assistant
   useEffect(() => {
     if (currentMission) {
       setCompanionFocus({
@@ -43,7 +37,6 @@ export default function MissionRoadmapPage({
     }
   }, [currentMission]);
 
-  // Fetch Markdown Briefing Content when Mission is resolved
   useEffect(() => {
     if (currentMission?.content_path) {
       setLoadingMarkdown(true);
@@ -74,55 +67,21 @@ export default function MissionRoadmapPage({
 
   const quests: QuestSchema[] = currentMission.quests || [];
 
+  // Format estimated time
+  const estimatedDays = currentMission.estimated_time_in_days || 0;
+  const estimatedTime = `~${estimatedDays} day${estimatedDays > 1 ? 's' : ''}`;
+
   return (
     <div className="w-full space-y-10 animate-in fade-in duration-300 text-left">
-
-      {/* Navigation Header */}
-      <div className="flex items-center justify-between border-b border-border/60 pb-5">
-        <button
-          onClick={() => {
-            startTransition(() => {
-              router.push('/program');
-            });
-          }}
-          disabled={isPending}
-          className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition cursor-pointer"
-        >
-          <ChevronLeft className="h-4 w-4" />
-          Back to Roadmap
-        </button>
-        <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted-foreground/60">
-          Mission Brief
-        </span>
-      </div>
-
-      {/* Mission Title Header */}
-      <div className="pt-2">
-        <MissionHeader
-          sequence={currentMission.sequence}
-          title={currentMission.title}
-        />
-        {currentMission.big_question && (
-          <p className="text-sm font-medium text-muted-foreground italic pt-2">
-            &ldquo;{currentMission.big_question}&rdquo;
-          </p>
-        )}
-      </div>
-
-      {/* Video Player */}
-      {currentMission.video_url && (
-        <div className="aspect-video rounded-xl overflow-hidden border border-border bg-black/5">
-          <video
-            src={currentMission.video_url}
-            controls
-            className="w-full h-full object-contain"
-            preload="metadata"
-            playsInline
-          >
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      )}
+      {/* Header */}
+      <ProgramHeader
+        type="mission"
+        title={currentMission.title}
+        sequence={currentMission.sequence}
+        subtitle={currentMission.big_question}
+        estimatedTime={estimatedTime}
+        videoUrl={currentMission.video_url}
+      />
 
       {/* Markdown Content */}
       {loadingMarkdown && (
@@ -138,14 +97,13 @@ export default function MissionRoadmapPage({
         />
       )}
 
-      {/* Quests List */}
+      {/* Quests List - unchanged */}
       <div className="space-y-4 pt-4">
         <div className="pb-2 border-b border-border/60">
           <h3 className="text-sm font-sans font-bold uppercase tracking-widest text-muted-foreground">
             Quests Included
           </h3>
         </div>
-
         <div className="grid grid-cols-1 gap-3">
           {quests.map((quest: QuestSchema) => {
             const questTasks: TaskSchema[] = quest.tasks || [];
@@ -176,12 +134,10 @@ export default function MissionRoadmapPage({
                       </span>
                     )}
                   </div>
-
                   <h3 className="text-base font-bold text-foreground tracking-tight group-hover:text-primary transition-colors">
                     {quest.title}
                   </h3>
                 </div>
-
                 <div className="shrink-0 flex items-center justify-start sm:justify-end text-xs font-bold text-primary group-hover:translate-x-0.5 transition pr-1">
                   <span>{isCompleted ? 'Review Work' : 'Start Quest'}</span>
                   <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
@@ -191,7 +147,6 @@ export default function MissionRoadmapPage({
           })}
         </div>
       </div>
-
     </div>
   );
 }

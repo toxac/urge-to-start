@@ -6,9 +6,10 @@ import { useRouter } from 'next/navigation';
 import { useStore } from '@nanostores/react';
 import { $playbookStore } from '@/lib/stores/playbookStore';
 import { $progressStore } from '@/lib/stores/progressStore';
-import { $profileStore } from '@/lib/stores/profileStore'; 
+import { $profileStore } from '@/lib/stores/profileStore';
 import { setCompanionFocus } from '@/lib/stores/companionStore';
-import { TaskFormRegistry } from '@/components/program/TaskFormRegistry'; 
+import { TaskFormRegistry } from '@/components/program/TaskFormRegistry';
+import { ProgramHeader } from '@/components/program/ProgramHeader'; // 👈 new import
 import { ChevronLeft, CheckCircle2, Lock, Eye, Play, Loader2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MissionSchema, QuestSchema, TaskSchema } from '@/types/playbook';
@@ -29,8 +30,9 @@ export default function QuestActionCenterPage({
   const profile = useStore($profileStore);
 
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
+  const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
+  const [loadingMarkdown, setLoadingMarkdown] = useState(false);
 
-  // Strongly typed matching for active mission and quest
   let activeMissionId = '';
   let currentQuest: QuestSchema | null = null;
 
@@ -62,6 +64,24 @@ export default function QuestActionCenterPage({
     }
   }, [activeTaskId, activeMissionId, currentQuest]);
 
+  // Fetch markdown content for quest
+  useEffect(() => {
+    if (currentQuest?.content_path) {
+      setLoadingMarkdown(true);
+      fetch(`/api/markdown?path=${encodeURIComponent(currentQuest.content_path)}`)
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to load markdown');
+          return res.text();
+        })
+        .then(html => setMarkdownHtml(html))
+        .catch(err => {
+          console.error('Error loading markdown:', err);
+          setMarkdownHtml(null);
+        })
+        .finally(() => setLoadingMarkdown(false));
+    }
+  }, [currentQuest]);
+
   if (!currentQuest) {
     return (
       <div className="flex flex-col items-center justify-center space-y-3 py-32 animate-in fade-in duration-200">
@@ -73,29 +93,37 @@ export default function QuestActionCenterPage({
     );
   }
 
+  // Format estimated time
+  const inApp = currentQuest.estimated_in_app_minutes || 0;
+  const offApp = currentQuest.estimated_off_app_minutes || 0;
+  const estimatedTime = `~${inApp} min in-app${offApp > 0 ? `, ${offApp} min off-app` : ''}`;
+
   return (
     <div className="w-full space-y-8 animate-in fade-in duration-300 text-left">
+      {/* Header */}
+      <ProgramHeader
+        type="quest"
+        title={currentQuest.title}
+        sequence={currentQuest.sequence}
+        estimatedTime={estimatedTime}
+        videoUrl={currentQuest.video_url}
+      />
 
-      {/* Navigation Header */}
-      <div className="flex items-center justify-between border-b border-border/60 pb-5">
-        <button
-          onClick={() => {
-            startTransition(() => {
-              router.push(`/program/mission/${activeMissionId}`);
-            });
-          }}
-          disabled={isPending}
-          className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition cursor-pointer"
-        >
-          <ChevronLeft className="h-4 w-4" />
-          Back to Mission
-        </button>
-        <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-muted-foreground/60">
-          Quest Work Center
-        </span>
-      </div>
+      {/* Markdown Content (if any) */}
+      {loadingMarkdown && (
+        <div className="py-8 text-center text-muted-foreground text-xs">
+          <Loader2 className="w-4 h-4 animate-spin inline-block mr-2" />
+          Loading quest content...
+        </div>
+      )}
+      {markdownHtml && !loadingMarkdown && (
+        <div
+          className="prose prose-sm md:prose-base max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:text-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground"
+          dangerouslySetInnerHTML={{ __html: markdownHtml }}
+        />
+      )}
 
-      {/* Quest Meta Banner */}
+      {/* Progress Banner (replacing the old card) */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 bg-muted/30 border border-border p-6 rounded-2xl">
         <div className="space-y-1 text-left">
           <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-md">
@@ -105,7 +133,6 @@ export default function QuestActionCenterPage({
             {currentQuest.title}
           </h1>
         </div>
-
         <div className="space-y-1 shrink-0 text-left md:text-right">
           <span className="text-[10px] font-sans font-bold text-muted-foreground uppercase tracking-wider block">Progress</span>
           <div className="flex items-center gap-2">
@@ -117,15 +144,12 @@ export default function QuestActionCenterPage({
         </div>
       </div>
 
-      {/* WORKSPACE LAYOUT SWITCHER */}
+      {/* WORKSPACE LAYOUT SWITCHER – unchanged */}
       {activeTaskId ? (
-        /* TASK EXECUTION BUBBLE VIEW */
         (() => {
           const activeTask = tasks.find((t: TaskSchema) => t.id === activeTaskId);
           const activeTaskProgress = progress[activeTaskId];
-          
           if (!activeTask) return null;
-
           return (
             <div className="border border-primary rounded-2xl bg-card shadow-md p-6 space-y-6 animate-in zoom-in-95 duration-200 text-left">
               <div className="flex items-center justify-between border-b pb-4">
@@ -135,16 +159,15 @@ export default function QuestActionCenterPage({
                   </span>
                   <h2 className="text-base font-bold text-foreground">{activeTask.title}</h2>
                 </div>
-                <Button 
-                  size="sm" 
-                  variant="outline" 
+                <Button
+                  size="sm"
+                  variant="outline"
                   className="h-7 text-[11px] font-semibold cursor-pointer"
                   onClick={() => setActiveTaskId(null)}
                 >
                   Close Step
                 </Button>
               </div>
-
               <TaskFormRegistry
                 task={activeTask}
                 userId={currentUserId}
@@ -157,21 +180,16 @@ export default function QuestActionCenterPage({
           );
         })()
       ) : (
-        /* CHAPTER PROGRESS TIMELINE BOARD VIEW */
         <div className="space-y-4">
           <div className="text-left pb-1">
             <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Tasks Checklist
             </h3>
           </div>
-
           {tasks.map((task: TaskSchema, index: number) => {
             const taskProgress = progress[task.id];
             const isTaskCompleted = taskProgress?.status === 'completed';
-
-            // Sequential lock rule: previous task must be completed
             const isLocked = index > 0 && progress[tasks[index - 1].id]?.status !== 'completed';
-
             return (
               <div
                 key={task.id}
@@ -196,7 +214,6 @@ export default function QuestActionCenterPage({
                       </div>
                     )}
                   </div>
-
                   <div className="space-y-0.5 truncate">
                     <h4 className="text-sm font-bold text-foreground truncate tracking-tight">
                       {task.title}
@@ -206,7 +223,6 @@ export default function QuestActionCenterPage({
                     </p>
                   </div>
                 </div>
-
                 <div className="shrink-0 pl-2">
                   {!isLocked && (
                     <Button
@@ -235,8 +251,6 @@ export default function QuestActionCenterPage({
               </div>
             );
           })}
-
-          {/* Quick Callout */}
           {nextIncompleteTask && (
             <div className="p-4 border rounded-xl bg-muted/20 border-dashed text-left flex items-center justify-between text-xs text-muted-foreground font-medium">
               <span>Next step: <strong>&ldquo;{nextIncompleteTask.title}&rdquo;</strong>.</span>
@@ -245,7 +259,6 @@ export default function QuestActionCenterPage({
           )}
         </div>
       )}
-
     </div>
   );
 }
