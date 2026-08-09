@@ -14,36 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      accomplishments: {
-        Row: {
-          created_at: string
-          description: string
-          icon_key: string
-          key: string
-          title: string
-          type: Database["public"]["Enums"]["accomplishment_type"]
-          unlocked_identity: string
-        }
-        Insert: {
-          created_at?: string
-          description: string
-          icon_key: string
-          key: string
-          title: string
-          type?: Database["public"]["Enums"]["accomplishment_type"]
-          unlocked_identity: string
-        }
-        Update: {
-          created_at?: string
-          description?: string
-          icon_key?: string
-          key?: string
-          title?: string
-          type?: Database["public"]["Enums"]["accomplishment_type"]
-          unlocked_identity?: string
-        }
-        Relationships: []
-      }
       ai_logs: {
         Row: {
           context_type: string
@@ -361,6 +331,7 @@ export type Database = {
       }
       missions: {
         Row: {
+          badge_config: Json | null
           big_question: string | null
           content: string | null
           content_path: string
@@ -375,6 +346,7 @@ export type Database = {
           video_url: string | null
         }
         Insert: {
+          badge_config?: Json | null
           big_question?: string | null
           content?: string | null
           content_path: string
@@ -389,6 +361,7 @@ export type Database = {
           video_url?: string | null
         }
         Update: {
+          badge_config?: Json | null
           big_question?: string | null
           content?: string | null
           content_path?: string
@@ -711,6 +684,7 @@ export type Database = {
       }
       quests: {
         Row: {
+          badge_config: Json | null
           content: string | null
           content_path: string
           context: Json | null
@@ -720,7 +694,6 @@ export type Database = {
           id: string
           mission_id: string
           notes: Json | null
-          on_success: Json
           sequence: number
           success_message: string
           title: string
@@ -728,6 +701,7 @@ export type Database = {
           video_url: string | null
         }
         Insert: {
+          badge_config?: Json | null
           content?: string | null
           content_path: string
           context?: Json | null
@@ -737,7 +711,6 @@ export type Database = {
           id: string
           mission_id: string
           notes?: Json | null
-          on_success?: Json
           sequence: number
           success_message: string
           title: string
@@ -745,6 +718,7 @@ export type Database = {
           video_url?: string | null
         }
         Update: {
+          badge_config?: Json | null
           content?: string | null
           content_path?: string
           context?: Json | null
@@ -754,7 +728,6 @@ export type Database = {
           id?: string
           mission_id?: string
           notes?: Json | null
-          on_success?: Json
           sequence?: number
           success_message?: string
           title?: string
@@ -771,27 +744,6 @@ export type Database = {
           },
         ]
       }
-      squad: {
-        Row: {
-          created_at: string
-          id: string
-          supporter_email: string
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          supporter_email: string
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          supporter_email?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       tasks: {
         Row: {
           ai_config: Json | null
@@ -804,11 +756,11 @@ export type Database = {
           estimated_minutes: number
           execution_environment: string | null
           execution_type: Database["public"]["Enums"]["execution_type"]
+          grant_points: number
           id: string
           interval: number | null
           mission_id: string
           observation_context: Json | null
-          on_success: Json
           quest_id: string
           recurring: boolean | null
           reflection_prompt: string | null
@@ -829,11 +781,11 @@ export type Database = {
           estimated_minutes?: number
           execution_environment?: string | null
           execution_type: Database["public"]["Enums"]["execution_type"]
+          grant_points?: number
           id: string
           interval?: number | null
           mission_id: string
           observation_context?: Json | null
-          on_success?: Json
           quest_id: string
           recurring?: boolean | null
           reflection_prompt?: string | null
@@ -854,11 +806,11 @@ export type Database = {
           estimated_minutes?: number
           execution_environment?: string | null
           execution_type?: Database["public"]["Enums"]["execution_type"]
+          grant_points?: number
           id?: string
           interval?: number | null
           mission_id?: string
           observation_context?: Json | null
-          on_success?: Json
           quest_id?: string
           recurring?: boolean | null
           reflection_prompt?: string | null
@@ -944,45 +896,6 @@ export type Database = {
             columns: ["offering_id"]
             isOneToOne: false
             referencedRelation: "offerings"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_accomplishments: {
-        Row: {
-          awarded_at: string
-          badge_key: string
-          id: string
-          project_id: string | null
-          user_id: string
-        }
-        Insert: {
-          awarded_at?: string
-          badge_key: string
-          id?: string
-          project_id?: string | null
-          user_id?: string
-        }
-        Update: {
-          awarded_at?: string
-          badge_key?: string
-          id?: string
-          project_id?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_accomplishments_badge_key_fkey"
-            columns: ["badge_key"]
-            isOneToOne: false
-            referencedRelation: "accomplishments"
-            referencedColumns: ["key"]
-          },
-          {
-            foreignKeyName: "user_accomplishments_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]

@@ -12,6 +12,13 @@ const mission2: MissionSchema = {
     estimated_time_in_days: 21,
     context: ["user_profile", "mission1_data"],
     success_message: "You've completed Mission 2: Discovery. You've mined your own frustrations, observed the people around you, researched the wider world, and picked the best opportunity to pursue. You're no longer searching—you have a direction. Mission 3 awaits.",
+    badge_config: {
+        key: "badge_mission_2",
+        title: "Opportunity Architect",
+        description: "Completed Mission 2: Discovery. Uncovered market pains, evaluated ideas objectively, and committed to a high-potential direction.",
+        unlocked_identity: "Focused Opportunity Hunter",
+        icon_key: "Search"
+    },
 
     quests: [
         // ============================================
@@ -28,9 +35,12 @@ const mission2: MissionSchema = {
             estimated_off_app_minutes: 90,
             content: null,
             context: ["user_profile"],
-            on_success: {
-                grant_points: 60,
-                badge_key: "SELF_AWARE"
+            badge_config: {
+                key: "badge_quest_2_1",
+                title: "Self Miner",
+                description: "Completed Quest 1: Mined your daily frustrations and skills to uncover high-leverage business opportunities.",
+                unlocked_identity: "Self-Aware Problem Finder",
+                icon_key: "Key"
             },
             notes: [
                 {
@@ -93,10 +103,7 @@ const mission2: MissionSchema = {
                         category: "personal_problems",
                         reference: "user_opportunities"
                     },
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "FRUSTRATION_SPOTTER"
-                    },
+                    grant_points: 20,
                     challenges: [
                         {
                             title: "The Frustration Log",
@@ -144,10 +151,7 @@ const mission2: MissionSchema = {
                     component_key: "OpportunityFromFrustrationForm",
                     reflection_prompt: "Which of your frustrations could someone pay to have solved? Why?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "PROBLEM_REFORMER"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission2_quest1_task1"],
@@ -192,10 +196,7 @@ const mission2: MissionSchema = {
                         category: "skills",
                         reference: "user_opportunities"
                     },
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "SKILL_AUDITOR"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: [],
@@ -237,10 +238,7 @@ const mission2: MissionSchema = {
                     component_key: "SkillsOpportunityForm",
                     reflection_prompt: "How could you package your skills as a service or product? What would be the simplest version?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "SKILL_ENTREPRENEUR"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission2_quest1_task3"],
@@ -265,9 +263,12 @@ const mission2: MissionSchema = {
             estimated_off_app_minutes: 120,
             content: null,
             context: ["user_profile"],
-            on_success: {
-                grant_points: 50,
-                badge_key: "OBSERVER"
+            badge_config: {
+                key: "badge_quest_2_2",
+                title: "Keen Observer",
+                description: "Completed Quest 2: Observed real-world complaints and identified target audience pain points.",
+                unlocked_identity: "Empathetic Investigator",
+                icon_key: "Eye"
             },
             notes: [
                 {
@@ -330,10 +331,7 @@ const mission2: MissionSchema = {
                         category: "zone_of_influence",
                         reference: "user_opportunities"
                     },
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "DETECTIVE"
-                    },
+                    grant_points: 25,
                     challenges: [
                         {
                             title: "The 5 Conversations Challenge",
@@ -381,10 +379,7 @@ const mission2: MissionSchema = {
                     component_key: "PeopleOpportunityForm",
                     reflection_prompt: "Which of these problems could be the foundation of a business? Why?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "OPPORTUNITY_SPOTTER"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission2_quest2_task1"],
@@ -409,9 +404,12 @@ const mission2: MissionSchema = {
             estimated_off_app_minutes: 180,
             content: null,
             context: ["user_profile"],
-            on_success: {
-                grant_points: 50,
-                badge_key: "WORLD_READY"
+            badge_config: {
+                key: "badge_quest_2_3",
+                title: "Market Explorer",
+                description: "Completed Quest 3: Scanned online communities, macro trends, and marketplaces to spot hidden demand gaps.",
+                unlocked_identity: "Broad-Spectrum Researcher",
+                icon_key: "Globe"
             },
             notes: [
                 {
@@ -471,10 +469,7 @@ const mission2: MissionSchema = {
                     component_key: "CommunityProblemForm",
                     reflection_prompt: "What's the most common problem you're seeing in these communities? Why do you think it's common?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "COMMUNITY_EXPLORER"
-                    },
+                    grant_points: 20,
                     challenges: [
                         {
                             title: "The Deep Dive",
@@ -522,10 +517,7 @@ const mission2: MissionSchema = {
                     component_key: "TrendProblemForm",
                     reflection_prompt: "What trend is creating new problems? Who is being affected by these changes?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "TREND_SPOTTER"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: [],
@@ -567,10 +559,7 @@ const mission2: MissionSchema = {
                     component_key: "MarketplaceProblemForm",
                     reflection_prompt: "What's a problem that people are trying to solve but no one is solving well? Where's the gap?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "MARKETPLACE_SCANNER"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: [],
@@ -595,9 +584,12 @@ const mission2: MissionSchema = {
             estimated_off_app_minutes: 30,
             content: null,
             context: ["user_profile", "user_opportunities"],
-            on_success: {
-                grant_points: 60,
-                badge_key: "DECISION_MAKER"
+            badge_config: {
+                key: "badge_quest_2_4",
+                title: "Decisive Founder",
+                description: "Completed Quest 4: Scored opportunities objectively, picked your target problem, and passed the decision gate.",
+                unlocked_identity: "Committed Business Builder",
+                icon_key: "CheckCircle"
             },
             notes: [
                 {
@@ -657,10 +649,7 @@ const mission2: MissionSchema = {
                     component_key: "OpportunityScoringForm",
                     reflection_prompt: "Look at your highest-scoring opportunity. Why did it score so high? What makes it the most promising?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 30,
-                        badge_key: "SCORER"
-                    },
+                    grant_points: 30,
                     challenges: null,
                     ai_config: null,
                     dependencies: [],
@@ -702,10 +691,7 @@ const mission2: MissionSchema = {
                     component_key: "OpportunityPickerForm",
                     reflection_prompt: "Why did you pick this opportunity? What made it stand out from the others?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 15,
-                        badge_key: "OPPORTUNITY_PICKER"
-                    },
+                    grant_points: 15,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission2_quest4_task1"],
@@ -740,10 +726,7 @@ const mission2: MissionSchema = {
                     component_key: "DecisionGateForm",
                     reflection_prompt: "What's your biggest hesitation about this opportunity? Address it now.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 15,
-                        badge_key: "COMMITTED"
-                    },
+                    grant_points: 15,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission2_quest4_task2"],

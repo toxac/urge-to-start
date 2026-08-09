@@ -59,6 +59,7 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
         big_question: mission.big_question,
         estimated_time_in_days: mission.estimated_time_in_days,
         context: mission.context as any,
+        badge_config: mission.badge_config as any,
         success_message: mission.success_message,
         updated_at: new Date().toISOString()
       })
@@ -89,7 +90,7 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
           estimated_off_app_minutes: quest.estimated_off_app_minutes,
           content: questMarkdownContent || quest.content || null,
           context: quest.context as any,
-          on_success: quest.on_success as any,
+          badge_config: quest.badge_config as any,
           notes: quest.notes as any,
           success_message: quest.success_message,
           updated_at: new Date().toISOString()
@@ -124,7 +125,7 @@ export async function syncPlaybookToDatabase(config: PlaybookConfig) {
             component_key: task.component_key,
             reflection_prompt: task.reflection_prompt,
             observation_context: task.observation_context as any,
-            on_success: task.on_success as any,
+            grant_points: task.grant_points,
             challenges: task.challenges as any,
             ai_config: task.ai_config as any,
             dependencies: task.dependencies,

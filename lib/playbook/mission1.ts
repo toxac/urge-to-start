@@ -12,6 +12,13 @@ const mission1: MissionSchema = {
     estimated_time_in_days: 14,
     context: ["user_profile"],
     success_message: "You've completed Mission 1: Beg. Borrow. Steel. You defined your 'why,' made a real commitment, mapped your hidden resources, built your support squad, and faced rejection head-on. You're no longer in the 'thinking' phase—you're in the 'doing' phase. The foundation is laid. You are ready for Mission 2.",
+    badge_config: {
+        key: "badge_mission_1",
+        title: "Resourceful Founder",
+        description: "Completed Mission 1: Beg. Borrow. Steel. Mastered asking, faced rejection, and mapped your initial founder assets.",
+        unlocked_identity: "Resilient Action-Taker",
+        icon_key: "ShieldCheck"
+    },
 
     quests: [
         // ============================================
@@ -28,9 +35,12 @@ const mission1: MissionSchema = {
             estimated_off_app_minutes: 60,
             content: null,
             context: ["user_profile"],
-            on_success: {
-                grant_points: 50,
-                badge_key: "PATHFINDER"
+            badge_config: {
+                key: "badge_quest_1_1",
+                title: "Pathfinder",
+                description: "Completed Quest 1: Defined your core why, made a real commitment, and faced your initial fears.",
+                unlocked_identity: "Self-Aware Founder",
+                icon_key: "Compass"
             },
             notes: [
                 {
@@ -91,10 +101,7 @@ const mission1: MissionSchema = {
                     component_key: "MotivationForm",
                     reflection_prompt: "Look at your 'why_statement.' Does it resonate with you on a gut level? If not, tweak it now. This will be your anchor.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "HONEST_SELF"
-                    },
+                    grant_points: 25,
                     challenges: [
                         {
                             title: "The 5-Minute Timer",
@@ -142,10 +149,7 @@ const mission1: MissionSchema = {
                     component_key: "CommitmentForm",
                     reflection_prompt: "Look at your weekly hours. Is this a realistic, sustainable commitment for the next few months? If you can only do 2 hours a day, own that and build your plan around it.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "ACTION_COMMITMENT"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: [],
@@ -187,10 +191,7 @@ const mission1: MissionSchema = {
                     component_key: "RoadblockForm",
                     reflection_prompt: "What's the scariest roadblock on this list? We can help you with that. Let's make a plan.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "ROADBLOCK_ACKNOWLEDGED"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: [],
@@ -215,9 +216,12 @@ const mission1: MissionSchema = {
             estimated_off_app_minutes: 60,
             content: null,
             context: ["user_profile"],
-            on_success: {
-                grant_points: 50,
-                badge_key: "RESOURCEFUL"
+            badge_config: {
+                key: "badge_quest_1_2",
+                title: "Asset Mapper",
+                description: "Completed Quest 2: Mapped your connections and audited your skills to unlock hidden leverage.",
+                unlocked_identity: "Resourceful Strategist",
+                icon_key: "Network"
             },
             notes: [
                 {
@@ -271,10 +275,7 @@ const mission1: MissionSchema = {
                     component_key: "SocialFootprintForm",
                     reflection_prompt: "Who is the most valuable person in your network right now? Why? Consider reaching out to them casually this week.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "NETWORK_MAPPER"
-                    },
+                    grant_points: 25,
                     challenges: [
                         {
                             title: "The Connection Challenge",
@@ -322,10 +323,7 @@ const mission1: MissionSchema = {
                     component_key: "SkillsForm",
                     reflection_prompt: "List your top 3 to 5 skills. How could these skills help a potential customer solve their problem?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "SKILL_AUDITOR"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: [],
@@ -350,9 +348,12 @@ const mission1: MissionSchema = {
             estimated_off_app_minutes: 120,
             content: null,
             context: ["user_profile"],
-            on_success: {
-                grant_points: 60,
-                badge_key: "ASKER"
+            badge_config: {
+                key: "badge_quest_1_3",
+                title: "Fearless Asker",
+                description: "Completed Quest 3: Assembled your support squad, introduced yourself online, and made real asks.",
+                unlocked_identity: "Proactive Initiator",
+                icon_key: "Megaphone"
             },
             notes: [
                 {
@@ -419,10 +420,7 @@ const mission1: MissionSchema = {
                     component_key: "CheerSquadForm",
                     reflection_prompt: "Who did you ask? What was their reaction? Having a support network is your secret weapon.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 35,
-                        badge_key: "SQUAD_ASSEMBLED"
-                    },
+                    grant_points: 35,
                     challenges: null,
                     ai_config: null,
                     dependencies: [],
@@ -457,10 +455,7 @@ const mission1: MissionSchema = {
                     component_key: "CommunityIntroForm",
                     reflection_prompt: "What is one thing you're most excited to learn from the community?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "COMMUNITY_MEMBER"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission1_quest1_task1"],
@@ -495,10 +490,7 @@ const mission1: MissionSchema = {
                     component_key: "OffAppActionForm",
                     reflection_prompt: "How did it feel? What was the response? You've just proven you can ask for something. Now, think about how much easier this will feel next time.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 30,
-                        badge_key: "FIRST_ASK"
-                    },
+                    grant_points: 30,
                     challenges: [
                         {
                             title: "The 3-Ask Challenge",
@@ -529,9 +521,12 @@ const mission1: MissionSchema = {
             estimated_off_app_minutes: 90,
             content: null,
             context: ["user_profile"],
-            on_success: {
-                grant_points: 50,
-                badge_key: "RESILIENT"
+            badge_config: {
+                key: "badge_quest_1_4",
+                title: "Rejection Master",
+                description: "Completed Quest 4: Collected 'Nos', made bold asks, and conquered the fear of rejection.",
+                unlocked_identity: "Bulletproof Builder",
+                icon_key: "Flame"
             },
             notes: [
                 {
@@ -591,10 +586,7 @@ const mission1: MissionSchema = {
                     component_key: "OffAppActionForm",
                     reflection_prompt: "What did you learn from each 'No'? Did any of them give you a reason why that could be helpful?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "NO_HUNTER"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: [],
@@ -636,10 +628,7 @@ const mission1: MissionSchema = {
                     component_key: "OffAppActionForm",
                     reflection_prompt: "You just made a bold ask. You probably got a 'no.' And you're still standing. That's the whole point. You're now more resilient than 99% of people who never ask.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 35,
-                        badge_key: "BOLD_ASKER"
-                    },
+                    grant_points: 35,
                     challenges: [
                         {
                             title: "The Bold Ask",
@@ -680,10 +669,7 @@ const mission1: MissionSchema = {
                     component_key: "AuditForm",
                     reflection_prompt: "You've proven something to yourself today. Looking at the growth goals you just set, what is the most important mindset shift you need to achieve them?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "REJECTION_MASTER"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission1_quest4_task2", "mission1_quest4_task1"],

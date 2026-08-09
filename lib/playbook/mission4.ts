@@ -12,6 +12,13 @@ const mission4: MissionSchema = {
     estimated_time_in_days: 21,
     context: ["user_profile", "user_projects"],
     success_message: "You've completed Mission 4: The Business Engine. You've defined your offer, set your price, built your acquisition plan, run the numbers, and made a conscious decision. You know exactly how your business makes money—or if it can at all. Mission 5 awaits.",
+    badge_config: {
+        key: "badge_mission_4",
+        title: "Engine Builder",
+        description: "Completed Mission 4: The Business Engine. Modeled pricing, customer acquisition channels, and unit economics.",
+        unlocked_identity: "Commercial Strategist",
+        icon_key: "Cpu"
+    },
 
     quests: [
         // ============================================
@@ -28,9 +35,12 @@ const mission4: MissionSchema = {
             estimated_off_app_minutes: 30,
             content: null,
             context: ["user_profile", "user_projects"],
-            on_success: {
-                grant_points: 60,
-                badge_key: "OFFER_DEFINER"
+            badge_config: {
+                key: "badge_quest_4_1",
+                title: "Offer Architect",
+                description: "Completed Quest 1: Defined your promise, focused feature sets, and mapped the customer experience.",
+                unlocked_identity: "Value Creator",
+                icon_key: "Gift"
             },
             notes: [
                 {
@@ -90,10 +100,7 @@ const mission4: MissionSchema = {
                     component_key: "ValuePropositionForm",
                     reflection_prompt: "If your customer could only remember one thing about your offer, what should it be? That's your value proposition.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "VALUE_PROMISE"
-                    },
+                    grant_points: 20,
                     challenges: [
                         {
                             title: "The 2-Minute Test",
@@ -141,10 +148,7 @@ const mission4: MissionSchema = {
                     component_key: "FeatureBrainstormForm",
                     reflection_prompt: "Look at your list. What features are you most excited about? Which ones are you dreading? That's a signal.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 15,
-                        badge_key: "FEATURE_BRAINSTORMER"
-                    },
+                    grant_points: 15,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission4_quest1_task1"],
@@ -186,10 +190,7 @@ const mission4: MissionSchema = {
                     component_key: "FeaturePrioritizationForm",
                     reflection_prompt: "You're saying 'no' to features. How does that feel? The best founders get comfortable with saying 'no' to good ideas so they can say 'yes' to great ones.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "FEATURE_PRIORITIZER"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission4_quest1_task2"],
@@ -231,10 +232,7 @@ const mission4: MissionSchema = {
                     component_key: "CustomerExperienceForm",
                     reflection_prompt: "Put yourself in your customer's shoes. What are they feeling at each step? Where does the anxiety or confusion happen?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "EXPERIENCE_MAPPER"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission4_quest1_task3"],
@@ -259,9 +257,12 @@ const mission4: MissionSchema = {
             estimated_off_app_minutes: 20,
             content: null,
             context: ["user_profile", "user_projects"],
-            on_success: {
-                grant_points: 50,
-                badge_key: "PRICE_SETTER"
+            badge_config: {
+                key: "badge_quest_4_2",
+                title: "Value Pricer",
+                description: "Completed Quest 2: Named your price confidently based on value perception, not fear.",
+                unlocked_identity: "Monetization Strategist",
+                icon_key: "DollarSign"
             },
             notes: [
                 {
@@ -321,10 +322,7 @@ const mission4: MissionSchema = {
                     component_key: "PriceSettingForm",
                     reflection_prompt: "If you were your customer, would you pay this price? Why or why not?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "PRICE_NAMER"
-                    },
+                    grant_points: 25,
                     challenges: [
                         {
                             title: "The $1,000 Test",
@@ -365,10 +363,7 @@ const mission4: MissionSchema = {
                     component_key: "PriceAssessmentForm",
                     reflection_prompt: "If your price feels 'too cheap,' you might be sending the wrong signal. What would make it feel premium?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "PRICE_ASSESSOR"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission4_quest2_task1"],
@@ -393,9 +388,12 @@ const mission4: MissionSchema = {
             estimated_off_app_minutes: 60,
             content: null,
             context: ["user_profile", "user_projects"],
-            on_success: {
-                grant_points: 60,
-                badge_key: "ACQUISITION_PLANNER"
+            badge_config: {
+                key: "badge_quest_4_3",
+                title: "Acquisition Planner",
+                description: "Completed Quest 3: Selected a focused acquisition channel, crafted compelling messaging, and built an acquisition plan.",
+                unlocked_identity: "Growth Initiator",
+                icon_key: "Target"
             },
             notes: [
                 {
@@ -455,10 +453,7 @@ const mission4: MissionSchema = {
                     component_key: "ChannelSelectionForm",
                     reflection_prompt: "Why did you pick this channel over all others? What makes it your best first bet?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "CHANNEL_CHOOSER"
-                    },
+                    grant_points: 20,
                     challenges: [
                         {
                             title: "The 1-Customer Challenge",
@@ -499,10 +494,7 @@ const mission4: MissionSchema = {
                     component_key: "MessagingForm",
                     reflection_prompt: "Would you respond to this message? If not, rewrite it until you would.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 15,
-                        badge_key: "MESSAGE_CRAFTER"
-                    },
+                    grant_points: 15,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission4_quest3_task1"],
@@ -537,10 +529,7 @@ const mission4: MissionSchema = {
                     component_key: "AcquisitionAssessmentForm",
                     reflection_prompt: "If this acquisition plan fails, what's your backup plan? Always have a Plan B.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "ACQUISITION_ASSESSOR"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission4_quest3_task2"],
@@ -565,9 +554,12 @@ const mission4: MissionSchema = {
             estimated_off_app_minutes: 90,
             content: null,
             context: ["user_profile", "user_projects"],
-            on_success: {
-                grant_points: 65,
-                badge_key: "FINANCIAL_MASTER"
+            badge_config: {
+                key: "badge_quest_4_4",
+                title: "Financial Master",
+                description: "Completed Quest 4: Modeled cost structures, fixed/variable costs, and unit economics profitability.",
+                unlocked_identity: "Numbers Realist",
+                icon_key: "Calculator"
             },
             notes: [
                 {
@@ -620,10 +612,7 @@ const mission4: MissionSchema = {
                     component_key: "CostStructureForm",
                     reflection_prompt: "Look at your costs. What surprised you? What could you reduce or eliminate?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "COST_ANALYZER"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission4_quest3_task3"],
@@ -658,10 +647,7 @@ const mission4: MissionSchema = {
                     component_key: "CostAnalysisForm",
                     reflection_prompt: "If you had to cut your costs in half, how would you do it? Would the customer experience suffer?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "COST_UNDERSTANDER"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission4_quest4_task1"],
@@ -696,10 +682,7 @@ const mission4: MissionSchema = {
                     component_key: "ProfitabilityCheckForm",
                     reflection_prompt: "If you're not making a profit, what would need to change? More sales? Higher price? Lower costs? Be specific.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "PROFITABILITY_CHECKER"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission4_quest4_task2"],
@@ -724,9 +707,12 @@ const mission4: MissionSchema = {
             estimated_off_app_minutes: 10,
             content: null,
             context: ["user_profile", "user_projects"],
-            on_success: {
-                grant_points: 40,
-                badge_key: "FINAL_DECISION"
+            badge_config: {
+                key: "badge_quest_4_5",
+                title: "Commercial Decision Maker",
+                description: "Completed Quest 5: Evaluated unit economics objectively and made a conscious commercial call.",
+                unlocked_identity: "Data-Driven Founder",
+                icon_key: "CheckSquare"
             },
             notes: [
                 {
@@ -779,10 +765,7 @@ const mission4: MissionSchema = {
                     component_key: "FinalDecisionForm",
                     reflection_prompt: "What did you learn from this financial exercise? If you're saying 'no' to this business, what did you learn that you'll take to the next one?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "DECISION_MAKER"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: {
                         role: "Financial Decision Advisor",

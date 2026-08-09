@@ -12,6 +12,13 @@ const mission3: MissionSchema = {
     estimated_time_in_days: 21,
     context: ["user_profile", "user_opportunities", "user_projects"],
     success_message: "You've completed Mission 3: Getting Real. You've validated your problem with real customers, defined your Minimum Sellable Product, understood your environment, and made a conscious decision about your business. You're no longer dreaming—you're building with intention. Mission 4 awaits.",
+    badge_config: {
+        key: "badge_mission_3",
+        title: "Validated Strategist",
+        description: "Completed Mission 3: Getting Real. Validated customer pain, defined your MSP, and made an intentional Go/No-Go decision.",
+        unlocked_identity: "Intentional Builder",
+        icon_key: "ShieldCheck"
+    },
 
     quests: [
         // ============================================
@@ -28,9 +35,12 @@ const mission3: MissionSchema = {
             estimated_off_app_minutes: 180,
             content: null,
             context: ["user_profile", "user_opportunities", "user_projects"],
-            on_success: {
-                grant_points: 65,
-                badge_key: "PROBLEM_MASTER"
+            badge_config: {
+                key: "badge_quest_3_1",
+                title: "Problem Master",
+                description: "Completed Quest 1: Conducted real customer interviews and defined a crystal-clear customer persona.",
+                unlocked_identity: "Customer-Centric Investigator",
+                icon_key: "Search"
             },
             notes: [
                 {
@@ -90,10 +100,7 @@ const mission3: MissionSchema = {
                     component_key: "ProblemDefinitionForm",
                     reflection_prompt: "Looking at your problem statement, would someone who has this problem recognize themselves in it? If not, go deeper.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "PROBLEM_DEFINER"
-                    },
+                    grant_points: 20,
                     challenges: [
                         {
                             title: "The 5-Why Challenge",
@@ -141,10 +148,7 @@ const mission3: MissionSchema = {
                     component_key: "CustomerInterviewLogger",
                     reflection_prompt: "What surprised you most in these interviews? What did you learn that you didn't expect?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 30,
-                        badge_key: "CUSTOMER_TALKER"
-                    },
+                    grant_points: 30,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission3_quest1_task1"],
@@ -186,10 +190,7 @@ const mission3: MissionSchema = {
                     component_key: "CustomerPersonaForm",
                     reflection_prompt: "Would this person recognize themselves in this persona? If not, go back and add more detail.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "PERSONA_CREATOR"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission3_quest1_task2"],
@@ -214,9 +215,12 @@ const mission3: MissionSchema = {
             estimated_off_app_minutes: 60,
             content: null,
             context: ["user_profile", "user_projects"],
-            on_success: {
-                grant_points: 60,
-                badge_key: "MSP_DEFINER"
+            badge_config: {
+                key: "badge_quest_3_2",
+                title: "MSP Architect",
+                description: "Completed Quest 2: Designed a lean, focused Minimum Sellable Product ready for market execution.",
+                unlocked_identity: "Lean Product Strategist",
+                icon_key: "Layers"
             },
             notes: [
                 {
@@ -269,10 +273,7 @@ const mission3: MissionSchema = {
                     component_key: "SolutionTypeForm",
                     reflection_prompt: "Why did you choose this approach? What makes it the best fit for your customer?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "SOLUTION_CHOOSER"
-                    },
+                    grant_points: 20,
                     challenges: [
                         {
                             title: "The 7-Day Build",
@@ -320,10 +321,7 @@ const mission3: MissionSchema = {
                     component_key: "MSPDefinitionForm",
                     reflection_prompt: "Is this something you could sell today? If not, it's too big. Cut it down.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 15,
-                        badge_key: "MSP_DESCRIBER"
-                    },
+                    grant_points: 15,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission3_quest2_task1"],
@@ -358,10 +356,7 @@ const mission3: MissionSchema = {
                     component_key: "MSPBuildForm",
                     reflection_prompt: "Would you buy this? At this price? For this value? Be honest.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "MSP_BUILDER"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission3_quest2_task2"],
@@ -386,9 +381,12 @@ const mission3: MissionSchema = {
             estimated_off_app_minutes: 60,
             content: null,
             context: ["user_profile", "user_projects"],
-            on_success: {
-                grant_points: 50,
-                badge_key: "ENVIRONMENT_READY"
+            badge_config: {
+                key: "badge_quest_3_3",
+                title: "Landscape Analyst",
+                description: "Completed Quest 3: Mapped competitive workarounds and verified essential business compliance requirements.",
+                unlocked_identity: "Battlefield Strategist",
+                icon_key: "Map"
             },
             notes: [
                 {
@@ -448,10 +446,7 @@ const mission3: MissionSchema = {
                     component_key: "LandscapeForm",
                     reflection_prompt: "Looking at this landscape, what's your biggest opportunity? What's your biggest threat?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "LANDSCAPE_MAPPER"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission3_quest2_task3"],
@@ -486,10 +481,7 @@ const mission3: MissionSchema = {
                     component_key: "ComplianceForm",
                     reflection_prompt: "What's the biggest compliance requirement you need to address before launching?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "COMPLIANCE_CHECKER"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission3_quest3_task1"],
@@ -514,9 +506,12 @@ const mission3: MissionSchema = {
             estimated_off_app_minutes: 30,
             content: null,
             context: ["user_profile", "user_projects"],
-            on_success: {
-                grant_points: 60,
-                badge_key: "DECISION_MAKER"
+            badge_config: {
+                key: "badge_quest_3_4",
+                title: "Decisive Gatekeeper",
+                description: "Completed Quest 4: Assessed project viability, faced worst-case scenarios, and passed the official Go/No-Go gate.",
+                unlocked_identity: "Determined Founder",
+                icon_key: "Flag"
             },
             notes: [
                 {
@@ -576,10 +571,7 @@ const mission3: MissionSchema = {
                     component_key: "ViabilityCheckForm",
                     reflection_prompt: "If this didn't work out, what would you regret more—starting or not starting?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "VIABILITY_CHECKER"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission3_quest3_task2"],
@@ -614,10 +606,7 @@ const mission3: MissionSchema = {
                     component_key: "WorstCaseForm",
                     reflection_prompt: "What's the worst that could happen? And what would you do next?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "REALIST"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission3_quest4_task1"],
@@ -659,10 +648,7 @@ const mission3: MissionSchema = {
                     component_key: "DecisionGateForm",
                     reflection_prompt: "What's the one thing that pushed you to this decision?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 15,
-                        badge_key: "DECISION_COMMITTED"
-                    },
+                    grant_points: 15,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission3_quest4_task2"],

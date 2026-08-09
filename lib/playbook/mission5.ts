@@ -12,6 +12,13 @@ const mission5: MissionSchema = {
     estimated_time_in_days: 30,
     context: ["user_profile", "user_projects", "user_builds", "user_contacts"],
     success_message: "You've completed Mission 5: Build & Launch. You planned your build, executed your plan, gathered testers, validated your product, and launched. You're no longer a person with an idea—you're a founder with a live business. Welcome to the other side. 🎉",
+    badge_config: {
+        key: "badge_mission_5",
+        title: "Live Founder",
+        description: "Completed Mission 5: Build & Launch. Built your product, validated with real testers, and launched your business into the world.",
+        unlocked_identity: "Active Business Operator",
+        icon_key: "Rocket"
+    },
 
     quests: [
         // ============================================
@@ -28,9 +35,12 @@ const mission5: MissionSchema = {
             estimated_off_app_minutes: 60,
             content: null,
             context: ["user_profile", "user_projects"],
-            on_success: {
-                grant_points: 60,
-                badge_key: "BUILD_PLANNER"
+            badge_config: {
+                key: "badge_quest_5_1",
+                title: "Build Strategist",
+                description: "Completed Quest 1: Set your build timeline, mapped resource requirements, and created a structured build checklist.",
+                unlocked_identity: "Organized Builder",
+                icon_key: "Calendar"
             },
             notes: [
                 {
@@ -83,10 +93,7 @@ const mission5: MissionSchema = {
                     component_key: "BuildTimelineForm",
                     reflection_prompt: "What's the most ambitious but realistic date you could launch? What would make that possible?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "TIMELINE_SETTER"
-                    },
+                    grant_points: 20,
                     challenges: [
                         {
                             title: "The 30-Day Sprint",
@@ -127,10 +134,7 @@ const mission5: MissionSchema = {
                     component_key: "BuildResourcesForm",
                     reflection_prompt: "What's the one resource you're missing that would make this 10x easier? Can you get it?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "RESOURCE_PLANNER"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission5_quest1_task1"],
@@ -165,10 +169,7 @@ const mission5: MissionSchema = {
                     component_key: "BuildTasksForm",
                     reflection_prompt: "What's the first thing you'll build? Start there.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "TASK_CREATOR"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission5_quest1_task2"],
@@ -193,9 +194,12 @@ const mission5: MissionSchema = {
             estimated_off_app_minutes: 0,
             content: null,
             context: ["user_profile", "user_builds", "build_tasks"],
-            on_success: {
-                grant_points: 70,
-                badge_key: "BUILDER"
+            badge_config: {
+                key: "badge_quest_5_2",
+                title: "Product Executioner",
+                description: "Completed Quest 2: Executed daily build logs, managed costs, and created a working Proof of Concept.",
+                unlocked_identity: "Product Operator",
+                icon_key: "LayoutDashboard"
             },
             notes: [
                 {
@@ -240,10 +244,7 @@ const mission5: MissionSchema = {
                     component_key: "BuildDashboard",
                     reflection_prompt: "What's the one thing you're most excited to build? What's the one thing you're most nervous about?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 15,
-                        badge_key: "DASHBOARD_VIEWER"
-                    },
+                    grant_points: 15,
                     challenges: [
                         {
                             title: "The Daily Build Challenge",
@@ -274,9 +275,12 @@ const mission5: MissionSchema = {
             estimated_off_app_minutes: 60,
             content: null,
             context: ["user_profile", "user_contacts", "user_builds"],
-            on_success: {
-                grant_points: 60,
-                badge_key: "TESTER_HUNTER"
+            badge_config: {
+                key: "badge_quest_5_3",
+                title: "Tester Recruiter",
+                description: "Completed Quest 3: Recruited target users, onboarded testers, and collected actionable product feedback.",
+                unlocked_identity: "Feedback-Driven Founder",
+                icon_key: "Users"
             },
             notes: [
                 {
@@ -329,10 +333,7 @@ const mission5: MissionSchema = {
                     component_key: "TesterRecruitmentForm",
                     reflection_prompt: "What's the best place to find people who have this problem? That's where your testers are.",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 15,
-                        badge_key: "TESTER_RECRUITER"
-                    },
+                    grant_points: 15,
                     challenges: [
                         {
                             title: "The 5-Tester Challenge",
@@ -373,10 +374,7 @@ const mission5: MissionSchema = {
                     component_key: "TesterOnboardingForm",
                     reflection_prompt: "Put yourself in your tester's shoes. What would you need to know to give helpful feedback?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "TESTER_ONBOARDER"
-                    },
+                    grant_points: 20,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission5_quest3_task1"],
@@ -411,10 +409,7 @@ const mission5: MissionSchema = {
                     component_key: "FeedbackCollectionForm",
                     reflection_prompt: "What was the most surprising piece of feedback? What will you do with it?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "FEEDBACK_COLLECTOR"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission5_quest3_task2"],
@@ -439,9 +434,12 @@ const mission5: MissionSchema = {
             estimated_off_app_minutes: 30,
             content: null,
             context: ["user_profile", "user_builds"],
-            on_success: {
-                grant_points: 50,
-                badge_key: "VALIDATOR"
+            badge_config: {
+                key: "badge_quest_5_4",
+                title: "Product Optimizer",
+                description: "Completed Quest 4: Performed validation checks and executed essential pre-launch tweaks.",
+                unlocked_identity: "Quality Refine-Master",
+                icon_key: "Sliders"
             },
             notes: [
                 {
@@ -494,10 +492,7 @@ const mission5: MissionSchema = {
                     component_key: "ValidationCheckForm",
                     reflection_prompt: "If you had to launch today, would you? Why or why not?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "VALIDATION_CHECKER"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission5_quest3_task3"],
@@ -532,10 +527,7 @@ const mission5: MissionSchema = {
                     component_key: "FinalTweaksForm",
                     reflection_prompt: "What's the smallest change that would make the biggest difference?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "FINAL_TWEAKER"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: null,
                     dependencies: ["mission5_quest4_task1"],
@@ -560,9 +552,12 @@ const mission5: MissionSchema = {
             estimated_off_app_minutes: 30,
             content: null,
             context: ["user_profile", "user_builds"],
-            on_success: {
-                grant_points: 60,
-                badge_key: "LAUNCHER"
+            badge_config: {
+                key: "badge_quest_5_5",
+                title: "Launch Pioneer",
+                description: "Completed Quest 5: Completed the launch checklist, made the final launch call, and went live.",
+                unlocked_identity: "Official Business Founder",
+                icon_key: "Zap"
             },
             notes: [
                 {
@@ -615,10 +610,7 @@ const mission5: MissionSchema = {
                     component_key: "LaunchChecklistForm",
                     reflection_prompt: "If you had to launch right now, what would you be worried about?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 20,
-                        badge_key: "LAUNCH_CHECKER"
-                    },
+                    grant_points: 20,
                     challenges: [
                         {
                             title: "The First Sale Challenge",
@@ -659,10 +651,7 @@ const mission5: MissionSchema = {
                     component_key: "LaunchDecisionForm",
                     reflection_prompt: "What's the scariest part of launching? What excites you the most?",
                     observation_context: null,
-                    on_success: {
-                        grant_points: 25,
-                        badge_key: "LAUNCH_DECISION"
-                    },
+                    grant_points: 25,
                     challenges: null,
                     ai_config: {
                         role: "Launch Advisor",
