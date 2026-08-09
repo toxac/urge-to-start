@@ -9,8 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { updateMyProfile } from '@/actions/profiles';
-import { completeTaskExecution } from '@/actions/progress';
-import { setProgressStoreRow } from '@/lib/stores/progressStore';
+import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { updateProfileStoreFields, $profileStore } from '@/lib/stores/profileStore';
 import { useStore } from '@nanostores/react';
 import { BaseTaskComponentProps } from '../types';
@@ -60,6 +59,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
     setErrorMessage(null);
 
     try {
+      // 1. Sync Profile Data
       const profileSync = await updateMyProfile({
         motivations: formData as any
       });
@@ -74,19 +74,17 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         updateProfileStoreFields(profileSync.data as any);
       }
 
-      const progressSync = await completeTaskExecution({
-        taskId: task.id,
+      // 2. Process Task Completion & Points
+      const taskResult = await processTaskCompletion({
+        task,
         savedPayload: { formData }
       });
 
-      if (progressSync.success) {
-        if (progressSync.data) {
-          setProgressStoreRow(progressSync.data as any);
-        }
+      if (taskResult.success) {
         setIsEditing(false);
         if (onSuccess) onSuccess();
       } else {
-        setErrorMessage(progressSync.error || 'Failed to mark task complete');
+        setErrorMessage(taskResult.error || 'Failed to record task completion');
       }
     } catch (err: any) {
       setErrorMessage(err.message || 'An unexpected error occurred');
