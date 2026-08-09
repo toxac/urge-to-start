@@ -1351,7 +1351,12 @@ export type Database = {
         | "project_launch"
         | "introduction"
       program_item_type: "mission" | "quest" | "task"
-      progress_status: "not_started" | "in_progress" | "completed" | "repeat"
+      progress_status:
+        | "not_started"
+        | "in_progress"
+        | "completed"
+        | "repeat"
+        | "blocked"
       question_status:
         | "pending"
         | "answered_by_ai"
@@ -1644,7 +1649,13 @@ export const Constants = {
         "introduction",
       ],
       program_item_type: ["mission", "quest", "task"],
-      progress_status: ["not_started", "in_progress", "completed", "repeat"],
+      progress_status: [
+        "not_started",
+        "in_progress",
+        "completed",
+        "repeat",
+        "blocked",
+      ],
       question_status: [
         "pending",
         "answered_by_ai",

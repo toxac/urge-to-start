@@ -9,30 +9,108 @@ import { LogReflectionSchema } from '@/types/progress';
 
 type ProgressRow = Database['public']['Tables']['user_progress']['Row'];
 type ProgressInsert = Database['public']['Tables']['user_progress']['Insert'];
-type AccomplishmentInsert = Database['public']['Tables']['user_accomplishments']['Insert'];
+type ProgressStatus = Database['public']['Enums']['progress_status'];
 
 type ActionResponse<T> = 
   | { success: true; data: T } 
   | { success: false; error: string };
 
 // =========================================================================
-// ZOD RUNTIME VALIDATION SCHEMAS (NOT EXPORTED - keep internal only)
+// ZOD SCHEMAS
 // =========================================================================
 
-// Accepts both string IDs (e.g., 'mission1_quest3_task3') and standard UUIDs
-const CompleteTaskSchema = z.object({
+const RecordProgressSchema = z.object({
   taskId: z.string().min(1, 'Task ID is required'),
+  questId: z.string().min(1, 'Quest ID is required'),
+  missionId: z.string().min(1, 'Mission ID is required'),
   savedPayload: z.record(z.string(), z.any()).default({}),
+  status: z.enum(['in_progress', 'completed', 'not_started', 'repeat', 'blocked']).default('completed'),
 });
 
 // =========================================================================
-// SERVER ACTIONS LAYER
+// SINGLE RESPONSIBILITY SERVER ACTIONS (user_progress Table Only)
 // =========================================================================
 
 /**
- * POST: Logs a reflection for off-app tasks or log counters.
- * Appends a new reflection entry to the reflections array in user_progress.
- * Automatically completes the task when reflections reach or exceed targetCount.
+ * 1. POST: Logs/upserts task progress in user_progress.
+ */
+export async function recordTaskProgressAction(
+  rawInput: z.infer<typeof RecordProgressSchema>
+): Promise<ActionResponse<ProgressRow>> {
+  try {
+    const validated = RecordProgressSchema.parse(rawInput);
+    const supabase = await createClient();
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return { success: false, error: 'Authentication required' };
+    }
+
+    const now = new Date().toISOString();
+    const progressStatus = validated.status as ProgressStatus;
+
+    // Fetch existing row if present for idempotency/status checks
+    const { data: existingProgress } = await supabase
+      .from('user_progress')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('task_id', validated.taskId)
+      .maybeSingle();
+
+    let savedRow: ProgressRow;
+
+    if (existingProgress) {
+      const { data: updated, error: updErr } = await supabase
+        .from('user_progress')
+        .update({
+          status: progressStatus,
+          saved_payload: validated.savedPayload as Json,
+          completed_at: progressStatus === 'completed' ? (existingProgress.completed_at || now) : null,
+          updated_at: now,
+        })
+        .eq('id', existingProgress.id)
+        .select()
+        .single();
+
+      if (updErr || !updated) throw updErr;
+      savedRow = updated;
+    } else {
+      const progressPayload: ProgressInsert = {
+        user_id: user.id,
+        item_type: 'task',
+        task_id: validated.taskId,
+        quest_id: validated.questId,
+        mission_id: validated.missionId,
+        status: progressStatus,
+        saved_payload: validated.savedPayload as Json,
+        reflections: [] as unknown as Json,
+        completed_at: progressStatus === 'completed' ? now : null,
+        updated_at: now,
+      };
+
+      const { data: inserted, error: insErr } = await supabase
+        .from('user_progress')
+        .insert(progressPayload)
+        .select()
+        .single();
+
+      if (insErr || !inserted) throw insErr;
+      savedRow = inserted;
+    }
+
+    revalidatePath('/program');
+    revalidatePath(`/program/mission/${validated.missionId}`);
+    revalidatePath(`/program/quest/${validated.questId}`);
+
+    return { success: true, data: savedRow };
+  } catch (err: any) {
+    console.error('❌ Error in recordTaskProgressAction:', err);
+    return { success: false, error: err.message || 'Failed to record progress' };
+  }
+}
+
+/**
+ * 2. POST: Logs a reflection entry for off-app tasks or log counter tasks.
  */
 export async function logTaskReflectionAction(
   rawInput: z.infer<typeof LogReflectionSchema>
@@ -46,7 +124,7 @@ export async function logTaskReflectionAction(
       return { success: false, error: 'Authentication required' };
     }
 
-    // 1. Fetch task details to verify mission and quest IDs
+    // Fetch task details to obtain task, mission, and quest keys
     const { data: taskData, error: taskErr } = await supabase
       .from('tasks')
       .select('*')
@@ -59,7 +137,7 @@ export async function logTaskReflectionAction(
 
     const task = taskData as Record<string, any>;
 
-    // 2. Fetch current user progress row for this task
+    // Fetch current user progress row for this task
     const { data: existingProgress } = await supabase
       .from('user_progress')
       .select('*')
@@ -79,8 +157,9 @@ export async function logTaskReflectionAction(
     const updatedReflections = [...currentReflections, newEntry];
     const targetCount = validated.targetCount > 0 ? validated.targetCount : 1;
     const isCompleted = updatedReflections.length >= targetCount;
+    const progressStatus: ProgressStatus = isCompleted ? 'completed' : 'in_progress';
+    const now = new Date().toISOString();
 
-    // 3. Upsert into user_progress
     let savedRow: ProgressRow;
 
     if (existingProgress) {
@@ -88,9 +167,9 @@ export async function logTaskReflectionAction(
         .from('user_progress')
         .update({
           reflections: updatedReflections as unknown as Json,
-          status: isCompleted ? 'completed' : 'in_progress',
-          completed_at: isCompleted ? new Date().toISOString() : existingProgress.completed_at,
-          updated_at: new Date().toISOString(),
+          status: progressStatus,
+          completed_at: isCompleted ? (existingProgress.completed_at || now) : null,
+          updated_at: now,
         })
         .eq('id', existingProgress.id)
         .select()
@@ -107,9 +186,9 @@ export async function logTaskReflectionAction(
         mission_id: task.mission_id,
         reflections: updatedReflections as unknown as Json,
         saved_payload: {} as Json,
-        status: isCompleted ? 'completed' : 'in_progress',
-        completed_at: isCompleted ? new Date().toISOString() : null,
-        updated_at: new Date().toISOString(),
+        status: progressStatus,
+        completed_at: isCompleted ? now : null,
+        updated_at: now,
       };
 
       const { data: inserted, error: insErr } = await supabase
@@ -122,20 +201,9 @@ export async function logTaskReflectionAction(
       savedRow = inserted;
     }
 
-    // 4. Trigger completion sequence if target is newly reached
-    if (isCompleted && existingProgress?.status !== 'completed') {
-      await completeTaskExecution({
-        taskId: task.id,
-        savedPayload: {
-          reflections_count: updatedReflections.length,
-          last_reflection: validated.reflectionText,
-        },
-      });
-    }
-
+    revalidatePath('/program');
     if (task.mission_id) {
-      revalidatePath('/dashboard/missions');
-      revalidatePath(`/dashboard/missions/${task.mission_id}`);
+      revalidatePath(`/program/mission/${task.mission_id}`);
     }
 
     return {
@@ -146,199 +214,20 @@ export async function logTaskReflectionAction(
       },
     };
   } catch (err: any) {
+    console.error('❌ Error in logTaskReflectionAction:', err);
     return { success: false, error: err.message || 'Failed to log reflection entry' };
   }
 }
 
 /**
- * POST: Marks an individual task completed.
- * Safely handles idempotency, increments global profiles XP, and processes automatic milestone unlocks.
- */
-export async function completeTaskExecution(rawInput: z.infer<typeof CompleteTaskSchema>): Promise<ActionResponse<{ 
-  taskPointsAwarded: number; 
-  questCompleted: boolean; 
-  questPointsAwarded: number; 
-  badgeUnlocked: string | null; 
-}>> {
-  try {
-    const validated = CompleteTaskSchema.parse(rawInput);
-    const supabase = await createClient();
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) return { success: false, error: 'Authentication required to submit task execution states' };
-
-    // 1. RESOLVE TASK & ACCOMPANYING STRUCTURAL DETAILS
-    const { data: taskData, error: taskErr } = await supabase
-      .from('tasks')
-      .select('*')
-      .eq('id', validated.taskId)
-      .single();
-
-    if (taskErr || !taskData) return { success: false, error: 'The specified platform task could not be verified' };
-
-    const task = taskData as Record<string, any>;
-
-    // 2. IDEMPOTENCY GUARD: Check if the user has already marked this item complete
-    const { data: currentProgress } = await supabase
-      .from('user_progress')
-      .select('*')
-      .eq('user_id', user.id)
-      .eq('task_id', task.id)
-      .maybeSingle();
-
-    if (currentProgress && currentProgress.status === 'completed') {
-      return { success: false, error: 'Idempotency Block: This action task has already been recorded as completed' };
-    }
-
-    let pointsToAward = Number(task.grant_points) || 0;
-
-    // 3. TRANSACTION COHESION STEP A: Write or Update user_progress status logs
-    if (currentProgress) {
-      const { error: updErr } = await supabase
-        .from('user_progress')
-        .update({ 
-          status: 'completed', 
-          saved_payload: validated.savedPayload as Json, 
-          completed_at: new Date().toISOString(), 
-          updated_at: new Date().toISOString() 
-        })
-        .eq('id', currentProgress.id);
-      if (updErr) throw updErr;
-    } else {
-      const progressPayload: ProgressInsert = {
-        user_id: user.id,
-        item_type: 'task',
-        task_id: task.id,
-        quest_id: task.quest_id,
-        mission_id: task.mission_id,
-        status: 'completed',
-        saved_payload: validated.savedPayload as Json,
-        reflections: [] as unknown as Json,
-        completed_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-      const { error: insErr } = await supabase.from('user_progress').insert(progressPayload);
-      if (insErr) throw insErr;
-    }
-
-    // 4. AUTOMATIC UNLOCKS LOOP: Evaluate parent Quest completion states
-    let questCompleted = false;
-    let questPointsAwarded = 0;
-    let badgeUnlocked: string | null = null;
-
-    if (task.quest_id) {
-      const { data: allQuestTasks } = await supabase
-        .from('tasks')
-        .select('id')
-        .eq('quest_id', task.quest_id);
-
-      const { data: userCompletedQuestTasks } = await supabase
-        .from('user_progress')
-        .select('task_id')
-        .eq('user_id', user.id)
-        .eq('quest_id', task.quest_id)
-        .eq('status', 'completed');
-
-      const totalQuestTasksCount = allQuestTasks?.length || 0;
-      const completedQuestTasksCount = (userCompletedQuestTasks?.length || 0) + (currentProgress ? 0 : 1);
-
-      if (totalQuestTasksCount > 0 && completedQuestTasksCount >= totalQuestTasksCount) {
-        questCompleted = true;
-
-        const { data: questData } = await supabase
-          .from('quests')
-          .select('*')
-          .eq('id', task.quest_id)
-          .single();
-
-        const quest = questData as Record<string, any> | null;
-
-        if (quest && quest.ai_config) {
-          const aiConfig = quest.ai_config as {
-            on_success?: {
-              grant_points?: number;
-              badge_key?: string;
-            };
-          };
-          
-          const onSuccess = aiConfig.on_success || {};
-          questPointsAwarded = onSuccess.grant_points || 0;
-          pointsToAward += questPointsAwarded;
-
-          const badgeKey = onSuccess.badge_key;
-          if (badgeKey) {
-            const { data: existingAchievement } = await supabase
-              .from('user_accomplishments')
-              .select('id')
-              .eq('user_id', user.id)
-              .eq('badge_key', badgeKey)
-              .maybeSingle();
-
-            if (!existingAchievement) {
-              badgeUnlocked = badgeKey;
-              const accomplishmentPayload: AccomplishmentInsert = {
-                user_id: user.id,
-                badge_key: badgeKey,
-                awarded_at: new Date().toISOString()
-              };
-              await supabase.from('user_accomplishments').insert(accomplishmentPayload);
-            }
-          }
-        }
-
-        const questProgressRecord: ProgressInsert = {
-          user_id: user.id,
-          item_type: 'quest',
-          quest_id: task.quest_id,
-          mission_id: task.mission_id,
-          status: 'completed',
-          saved_payload: {} as Json,
-          reflections: [] as unknown as Json,
-          completed_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        };
-        await supabase.from('user_progress').insert(questProgressRecord);
-      }
-    }
-
-    // 5. TRANSACTION COHESION STEP B: Increment user's platform XP profile row balance
-    const { data: profile } = await supabase.from('profiles').select('accumulated_xp').eq('id', user.id).single();
-    if (profile) {
-      const freshXPTotal = (profile.accumulated_xp || 0) + pointsToAward;
-      await supabase
-        .from('profiles')
-        .update({ accumulated_xp: freshXPTotal, updated_at: new Date().toISOString() })
-        .eq('id', user.id);
-    }
-
-    revalidatePath('/dashboard/missions');
-    if (task.mission_id) {
-      revalidatePath(`/dashboard/missions/${task.mission_id}`);
-    }
-
-    return {
-      success: true,
-      data: {
-        taskPointsAwarded: Number(task.grant_points) || 0,
-        questCompleted,
-        questPointsAwarded,
-        badgeUnlocked
-      }
-    };
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Failed to process task completion sequence' };
-  }
-}
-
-/**
- * GET: Fetches the calling user's entire completion history log dataset.
+ * 3. GET: Fetches the active user's complete user_progress array.
  */
 export async function getMyProgressTracker(): Promise<ActionResponse<ProgressRow[]>> {
   try {
     const supabase = await createClient();
 
     const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) return { success: false, error: 'Authentication required to extract user progress logs' };
+    if (authError || !user) return { success: false, error: 'Authentication required' };
 
     const { data, error } = await supabase
       .from('user_progress')
@@ -349,6 +238,6 @@ export async function getMyProgressTracker(): Promise<ActionResponse<ProgressRow
 
     return { success: true, data: data || [] };
   } catch (err: any) {
-    return { success: false, error: err.message || 'System exception compiling user progress dataset' };
+    return { success: false, error: err.message || 'Failed to fetch user progress dataset' };
   }
 }
