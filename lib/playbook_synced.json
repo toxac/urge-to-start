@@ -12,6 +12,13 @@
       "user_profile"
     ],
     "success_message": "You've completed Mission 1: Beg. Borrow. Steel. You defined your 'why,' made a real commitment, mapped your hidden resources, built your support squad, and faced rejection head-on. You're no longer in the 'thinking' phase—you're in the 'doing' phase. The foundation is laid. You are ready for Mission 2.",
+    "badge_config": {
+      "key": "badge_mission_1",
+      "title": "Resourceful Founder",
+      "description": "Completed Mission 1: Beg. Borrow. Steel. Mastered asking, faced rejection, and mapped your initial founder assets.",
+      "unlocked_identity": "Resilient Action-Taker",
+      "icon_key": "ShieldCheck"
+    },
     "quests": [
       {
         "id": "mission1_quest1",
@@ -26,9 +33,12 @@
         "context": [
           "user_profile"
         ],
-        "on_success": {
-          "grant_points": 50,
-          "badge_key": "PATHFINDER"
+        "badge_config": {
+          "key": "badge_quest_1_1",
+          "title": "Pathfinder",
+          "description": "Completed Quest 1: Defined your core why, made a real commitment, and faced your initial fears.",
+          "unlocked_identity": "Self-Aware Founder",
+          "icon_key": "Compass"
         },
         "notes": [
           {
@@ -45,8 +55,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: The New Beginning. You know your 'why,' you've made a commitment, and you've faced your fears. That's more than most people ever do. On to the next quest.",
-        "created_at": "2026-08-05T16:05:27.595Z",
-        "updated_at": "2026-08-05T16:05:27.595Z",
+        "created_at": "2026-08-09T16:34:21.377Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission1_quest1_task1",
@@ -87,10 +97,7 @@
             "component_key": "MotivationForm",
             "reflection_prompt": "Look at your 'why_statement.' Does it resonate with you on a gut level? If not, tweak it now. This will be your anchor.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "HONEST_SELF"
-            },
+            "grant_points": 25,
             "challenges": [
               {
                 "title": "The 5-Minute Timer",
@@ -101,8 +108,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission1_quest1_task2",
@@ -136,16 +143,13 @@
             "component_key": "CommitmentForm",
             "reflection_prompt": "Look at your weekly hours. Is this a realistic, sustainable commitment for the next few months? If you can only do 2 hours a day, own that and build your plan around it.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "ACTION_COMMITMENT"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission1_quest1_task3",
@@ -179,16 +183,13 @@
             "component_key": "RoadblockForm",
             "reflection_prompt": "What's the scariest roadblock on this list? We can help you with that. Let's make a plan.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "ROADBLOCK_ACKNOWLEDGED"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -205,9 +206,12 @@
         "context": [
           "user_profile"
         ],
-        "on_success": {
-          "grant_points": 50,
-          "badge_key": "RESOURCEFUL"
+        "badge_config": {
+          "key": "badge_quest_1_2",
+          "title": "Asset Mapper",
+          "description": "Completed Quest 2: Mapped your connections and audited your skills to unlock hidden leverage.",
+          "unlocked_identity": "Resourceful Strategist",
+          "icon_key": "Network"
         },
         "notes": [
           {
@@ -224,8 +228,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: What You've Got. You've mapped your network and skills. You're not starting from zero—you have assets. Now let's put them to work.",
-        "created_at": "2026-08-05T16:05:27.595Z",
-        "updated_at": "2026-08-05T16:05:27.595Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission1_quest2_task1",
@@ -259,10 +263,7 @@
             "component_key": "SocialFootprintForm",
             "reflection_prompt": "Who is the most valuable person in your network right now? Why? Consider reaching out to them casually this week.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "NETWORK_MAPPER"
-            },
+            "grant_points": 25,
             "challenges": [
               {
                 "title": "The Connection Challenge",
@@ -273,8 +274,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission1_quest2_task2",
@@ -308,16 +309,13 @@
             "component_key": "SkillsForm",
             "reflection_prompt": "List your top 3 to 5 skills. How could these skills help a potential customer solve their problem?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "SKILL_AUDITOR"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -334,9 +332,12 @@
         "context": [
           "user_profile"
         ],
-        "on_success": {
-          "grant_points": 60,
-          "badge_key": "ASKER"
+        "badge_config": {
+          "key": "badge_quest_1_3",
+          "title": "Fearless Asker",
+          "description": "Completed Quest 3: Assembled your support squad, introduced yourself online, and made real asks.",
+          "unlocked_identity": "Proactive Initiator",
+          "icon_key": "Megaphone"
         },
         "notes": [
           {
@@ -359,14 +360,14 @@
           }
         ],
         "success_message": "You've completed Quest 3: Start Asking. You've built your squad, introduced yourself to the community, and asked for a discount. You're now officially an 'asker.' The fear of asking is fading. Next up: chasing rejection.",
-        "created_at": "2026-08-05T16:05:27.595Z",
-        "updated_at": "2026-08-05T16:05:27.595Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission1_quest3_task1",
             "title": "Build Your Squad",
             "sequence": 1,
-            "execution_type": "off-task-action",
+            "execution_type": "standard-form",
             "estimated_minutes": 30,
             "briefing_text": "Your success hinges on a support system. Send a short message to 3-5 people (friends, family, colleagues) and tell them you're starting a business and ask if they'd be part of your 'cheer squad' to follow your progress and hold you accountable. Use the template below—just customize it.\n\nTemplate: Hey [Name], I'm starting a business and I need people in my corner. Would you be willing to be part of my 'cheer squad'? I'll share my weekly progress with you. All you need to do is check in and hold me accountable. No heavy lifting—just your support. Would you be up for that?",
             "mission_id": "mission-1",
@@ -401,16 +402,13 @@
             "component_key": "CheerSquadForm",
             "reflection_prompt": "Who did you ask? What was their reaction? Having a support network is your secret weapon.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 35,
-              "badge_key": "SQUAD_ASSEMBLED"
-            },
+            "grant_points": 35,
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission1_quest3_task2",
@@ -437,24 +435,21 @@
             "component_key": "CommunityIntroForm",
             "reflection_prompt": "What is one thing you're most excited to learn from the community?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "COMMUNITY_MEMBER"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission1_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission1_quest3_task3",
             "title": "Ask for Something",
             "sequence": 3,
-            "execution_type": "log_counter",
+            "execution_type": "off-task-action",
             "estimated_minutes": 30,
             "briefing_text": "Now you're warmed up. Let's make a bigger ask. Find a service, tool, or product you use (or want to use) for your business and ask for a discount or a better deal. This could be a software subscription, a freelance service, or even a coffee shop. Practice asking without hesitation.",
             "mission_id": "mission-1",
@@ -472,13 +467,10 @@
                 "title": "How to Ask for a Discount"
               }
             ],
-            "component_key": "DiscountAskLogger",
+            "component_key": "OffAppActionForm",
             "reflection_prompt": "How did it feel? What was the response? You've just proven you can ask for something. Now, think about how much easier this will feel next time.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 30,
-              "badge_key": "FIRST_ASK"
-            },
+            "grant_points": 30,
             "challenges": [
               {
                 "title": "The 3-Ask Challenge",
@@ -491,8 +483,8 @@
               "mission1_quest3_task1"
             ],
             "target_count": 1,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -509,9 +501,12 @@
         "context": [
           "user_profile"
         ],
-        "on_success": {
-          "grant_points": 50,
-          "badge_key": "RESILIENT"
+        "badge_config": {
+          "key": "badge_quest_1_4",
+          "title": "Rejection Master",
+          "description": "Completed Quest 4: Collected 'Nos', made bold asks, and conquered the fear of rejection.",
+          "unlocked_identity": "Bulletproof Builder",
+          "icon_key": "Flame"
         },
         "notes": [
           {
@@ -534,14 +529,14 @@
           }
         ],
         "success_message": "You've completed Quest 4: No Is Just Data. You've faced rejection, made bold asks, and survived. You're now more resilient than 99% of people who never ask. You're ready for Mission 2.",
-        "created_at": "2026-08-05T16:05:27.595Z",
-        "updated_at": "2026-08-05T16:05:27.595Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission1_quest4_task1",
             "title": "Practice Getting Nos",
             "sequence": 1,
-            "execution_type": "log_counter",
+            "execution_type": "off-task-action",
             "estimated_minutes": 45,
             "briefing_text": "Your challenge: Get 2 'No's. This could be from asking people for feedback on an idea, asking for a sale, or any other reasonable request where 'No' is a possible response. The goal is to collect them. Each 'No' is a data point and a step forward.\n\nSuggested scenarios:\n• Ask a stranger for directions to a place you already know (see if they say no)\n• Ask a friend to buy your product/service (even if it doesn't exist yet)\n• Ask a local business if they'd partner with you (without a clear proposal)\n• Ask someone for a big favor (like covering your shift or lending you money)",
             "mission_id": "mission-1",
@@ -566,25 +561,22 @@
                 "title": "Handling Rejection Like a Pro"
               }
             ],
-            "component_key": "NoCounter",
+            "component_key": "OffAppActionForm",
             "reflection_prompt": "What did you learn from each 'No'? Did any of them give you a reason why that could be helpful?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "NO_HUNTER"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
             "target_count": 2,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission1_quest4_task2",
             "title": "The Bold Ask",
             "sequence": 2,
-            "execution_type": "log_counter",
+            "execution_type": "off-task-action",
             "estimated_minutes": 30,
             "briefing_text": "Now it's time for the real test. Make a request that you're 95% sure will get a 'no.' Ask for something big, bold, or unreasonable. The goal isn't to get a 'yes'—it's to prove to yourself that rejection won't kill you.\n\n🔥 Examples of bold asks:\n• Ask a celebrity or influencer for a call\n• Ask a company for free lifetime access to their product\n• Ask a local business to give you something for free\n• Ask someone to introduce you to their most valuable contact\n• Ask for a 90% discount on something\n\n💡 The more unreasonable, the better. You're not trying to get a yes. You're trying to get comfortable with rejection.",
             "mission_id": "mission-1",
@@ -609,13 +601,10 @@
                 "title": "The Art of the Bold Ask"
               }
             ],
-            "component_key": "BoldAskLogger",
+            "component_key": "OffAppActionForm",
             "reflection_prompt": "You just made a bold ask. You probably got a 'no.' And you're still standing. That's the whole point. You're now more resilient than 99% of people who never ask.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 35,
-              "badge_key": "BOLD_ASKER"
-            },
+            "grant_points": 35,
             "challenges": [
               {
                 "title": "The Bold Ask",
@@ -628,8 +617,8 @@
               "mission1_quest4_task1"
             ],
             "target_count": 1,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission1_quest4_task3",
@@ -637,7 +626,7 @@
             "sequence": 3,
             "execution_type": "standard-form",
             "estimated_minutes": 15,
-            "briefing_text": "You've done the hard work. You've asked, been rejected, and survived. Now let's reflect on what this means for your journey.",
+            "briefing_text": "You've done the hard work. You've asked, been rejected, and survived. Now let's turn those experiences into fuel by defining your next milestone targets.",
             "mission_id": "mission-1",
             "quest_id": "mission1_quest4",
             "execution_environment": null,
@@ -653,27 +642,25 @@
                 "title": "Rejection Is the Price of Admission"
               }
             ],
-            "component_key": "RejectionReflectionForm",
-            "reflection_prompt": "You've proven something to yourself today. What's the most important thing you learned about rejection? How will this change how you approach your business?",
+            "component_key": "AuditForm",
+            "reflection_prompt": "You've proven something to yourself today. Looking at the growth goals you just set, what is the most important mindset shift you need to achieve them?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "REJECTION_MASTER"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
-              "mission1_quest4_task2"
+              "mission1_quest4_task2",
+              "mission1_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-05T16:05:27.595Z",
-    "updated_at": "2026-08-05T16:05:27.595Z"
+    "created_at": "2026-08-09T16:34:21.378Z",
+    "updated_at": "2026-08-09T16:34:21.378Z"
   },
   "mission2": {
     "id": "mission-2",
@@ -689,6 +676,13 @@
       "mission1_data"
     ],
     "success_message": "You've completed Mission 2: Discovery. You've mined your own frustrations, observed the people around you, researched the wider world, and picked the best opportunity to pursue. You're no longer searching—you have a direction. Mission 3 awaits.",
+    "badge_config": {
+      "key": "badge_mission_2",
+      "title": "Opportunity Architect",
+      "description": "Completed Mission 2: Discovery. Uncovered market pains, evaluated ideas objectively, and committed to a high-potential direction.",
+      "unlocked_identity": "Focused Opportunity Hunter",
+      "icon_key": "Search"
+    },
     "quests": [
       {
         "id": "mission2_quest1",
@@ -703,9 +697,12 @@
         "context": [
           "user_profile"
         ],
-        "on_success": {
-          "grant_points": 60,
-          "badge_key": "SELF_AWARE"
+        "badge_config": {
+          "key": "badge_quest_2_1",
+          "title": "Self Miner",
+          "description": "Completed Quest 1: Mined your daily frustrations and skills to uncover high-leverage business opportunities.",
+          "unlocked_identity": "Self-Aware Problem Finder",
+          "icon_key": "Key"
         },
         "notes": [
           {
@@ -728,8 +725,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: Mine Yourself. You've identified problems from your own life and skills. You're building a foundation for your business.",
-        "created_at": "2026-08-05T16:05:27.595Z",
-        "updated_at": "2026-08-05T16:05:27.595Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission2_quest1_task1",
@@ -766,10 +763,7 @@
               "category": "personal_problems",
               "reference": "user_opportunities"
             },
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "FRUSTRATION_SPOTTER"
-            },
+            "grant_points": 20,
             "challenges": [
               {
                 "title": "The Frustration Log",
@@ -780,8 +774,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission2_quest1_task2",
@@ -815,18 +809,15 @@
             "component_key": "OpportunityFromFrustrationForm",
             "reflection_prompt": "Which of your frustrations could someone pay to have solved? Why?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "PROBLEM_REFORMER"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission2_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.595Z",
-            "updated_at": "2026-08-05T16:05:27.595Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission2_quest1_task3",
@@ -863,16 +854,13 @@
               "category": "skills",
               "reference": "user_opportunities"
             },
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "SKILL_AUDITOR"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission2_quest1_task4",
@@ -906,18 +894,15 @@
             "component_key": "SkillsOpportunityForm",
             "reflection_prompt": "How could you package your skills as a service or product? What would be the simplest version?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "SKILL_ENTREPRENEUR"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission2_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -934,9 +919,12 @@
         "context": [
           "user_profile"
         ],
-        "on_success": {
-          "grant_points": 50,
-          "badge_key": "OBSERVER"
+        "badge_config": {
+          "key": "badge_quest_2_2",
+          "title": "Keen Observer",
+          "description": "Completed Quest 2: Observed real-world complaints and identified target audience pain points.",
+          "unlocked_identity": "Empathetic Investigator",
+          "icon_key": "Eye"
         },
         "notes": [
           {
@@ -959,8 +947,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: People Watching. You've observed problems in your immediate circle. These people are your first potential customers.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission2_quest2_task1",
@@ -997,10 +985,7 @@
               "category": "zone_of_influence",
               "reference": "user_opportunities"
             },
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "DETECTIVE"
-            },
+            "grant_points": 25,
             "challenges": [
               {
                 "title": "The 5 Conversations Challenge",
@@ -1011,8 +996,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission2_quest2_task2",
@@ -1046,18 +1031,15 @@
             "component_key": "PeopleOpportunityForm",
             "reflection_prompt": "Which of these problems could be the foundation of a business? Why?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "OPPORTUNITY_SPOTTER"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission2_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -1074,9 +1056,12 @@
         "context": [
           "user_profile"
         ],
-        "on_success": {
-          "grant_points": 50,
-          "badge_key": "WORLD_READY"
+        "badge_config": {
+          "key": "badge_quest_2_3",
+          "title": "Market Explorer",
+          "description": "Completed Quest 3: Scanned online communities, macro trends, and marketplaces to spot hidden demand gaps.",
+          "unlocked_identity": "Broad-Spectrum Researcher",
+          "icon_key": "Globe"
         },
         "notes": [
           {
@@ -1099,8 +1084,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: The Wider World. You've discovered problems beyond your immediate circle. Your opportunity set is now diverse.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission2_quest3_task1",
@@ -1134,10 +1119,7 @@
             "component_key": "CommunityProblemForm",
             "reflection_prompt": "What's the most common problem you're seeing in these communities? Why do you think it's common?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "COMMUNITY_EXPLORER"
-            },
+            "grant_points": 20,
             "challenges": [
               {
                 "title": "The Deep Dive",
@@ -1148,8 +1130,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission2_quest3_task2",
@@ -1183,16 +1165,13 @@
             "component_key": "TrendProblemForm",
             "reflection_prompt": "What trend is creating new problems? Who is being affected by these changes?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "TREND_SPOTTER"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission2_quest3_task3",
@@ -1226,16 +1205,13 @@
             "component_key": "MarketplaceProblemForm",
             "reflection_prompt": "What's a problem that people are trying to solve but no one is solving well? Where's the gap?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "MARKETPLACE_SCANNER"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -1253,9 +1229,12 @@
           "user_profile",
           "user_opportunities"
         ],
-        "on_success": {
-          "grant_points": 60,
-          "badge_key": "DECISION_MAKER"
+        "badge_config": {
+          "key": "badge_quest_2_4",
+          "title": "Decisive Founder",
+          "description": "Completed Quest 4: Scored opportunities objectively, picked your target problem, and passed the decision gate.",
+          "unlocked_identity": "Committed Business Builder",
+          "icon_key": "CheckCircle"
         },
         "notes": [
           {
@@ -1278,8 +1257,8 @@
           }
         ],
         "success_message": "You've completed Quest 4: The Decision. You've evaluated your opportunities, picked the best one, and committed to a direction. You're no longer searching—you're building. Mission 3 awaits.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission2_quest4_task1",
@@ -1313,16 +1292,13 @@
             "component_key": "OpportunityScoringForm",
             "reflection_prompt": "Look at your highest-scoring opportunity. Why did it score so high? What makes it the most promising?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 30,
-              "badge_key": "SCORER"
-            },
+            "grant_points": 30,
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission2_quest4_task2",
@@ -1356,18 +1332,15 @@
             "component_key": "OpportunityPickerForm",
             "reflection_prompt": "Why did you pick this opportunity? What made it stand out from the others?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 15,
-              "badge_key": "OPPORTUNITY_PICKER"
-            },
+            "grant_points": 15,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission2_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission2_quest4_task3",
@@ -1394,24 +1367,21 @@
             "component_key": "DecisionGateForm",
             "reflection_prompt": "What's your biggest hesitation about this opportunity? Address it now.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 15,
-              "badge_key": "COMMITTED"
-            },
+            "grant_points": 15,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission2_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-05T16:05:27.596Z",
-    "updated_at": "2026-08-05T16:05:27.596Z"
+    "created_at": "2026-08-09T16:34:21.378Z",
+    "updated_at": "2026-08-09T16:34:21.378Z"
   },
   "mission3": {
     "id": "mission-3",
@@ -1428,6 +1398,13 @@
       "user_projects"
     ],
     "success_message": "You've completed Mission 3: Getting Real. You've validated your problem with real customers, defined your Minimum Sellable Product, understood your environment, and made a conscious decision about your business. You're no longer dreaming—you're building with intention. Mission 4 awaits.",
+    "badge_config": {
+      "key": "badge_mission_3",
+      "title": "Validated Strategist",
+      "description": "Completed Mission 3: Getting Real. Validated customer pain, defined your MSP, and made an intentional Go/No-Go decision.",
+      "unlocked_identity": "Intentional Builder",
+      "icon_key": "ShieldCheck"
+    },
     "quests": [
       {
         "id": "mission3_quest1",
@@ -1444,9 +1421,12 @@
           "user_opportunities",
           "user_projects"
         ],
-        "on_success": {
-          "grant_points": 65,
-          "badge_key": "PROBLEM_MASTER"
+        "badge_config": {
+          "key": "badge_quest_3_1",
+          "title": "Problem Master",
+          "description": "Completed Quest 1: Conducted real customer interviews and defined a crystal-clear customer persona.",
+          "unlocked_identity": "Customer-Centric Investigator",
+          "icon_key": "Search"
         },
         "notes": [
           {
@@ -1469,8 +1449,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: The Deep Dive. You now understand your problem intimately—when it happens, who it affects, and what people do about it.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission3_quest1_task1",
@@ -1504,10 +1484,7 @@
             "component_key": "ProblemDefinitionForm",
             "reflection_prompt": "Looking at your problem statement, would someone who has this problem recognize themselves in it? If not, go deeper.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "PROBLEM_DEFINER"
-            },
+            "grant_points": 20,
             "challenges": [
               {
                 "title": "The 5-Why Challenge",
@@ -1518,8 +1495,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission3_quest1_task2",
@@ -1553,18 +1530,15 @@
             "component_key": "CustomerInterviewLogger",
             "reflection_prompt": "What surprised you most in these interviews? What did you learn that you didn't expect?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 30,
-              "badge_key": "CUSTOMER_TALKER"
-            },
+            "grant_points": 30,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission3_quest1_task1"
             ],
             "target_count": 5,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission3_quest1_task3",
@@ -1598,18 +1572,15 @@
             "component_key": "CustomerPersonaForm",
             "reflection_prompt": "Would this person recognize themselves in this persona? If not, go back and add more detail.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "PERSONA_CREATOR"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission3_quest1_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -1627,9 +1598,12 @@
           "user_profile",
           "user_projects"
         ],
-        "on_success": {
-          "grant_points": 60,
-          "badge_key": "MSP_DEFINER"
+        "badge_config": {
+          "key": "badge_quest_3_2",
+          "title": "MSP Architect",
+          "description": "Completed Quest 2: Designed a lean, focused Minimum Sellable Product ready for market execution.",
+          "unlocked_identity": "Lean Product Strategist",
+          "icon_key": "Layers"
         },
         "notes": [
           {
@@ -1652,8 +1626,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: Build to Sell. You've defined your Minimum Sellable Product. It's small, focused, and ready to sell.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission3_quest2_task1",
@@ -1680,10 +1654,7 @@
             "component_key": "SolutionTypeForm",
             "reflection_prompt": "Why did you choose this approach? What makes it the best fit for your customer?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "SOLUTION_CHOOSER"
-            },
+            "grant_points": 20,
             "challenges": [
               {
                 "title": "The 7-Day Build",
@@ -1696,8 +1667,8 @@
               "mission3_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission3_quest2_task2",
@@ -1731,18 +1702,15 @@
             "component_key": "MSPDefinitionForm",
             "reflection_prompt": "Is this something you could sell today? If not, it's too big. Cut it down.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 15,
-              "badge_key": "MSP_DESCRIBER"
-            },
+            "grant_points": 15,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission3_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission3_quest2_task3",
@@ -1769,18 +1737,15 @@
             "component_key": "MSPBuildForm",
             "reflection_prompt": "Would you buy this? At this price? For this value? Be honest.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "MSP_BUILDER"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission3_quest2_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -1798,9 +1763,12 @@
           "user_profile",
           "user_projects"
         ],
-        "on_success": {
-          "grant_points": 50,
-          "badge_key": "ENVIRONMENT_READY"
+        "badge_config": {
+          "key": "badge_quest_3_3",
+          "title": "Landscape Analyst",
+          "description": "Completed Quest 3: Mapped competitive workarounds and verified essential business compliance requirements.",
+          "unlocked_identity": "Battlefield Strategist",
+          "icon_key": "Map"
         },
         "notes": [
           {
@@ -1823,8 +1791,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: Know the Battlefield. You understand the landscape, the trends, and the compliance requirements. You're ready to make an informed decision.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission3_quest3_task1",
@@ -1858,18 +1826,15 @@
             "component_key": "LandscapeForm",
             "reflection_prompt": "Looking at this landscape, what's your biggest opportunity? What's your biggest threat?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "LANDSCAPE_MAPPER"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission3_quest2_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission3_quest3_task2",
@@ -1896,18 +1861,15 @@
             "component_key": "ComplianceForm",
             "reflection_prompt": "What's the biggest compliance requirement you need to address before launching?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "COMPLIANCE_CHECKER"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission3_quest3_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -1925,9 +1887,12 @@
           "user_profile",
           "user_projects"
         ],
-        "on_success": {
-          "grant_points": 60,
-          "badge_key": "DECISION_MAKER"
+        "badge_config": {
+          "key": "badge_quest_3_4",
+          "title": "Decisive Gatekeeper",
+          "description": "Completed Quest 4: Assessed project viability, faced worst-case scenarios, and passed the official Go/No-Go gate.",
+          "unlocked_identity": "Determined Founder",
+          "icon_key": "Flag"
         },
         "notes": [
           {
@@ -1950,8 +1915,8 @@
           }
         ],
         "success_message": "You've completed Mission 3: Getting Real. You've validated your problem, defined your MSP, understood the environment, and made a conscious decision. You're no longer dreaming—you're building with intention. Mission 4 awaits.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission3_quest4_task1",
@@ -1985,18 +1950,15 @@
             "component_key": "ViabilityCheckForm",
             "reflection_prompt": "If this didn't work out, what would you regret more—starting or not starting?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "VIABILITY_CHECKER"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission3_quest3_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission3_quest4_task2",
@@ -2023,18 +1985,15 @@
             "component_key": "WorstCaseForm",
             "reflection_prompt": "What's the worst that could happen? And what would you do next?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "REALIST"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission3_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission3_quest4_task3",
@@ -2068,24 +2027,21 @@
             "component_key": "DecisionGateForm",
             "reflection_prompt": "What's the one thing that pushed you to this decision?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 15,
-              "badge_key": "DECISION_COMMITTED"
-            },
+            "grant_points": 15,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission3_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-05T16:05:27.596Z",
-    "updated_at": "2026-08-05T16:05:27.596Z"
+    "created_at": "2026-08-09T16:34:21.378Z",
+    "updated_at": "2026-08-09T16:34:21.378Z"
   },
   "mission4": {
     "id": "mission-4",
@@ -2101,6 +2057,13 @@
       "user_projects"
     ],
     "success_message": "You've completed Mission 4: The Business Engine. You've defined your offer, set your price, built your acquisition plan, run the numbers, and made a conscious decision. You know exactly how your business makes money—or if it can at all. Mission 5 awaits.",
+    "badge_config": {
+      "key": "badge_mission_4",
+      "title": "Engine Builder",
+      "description": "Completed Mission 4: The Business Engine. Modeled pricing, customer acquisition channels, and unit economics.",
+      "unlocked_identity": "Commercial Strategist",
+      "icon_key": "Cpu"
+    },
     "quests": [
       {
         "id": "mission4_quest1",
@@ -2116,9 +2079,12 @@
           "user_profile",
           "user_projects"
         ],
-        "on_success": {
-          "grant_points": 60,
-          "badge_key": "OFFER_DEFINER"
+        "badge_config": {
+          "key": "badge_quest_4_1",
+          "title": "Offer Architect",
+          "description": "Completed Quest 1: Defined your promise, focused feature sets, and mapped the customer experience.",
+          "unlocked_identity": "Value Creator",
+          "icon_key": "Gift"
         },
         "notes": [
           {
@@ -2141,8 +2107,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: Shape Your Offer. You have a clear value proposition, a focused feature set, and a mapped customer experience. You know what you're selling.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission4_quest1_task1",
@@ -2176,10 +2142,7 @@
             "component_key": "ValuePropositionForm",
             "reflection_prompt": "If your customer could only remember one thing about your offer, what should it be? That's your value proposition.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "VALUE_PROMISE"
-            },
+            "grant_points": 20,
             "challenges": [
               {
                 "title": "The 2-Minute Test",
@@ -2192,8 +2155,8 @@
               "mission3_quest4_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission4_quest1_task2",
@@ -2227,18 +2190,15 @@
             "component_key": "FeatureBrainstormForm",
             "reflection_prompt": "Look at your list. What features are you most excited about? Which ones are you dreading? That's a signal.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 15,
-              "badge_key": "FEATURE_BRAINSTORMER"
-            },
+            "grant_points": 15,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission4_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission4_quest1_task3",
@@ -2272,18 +2232,15 @@
             "component_key": "FeaturePrioritizationForm",
             "reflection_prompt": "You're saying 'no' to features. How does that feel? The best founders get comfortable with saying 'no' to good ideas so they can say 'yes' to great ones.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "FEATURE_PRIORITIZER"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission4_quest1_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission4_quest1_task4",
@@ -2317,18 +2274,15 @@
             "component_key": "CustomerExperienceForm",
             "reflection_prompt": "Put yourself in your customer's shoes. What are they feeling at each step? Where does the anxiety or confusion happen?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "EXPERIENCE_MAPPER"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission4_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -2346,9 +2300,12 @@
           "user_profile",
           "user_projects"
         ],
-        "on_success": {
-          "grant_points": 50,
-          "badge_key": "PRICE_SETTER"
+        "badge_config": {
+          "key": "badge_quest_4_2",
+          "title": "Value Pricer",
+          "description": "Completed Quest 2: Named your price confidently based on value perception, not fear.",
+          "unlocked_identity": "Monetization Strategist",
+          "icon_key": "DollarSign"
         },
         "notes": [
           {
@@ -2371,8 +2328,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: Price It Right. You have a confident price based on value, not fear.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission4_quest2_task1",
@@ -2406,10 +2363,7 @@
             "component_key": "PriceSettingForm",
             "reflection_prompt": "If you were your customer, would you pay this price? Why or why not?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "PRICE_NAMER"
-            },
+            "grant_points": 25,
             "challenges": [
               {
                 "title": "The $1,000 Test",
@@ -2422,8 +2376,8 @@
               "mission4_quest1_task4"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission4_quest2_task2",
@@ -2450,18 +2404,15 @@
             "component_key": "PriceAssessmentForm",
             "reflection_prompt": "If your price feels 'too cheap,' you might be sending the wrong signal. What would make it feel premium?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "PRICE_ASSESSOR"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission4_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -2479,9 +2430,12 @@
           "user_profile",
           "user_projects"
         ],
-        "on_success": {
-          "grant_points": 60,
-          "badge_key": "ACQUISITION_PLANNER"
+        "badge_config": {
+          "key": "badge_quest_4_3",
+          "title": "Acquisition Planner",
+          "description": "Completed Quest 3: Selected a focused acquisition channel, crafted compelling messaging, and built an acquisition plan.",
+          "unlocked_identity": "Growth Initiator",
+          "icon_key": "Target"
         },
         "notes": [
           {
@@ -2504,8 +2458,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: Find Your Customers. You have a focused channel, a clear message, and a realistic acquisition plan.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission4_quest3_task1",
@@ -2539,10 +2493,7 @@
             "component_key": "ChannelSelectionForm",
             "reflection_prompt": "Why did you pick this channel over all others? What makes it your best first bet?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "CHANNEL_CHOOSER"
-            },
+            "grant_points": 20,
             "challenges": [
               {
                 "title": "The 1-Customer Challenge",
@@ -2555,8 +2506,8 @@
               "mission4_quest2_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission4_quest3_task2",
@@ -2583,18 +2534,15 @@
             "component_key": "MessagingForm",
             "reflection_prompt": "Would you respond to this message? If not, rewrite it until you would.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 15,
-              "badge_key": "MESSAGE_CRAFTER"
-            },
+            "grant_points": 15,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission4_quest3_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission4_quest3_task3",
@@ -2621,18 +2569,15 @@
             "component_key": "AcquisitionAssessmentForm",
             "reflection_prompt": "If this acquisition plan fails, what's your backup plan? Always have a Plan B.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "ACQUISITION_ASSESSOR"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission4_quest3_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -2650,9 +2595,12 @@
           "user_profile",
           "user_projects"
         ],
-        "on_success": {
-          "grant_points": 65,
-          "badge_key": "FINANCIAL_MASTER"
+        "badge_config": {
+          "key": "badge_quest_4_4",
+          "title": "Financial Master",
+          "description": "Completed Quest 4: Modeled cost structures, fixed/variable costs, and unit economics profitability.",
+          "unlocked_identity": "Numbers Realist",
+          "icon_key": "Calculator"
         },
         "notes": [
           {
@@ -2675,8 +2623,8 @@
           }
         ],
         "success_message": "You've completed Quest 4: The Financials. You understand your costs, your unit economics, and your profitability. The numbers tell a story—are you listening?",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission4_quest4_task1",
@@ -2703,18 +2651,15 @@
             "component_key": "CostStructureForm",
             "reflection_prompt": "Look at your costs. What surprised you? What could you reduce or eliminate?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "COST_ANALYZER"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission4_quest3_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission4_quest4_task2",
@@ -2741,18 +2686,15 @@
             "component_key": "CostAnalysisForm",
             "reflection_prompt": "If you had to cut your costs in half, how would you do it? Would the customer experience suffer?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "COST_UNDERSTANDER"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission4_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission4_quest4_task3",
@@ -2779,18 +2721,15 @@
             "component_key": "ProfitabilityCheckForm",
             "reflection_prompt": "If you're not making a profit, what would need to change? More sales? Higher price? Lower costs? Be specific.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "PROFITABILITY_CHECKER"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission4_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -2808,9 +2747,12 @@
           "user_profile",
           "user_projects"
         ],
-        "on_success": {
-          "grant_points": 40,
-          "badge_key": "FINAL_DECISION"
+        "badge_config": {
+          "key": "badge_quest_4_5",
+          "title": "Commercial Decision Maker",
+          "description": "Completed Quest 5: Evaluated unit economics objectively and made a conscious commercial call.",
+          "unlocked_identity": "Data-Driven Founder",
+          "icon_key": "CheckSquare"
         },
         "notes": [
           {
@@ -2833,8 +2775,8 @@
           }
         ],
         "success_message": "You've completed Mission 4: The Business Engine. You've made a conscious decision based on real numbers. This is what building a real business looks like.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission4_quest5_task1",
@@ -2861,10 +2803,7 @@
             "component_key": "FinalDecisionForm",
             "reflection_prompt": "What did you learn from this financial exercise? If you're saying 'no' to this business, what did you learn that you'll take to the next one?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "DECISION_MAKER"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": {
               "role": "Financial Decision Advisor",
@@ -2879,14 +2818,14 @@
               "mission4_quest4_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-05T16:05:27.596Z",
-    "updated_at": "2026-08-05T16:05:27.596Z"
+    "created_at": "2026-08-09T16:34:21.378Z",
+    "updated_at": "2026-08-09T16:34:21.378Z"
   },
   "mission5": {
     "id": "mission-5",
@@ -2904,6 +2843,13 @@
       "user_contacts"
     ],
     "success_message": "You've completed Mission 5: Build & Launch. You planned your build, executed your plan, gathered testers, validated your product, and launched. You're no longer a person with an idea—you're a founder with a live business. Welcome to the other side. 🎉",
+    "badge_config": {
+      "key": "badge_mission_5",
+      "title": "Live Founder",
+      "description": "Completed Mission 5: Build & Launch. Built your product, validated with real testers, and launched your business into the world.",
+      "unlocked_identity": "Active Business Operator",
+      "icon_key": "Rocket"
+    },
     "quests": [
       {
         "id": "mission5_quest1",
@@ -2919,9 +2865,12 @@
           "user_profile",
           "user_projects"
         ],
-        "on_success": {
-          "grant_points": 60,
-          "badge_key": "BUILD_PLANNER"
+        "badge_config": {
+          "key": "badge_quest_5_1",
+          "title": "Build Strategist",
+          "description": "Completed Quest 1: Set your build timeline, mapped resource requirements, and created a structured build checklist.",
+          "unlocked_identity": "Organized Builder",
+          "icon_key": "Calendar"
         },
         "notes": [
           {
@@ -2944,8 +2893,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: Plan the Build. You have a timeline, a resource plan, and a build checklist. Now it's time to execute.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission5_quest1_task1",
@@ -2972,10 +2921,7 @@
             "component_key": "BuildTimelineForm",
             "reflection_prompt": "What's the most ambitious but realistic date you could launch? What would make that possible?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "TIMELINE_SETTER"
-            },
+            "grant_points": 20,
             "challenges": [
               {
                 "title": "The 30-Day Sprint",
@@ -2988,8 +2934,8 @@
               "mission4_quest5_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission5_quest1_task2",
@@ -3016,18 +2962,15 @@
             "component_key": "BuildResourcesForm",
             "reflection_prompt": "What's the one resource you're missing that would make this 10x easier? Can you get it?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "RESOURCE_PLANNER"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission5_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission5_quest1_task3",
@@ -3054,18 +2997,15 @@
             "component_key": "BuildTasksForm",
             "reflection_prompt": "What's the first thing you'll build? Start there.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "TASK_CREATOR"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission5_quest1_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -3084,9 +3024,12 @@
           "user_builds",
           "build_tasks"
         ],
-        "on_success": {
-          "grant_points": 70,
-          "badge_key": "BUILDER"
+        "badge_config": {
+          "key": "badge_quest_5_2",
+          "title": "Product Executioner",
+          "description": "Completed Quest 2: Executed daily build logs, managed costs, and created a working Proof of Concept.",
+          "unlocked_identity": "Product Operator",
+          "icon_key": "LayoutDashboard"
         },
         "notes": [
           {
@@ -3109,8 +3052,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: The Build. You've built your product, tracked your costs, and have something testers can test. The foundation is solid.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission5_quest2_task1",
@@ -3129,10 +3072,7 @@
             "component_key": "BuildDashboard",
             "reflection_prompt": "What's the one thing you're most excited to build? What's the one thing you're most nervous about?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 15,
-              "badge_key": "DASHBOARD_VIEWER"
-            },
+            "grant_points": 15,
             "challenges": [
               {
                 "title": "The Daily Build Challenge",
@@ -3145,8 +3085,8 @@
               "mission5_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -3165,9 +3105,12 @@
           "user_contacts",
           "user_builds"
         ],
-        "on_success": {
-          "grant_points": 60,
-          "badge_key": "TESTER_HUNTER"
+        "badge_config": {
+          "key": "badge_quest_5_3",
+          "title": "Tester Recruiter",
+          "description": "Completed Quest 3: Recruited target users, onboarded testers, and collected actionable product feedback.",
+          "unlocked_identity": "Feedback-Driven Founder",
+          "icon_key": "Users"
         },
         "notes": [
           {
@@ -3190,8 +3133,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: Get Testers. You've recruited, onboarded, and collected feedback from testers. You have real data to work with.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission5_quest3_task1",
@@ -3218,10 +3161,7 @@
             "component_key": "TesterRecruitmentForm",
             "reflection_prompt": "What's the best place to find people who have this problem? That's where your testers are.",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 15,
-              "badge_key": "TESTER_RECRUITER"
-            },
+            "grant_points": 15,
             "challenges": [
               {
                 "title": "The 5-Tester Challenge",
@@ -3234,8 +3174,8 @@
               "mission5_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission5_quest3_task2",
@@ -3262,18 +3202,15 @@
             "component_key": "TesterOnboardingForm",
             "reflection_prompt": "Put yourself in your tester's shoes. What would you need to know to give helpful feedback?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "TESTER_ONBOARDER"
-            },
+            "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission5_quest3_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission5_quest3_task3",
@@ -3300,18 +3237,15 @@
             "component_key": "FeedbackCollectionForm",
             "reflection_prompt": "What was the most surprising piece of feedback? What will you do with it?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "FEEDBACK_COLLECTOR"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission5_quest3_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -3329,9 +3263,12 @@
           "user_profile",
           "user_builds"
         ],
-        "on_success": {
-          "grant_points": 50,
-          "badge_key": "VALIDATOR"
+        "badge_config": {
+          "key": "badge_quest_5_4",
+          "title": "Product Optimizer",
+          "description": "Completed Quest 4: Performed validation checks and executed essential pre-launch tweaks.",
+          "unlocked_identity": "Quality Refine-Master",
+          "icon_key": "Sliders"
         },
         "notes": [
           {
@@ -3354,8 +3291,8 @@
           }
         ],
         "success_message": "You've completed Quest 4: Validate & Tweak. You've validated your product with real users and made meaningful improvements. You're ready to launch.",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission5_quest4_task1",
@@ -3382,18 +3319,15 @@
             "component_key": "ValidationCheckForm",
             "reflection_prompt": "If you had to launch today, would you? Why or why not?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "VALIDATION_CHECKER"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission5_quest3_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission5_quest4_task2",
@@ -3420,18 +3354,15 @@
             "component_key": "FinalTweaksForm",
             "reflection_prompt": "What's the smallest change that would make the biggest difference?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "FINAL_TWEAKER"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": null,
             "dependencies": [
               "mission5_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       },
@@ -3449,9 +3380,12 @@
           "user_profile",
           "user_builds"
         ],
-        "on_success": {
-          "grant_points": 60,
-          "badge_key": "LAUNCHER"
+        "badge_config": {
+          "key": "badge_quest_5_5",
+          "title": "Launch Pioneer",
+          "description": "Completed Quest 5: Completed the launch checklist, made the final launch call, and went live.",
+          "unlocked_identity": "Official Business Founder",
+          "icon_key": "Zap"
         },
         "notes": [
           {
@@ -3474,8 +3408,8 @@
           }
         ],
         "success_message": "You've completed Mission 5: Build & Launch. You've launched your business. You're no longer a person with an idea—you're a founder with a live business. Welcome to the other side. 🎉",
-        "created_at": "2026-08-05T16:05:27.596Z",
-        "updated_at": "2026-08-05T16:05:27.596Z",
+        "created_at": "2026-08-09T16:34:21.378Z",
+        "updated_at": "2026-08-09T16:34:21.378Z",
         "tasks": [
           {
             "id": "mission5_quest5_task1",
@@ -3502,10 +3436,7 @@
             "component_key": "LaunchChecklistForm",
             "reflection_prompt": "If you had to launch right now, what would you be worried about?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 20,
-              "badge_key": "LAUNCH_CHECKER"
-            },
+            "grant_points": 20,
             "challenges": [
               {
                 "title": "The First Sale Challenge",
@@ -3518,8 +3449,8 @@
               "mission5_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           },
           {
             "id": "mission5_quest5_task2",
@@ -3546,10 +3477,7 @@
             "component_key": "LaunchDecisionForm",
             "reflection_prompt": "What's the scariest part of launching? What excites you the most?",
             "observation_context": null,
-            "on_success": {
-              "grant_points": 25,
-              "badge_key": "LAUNCH_DECISION"
-            },
+            "grant_points": 25,
             "challenges": null,
             "ai_config": {
               "role": "Launch Advisor",
@@ -3565,13 +3493,13 @@
               "mission5_quest5_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-05T16:05:27.596Z",
-            "updated_at": "2026-08-05T16:05:27.596Z"
+            "created_at": "2026-08-09T16:34:21.378Z",
+            "updated_at": "2026-08-09T16:34:21.378Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-05T16:05:27.596Z",
-    "updated_at": "2026-08-05T16:05:27.596Z"
+    "created_at": "2026-08-09T16:34:21.378Z",
+    "updated_at": "2026-08-09T16:34:21.378Z"
   }
 }
