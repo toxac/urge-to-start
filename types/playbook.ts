@@ -11,11 +11,14 @@ export type MissionRow = Database['public']['Tables']['missions']['Row'];
 export type QuestRow = Database['public']['Tables']['quests']['Row'];
 export type TaskRow = Database['public']['Tables']['tasks']['Row'];
 
-// 3. DEFINE LOCAL TYPES EXCLUSIVELY FOR JSONB STRUCTURES
+// 3. DEFINE LOCAL TYPES EXCLUSIVELY FOR JSONB & BLUEPRINT CONFIGS
 
-export type OnSuccessSchema = {
-    grant_points: number;
-    badge_key: string;
+export type BadgeConfig = {
+    key: string;
+    title: string;
+    description: string;
+    unlocked_identity: string;
+    icon_key: string;
 };
 
 export type NoteSchema = {
@@ -59,7 +62,7 @@ export type TaskSchema = Omit<
 > & {
     resources: ReferenceSchema[];
     observation_context: ObservationContextSchema | null;
-    on_success: OnSuccessSchema;
+    grant_points: number; // ⚡ Direct point reward per task
     challenges: ChallengeSchema[] | null;
     ai_config: AIConfigSchema | null;
 };
@@ -69,7 +72,7 @@ export type QuestSchema = Omit<
     'context' | 'on_success' | 'notes'
 > & {
     context: string[] | null;
-    on_success: OnSuccessSchema;
+    badge_config: BadgeConfig | null; // ⚡ Chapter completion trophy
     notes: NoteSchema[] | null;
     tasks: TaskSchema[];
 };
@@ -79,6 +82,7 @@ export type MissionSchema = Omit<
     'context'
 > & {
     context: string[];
+    badge_config: BadgeConfig | null; // ⚡ Major milestone trophy
     quests: QuestSchema[];
 };
 
