@@ -900,6 +900,53 @@ export type Database = {
           },
         ]
       }
+      user_accomplishments: {
+        Row: {
+          awarded_for: string
+          badge_granted: string | null
+          created_at: string
+          description: string | null
+          id: string
+          points_granted: number
+          related_reference_id: string | null
+          related_table: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          awarded_for: string
+          badge_granted?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          points_granted?: number
+          related_reference_id?: string | null
+          related_table?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          awarded_for?: string
+          badge_granted?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          points_granted?: number
+          related_reference_id?: string | null
+          related_table?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_accomplishments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_actions: {
         Row: {
           action_type: Database["public"]["Enums"]["user_action_type"]
