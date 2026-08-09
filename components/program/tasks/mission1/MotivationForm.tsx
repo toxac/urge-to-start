@@ -26,10 +26,8 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
 
-  // Extract REQUIRED resources to display at the top of the form
   const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
-  // Pre-fill hierarchy: Task Execution Payload -> Profile Store Column -> Empty Defaults
   const preSavedMotivation: ProfileMotivationSchema =
     existingProgress?.saved_payload?.formData || profile?.motivations || {
       push: '',
@@ -62,7 +60,6 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
     setErrorMessage(null);
 
     try {
-      // 1. Sync to profiles table
       const profileSync = await updateMyProfile({
         motivations: formData as any
       });
@@ -77,7 +74,6 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         updateProfileStoreFields(profileSync.data as any);
       }
 
-      // 2. Complete Task Execution
       const progressSync = await completeTaskExecution({
         taskId: task.id,
         savedPayload: { formData }
@@ -99,7 +95,6 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
     }
   };
 
-  // ─── READ-ONLY COMPLETED VIEW ───
   if (!isEditing) {
     return (
       <div className="w-full space-y-5 border rounded-2xl p-6 bg-emerald-500/5 border-emerald-500/20 text-left">
@@ -122,7 +117,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         <div className="space-y-4 text-xs leading-relaxed">
           <div className="p-4 rounded-xl bg-card border border-border/60 space-y-1">
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-              Your Anchor
+              Your North Star Anchor
             </span>
             <p className="text-sm font-bold text-foreground italic">
               "{preSavedMotivation.why_statement}"
@@ -162,7 +157,6 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
     );
   }
 
-  // ─── EDITABLE FORM VIEW ───
   return (
     <div className="w-full space-y-6 text-left">
       {errorMessage && (
@@ -172,7 +166,6 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         </div>
       )}
 
-      {/* REQUIRED RESOURCES BANNER */}
       {requiredResources.length > 0 && (
         <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
           <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
@@ -204,8 +197,8 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
             1. What are you running from? *
           </Label>
           <Select
-            value={selectedPush || undefined}
-            onValueChange={(val) => setValue('push', (val as string) || '', { shouldValidate: true })}
+            value={selectedPush ?? ''}
+            onValueChange={(val) => setValue('push', val ?? '', { shouldValidate: true })}
           >
             <SelectTrigger className="w-full text-xs h-10">
               <SelectValue placeholder="Select what is pushing you to start..." />
@@ -236,8 +229,8 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
             2. What are you running toward?*
           </Label>
           <Select
-            value={selectedPull || undefined}
-            onValueChange={(val) => setValue('pull', (val as string) || '', { shouldValidate: true })}
+            value={selectedPull ?? ''}
+            onValueChange={(val) => setValue('pull', val ?? '', { shouldValidate: true })}
           >
             <SelectTrigger className="w-full text-xs h-10">
               <SelectValue placeholder="Select what is pulling you forward..." />
@@ -268,8 +261,8 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
             3. Why do you want to start now?*
           </Label>
           <Select
-            value={selectedUrgency || undefined}
-            onValueChange={(val) => setValue('urgency', (val as string) || '', { shouldValidate: true })}
+            value={selectedUrgency ?? ''}
+            onValueChange={(val) => setValue('urgency', val ?? '', { shouldValidate: true })}
           >
             <SelectTrigger className="w-full text-xs h-10">
               <SelectValue placeholder="Select your urgency catalyst..." />
@@ -312,7 +305,6 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
           )}
         </div>
 
-        {/* Form Footer Controls */}
         <div className="flex gap-3 pt-2">
           {isInitiallyCompleted && (
             <Button
