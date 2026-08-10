@@ -18,7 +18,7 @@ interface CreateUserActionInput {
 }
 
 /**
- * Creates a new goal/action choice in the user_actions table.
+ * Creates a new action choice in public.user_actions table.
  */
 export async function createUserAction(
   input: CreateUserActionInput
