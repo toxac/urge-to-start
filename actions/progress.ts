@@ -240,6 +240,9 @@ export async function getMyProgressTracker(): Promise<ActionResponse<ProgressRow
   }
 }
 
+/**
+ * Ensures a user_progress row exists with status = 'in_progress'
+ */
 export async function setTaskStatusInProgressAction(
   taskId: string
 ): Promise<ActionResponse<ProgressRow>> {
@@ -251,13 +254,14 @@ export async function setTaskStatusInProgressAction(
       return { success: false, error: 'Authentication required' };
     }
 
+    // ⚡ UPSERT creates the row if missing, or updates if already exists
     const { data, error } = await supabase
       .from('user_progress')
       .upsert(
         {
           user_id: user.id,
           task_id: taskId,
-          item_type: 'task', // ⚡ Added required item_type field
+          item_type: 'task',
           status: 'in_progress',
           updated_at: new Date().toISOString(),
         },
@@ -269,8 +273,9 @@ export async function setTaskStatusInProgressAction(
     if (error || !data) throw error;
 
     revalidatePath('/program');
-    return { success: true, data };
+    return { success: true, data: data as ProgressRow };
   } catch (err: any) {
+    console.error('❌ Error setting task in_progress status:', err);
     return { success: false, error: err.message || 'Failed to update task status' };
   }
 }
