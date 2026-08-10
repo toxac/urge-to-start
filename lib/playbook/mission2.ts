@@ -452,7 +452,7 @@ const mission2: MissionSchema = {
                     sequence: 1,
                     execution_type: "standard-form",
                     estimated_minutes: 30,
-                    briefing_text: "Online communities are goldmines. Reddit, Facebook Groups, LinkedIn communities, Quora—people are actively discussing their problems. Go find them.",
+                    briefing_text: "Online communities are goldmines. Reddit, Facebook Groups, LinkedIn communities, Quora—people are actively discussing their problems. Go find them and turn a repeated complaint into a business opportunity seed.",
                     mission_id: "mission-2",
                     quest_id: "mission2_quest3",
                     execution_environment: null,
@@ -475,9 +475,15 @@ const mission2: MissionSchema = {
                             title: "Problem-Spotting Techniques for Founders"
                         }
                     ],
-                    component_key: "CommunityProblemForm",
+                    component_key: "OpportunityForm",
                     reflection_prompt: "What's the most common problem you're seeing in these communities? Why do you think it's common?",
-                    observation_context: null,
+                    observation_context: {
+                        category: "broader_search",
+                        reference: "user_opportunities"
+                    },
+                    metadata: {
+                        opportunity_source_type: "broader_search"
+                    },
                     grant_points: 20,
                     challenges: [
                         {
@@ -500,7 +506,7 @@ const mission2: MissionSchema = {
                     sequence: 2,
                     execution_type: "standard-form",
                     estimated_minutes: 30,
-                    briefing_text: "Trends are signals. What's changing? What's new? What's growing? These changes create new problems—and new opportunities.",
+                    briefing_text: "Trends are signals. What's changing? What's new? What's growing? These changes create new problems—and new opportunities. Capture a trend-driven opportunity seed.",
                     mission_id: "mission-2",
                     quest_id: "mission2_quest3",
                     execution_environment: null,
@@ -523,9 +529,15 @@ const mission2: MissionSchema = {
                             title: "Trends Are Trouble (And That's Good)"
                         }
                     ],
-                    component_key: "TrendProblemForm",
+                    component_key: "OpportunityForm",
                     reflection_prompt: "What trend is creating new problems? Who is being affected by these changes?",
-                    observation_context: null,
+                    observation_context: {
+                        category: "broader_search",
+                        reference: "user_opportunities"
+                    },
+                    metadata: {
+                        opportunity_source_type: "broader_search"
+                    },
                     grant_points: 20,
                     challenges: null,
                     ai_config: null,
@@ -542,7 +554,7 @@ const mission2: MissionSchema = {
                     sequence: 3,
                     execution_type: "standard-form",
                     estimated_minutes: 30,
-                    briefing_text: "Marketplaces tell you what people are already paying for. They reveal gaps, complaints, and underserved needs. Go scan Etsy, Fiverr, Upwork, Amazon—what problems are being solved? What's missing?",
+                    briefing_text: "Marketplaces tell you what people are already paying for. They reveal gaps, complaints, and underserved needs. Go scan Etsy, Fiverr, Upwork, Amazon—what problems are being solved poorly? Seed the opportunity gap.",
                     mission_id: "mission-2",
                     quest_id: "mission2_quest3",
                     execution_environment: null,
@@ -565,9 +577,15 @@ const mission2: MissionSchema = {
                             title: "Marketplace Love Notes and Breakup Letters"
                         }
                     ],
-                    component_key: "MarketplaceProblemForm",
+                    component_key: "OpportunityForm",
                     reflection_prompt: "What's a problem that people are trying to solve but no one is solving well? Where's the gap?",
-                    observation_context: null,
+                    observation_context: {
+                        category: "broader_search",
+                        reference: "user_opportunities"
+                    },
+                    metadata: {
+                        opportunity_source_type: "broader_search"
+                    },
                     grant_points: 20,
                     challenges: null,
                     ai_config: null,
