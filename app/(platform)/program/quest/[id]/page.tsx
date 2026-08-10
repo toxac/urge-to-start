@@ -8,19 +8,16 @@ import { $playbookStore } from '@/lib/stores/playbookStore';
 import { $progressStore } from '@/lib/stores/progressStore';
 import { $profileStore } from '@/lib/stores/profileStore';
 import { $accomplishmentStore } from '@/lib/stores/accomplishmentStore';
-import { $focusMode } from '@/lib/stores/focusMode';
 import { setCompanionFocus } from '@/lib/stores/companionStore';
 import { TaskFormRegistry } from '@/components/program/TaskFormRegistry';
 import { ProgramHeader } from '@/components/program/ProgramHeader';
 import { 
-  ChevronLeft, 
   CheckCircle2, 
   Lock, 
   Eye, 
   Play, 
   Loader2, 
   ArrowRight, 
-  EyeOff, 
   Trophy, 
   Award, 
   Sparkles,
@@ -45,7 +42,6 @@ export default function QuestActionCenterPage({
   const progress = useStore($progressStore);
   const profile = useStore($profileStore);
   const accomplishments = useStore($accomplishmentStore);
-  const focusMode = useStore($focusMode);
 
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
   const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
@@ -78,11 +74,6 @@ export default function QuestActionCenterPage({
   const nextQuest = currentQuestIndex >= 0 && activeMission?.quests?.[currentQuestIndex + 1] 
     ? activeMission.quests[currentQuestIndex + 1] 
     : null;
-
-  // Retrieve accomplishment/badge for this quest if awarded
-  const questAccomplishment = Object.values(accomplishments || {}).find(
-    (acc) => acc.related_table === 'quests' && acc.related_reference_id === currentQuest?.id
-  );
 
   // Sync Companion Focus
   useEffect(() => {
@@ -130,29 +121,11 @@ export default function QuestActionCenterPage({
   const offApp = currentQuest.estimated_off_app_minutes || 0;
   const estimatedTime = `~${inApp} min in-app${offApp > 0 ? `, ${offApp} min off-app` : ''}`;
 
-  // Toggle focus mode
-  const toggleFocusMode = () => {
-    $focusMode.set(!focusMode);
-  };
-
-  // Show extra content only when NOT in focus mode AND no task is open
-  const showExtraContent = !focusMode && !activeTaskId;
-
   return (
     <div className="w-full py-4 space-y-8 animate-in fade-in duration-300 text-left relative">
-      {/* ─── Focus Mode Toggle Button ─── */}
-      <Button
-        variant="outline"
-        size="sm"
-        className="fixed bottom-6 right-6 z-50 rounded-full h-10 w-10 p-0 shadow-lg bg-background border border-border hover:bg-muted transition-colors"
-        onClick={toggleFocusMode}
-        title={focusMode ? 'Exit Focus Mode' : 'Enter Focus Mode'}
-      >
-        {focusMode ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-      </Button>
-
-      {/* ─── EXTRA CONTENT (hidden when focus mode OR task open) ─── */}
-      {showExtraContent && (
+      
+      {/* ─── QUEST HEADER & LESSON CONTENT ─── */}
+      {!activeTaskId && (
         <>
           <ProgramHeader
             type="quest"
@@ -325,6 +298,7 @@ export default function QuestActionCenterPage({
             {tasks.map((task: TaskSchema, index: number) => {
               const taskProgress = progress[task.id];
               const isTaskCompleted = taskProgress?.status === 'completed';
+              const isTaskInProgress = taskProgress?.status === 'in_progress';
               const isLocked = index > 0 && progress[tasks[index - 1].id]?.status !== 'completed';
 
               return (
@@ -375,6 +349,11 @@ export default function QuestActionCenterPage({
                           <>
                             <Eye className="w-3.5 h-3.5" />
                             <span>Review Work</span>
+                          </>
+                        ) : isTaskInProgress ? (
+                          <>
+                            <Play className="w-3 h-3 fill-amber-500/20 text-amber-500" />
+                            <span className="text-amber-500">Continue Task</span>
                           </>
                         ) : (
                           <>
