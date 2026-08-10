@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Slider } from '@/components/ui/slider';
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { updateProfileStoreFields, $profileStore } from '@/lib/stores/profileStore';
 import { recordAccomplishment } from '@/actions/accomplishments';
@@ -15,15 +16,15 @@ import { setAccomplishmentStoreRow } from '@/lib/stores/accomplishmentStore';
 import { BaseTaskComponentProps } from '../types';
 import { ReferenceSchema } from '@/types/playbook';
 import { SelfAssessmentData, SelfAssessmentMetric } from '@/types/profiles';
-import { 
-  Loader2, 
-  CheckCircle2, 
-  AlertCircle, 
-  BookOpen, 
-  ExternalLink, 
-  MessageSquareQuote, 
-  TrendingUp, 
-  Brain 
+import {
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  BookOpen,
+  ExternalLink,
+  MessageSquareQuote,
+  TrendingUp,
+  Brain
 } from 'lucide-react';
 
 interface FormInputs {
@@ -62,44 +63,46 @@ export function AuditForm({ task, existingProgress, onSuccess }: BaseTaskCompone
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Read existing self assessment if already completed
-  const savedPayloadAssessment: SelfAssessmentData | null = 
+  const savedPayloadAssessment: SelfAssessmentData | null =
     (existingProgress as any)?.saved_payload?.assessment?.self_assessment || null;
 
   const [assessmentData, setAssessmentData] = useState<SelfAssessmentData | null>(savedPayloadAssessment);
 
-  // Form states for scores (Before vs After)
-  const [scores, setScores] = useState<Record<string, { before: number; after: number }>>({
-    asking_confidence: { before: 3, after: 7 },
-    rejection_resilience: { before: 3, after: 8 },
-    public_visibility: { before: 4, after: 7 },
-    action_speed: { before: 3, after: 8 },
+  // Range Slider Values: [Before, After] (Values between 1 and 10)
+  const [metricValues, setMetricValues] = useState<Record<string, [number, number]>>({
+    asking_confidence: [3, 7],
+    rejection_resilience: [3, 8],
+    public_visibility: [4, 7],
+    action_speed: [3, 8],
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
   const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
-  const handleScoreChange = (metricId: string, type: 'before' | 'after', value: number) => {
-    setScores(prev => ({
-      ...prev,
-      [metricId]: {
-        ...prev[metricId],
-        [type]: value
-      }
-    }));
+  const handleSliderChange = (metricId: string, val: number | readonly number[]) => {
+    const arr = Array.isArray(val) ? [...val] : [val, val];
+    if (arr.length >= 2) {
+      setMetricValues((prev) => ({
+        ...prev,
+        [metricId]: [arr[0], arr[1]] as [number, number],
+      }));
+    }
   };
 
   const onSubmit = async (formData: FormInputs) => {
     setIsSubmitting(true);
     setErrorMessage(null);
 
-    const formattedMetrics: SelfAssessmentMetric[] = DEFAULT_METRICS.map(m => ({
-      id: m.id,
-      label: m.label,
-      before: scores[m.id]?.before || 5,
-      after: scores[m.id]?.after || 5
-    }));
+    const formattedMetrics: SelfAssessmentMetric[] = DEFAULT_METRICS.map(m => {
+      const [beforeVal, afterVal] = metricValues[m.id] || [3, 7];
+      return {
+        id: m.id,
+        label: m.label,
+        before: beforeVal,
+        after: afterVal
+      };
+    });
 
     const finalAssessmentData: SelfAssessmentData = {
       scores: formattedMetrics,
@@ -108,14 +111,13 @@ export function AuditForm({ task, existingProgress, onSuccess }: BaseTaskCompone
     };
 
     try {
-      // 1. Process Task Completion & Progress
       const taskResult = await processTaskCompletion({
         task,
-        savedPayload: { 
+        savedPayload: {
           assessment: {
             assessment_type: 'self_assessment',
             self_assessment: finalAssessmentData
-          } 
+          }
         },
       });
 
@@ -127,19 +129,17 @@ export function AuditForm({ task, existingProgress, onSuccess }: BaseTaskCompone
 
       setAssessmentData(finalAssessmentData);
 
-      // 2. Hydrate $profileStore
       const currentAssessments = (profile as any)?.assessment || [];
-      updateProfileStoreFields({ 
+      updateProfileStoreFields({
         assessment: [
           ...currentAssessments,
           {
             assessment_type: 'self_assessment',
             self_assessment: finalAssessmentData
           }
-        ] 
+        ]
       } as any);
 
-      // 3. Record Mission Accomplishment for Mission 1 Graduation
       const missionRes = await recordAccomplishment({
         awardedFor: 'mission',
         relatedTable: 'missions',
@@ -206,7 +206,6 @@ export function AuditForm({ task, existingProgress, onSuccess }: BaseTaskCompone
             </Badge>
           </div>
 
-          {/* Growth Summary Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {assessmentData.scores.map((item) => {
               const diff = item.after - item.before;
@@ -228,7 +227,6 @@ export function AuditForm({ task, existingProgress, onSuccess }: BaseTaskCompone
             })}
           </div>
 
-          {/* Key Takeaway */}
           <div className="p-4 rounded-xl bg-card border border-border/60 space-y-1.5">
             <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1">
               <MessageSquareQuote className="w-3.5 h-3.5" />
@@ -240,9 +238,9 @@ export function AuditForm({ task, existingProgress, onSuccess }: BaseTaskCompone
           </div>
         </div>
       ) : (
-        /* INITIAL ASSESSMENT FORM */
+        /* INITIAL ASSESSMENT FORM USING SLIDERS */
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 rounded-2xl border border-border bg-card/60 space-y-6 text-left">
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
               <Brain className="w-4 h-4 text-amber-500" />
               Mission 1 Mindset Audit
@@ -251,76 +249,62 @@ export function AuditForm({ task, existingProgress, onSuccess }: BaseTaskCompone
               Rate Your Before vs. After Mindset Shift
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Reflect on how your perspective has changed after taking real-world risks and handling rejection during this mission.
+              Drag the dual slider thumbs to set where you started vs. where you stand today (1 to 10 scale).
             </p>
           </div>
 
-          {/* Metrics Sliders / Selectors */}
-          <div className="space-y-5 border-t pt-4">
-            {DEFAULT_METRICS.map((m) => (
-              <div key={m.id} className="p-4 rounded-xl border bg-card space-y-3">
-                <div className="space-y-0.5">
-                  <Label className="text-xs font-bold text-foreground block">
-                    {m.label}
-                  </Label>
-                  <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
-                    <span>1 = {m.min_label}</span>
-                    <span>10 = {m.max_label}</span>
-                  </div>
-                </div>
+          <div className="space-y-4 border-t pt-4">
+            {DEFAULT_METRICS.map((m) => {
+              const [beforeVal, afterVal] = metricValues[m.id] || [3, 7];
+              const growthDiff = afterVal - beforeVal;
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  {/* Before Rating */}
-                  <div className="space-y-1.5">
-                    <span className="text-[11px] font-semibold text-muted-foreground block">
-                      Before Mission 1: <strong className="text-foreground">{scores[m.id]?.before || 3}</strong>/10
-                    </span>
-                    <div className="flex gap-1">
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                        <button
-                          key={num}
-                          type="button"
-                          onClick={() => handleScoreChange(m.id, 'before', num)}
-                          className={`flex-1 h-7 text-[10px] font-bold rounded-md border transition cursor-pointer ${
-                            scores[m.id]?.before === num 
-                              ? 'bg-muted-foreground text-background font-bold border-muted-foreground' 
-                              : 'bg-background hover:bg-muted text-muted-foreground'
-                          }`}
-                        >
-                          {num}
-                        </button>
-                      ))}
+              return (
+                <div key={m.id} className="p-4 rounded-xl border border-border/80 bg-card space-y-3.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <Label className="text-xs font-bold text-foreground block">
+                      {m.label}
+                    </Label>
+
+                    {/* Dynamic Growth Badge */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-mono text-muted-foreground">
+                        Before: <strong className="text-foreground">{beforeVal}</strong>/10
+                      </span>
+                      <span className="text-[11px] font-mono text-emerald-500">
+                        Now: <strong className="text-emerald-500">{afterVal}</strong>/10
+                      </span>
+                      {growthDiff !== 0 && (
+                        <Badge variant="outline" className={`text-[10px] font-mono font-bold ${growthDiff > 0
+                            ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30'
+                            : 'bg-amber-500/10 text-amber-500 border-amber-500/30'
+                          }`}>
+                          {growthDiff > 0 ? `+${growthDiff}` : growthDiff} Shift
+                        </Badge>
+                      )}
                     </div>
                   </div>
 
-                  {/* After Rating */}
-                  <div className="space-y-1.5">
-                    <span className="text-[11px] font-semibold text-emerald-500 block">
-                      Right Now: <strong className="text-emerald-500">{scores[m.id]?.after || 8}</strong>/10
-                    </span>
-                    <div className="flex gap-1">
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                        <button
-                          key={num}
-                          type="button"
-                          onClick={() => handleScoreChange(m.id, 'after', num)}
-                          className={`flex-1 h-7 text-[10px] font-bold rounded-md border transition cursor-pointer ${
-                            scores[m.id]?.after === num 
-                              ? 'bg-emerald-500 text-white font-bold border-emerald-500' 
-                              : 'bg-background hover:bg-emerald-500/10 text-muted-foreground'
-                          }`}
-                        >
-                          {num}
-                        </button>
-                      ))}
+                  {/* Dual-Thumb Range Slider */}
+                  <div className="px-1 py-2 space-y-2">
+                    <Slider
+                      value={[beforeVal, afterVal]}
+                      onValueChange={(val) => handleSliderChange(m.id, val)}
+                      min={1}
+                      max={10}
+                      step={1}
+                      className="cursor-pointer"
+                    />
+
+                    <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
+                      <span>1 ({m.min_label})</span>
+                      <span>10 ({m.max_label})</span>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {/* Key Takeaway Input */}
           <div className="space-y-2 pt-2">
             <Label className="text-xs font-bold text-foreground block">
               What is your biggest personal takeaway about rejection and taking action? *
@@ -348,7 +332,7 @@ export function AuditForm({ task, existingProgress, onSuccess }: BaseTaskCompone
                 Saving Assessment...
               </span>
             ) : (
-              `Complete Mission 1 Self-Assessment & Earn +${task.grant_points} XP`
+              `Save and Complete Mission 1`
             )}
           </Button>
         </form>

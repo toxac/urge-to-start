@@ -677,11 +677,11 @@ const mission1: MissionSchema = {
                 // Task 4.3: The Reflection
                 {
                     id: "mission1_quest4_task3",
-                    title: "Rejection Mastery",
+                    title: "Are You Ready to Get Started?",
                     sequence: 3,
                     execution_type: "standard-form",
                     estimated_minutes: 15,
-                    briefing_text: "You've done the hard work. You've asked, been rejected, and survived. Now let's turn those experiences into fuel by defining your next milestone targets.",
+                    briefing_text: "You've done the hard work—you asked, faced rejection, and proved to yourself that it's completely harmless. Now, reflect on your journey, measure your mindset shift across key confidence metrics, and lock in your key takeaways.",
                     mission_id: "mission-1",
                     quest_id: "mission1_quest4",
                     execution_environment: null,
