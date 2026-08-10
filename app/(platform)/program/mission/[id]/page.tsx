@@ -98,13 +98,13 @@ export default function MissionRoadmapPage({
       )}
 
       {/* Quests List - unchanged */}
-      <div className="space-y-4 pt-4">
-        <div className="pb-2 border-b border-border/60">
+      <div className="bg-card border border-border rounded-2xl pb-10 shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b border-border/60 bg-muted/20">
           <h3 className="text-sm font-sans font-bold uppercase tracking-widest text-muted-foreground">
-            Quests Included
+            Quests in the mission
           </h3>
         </div>
-        <div className="grid grid-cols-1 gap-3">
+        <div className="divide-y divide-border/40">
           {quests.map((quest: QuestSchema) => {
             const questTasks: TaskSchema[] = quest.tasks || [];
             const totalTasks = questTasks.length;
@@ -116,7 +116,7 @@ export default function MissionRoadmapPage({
               <div
                 key={quest.id}
                 onClick={() => router.push(`/program/quest/${quest.id}`)}
-                className="group bg-card/40 border border-border hover:border-primary/60 rounded-2xl p-6 shadow-sm transition duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden"
+                className="group px-6 py-5 hover:bg-muted/20 transition duration-200 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4"
               >
                 <div className="space-y-1.5 flex-1 text-left">
                   <div className="flex items-center gap-2.5">

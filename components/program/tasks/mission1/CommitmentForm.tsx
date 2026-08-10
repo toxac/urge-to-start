@@ -18,6 +18,8 @@ import { Loader2, Edit2, CheckCircle2, AlertCircle, Clock, DollarSign, Calendar,
 
 export function CommitmentForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const profile = useStore($profileStore);
+  const currency = profile?.currency || 'INR'; // Dynamic currency from profile store with INR default
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -44,6 +46,19 @@ export function CommitmentForm({ task, existingProgress, onSuccess }: BaseTaskCo
   });
 
   const selectedTimeToLaunch = useWatch({ control, name: 'time_to_launch' });
+
+  // Currency formatter helper
+  const formatCurrency = (val: number) => {
+    try {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency,
+        maximumFractionDigits: 0,
+      }).format(val);
+    } catch {
+      return `${currency} ${val}`;
+    }
+  };
 
   const onSubmit = async (formData: ProfileCommitmentSchema) => {
     setIsSubmitting(true);
@@ -127,7 +142,7 @@ export function CommitmentForm({ task, existingProgress, onSuccess }: BaseTaskCo
               Starting Capital
             </span>
             <p className="text-base font-bold text-foreground">
-              ${preSavedCommitment.capital || 0}
+              {formatCurrency(preSavedCommitment.capital || 0)}
             </p>
           </div>
 
@@ -207,21 +222,21 @@ export function CommitmentForm({ task, existingProgress, onSuccess }: BaseTaskCo
         {/* Question 2: Capital Available */}
         <div className="space-y-2">
           <Label className="text-xs font-bold text-foreground block">
-            2. How much cash capital do you have available to start? ($ USD) *
+            2. How much cash capital do you have available to start? ({currency}) *
           </Label>
           <Input
             type="number"
             min={0}
             className="text-xs h-10 w-full"
-            placeholder="e.g. 500"
+            placeholder="e.g. 5000"
             {...register('capital', { required: true, min: 0 })}
           />
           <p className="text-[11px] text-muted-foreground">
-            Include savings or small funds allocated specifically for early setup, hosting, or tools. $0 is completely fine!
+            Include savings or small funds allocated specifically for early setup, hosting, or tools in {currency}. 0 is completely fine!
           </p>
           {errors.capital && (
             <p className="text-[11px] font-semibold text-destructive">
-              Please enter an amount ($0 or more).
+              Please enter an amount (0 or more).
             </p>
           )}
         </div>
@@ -229,7 +244,7 @@ export function CommitmentForm({ task, existingProgress, onSuccess }: BaseTaskCo
         {/* Question 3: Time to Launch (MSP Target) */}
         <div className="space-y-2">
           <Label className="text-xs font-bold text-foreground block">
-            3. What is your target timeline to launch a Minimum Sellable Product (MSP)? *
+            3. How soon do you want to launch?*
           </Label>
 
           <Select
@@ -276,7 +291,7 @@ export function CommitmentForm({ task, existingProgress, onSuccess }: BaseTaskCo
             ) : isInitiallyCompleted ? (
               'Update Commitment'
             ) : (
-              `Lock in Commitment & Earn +${task.grant_points} XP`
+              `Save Commitment & Mark Task Complete`
             )}
           </Button>
         </div>

@@ -3,9 +3,8 @@
 
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
-import { ActionResponse } from '@/types/profiles';
+import { ActionResponse } from '@/actions/progress';
 import { AIAssessmentResult, AIAssessmentResultSchema, UserActionInsert } from '@/types/userActions';
-import { completeTaskExecution } from '@/actions/progress';
 import { deepseek } from '@/lib/ai/deepseekClient';
 
 export async function runAIAssessmentAction(taskId: string): Promise<ActionResponse<{
@@ -77,7 +76,6 @@ export async function runAIAssessmentAction(taskId: string): Promise<ActionRespo
 
     // 4. Generate AI Assessment using DeepSeek
     let assessmentResult: AIAssessmentResult;
-    // System prompt update inside actions/profile-assessment.ts
     const systemPrompt = `You are an elite startup mentor auditing a founder's readiness at the end of Mission 1. 
     Analyze their commitments, skills, distribution footprint, roadblocks, and logged reflections.
 
@@ -91,13 +89,13 @@ export async function runAIAssessmentAction(taskId: string): Promise<ActionRespo
     "summary": "string",
     "suggested_actions": [
         {
-        "title": "string", // Goal headline (e.g., "Expand Audience Reach")
-        "description": "string", // Specific measurable outcome (e.g., "Reach 100 new followers to validate distribution demand.")
-        "checkback_delay_days": number, // Target timeframe in days (e.g., 30)
+        "title": "string",
+        "description": "string",
+        "checkback_delay_days": number,
         "action_type": "program" | "general" | "system",
         "metadata": {
-            "platform": "string", // e.g., "LinkedIn", "X (Twitter)", "Email"
-            "target_metric": "string", // e.g., "100 new followers"
+            "platform": "string",
+            "target_metric": "string",
             "category": "audience" | "outreach" | "content" | "revenue"
         }
         }
@@ -198,15 +196,6 @@ export async function runAIAssessmentAction(taskId: string): Promise<ActionRespo
       .insert(actionsToInsert);
 
     if (actionsErr) throw actionsErr;
-
-    // 7. Complete task mission1_quest4_task4 & grant XP
-    await completeTaskExecution({
-      taskId,
-      savedPayload: {
-        actions_created: actionsToInsert.length,
-        evaluated_at: new Date().toISOString(),
-      }
-    });
 
     revalidatePath('/dashboard');
     revalidatePath('/program');
