@@ -62,6 +62,7 @@ export function SocialFootprintForm({ task, existingProgress }: BaseTaskComponen
       description: string;
       checkbackDelayDays: number;
       channelName?: string;
+      growthPillar?: 'new_presence' | 'grow_following' | 'increase_engagement';
     }>;
   } | null>(existingProgress?.saved_payload?.assessmentResult || null);
 
@@ -146,10 +147,10 @@ export function SocialFootprintForm({ task, existingProgress }: BaseTaskComponen
       if (!profileSync.success) throw new Error(profileSync.error || 'Failed to update profile');
       if (profileSync.data) updateProfileStoreFields(profileSync.data as any);
 
-      // 2. Trigger AI Network Assessment
+      // 2. Trigger AI Network Assessment & Log Output
       setIsAnalyzing(true);
       const updatedProfileState = { ...profile, social_footprint: formattedItems };
-      const aiRes = await runSocialAssessmentAction(updatedProfileState);
+      const aiRes = await runSocialAssessmentAction(updatedProfileState, task.id);
       const aiData = aiRes.success ? aiRes.data : null;
 
       if (aiData) {
@@ -258,6 +259,11 @@ export function SocialFootprintForm({ task, existingProgress }: BaseTaskComponen
                           <span className="text-xs font-bold text-foreground">{actionItem.title}</span>
                           {actionItem.channelName && (
                             <Badge variant="secondary" className="text-[9px] font-mono">{actionItem.channelName}</Badge>
+                          )}
+                          {actionItem.growthPillar && (
+                            <Badge variant="outline" className="text-[9px] font-mono capitalize">
+                              {actionItem.growthPillar.replace('_', ' ')}
+                            </Badge>
                           )}
                         </div>
                         <p className="text-[11px] text-muted-foreground leading-relaxed">{actionItem.description}</p>
