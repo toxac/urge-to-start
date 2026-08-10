@@ -7,12 +7,27 @@ import { useStore } from '@nanostores/react';
 import { $playbookStore } from '@/lib/stores/playbookStore';
 import { $progressStore } from '@/lib/stores/progressStore';
 import { $profileStore } from '@/lib/stores/profileStore';
+import { $accomplishmentStore } from '@/lib/stores/accomplishmentStore';
 import { $focusMode } from '@/lib/stores/focusMode';
 import { setCompanionFocus } from '@/lib/stores/companionStore';
 import { TaskFormRegistry } from '@/components/program/TaskFormRegistry';
 import { ProgramHeader } from '@/components/program/ProgramHeader';
-import { ChevronLeft, CheckCircle2, Lock, Eye, Play, Loader2, ArrowRight, EyeOff } from 'lucide-react';
+import { 
+  ChevronLeft, 
+  CheckCircle2, 
+  Lock, 
+  Eye, 
+  Play, 
+  Loader2, 
+  ArrowRight, 
+  EyeOff, 
+  Trophy, 
+  Award, 
+  Sparkles,
+  ArrowUpRight
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { MissionSchema, QuestSchema, TaskSchema } from '@/types/playbook';
 
 export default function QuestActionCenterPage({
@@ -29,18 +44,21 @@ export default function QuestActionCenterPage({
   const playbook = useStore($playbookStore);
   const progress = useStore($progressStore);
   const profile = useStore($profileStore);
+  const accomplishments = useStore($accomplishmentStore);
   const focusMode = useStore($focusMode);
 
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
   const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
   const [loadingMarkdown, setLoadingMarkdown] = useState(false);
 
+  let activeMission: MissionSchema | null = null;
   let activeMissionId = '';
   let currentQuest: QuestSchema | null = null;
 
   for (const [mId, mission] of Object.entries(playbook || {}) as [string, MissionSchema][]) {
     const foundQuest = mission.quests?.find((q: QuestSchema) => q.id === questParamId);
     if (foundQuest) {
+      activeMission = mission;
       activeMissionId = mission.id || mId;
       currentQuest = foundQuest;
       break;
@@ -51,8 +69,20 @@ export default function QuestActionCenterPage({
   const currentUserId = profile?.id || '';
 
   const completedCount = tasks.filter((t: TaskSchema) => progress[t.id]?.status === 'completed').length;
+  const isQuestFullyCompleted = tasks.length > 0 && completedCount === tasks.length;
   const progressRatioPercentage = tasks.length > 0 ? Math.min(100, Math.floor((completedCount / tasks.length) * 100)) : 0;
   const nextIncompleteTask = tasks.find((t: TaskSchema) => progress[t.id]?.status !== 'completed');
+
+  // Determine Next Quest in the sequence
+  const currentQuestIndex = activeMission?.quests?.findIndex((q) => q.id === currentQuest?.id) ?? -1;
+  const nextQuest = currentQuestIndex >= 0 && activeMission?.quests?.[currentQuestIndex + 1] 
+    ? activeMission.quests[currentQuestIndex + 1] 
+    : null;
+
+  // Retrieve accomplishment/badge for this quest if awarded
+  const questAccomplishment = Object.values(accomplishments || {}).find(
+    (acc) => acc.related_table === 'quests' && acc.related_reference_id === currentQuest?.id
+  );
 
   // Sync Companion Focus
   useEffect(() => {
@@ -145,6 +175,97 @@ export default function QuestActionCenterPage({
             />
           )}
         </>
+      )}
+
+      {/* ─── QUEST COMPLETED CELEBRATION BANNER ─── */}
+      {isQuestFullyCompleted && !activeTaskId && (
+        <div className="w-full border rounded-2xl p-6 bg-gradient-to-r from-emerald-500/10 via-primary/5 to-amber-500/10 border-emerald-500/30 shadow-sm space-y-5 animate-in slide-in-from-top-4 duration-300">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/50 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                <Trophy className="w-5 h-5 text-emerald-500" />
+              </div>
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-500">
+                    Quest Accomplished!
+                  </span>
+                  <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/30 text-[9px] font-mono">
+                    100% Complete
+                  </Badge>
+                </div>
+                <h3 className="text-base font-bold text-foreground">
+                  {currentQuest.title}
+                </h3>
+              </div>
+            </div>
+
+            {/* Next Quest / Mission Action Button */}
+            <div className="shrink-0">
+              {nextQuest ? (
+                <Button
+                  onClick={() => {
+                    startTransition(() => {
+                      router.push(`/program/quest/${nextQuest.id}`);
+                    });
+                  }}
+                  disabled={isPending}
+                  className="h-10 px-5 text-xs font-bold tracking-wider uppercase cursor-pointer gap-2 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md"
+                >
+                  {isPending ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <>
+                      <span>Start Quest {nextQuest.sequence}: {nextQuest.title}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    startTransition(() => {
+                      router.push(`/program/mission/${activeMissionId}`);
+                    });
+                  }}
+                  disabled={isPending}
+                  variant="outline"
+                  className="h-10 px-5 text-xs font-bold tracking-wider uppercase cursor-pointer gap-2 border-emerald-500/40 hover:bg-emerald-500/10 text-foreground"
+                >
+                  {isPending ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <>
+                      <span>Return to Mission Overview</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Badge & XP Rewards Summary */}
+          {currentQuest.badge_config && (
+            <div className="p-4 rounded-xl bg-card border border-border/60 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-3">
+                <Award className="w-5 h-5 text-amber-500 shrink-0" />
+                <div>
+                  <span className="font-bold text-foreground block">
+                    {currentQuest.badge_config.title || 'Quest Badge Unlocked'}
+                  </span>
+                  <p className="text-muted-foreground text-[11px]">
+                    {currentQuest.badge_config.description || 'All quest challenges successfully validated.'}
+                  </p>
+                </div>
+              </div>
+              <Badge variant="secondary" className="text-xs font-mono font-bold text-amber-500 shrink-0 flex items-center gap-1">
+                <Sparkles className="w-3 h-3" />
+                +100 Bonus XP
+              </Badge>
+            </div>
+          )}
+        </div>
       )}
 
       {/* ─── TASK FORM OR CHECKLIST ─── */}
