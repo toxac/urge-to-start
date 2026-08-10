@@ -1233,5 +1233,39 @@ export function ComplementarySidebar() {
 
 ```
 
+cheer squad message -> 
+Hey ac! I'm launching a new project and building my inner "Cheer Squad" of trusted people to keep me accountable and share behind-the-scenes milestones.
+
+
+user_posts policies
+
+```sql
+alter policy "Authenticated members can contribute feedback metrics"
+on "public"."user_posts"
+to authenticated
+using (
+  has_program_access(auth.uid())
+) with check (
+  has_program_access(auth.uid())
+);
+
+alter policy "Authors can fully manage their own community posts"
+on "public"."user_posts"
+to authenticated
+using (
+  (auth.uid() = user_id)
+) with check (
+  (auth.uid() = user_id)
+);
+
+alter policy "Full members can browse community content posts"
+on "public"."user_posts"
+to authenticated
+using (
+  ((is_published = true) AND has_program_access(auth.uid()))
+);
+
+```
+
 
 

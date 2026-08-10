@@ -236,9 +236,9 @@ export function CommunityIntroForm({ task, existingProgress, onSuccess }: BaseTa
                 Publishing to Community...
               </span>
             ) : isInitiallyCompleted ? (
-              'Update Community Intro'
+              'Update Community Intro Post'
             ) : (
-              `Publish Intro Post & Earn +${task.grant_points} XP`
+              `Publish Intro Post & Mark Task Complete`
             )}
           </Button>
         </div>

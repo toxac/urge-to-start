@@ -448,9 +448,9 @@ export function CheerSquadForm({ task, existingProgress, onSuccess }: BaseTaskCo
                 Generating Invite Links...
               </span>
             ) : isInitiallyCompleted ? (
-              'Update Cheer Squad'
+              'Update Squad'
             ) : (
-              `Lock in Cheer Squad & Earn +${task.grant_points} XP`
+              `Save squad & mark task complete`
             )}
           </Button>
         </div>
