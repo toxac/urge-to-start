@@ -449,65 +449,6 @@ export type Database = {
         }
         Relationships: []
       }
-      opportunities: {
-        Row: {
-          capture_metadata: Json
-          created_at: string
-          description: string
-          id: string
-          pain_score_grade: number | null
-          project_id: string | null
-          scores: Json | null
-          source_type: Database["public"]["Enums"]["opportunity_source_type"]
-          status: Database["public"]["Enums"]["opportunity_status"]
-          title: string
-          updated_at: string
-          user_id: string
-          validated_at: string | null
-          validation_interviews: Json
-        }
-        Insert: {
-          capture_metadata?: Json
-          created_at?: string
-          description: string
-          id?: string
-          pain_score_grade?: number | null
-          project_id?: string | null
-          scores?: Json | null
-          source_type: Database["public"]["Enums"]["opportunity_source_type"]
-          status?: Database["public"]["Enums"]["opportunity_status"]
-          title: string
-          updated_at?: string
-          user_id: string
-          validated_at?: string | null
-          validation_interviews?: Json
-        }
-        Update: {
-          capture_metadata?: Json
-          created_at?: string
-          description?: string
-          id?: string
-          pain_score_grade?: number | null
-          project_id?: string | null
-          scores?: Json | null
-          source_type?: Database["public"]["Enums"]["opportunity_source_type"]
-          status?: Database["public"]["Enums"]["opportunity_status"]
-          title?: string
-          updated_at?: string
-          user_id?: string
-          validated_at?: string | null
-          validation_interviews?: Json
-        }
-        Relationships: [
-          {
-            foreignKeyName: "opportunities_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       profiles: {
         Row: {
           accumulated_xp: number
@@ -759,6 +700,7 @@ export type Database = {
           grant_points: number
           id: string
           interval: number | null
+          metadata: Json | null
           mission_id: string
           observation_context: Json | null
           quest_id: string
@@ -784,6 +726,7 @@ export type Database = {
           grant_points?: number
           id: string
           interval?: number | null
+          metadata?: Json | null
           mission_id: string
           observation_context?: Json | null
           quest_id: string
@@ -809,6 +752,7 @@ export type Database = {
           grant_points?: number
           id?: string
           interval?: number | null
+          metadata?: Json | null
           mission_id?: string
           observation_context?: Json | null
           quest_id?: string
@@ -1102,6 +1046,107 @@ export type Database = {
           },
         ]
       }
+      user_observations: {
+        Row: {
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          notes: string | null
+          task_id: string | null
+          updated_at: string | null
+          user_id: string
+          what: string
+          where_location: string
+          who: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          task_id?: string | null
+          updated_at?: string | null
+          user_id: string
+          what: string
+          where_location: string
+          who: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          task_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+          what?: string
+          where_location?: string
+          who?: string
+        }
+        Relationships: []
+      }
+      user_opportunities: {
+        Row: {
+          capture_metadata: Json | null
+          created_at: string | null
+          description: string
+          id: string
+          pain_score_grade: number | null
+          project_id: string | null
+          scores: Json | null
+          source_type: Database["public"]["Enums"]["opportunity_source_type"]
+          status: Database["public"]["Enums"]["opportunity_status"]
+          task_id: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+          validated_at: string | null
+          validation_interviews: Json | null
+        }
+        Insert: {
+          capture_metadata?: Json | null
+          created_at?: string | null
+          description: string
+          id?: string
+          pain_score_grade?: number | null
+          project_id?: string | null
+          scores?: Json | null
+          source_type?: Database["public"]["Enums"]["opportunity_source_type"]
+          status?: Database["public"]["Enums"]["opportunity_status"]
+          task_id?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+          validated_at?: string | null
+          validation_interviews?: Json | null
+        }
+        Update: {
+          capture_metadata?: Json | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          pain_score_grade?: number | null
+          project_id?: string | null
+          scores?: Json | null
+          source_type?: Database["public"]["Enums"]["opportunity_source_type"]
+          status?: Database["public"]["Enums"]["opportunity_status"]
+          task_id?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+          validated_at?: string | null
+          validation_interviews?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_opportunities_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_posts: {
         Row: {
           category: Database["public"]["Enums"]["post_category"]
@@ -1267,7 +1312,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      has_program_access: { Args: { user_id_param: string }; Returns: boolean }
+      has_program_access: { Args: { p_user_id: string }; Returns: boolean }
     }
     Enums: {
       accomplishment_type:
