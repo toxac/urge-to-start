@@ -51,11 +51,25 @@ export type ProfileSocialFootprintSchema = {
   total_connections: number | null;
 };
 
+export type SelfAssessmentMetric = {
+  id: string;
+  label: string;
+  before: number; // 1 - 10 scale
+  after: number;  // 1 - 10 scale
+};
+
+export type SelfAssessmentData = {
+  scores: SelfAssessmentMetric[];
+  key_takeaway: string;
+  completed_at: string;
+};
+
 export type ProfileAssessmentSchema = {
-  assessment_type: string;
-  observation: string;
-  recommendation: string[];
-  score: number;
+  assessment_type: 'ai_audit' | 'self_assessment';
+  observation?: string;
+  recommendation?: string[];
+  score?: number;
+  self_assessment?: SelfAssessmentData; // ⚡ Added Self Assessment Support
 };
 
 export interface MentorMetadata {
