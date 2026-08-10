@@ -271,7 +271,7 @@ export function RoadblockForm({ task, existingProgress, onSuccess }: BaseTaskCom
             ) : isInitiallyCompleted ? (
               'Update Roadblocks'
             ) : (
-              `Surface Fears & Earn +${task.grant_points} XP`
+              `Save Roadblocks & Mark Task Complete`
             )}
           </Button>
         </div>
