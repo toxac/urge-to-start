@@ -265,6 +265,13 @@ const mission1: MissionSchema = {
                             title: "How to Network Without Being Creepy"
                         },
                         {
+                            type: "tools",
+                            isInternal: true,
+                            isRequired: true,
+                            url_link: "/resources/tools/build-your-presence",
+                            title: "Launch yourself before your business - Guide to building your presence"
+                        },
+                        {
                             type: "insights",
                             isInternal: true,
                             isRequired: false,

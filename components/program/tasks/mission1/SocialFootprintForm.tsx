@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 import { updateMyProfile } from '@/actions/profiles';
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { updateProfileStoreFields, $profileStore } from '@/lib/stores/profileStore';
@@ -24,14 +25,25 @@ import {
   ExternalLink, 
   Users, 
   BookOpen,
-  Share2
+  Share2,
+  Sparkles,
+  TrendingUp,
+  Target
 } from 'lucide-react';
 
 interface FormValues {
   items: ProfileSocialFootprintSchema[];
 }
 
-export function SocialFootprintAForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
+const COMMON_CHANNEL_PRESETS = [
+  { name: 'LinkedIn', type: 'platform' },
+  { name: 'X / Twitter', type: 'platform' },
+  { name: 'Discord Community', type: 'clubs' },
+  { name: 'Founders Slack', type: 'clubs' },
+  { name: 'Alumni Network', type: 'network' },
+];
+
+export function SocialFootprintForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const profile = useStore($profileStore);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -39,10 +51,8 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
 
-  // Extract REQUIRED resources to display at the top of the form
   const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
-  // Pre-fill hierarchy: Task Execution Payload -> Profile Store Column -> Default 1 item
   const savedList: ProfileSocialFootprintSchema[] = 
     existingProgress?.saved_payload?.formData?.items || profile?.social_footprint || [
       {
@@ -68,14 +78,35 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
 
   const watchedItems = watch('items');
 
+  // Helper to quick-add common channels
+  const handleAddPreset = (preset: { name: string; type: string }) => {
+    const exists = watchedItems?.some((i) => i.name.toLowerCase() === preset.name.toLowerCase());
+    if (!exists) {
+      append({
+        type: preset.type as any,
+        name: preset.name,
+        profile_link_url: '',
+        total_connections: null,
+      });
+    }
+  };
+
   const onSubmit = async (formData: FormValues) => {
     setIsSubmitting(true);
     setErrorMessage(null);
 
-    const formattedItems: ProfileSocialFootprintSchema[] = formData.items.map((item) => ({
-      ...item,
-      total_connections: item.total_connections ? Number(item.total_connections) : null
-    }));
+    const formattedItems: ProfileSocialFootprintSchema[] = formData.items
+      .filter((item) => item.name.trim().length > 0)
+      .map((item) => ({
+        ...item,
+        total_connections: item.total_connections ? Number(item.total_connections) : null
+      }));
+
+    if (formattedItems.length === 0) {
+      setErrorMessage('Please add at least one social or community channel.');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       // 1. Sync to profiles table
@@ -93,10 +124,24 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
         updateProfileStoreFields(profileSync.data as any);
       }
 
-      // 2. Process Program Task Completion & XP Award
+      // 2. Compute rapid distribution assessment metrics
+      const totalReach = formattedItems.reduce((acc, curr) => acc + (curr.total_connections || 0), 0);
+      const hasDirectChannel = formattedItems.some(i => i.type === 'clubs' || i.type === 'professional');
+
+      const assessmentSummary = {
+        totalChannels: formattedItems.length,
+        totalReach,
+        hasDirectCommunity: hasDirectChannel,
+        topChannel: formattedItems[0]?.name || 'Social Network',
+      };
+
+      // 3. Process Task Completion & Award XP
       const taskResult = await processTaskCompletion({
         task,
-        savedPayload: { formData: { items: formattedItems } }
+        savedPayload: { 
+          formData: { items: formattedItems },
+          assessmentSummary
+        }
       });
 
       if (taskResult.success) {
@@ -112,66 +157,94 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
     }
   };
 
-  // ─── READ-ONLY COMPLETED VIEW ───
+  // ─── READ-ONLY COMPLETED VIEW (With Network Assessment) ───
   if (!isEditing) {
     const list = savedList;
+    const assessmentSummary = existingProgress?.saved_payload?.assessmentSummary;
+    const totalReach = list.reduce((acc, curr) => acc + (curr.total_connections || 0), 0);
 
     return (
-      <div className="w-full space-y-5 border rounded-2xl p-6 bg-emerald-500/5 border-emerald-500/20 text-left">
-        <div className="flex items-center justify-between pb-3 border-b border-border/50">
-          <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 uppercase tracking-wider">
-            <CheckCircle2 className="w-4 h-4" />
-            Social Footprint & Network Mapped
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsEditing(true)}
-            className="h-8 text-xs font-semibold cursor-pointer gap-1.5"
-          >
-            <Edit2 className="w-3.5 h-3.5" />
-            Edit Network Map
-          </Button>
-        </div>
+      <div className="w-full space-y-6 text-left">
+        <div className="w-full space-y-5 border rounded-2xl p-6 bg-emerald-500/5 border-emerald-500/20">
+          <div className="flex items-center justify-between pb-3 border-b border-border/50">
+            <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 uppercase tracking-wider">
+              <CheckCircle2 className="w-4 h-4" />
+              Social Footprint & Network Assessment Complete
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsEditing(true)}
+              className="h-8 text-xs font-semibold cursor-pointer gap-1.5"
+            >
+              <Edit2 className="w-3.5 h-3.5" />
+              Edit Network Map
+            </Button>
+          </div>
 
-        <div className="space-y-3 text-xs">
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-            Your Network Channels ({list.length}):
-          </span>
-
+          {/* Network Assessment Header Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {list.map((item, index) => (
-              <div key={index} className="p-3.5 rounded-xl bg-card border border-border/60 space-y-1">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-foreground capitalize text-xs flex items-center gap-1.5">
-                    <Share2 className="w-3 h-3 text-primary" />
-                    {item.name}
-                  </span>
-                  <span className="text-[9px] uppercase font-bold text-muted-foreground px-2 py-0.5 rounded bg-muted">
-                    {item.type}
-                  </span>
+            <div className="p-4 rounded-xl bg-card border border-border/60 space-y-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                <Users className="w-3.5 h-3.5 text-primary" />
+                Total Distribution Reach
+              </span>
+              <p className="text-lg font-extrabold text-foreground font-mono">
+                {totalReach.toLocaleString()} <span className="text-xs font-sans text-muted-foreground">connections</span>
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-card border border-border/60 space-y-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
+                Active Distribution Channels
+              </span>
+              <p className="text-lg font-extrabold text-foreground font-mono">
+                {list.length} <span className="text-xs font-sans text-muted-foreground">networks mapped</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Mapped Channels List */}
+          <div className="space-y-3 text-xs pt-2">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
+              Your Network Inventory:
+            </span>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {list.map((item, index) => (
+                <div key={index} className="p-3.5 rounded-xl bg-card border border-border/60 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-foreground capitalize text-xs flex items-center gap-1.5">
+                      <Share2 className="w-3 h-3 text-primary" />
+                      {item.name}
+                    </span>
+                    <Badge variant="outline" className="text-[9px] uppercase font-bold text-muted-foreground">
+                      {item.type}
+                    </Badge>
+                  </div>
+
+                  {item.profile_link_url && (
+                    <a
+                      href={item.profile_link_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[11px] text-primary hover:underline flex items-center gap-1 truncate"
+                    >
+                      {item.profile_link_url}
+                      <ExternalLink className="w-2.5 h-2.5 shrink-0" />
+                    </a>
+                  )}
+
+                  {item.total_connections !== null && (
+                    <p className="text-[11px] text-muted-foreground flex items-center gap-1 pt-1 font-mono">
+                      <Users className="w-3 h-3" />
+                      {item.total_connections} contacts
+                    </p>
+                  )}
                 </div>
-
-                {item.profile_link_url && (
-                  <a
-                    href={item.profile_link_url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-[11px] text-primary hover:underline flex items-center gap-1 truncate"
-                  >
-                    {item.profile_link_url}
-                    <ExternalLink className="w-2.5 h-2.5 shrink-0" />
-                  </a>
-                )}
-
-                {item.total_connections !== null && (
-                  <p className="text-[11px] text-muted-foreground flex items-center gap-1 pt-1">
-                    <Users className="w-3 h-3" />
-                    {item.total_connections} connections / members
-                  </p>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -188,7 +261,7 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
         </div>
       )}
 
-      {/* ⚡ TOP SECTION: REQUIRED RESOURCES RENDER */}
+      {/* REQUIRED RESOURCES BANNER */}
       {requiredResources.length > 0 && (
         <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
           <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
@@ -212,6 +285,33 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
         </div>
       )}
 
+      {/* Quick Presets Toolbar */}
+      <div className="p-4 rounded-xl border bg-muted/20 border-border space-y-2">
+        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+          Quick-Add Primary Networks
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {COMMON_CHANNEL_PRESETS.map((preset, idx) => {
+            const isAdded = watchedItems?.some((i) => i.name.toLowerCase() === preset.name.toLowerCase());
+
+            return (
+              <Button
+                key={idx}
+                type="button"
+                variant={isAdded ? 'secondary' : 'outline'}
+                size="sm"
+                disabled={isAdded}
+                onClick={() => handleAddPreset(preset)}
+                className="h-7 text-[11px] font-medium cursor-pointer"
+              >
+                {isAdded ? '✓ ' : '+ '}{preset.name}
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -226,12 +326,12 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
               className="h-7 text-[10px] font-bold text-primary border-primary/20 hover:bg-primary/10 flex items-center gap-1 cursor-pointer"
             >
               <Plus className="w-3 h-3" />
-              Add Channel
+              Add Another Channel
             </Button>
           </div>
 
-          <p className="text-[11px] text-muted-foreground">
-            List where you have presence or network reach (LinkedIn, Twitter/X, Discord communities, Slack groups, Alumni networks, etc.).
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
+            Add as many channels as you have access to (LinkedIn, Twitter/X, Discord communities, Slack groups, Alumni networks, newsletter lists, etc.).
           </p>
 
           <div className="space-y-4">
@@ -260,7 +360,7 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {/* Channel Type */}
                     <div className="space-y-1">
-                      <Label className="text-[11px] font-semibold text-foreground">Type</Label>
+                      <Label className="text-[11px] font-semibold text-foreground">Channel Type</Label>
                       <Select
                         value={currentType}
                         onValueChange={(val) => setValue(`items.${index}.type` as const, val as any)}
@@ -271,14 +371,14 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
                         <SelectContent>
                           <SelectItem value="platform">Social Platform (LinkedIn, X, IG)</SelectItem>
                           <SelectItem value="clubs">Community / Club (Discord, Slack, Meetup)</SelectItem>
-                          <SelectItem value="professional">Professional Network (Former Colleagues)</SelectItem>
+                          <SelectItem value="professional">Professional Network (Colleagues)</SelectItem>
                           <SelectItem value="network">Alumni / School Group</SelectItem>
                           <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
-                    {/* Name */}
+                    {/* Channel Name */}
                     <div className="space-y-1">
                       <Label className="text-[11px] font-semibold text-foreground">Channel Name *</Label>
                       <Input
@@ -288,7 +388,7 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
                       />
                     </div>
 
-                    {/* Link */}
+                    {/* Profile Link */}
                     <div className="space-y-1">
                       <Label className="text-[11px] font-semibold text-foreground">Profile / Group Link</Label>
                       <Input
@@ -300,7 +400,7 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
 
                     {/* Connection Count */}
                     <div className="space-y-1">
-                      <Label className="text-[11px] font-semibold text-foreground">Connections / Followers Count</Label>
+                      <Label className="text-[11px] font-semibold text-foreground">Connections / Members Count</Label>
                       <Input
                         type="number"
                         min={0}
@@ -336,7 +436,7 @@ export function SocialFootprintAForm({ task, existingProgress, onSuccess }: Base
             {isSubmitting ? (
               <span className="flex items-center gap-2">
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                Saving Network Map...
+                Analyzing Network & Saving...
               </span>
             ) : isInitiallyCompleted ? (
               'Update Network Map'
