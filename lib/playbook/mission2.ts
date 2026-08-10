@@ -235,7 +235,7 @@ const mission2: MissionSchema = {
                             title: "What Skills Are People Willing to Pay For"
                         }
                     ],
-                    component_key: "SkillsOpportunityForm",
+                    component_key: "OpportunityForm",
                     reflection_prompt: "How could you package your skills as a service or product? What would be the simplest version?",
                     observation_context: null,
                     grant_points: 20,

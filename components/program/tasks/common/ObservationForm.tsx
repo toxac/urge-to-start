@@ -26,7 +26,9 @@ import {
   MapPin, 
   User, 
   Clock,
-  ArrowRight
+  ArrowRight,
+  Award,
+  Search
 } from 'lucide-react';
 
 type UserObservationRow = Database['public']['Tables']['user_observations']['Row'];
@@ -52,11 +54,77 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
 
   const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
+  const category = task.observation_context?.category || 'personal_problems';
+
+  // Dynamic configuration based on category framing
+  const formConfig = category === 'skills'
+    ? {
+        headerTitle: 'Audit a Personal Skill or Asset',
+        headerIcon: <Award className="w-3.5 h-3.5 text-amber-500" />,
+        whoLabel: 'Who asks for help? *',
+        whoPlaceholder: 'e.g. Myself, Friends, Classmates, Clients',
+        whoDefault: 'Myself & Peers',
+        whereLabel: 'Skill Category / Domain *',
+        wherePlaceholder: 'e.g. Technical, Design, Writing, Sales',
+        whereDefault: 'Technical & Web Dev',
+        whenLabel: 'Frequency / Context *',
+        whenPlaceholder: 'e.g. Frequent requests, Past projects',
+        whenDefault: 'Weekly Requests',
+        whatLabel: 'Core Skill or Natural Strength *',
+        whatPlaceholder: 'e.g. Rapidly prototyping clean UI layouts or writing Python automation scripts.',
+        notesLabel: 'Evidence / What people specifically ask you for (Optional)',
+        notesPlaceholder: 'e.g. Friends regularly ask me to help them debug Next.js app errors before project deadlines.',
+        submitButtonText: 'Save Skill Asset Entry',
+        loggedHeader: 'Audited Skill Assets',
+        completedTitle: 'Skill Assets Audited & Step Completed'
+      }
+    : category === 'zone_of_influence'
+    ? {
+        headerTitle: 'Observe People Around You',
+        headerIcon: <Search className="w-3.5 h-3.5 text-primary" />,
+        whoLabel: 'Who did you observe? *',
+        whoPlaceholder: 'e.g. Coworker, Friend, Neighbor, Local Shop Owner',
+        whoDefault: 'Colleague',
+        whereLabel: 'Where did you notice this? *',
+        wherePlaceholder: 'e.g. Office Coffee Machine, Gym, Local Cafe',
+        whereDefault: 'Office',
+        whenLabel: 'When / Situation? *',
+        whenPlaceholder: 'e.g. Weekly team sync, Lunch break',
+        whenDefault: 'Lunch Break',
+        whatLabel: 'What exact complaint or struggle did they express? *',
+        whatPlaceholder: 'e.g. They complained that scheduling shifts for 10 part-time staff takes them 3 hours every Sunday.',
+        notesLabel: 'Observation Notes / Emotional Intensity (Optional)',
+        notesPlaceholder: 'e.g. They seemed extremely frustrated and mentioned they would gladly pay for an auto-scheduler.',
+        submitButtonText: 'Save Observation Entry',
+        loggedHeader: 'Observed People Pains',
+        completedTitle: 'People Observations Recorded & Step Completed'
+      }
+    : {
+        headerTitle: 'Log a Personal Frustration',
+        headerIcon: <Eye className="w-3.5 h-3.5 text-primary" />,
+        whoLabel: 'Who experiences this? *',
+        whoPlaceholder: 'e.g. Myself, My Family',
+        whoDefault: 'Myself',
+        whereLabel: 'Where does it happen? *',
+        wherePlaceholder: 'e.g. At Home, Grocery Store, Office',
+        whereDefault: 'At Home',
+        whenLabel: 'When / Context? *',
+        whenPlaceholder: 'e.g. Morning Routine, Commute',
+        whenDefault: 'Morning Routine',
+        whatLabel: 'What is the exact frustration / pain point? *',
+        whatPlaceholder: 'e.g. It takes 20 minutes every morning to manually re-enter receipts into spreadsheet software.',
+        notesLabel: 'Additional Notes (Optional)',
+        notesPlaceholder: 'e.g. I complained about this 3 times this week.',
+        submitButtonText: 'Save Frustration Entry',
+        loggedHeader: 'Captured Frustrations',
+        completedTitle: 'Frustrations Logged & Step Completed'
+      };
+
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ObservationInputs>({
     defaultValues: {
-      who: 'Myself',
-      where_location: 'At Home',
-      when_context: 'Morning Routine',
+      who: formConfig.whoDefault,
+      where_location: formConfig.whereDefault,
+      when_context: formConfig.whenDefault,
       what: '',
       notes: ''
     }
@@ -73,7 +141,6 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
     loadObservations();
   }, [task.id]);
 
-  // 1. Add Observation (Sets task status to 'in_progress' on first entry)
   const onSubmitObservation = async (formData: ObservationInputs) => {
     setIsSubmitting(true);
     setErrorMessage(null);
@@ -87,7 +154,7 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
         what: formData.what,
         notes: formData.notes,
         metadata: {
-          category: task.observation_context?.category || 'personal_problems',
+          category,
           source: 'ObservationForm'
         }
       });
@@ -101,7 +168,6 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
       const newObservation = obsRes.data;
       setObservations(prev => [newObservation, ...prev]);
 
-      // Switch status to 'in_progress' if not already set
       if (!isCompleted && existingProgress?.status !== 'in_progress') {
         const progressRes = await setTaskStatusInProgressAction({
           taskId: task.id,
@@ -114,7 +180,6 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
         }
       }
 
-      // Reset form fields for the next entry while retaining helpful defaults
       reset({
         who: formData.who,
         where_location: formData.where_location,
@@ -130,10 +195,9 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
     }
   };
 
-  // 2. Complete Task Action (Explicit user finish)
   const handleCompleteTask = async () => {
     if (observations.length === 0) {
-      setErrorMessage('Please log at least one observation before completing this step.');
+      setErrorMessage('Please add at least one entry before completing this step.');
       return;
     }
 
@@ -145,6 +209,7 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
         task,
         savedPayload: {
           total_observations: observations.length,
+          category,
           last_updated_at: new Date().toISOString()
         }
       });
@@ -203,10 +268,10 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
           <div className="flex items-center justify-between pb-2 border-b border-border/50">
             <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 uppercase tracking-wider">
               <CheckCircle2 className="w-4 h-4" />
-              Observations Logged & Step Completed
+              {formConfig.completedTitle}
             </span>
             <Badge variant="outline" className="text-[10px] bg-emerald-500/10 text-emerald-500 border-emerald-500/30 font-bold">
-              {observations.length} Observations Captured
+              {observations.length} Entries
             </Badge>
           </div>
           <Button
@@ -217,7 +282,7 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
             className="text-xs font-semibold gap-1.5 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
-            Add Additional Observation
+            Add Additional Entry
           </Button>
         </div>
       )}
@@ -227,7 +292,7 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-              Captured Observations ({observations.length}):
+              {formConfig.loggedHeader} ({observations.length}):
             </span>
             {isInProgress && !isCompleted && (
               <Badge variant="outline" className="text-[9px] font-mono border-amber-500/40 text-amber-500 bg-amber-500/10">
@@ -260,7 +325,7 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
                 </p>
                 {obs.notes && (
                   <p className="text-[11px] text-muted-foreground italic border-t pt-2">
-                    Note: {obs.notes}
+                    Evidence / Notes: {obs.notes}
                   </p>
                 )}
               </div>
@@ -274,66 +339,70 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
         <form onSubmit={handleSubmit(onSubmitObservation)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-4">
           <div className="space-y-1">
             <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-              <Eye className="w-3.5 h-3.5" />
-              {observations.length > 0 ? 'Log Another Observation' : 'Log a Real Observation'}
+              {formConfig.headerIcon}
+              {observations.length > 0 ? `Log Another Entry` : formConfig.headerTitle}
             </span>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground leading-relaxed">
               {task.briefing_text}
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="space-y-1.5">
-              <Label className="text-xs font-semibold text-foreground">Who? *</Label>
+              <Label className="text-xs font-semibold text-foreground block">{formConfig.whoLabel}</Label>
               <Input
                 type="text"
-                placeholder="e.g. Myself, Colleague"
-                className="text-xs h-9"
+                placeholder={formConfig.whoPlaceholder}
+                className="text-xs h-9 bg-background"
                 {...register('who', { required: true })}
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-xs font-semibold text-foreground">Where? *</Label>
+              <Label className="text-xs font-semibold text-foreground block">{formConfig.whereLabel}</Label>
               <Input
                 type="text"
-                placeholder="e.g. At Home, Office, Gym"
-                className="text-xs h-9"
+                placeholder={formConfig.wherePlaceholder}
+                className="text-xs h-9 bg-background"
                 {...register('where_location', { required: true })}
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-xs font-semibold text-foreground">When / Context? *</Label>
+              <Label className="text-xs font-semibold text-foreground block">{formConfig.whenLabel}</Label>
               <Input
                 type="text"
-                placeholder="e.g. Morning Routine, Commute"
-                className="text-xs h-9"
+                placeholder={formConfig.whenPlaceholder}
+                className="text-xs h-9 bg-background"
                 {...register('when_context', { required: true })}
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">What is the exact observation / pain point? *</Label>
+            <Label className="text-xs font-semibold text-foreground block">
+              {formConfig.whatLabel}
+            </Label>
             <Textarea
-              className="text-xs leading-relaxed resize-none min-h-[80px]"
-              placeholder="e.g. It takes 20 minutes every morning to manually re-enter receipts into spreadsheet software."
+              className="text-xs leading-relaxed bg-background resize-none min-h-[80px]"
+              placeholder={formConfig.whatPlaceholder}
               {...register('what', { required: true, minLength: 5 })}
             />
             {errors.what && (
               <p className="text-[11px] text-destructive font-semibold">
-                Please describe the observation (at least 5 characters).
+                Please fill in this required field (at least 5 characters).
               </p>
             )}
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">Additional Notes (Optional)</Label>
+            <Label className="text-xs font-semibold text-foreground block">
+              {formConfig.notesLabel}
+            </Label>
             <Input
               type="text"
-              placeholder="e.g. They complained about it 3 times this week."
-              className="text-xs h-9"
+              placeholder={formConfig.notesPlaceholder}
+              className="text-xs h-9 bg-background"
               {...register('notes')}
             />
           </div>
@@ -352,14 +421,14 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
             ) : (
               <>
                 <Plus className="w-3.5 h-3.5" />
-                Save Observation Entry
+                {formConfig.submitButtonText}
               </>
             )}
           </Button>
         </form>
       )}
 
-      {/* COMPLETE TASK CTA (Active once at least 1 observation is logged) */}
+      {/* COMPLETE TASK CTA */}
       {!isCompleted && observations.length > 0 && (
         <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-0.5">
@@ -367,7 +436,7 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
               Ready to wrap up this task?
             </span>
             <p className="text-[11px] text-muted-foreground">
-              You have logged {observations.length} observation{observations.length > 1 ? 's' : ''}. Complete the step to earn your XP.
+              You have recorded {observations.length} entry{observations.length > 1 ? 'ies' : ''}. Complete the step to earn your XP.
             </p>
           </div>
           <Button
