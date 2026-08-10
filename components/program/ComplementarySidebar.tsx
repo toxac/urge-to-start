@@ -236,7 +236,7 @@ export function ComplementarySidebar() {
   return (
     <>
       {/* DESKTOP PANEL – visible from lg upward */}
-      <aside className="hidden lg:flex w-80 h-full border-l border-border bg-card flex-col overflow-hidden shrink-0 shadow-sm relative z-20">
+      <aside className="hidden lg:block fixed right-0 top-0 h-screen w-80 border-l border-border bg-card overflow-hidden shadow-sm z-20">
         <div className="p-4 border-b border-border bg-muted/20 flex items-center justify-between shrink-0">
           <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
             <BookOpen className="w-4 h-4 text-primary" />
@@ -247,7 +247,7 @@ export function ComplementarySidebar() {
                 : 'Mission Info'}
           </span>
         </div>
-        <div className="flex-1 overflow-y-auto p-4">{renderContent()}</div>
+        <div className="h-[calc(100%-56px)] overflow-y-auto p-4">{renderContent()}</div>
       </aside>
 
       {/* TABLET OVERLAY – visible only on md, hidden on lg+ and below sm */}
