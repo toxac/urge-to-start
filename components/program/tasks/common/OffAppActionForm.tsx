@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useStore } from '@nanostores/react';
 import { $actionStore, setActionStoreRow } from '@/lib/stores/actionStore';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
@@ -30,7 +31,8 @@ import {
   Lightbulb, 
   Check, 
   CalendarCheck, 
-  ArrowRight 
+  ArrowRight,
+  PenTool
 } from 'lucide-react';
 
 interface ReflectionFormInputs {
@@ -50,24 +52,20 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
 
   const completedLogsCount = existingReflections.length;
   
-  // ⚡ Check if an active user_action exists in store for this task
   const existingTaskAction = Object.values(actionsMap).find(
     (a) => a.task_id === task.id && a.status !== 'dismissed'
   );
 
   const isCompleted = existingProgress?.status === 'completed' || completedLogsCount >= targetCount;
-  
-  // ⚡ Task is in_progress if explicitly set in user_progress OR if an active user_action exists
   const isInProgress = existingProgress?.status === 'in_progress' || !!existingTaskAction;
 
   const [isAddingNew, setIsAddingNew] = useState(!isCompleted);
-  const [selectedScenarioIndex, setSelectedScenarioIndex] = useState<number | null>(null);
+  const [selectedScenarioIndex, setSelectedScenarioIndex] = useState<number | 'custom' | null>(null);
+  const [customScenarioText, setCustomScenarioText] = useState('');
   const [showReflectionInput, setShowReflectionInput] = useState(false);
 
-  // Extract REQUIRED resources
   const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
-  // Extract Scenarios from task.metadata
   const scenarios: string[] = task.metadata?.scenarios || [
     "Ask a coffee shop barista for a 10% discount just to practice handling rejection.",
     "Ask a store manager if they offer a student, founder, or local business discount.",
@@ -77,16 +75,24 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ReflectionFormInputs>();
 
-  // 1. Commit Scenario: Creates user_action AND marks task status = 'in_progress'
+  const getChosenScenario = (): string => {
+    if (selectedScenarioIndex === 'custom') {
+      return customScenarioText.trim();
+    }
+    if (typeof selectedScenarioIndex === 'number' && scenarios[selectedScenarioIndex]) {
+      return scenarios[selectedScenarioIndex];
+    }
+    return '';
+  };
+
   const handleScheduleScenarioAction = async () => {
-    if (selectedScenarioIndex === null) return;
+    const chosenScenarioText = getChosenScenario();
+    if (!chosenScenarioText) return;
+
     setIsSchedulingAction(true);
     setErrorMessage(null);
 
-    const chosenScenarioText = scenarios[selectedScenarioIndex];
-
     try {
-      // Step A: Create user_action reminder
       const actionRes = await createUserAction({
         title: `Real-World Goal: "${task.title}"`,
         description: `Chosen scenario: ${chosenScenarioText}`,
@@ -104,7 +110,6 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         return;
       }
 
-      // Hydrate $actionStore locally
       setActionStoreRow({
         id: actionRes.data.actionId,
         user_id: '',
@@ -122,7 +127,6 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         updated_at: new Date().toISOString()
       });
 
-      // Step B: Set user_progress.status = 'in_progress' with quest_id & mission_id
       const statusRes = await setTaskStatusInProgressAction({
         taskId: task.id,
         questId: (task as any).quest_id,
@@ -142,7 +146,6 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
     }
   };
 
-  // 2. Submit Reflection
   const onSubmit = async (formData: ReflectionFormInputs) => {
     setIsSubmitting(true);
     setErrorMessage(null);
@@ -187,6 +190,10 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
     }
   };
 
+  const isScheduleDisabled = isSchedulingAction || 
+    (selectedScenarioIndex === null) || 
+    (selectedScenarioIndex === 'custom' && customScenarioText.trim().length < 5);
+
   return (
     <div className="w-full space-y-6 text-left">
       {errorMessage && (
@@ -208,11 +215,11 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
           </Badge>
         </div>
         <p className="text-xs text-foreground font-medium leading-relaxed">
-          This task takes place out in the real world! Select a scenario to schedule your action goal, execute it, and log your reflection.
+          This task takes place out in the real world! Select a scenario (or write your own) to schedule your goal, execute it, and log your reflection.
         </p>
       </div>
 
-      {/* ⚡ ACTIVE USER ACTION CARD (Renders automatically if an action exists in $actionStore) */}
+      {/* ⚡ ACTIVE USER ACTION CARD */}
       <ActionItemCard taskId={task.id} />
 
       {/* REQUIRED RESOURCES BANNER */}
@@ -239,7 +246,7 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         </div>
       )}
 
-      {/* Counter Progress Tracker (Shown if target_count > 1) */}
+      {/* Counter Progress Tracker (if target_count > 1) */}
       {targetCount > 1 && (
         <div className="p-4 rounded-xl border border-border bg-card/60 flex items-center justify-between">
           <div className="space-y-0.5">
@@ -261,7 +268,7 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         </div>
       )}
 
-      {/* Completed Banner if finished */}
+      {/* Completed Banner */}
       {targetCount <= 1 && isCompleted && !isAddingNew && (
         <div className="w-full space-y-3 border rounded-2xl p-5 bg-emerald-500/5 border-emerald-500/20 text-left">
           <div className="flex items-center justify-between pb-2 border-b border-border/50">
@@ -273,7 +280,7 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         </div>
       )}
 
-      {/* 💡 STEP 1: SCENARIOS SELECTION (Only shown if NOT in_progress AND NOT completed) */}
+      {/* 💡 STEP 1: SCENARIOS SELECTION & CUSTOM INPUT */}
       {!isInProgress && !isCompleted && !showReflectionInput && (
         <div className="p-5 rounded-2xl border border-border bg-card space-y-4">
           <div className="space-y-1">
@@ -282,7 +289,7 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
               Choose Your Action Approach
             </span>
             <p className="text-xs text-muted-foreground">
-              Select a scenario to set as a goal:
+              Select a suggested scenario or write your own custom challenge:
             </p>
           </div>
 
@@ -309,28 +316,59 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
                 </div>
               );
             })}
+
+            {/* Custom Scenario Option */}
+            <div
+              onClick={() => setSelectedScenarioIndex('custom')}
+              className={`p-3.5 rounded-xl border transition cursor-pointer text-xs font-medium flex items-start gap-3 ${
+                selectedScenarioIndex === 'custom'
+                  ? 'border-primary bg-primary/5 text-foreground font-bold shadow-sm' 
+                  : 'border-border bg-card hover:bg-muted/30 text-muted-foreground'
+              }`}
+            >
+              <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 mt-0.5 ${
+                selectedScenarioIndex === 'custom' ? 'border-primary bg-primary text-primary-foreground' : 'border-muted-foreground/40'
+              }`}>
+                {selectedScenarioIndex === 'custom' && <Check className="w-2.5 h-2.5" />}
+              </div>
+              <div className="space-y-2 w-full">
+                <span className="flex items-center gap-1.5 font-bold text-primary">
+                  <PenTool className="w-3.5 h-3.5" />
+                  Create My Own Custom Scenario
+                </span>
+                
+                {selectedScenarioIndex === 'custom' && (
+                  <Input
+                    type="text"
+                    className="w-full h-9 text-xs bg-background"
+                    placeholder="e.g. Ask a gym receptionist if I can bring my cat in for a 5-minute workout."
+                    value={customScenarioText}
+                    onChange={(e) => setCustomScenarioText(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                )}
+              </div>
+            </div>
           </div>
 
-          {selectedScenarioIndex !== null && (
-            <Button
-              type="button"
-              onClick={handleScheduleScenarioAction}
-              disabled={isSchedulingAction}
-              className="w-full h-10 text-xs font-bold tracking-wider uppercase cursor-pointer gap-2"
-            >
-              {isSchedulingAction ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  Scheduling Goal...
-                </>
-              ) : (
-                <>
-                  <CalendarCheck className="w-4 h-4" />
-                  Commit to Scenario & Set Goal
-                </>
-              )}
-            </Button>
-          )}
+          <Button
+            type="button"
+            onClick={handleScheduleScenarioAction}
+            disabled={isScheduleDisabled}
+            className="w-full h-10 text-xs font-bold tracking-wider uppercase cursor-pointer gap-2"
+          >
+            {isSchedulingAction ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                Scheduling Goal...
+              </>
+            ) : (
+              <>
+                <CalendarCheck className="w-4 h-4" />
+                Commit to Scenario & Set Goal
+              </>
+            )}
+          </Button>
 
           <div className="pt-2 border-t border-border/40 flex justify-end">
             <Button
@@ -347,7 +385,7 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         </div>
       )}
 
-      {/* ⚡ STEP 2: IN-PROGRESS PROMPT (Shown when status == 'in_progress' or action exists) */}
+      {/* ⚡ STEP 2: IN-PROGRESS PROMPT */}
       {isInProgress && !isCompleted && !showReflectionInput && (
         <div className="p-5 rounded-2xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-0.5">
@@ -407,7 +445,7 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
 
             <Textarea
               className="w-full min-h-[100px] text-xs leading-relaxed resize-none"
-              placeholder="e.g. I asked the barista for a 10% discount. They looked surprised but laughed and gave me 5% off! It felt scary for 3 seconds, but the outcome was completely harmless."
+              placeholder="e.g. I asked the barista if I could steam my own milk. They laughed, said 'Health code says no, but I appreciate the bold ask!' It felt hilarious and completely harmless."
               {...register('reflection_text', { required: true, minLength: 5 })}
             />
             {errors.reflection_text && (

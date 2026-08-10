@@ -510,9 +510,9 @@ const mission1: MissionSchema = {
                     target_count: 1,
                     "metadata": {
                         "scenarios": [
-                        "Ask a local coffee shop barista for a 10% founder discount.",
-                        "Ask a colleague or peer for a 15-minute quick feedback session on your idea.",
-                        "Ask a software tool vendor or provider if they offer a extended trial or founder tier."
+                            "Ask a local coffee shop barista for a 10% founder discount.",
+                            "Ask a colleague or peer for a 15-minute quick feedback session on your idea.",
+                            "Ask an Uber driver if you can play DJ and connect to their car audio to play your custom hype song.",
                         ]
                     },
                     created_at: new Date().toISOString(),
@@ -604,7 +604,15 @@ const mission1: MissionSchema = {
                     challenges: null,
                     ai_config: null,
                     dependencies: [],
-                    target_count: 2,
+                    target_count: 1,
+                    metadata: {
+                        "scenarios": [
+                            "Ask a coffee shop barista if you can step behind the counter and steam your own milk / pour your own espresso shot.",
+                            "Ask a flight attendant or gate agent if you can get a free upgrade to First Class on your flight.",
+                            "Ask a stranger on the street if they would be willing to learn a dramatic 10-second secret handshake with you.",
+                            "Ask a bookshop or retail staff member if you can make a quick announcement on their store loudspeaker."
+                        ]
+                    },
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 },
