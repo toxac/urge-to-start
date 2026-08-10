@@ -7,6 +7,7 @@ import { Database } from '@/types/supabase';
 import { ActionResponse } from '@/actions/progress';
 
 type UserActionInsert = Database['public']['Tables']['user_actions']['Insert'];
+type UserActionRow = Database['public']['Tables']['user_actions']['Row'];
 
 interface CreateUserActionInput {
   title: string;
@@ -60,5 +61,43 @@ export async function createUserAction(
   } catch (err: any) {
     console.error('❌ Error creating user action:', err.message);
     return { success: false, error: err.message || 'Failed to create action goal' };
+  }
+}
+
+
+export async function updateUserActionStatusAction(
+  actionId: string,
+  status: 'pending' | 'completed' | 'dismissed'
+): Promise<ActionResponse<UserActionRow>> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) {
+      return { success: false, error: 'Authentication required.' };
+    }
+
+    const updates: Database['public']['Tables']['user_actions']['Update'] = {
+      status,
+      completed_at: status === 'completed' ? new Date().toISOString() : null,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { data, error } = await supabase
+      .from('user_actions')
+      .update(updates)
+      .eq('id', actionId)
+      .eq('user_id', user.id)
+      .select()
+      .single();
+
+    if (error || !data) throw error;
+
+    revalidatePath('/dashboard');
+
+    return { success: true, data };
+  } catch (err: any) {
+    console.error('❌ Error updating user action status:', err.message);
+    return { success: false, error: err.message || 'Failed to update action' };
   }
 }
