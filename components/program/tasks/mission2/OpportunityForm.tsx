@@ -48,7 +48,7 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   const [opportunities, setOpportunities] = useState<UserOpportunityRow[]>([]);
-  const [observations, setObservations] = useState<UserObservationRow[]>([]);
+  const [filteredObservations, setFilteredObservations] = useState<UserObservationRow[]>([]);
   const [selectedObsId, setSelectedObsId] = useState<string | null>(null);
 
   const sourceType: OpportunitySourceType = 
@@ -65,7 +65,7 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
 
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<OpportunityInputs>();
 
-  // Fetch logged opportunities and observations
+  // Fetch logged opportunities and matching observations
   useEffect(() => {
     async function loadData() {
       const [oppRes, obsRes] = await Promise.all([
@@ -77,7 +77,12 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
         setOpportunities(oppRes.data);
       }
       if (obsRes.success && obsRes.data) {
-        setObservations(obsRes.data);
+        // ⚡ Filter observations to ONLY show those matching the current sourceType / category
+        const filtered = obsRes.data.filter((obs) => {
+          const cat = (obs.metadata as any)?.category || 'personal_problems';
+          return cat === sourceType;
+        });
+        setFilteredObservations(filtered);
       }
     }
     loadData();
@@ -287,15 +292,15 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
             </p>
           </div>
 
-          {/* LINKED OBSERVATION QUICK-PICKER */}
-          {observations.length > 0 && (
+          {/* LINKED OBSERVATION QUICK-PICKER (FILTERED BY CURRENT SOURCE TYPE ONLY) */}
+          {filteredObservations.length > 0 && (
             <div className="p-3.5 rounded-xl border border-primary/20 bg-primary/5 space-y-2">
               <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1">
                 <Eye className="w-3 h-3" />
-                Select from Your Logged Observations:
+                Select from Your Relevant Logged Observations:
               </span>
               <div className="flex flex-col gap-2">
-                {observations.map((obs) => {
+                {filteredObservations.map((obs) => {
                   const isSelected = selectedObsId === obs.id;
                   return (
                     <button

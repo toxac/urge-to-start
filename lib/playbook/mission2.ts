@@ -150,7 +150,10 @@ const mission2: MissionSchema = {
                     ],
                     component_key: "OpportunityForm",
                     reflection_prompt: "Which of your frustrations could someone pay to have solved? Why?",
-                    observation_context: null,
+                    observation_context: {
+                        category: "personal_problems",
+                        reference: "user_opportunities"
+                    },
                     grant_points: 20,
                     challenges: null,
                     ai_config: null,
@@ -237,7 +240,10 @@ const mission2: MissionSchema = {
                     ],
                     component_key: "OpportunityForm",
                     reflection_prompt: "How could you package your skills as a service or product? What would be the simplest version?",
-                    observation_context: null,
+                    observation_context: {
+                        category: "skills",
+                        reference: "user_opportunities"
+                    },
                     grant_points: 20,
                     challenges: null,
                     ai_config: null,
