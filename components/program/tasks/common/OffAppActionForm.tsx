@@ -7,11 +7,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { logTaskReflectionAction } from '@/actions/progress';
+import { ActionItemCard } from '@/components/program/ActionItemCard';
+import { logTaskReflectionAction, setTaskStatusInProgressAction } from '@/actions/progress';
 import { recordAccomplishment } from '@/actions/accomplishments';
 import { createUserAction } from '@/actions/userActions';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
 import { setAccomplishmentStoreRow } from '@/lib/stores/accomplishmentStore';
+import { setActionStoreRow } from '@/lib/stores/actionStore';
 import { BaseTaskComponentProps } from '../types';
 import { ReferenceSchema } from '@/types/playbook';
 import { 
@@ -19,15 +21,15 @@ import {
   CheckCircle2, 
   AlertCircle, 
   BookOpen, 
-  ExternalLink,
-  Plus,
-  MessageSquareQuote,
-  Target,
-  Globe,
-  Lightbulb,
-  Check,
-  CalendarCheck,
-  ArrowRight
+  ExternalLink, 
+  Plus, 
+  MessageSquareQuote, 
+  Target, 
+  Globe, 
+  Lightbulb, 
+  Check, 
+  CalendarCheck, 
+  ArrowRight 
 } from 'lucide-react';
 
 interface ReflectionFormInputs {
@@ -45,11 +47,15 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
     ((existingProgress as any)?.reflections as any) || [];
 
   const completedLogsCount = existingReflections.length;
-  const isCompleted = existingProgress?.status === 'completed' || completedLogsCount >= targetCount;
   
+  // ⚡ Explicit status flags derived directly from DB progress state
+  const isCompleted = existingProgress?.status === 'completed' || completedLogsCount >= targetCount;
+  const isInProgress = existingProgress?.status === 'in_progress';
+
   const [isAddingNew, setIsAddingNew] = useState(!isCompleted);
   const [selectedScenarioIndex, setSelectedScenarioIndex] = useState<number | null>(null);
-  const [actionScheduled, setActionScheduled] = useState(false);
+  
+  // ⚡ Show reflection input directly if task is in_progress or user toggled it
   const [showReflectionInput, setShowReflectionInput] = useState(false);
 
   // Extract REQUIRED resources
@@ -65,7 +71,7 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ReflectionFormInputs>();
 
-  // 1. Handle scenario selection & schedule follow-up action in user_actions
+  // 1. Commit Scenario: Creates user_action AND marks task status = 'in_progress'
   const handleScheduleScenarioAction = async () => {
     if (selectedScenarioIndex === null) return;
     setIsSchedulingAction(true);
@@ -74,9 +80,10 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
     const chosenScenarioText = scenarios[selectedScenarioIndex];
 
     try {
-      const res = await createUserAction({
-        title: `Execute Real-World Ask: "${task.title}"`,
-        description: `Your chosen scenario: ${chosenScenarioText}`,
+      // Step A: Create user_action reminder
+      const actionRes = await createUserAction({
+        title: `Real-World Goal: "${task.title}"`,
+        description: `Chosen scenario: ${chosenScenarioText}`,
         checkbackDelayDays: 2,
         taskId: task.id,
         metadata: {
@@ -85,11 +92,36 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         }
       });
 
-      if (res.success) {
-        setActionScheduled(true);
-      } else {
-        setErrorMessage(res.error || 'Failed to schedule action');
+      if (!actionRes.success || !actionRes.data) {
+        setErrorMessage(actionRes.error || 'Failed to schedule action');
+        setIsSchedulingAction(false);
+        return;
       }
+
+      // Hydrate $actionStore
+      setActionStoreRow({
+        id: actionRes.data.actionId,
+        user_id: '',
+        project_id: null,
+        task_id: task.id,
+        title: `Real-World Goal: "${task.title}"`,
+        description: `Chosen scenario: ${chosenScenarioText}`,
+        action_type: 'program',
+        status: 'pending',
+        checkback_delay_days: 2,
+        due_at: new Date(Date.now() + 2 * 86400000).toISOString(),
+        completed_at: null,
+        metadata: { scenario: chosenScenarioText },
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      });
+
+      // Step B: Set user_progress.status = 'in_progress'
+      const statusRes = await setTaskStatusInProgressAction(task.id);
+      if (statusRes.success && statusRes.data) {
+        setProgressStoreRow(statusRes.data as any);
+      }
+
     } catch (err: any) {
       setErrorMessage(err.message || 'An error occurred while scheduling action');
     } finally {
@@ -159,13 +191,16 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
             Real-World Action Required
           </span>
           <Badge variant="outline" className="text-[10px] uppercase border-amber-500/40 text-amber-500 font-mono">
-            Off-App Challenge
+            {isInProgress ? 'In Progress' : 'Off-App Challenge'}
           </Badge>
         </div>
         <p className="text-xs text-foreground font-medium leading-relaxed">
-          This task takes place out in the real world! Pick a scenario below to schedule a 2-day reminder target, complete the action, and then log your reflection.
+          This task takes place out in the real world! Select a scenario to schedule your action goal, execute it, and log your reflection.
         </p>
       </div>
+
+      {/* ⚡ ACTIVE USER ACTION CARD (Renders automatically if an action exists) */}
+      <ActionItemCard taskId={task.id} />
 
       {/* REQUIRED RESOURCES BANNER */}
       {requiredResources.length > 0 && (
@@ -191,16 +226,16 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         </div>
       )}
 
-      {/* 💡 SCENARIOS SELECTION & SCHEDULING BLOCK */}
-      {(!isCompleted || isAddingNew) && !showReflectionInput && (
+      {/* 💡 STEP 1: SCENARIOS SELECTION (Only shown if NOT in_progress AND NOT completed) */}
+      {!isInProgress && !isCompleted && !showReflectionInput && (
         <div className="p-5 rounded-2xl border border-border bg-card space-y-4">
           <div className="space-y-1">
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
               <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
-              Step 1: Pick Your Action Approach
+              Choose Your Action Approach
             </span>
             <p className="text-xs text-muted-foreground">
-              Choose one scenario you will execute over the next 48 hours:
+              Select a scenario to set as a goal:
             </p>
           </div>
 
@@ -229,8 +264,7 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
             })}
           </div>
 
-          {/* Schedule / Confirm Button */}
-          {selectedScenarioIndex !== null && !actionScheduled && (
+          {selectedScenarioIndex !== null && (
             <Button
               type="button"
               onClick={handleScheduleScenarioAction}
@@ -240,100 +274,55 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
               {isSchedulingAction ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  Scheduling Reminder...
+                  Scheduling Goal...
                 </>
               ) : (
                 <>
                   <CalendarCheck className="w-4 h-4" />
-                  Commit to Scenario & Set 2-Day Reminder
+                  Commit to Scenario & Set Goal
                 </>
               )}
             </Button>
           )}
 
-          {/* Scheduled Confirmation Badge + Proceed to Reflection */}
-          {actionScheduled && (
-            <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 space-y-3 animate-in fade-in duration-200">
-              <div className="flex items-center gap-2 text-xs font-bold text-emerald-500">
-                <CheckCircle2 className="w-4 h-4 shrink-0" />
-                <span>Challenge set! Added to your goal reminders for 2 days from now.</span>
-              </div>
-              <p className="text-[11px] text-muted-foreground">
-                Done with the real-world challenge already? Click below to log your reflection.
-              </p>
-              <Button
-                type="button"
-                onClick={() => setShowReflectionInput(true)}
-                className="w-full h-9 text-xs font-bold uppercase cursor-pointer gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
-              >
-                <span>Log My Reflection Now</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
-            </div>
-          )}
+          <div className="pt-2 border-t border-border/40 flex justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setShowReflectionInput(true)}
+              className="text-xs font-semibold gap-1.5 cursor-pointer"
+            >
+              <span>Ready to Log Reflection Directly</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Button>
+          </div>
         </div>
       )}
 
-      {/* Progress Tracker (if target_count > 1) */}
-      {targetCount > 1 && (
-        <div className="p-4 rounded-xl border border-border bg-card/60 flex items-center justify-between">
+      {/* ⚡ STEP 2: IN-PROGRESS PROMPT (Shown when status == 'in_progress') */}
+      {isInProgress && !showReflectionInput && (
+        <div className="p-5 rounded-2xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-0.5">
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-              <Target className="w-3.5 h-3.5 text-primary" />
-              Action Progress Tracker
+            <span className="text-xs font-bold text-foreground block">
+              Task In Progress
             </span>
-            <p className="text-sm font-bold text-foreground">
-              {completedLogsCount} of {targetCount} Reps Completed
+            <p className="text-[11px] text-muted-foreground">
+              Have you executed your real-world challenge? Log your reflection below to complete the step.
             </p>
           </div>
-
-          <Badge 
-            variant={isCompleted ? 'default' : 'outline'}
-            className={isCompleted ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30' : ''}
+          <Button
+            type="button"
+            onClick={() => setShowReflectionInput(true)}
+            className="h-9 text-xs font-bold uppercase cursor-pointer gap-1.5 shrink-0"
           >
-            {isCompleted ? '✓ Target Met' : `${targetCount - completedLogsCount} Remaining`}
-          </Badge>
+            <span>Log Reflection</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Button>
         </div>
       )}
 
-      {/* Completed Banner if single-step and finished */}
-      {targetCount <= 1 && isCompleted && !isAddingNew && (
-        <div className="w-full space-y-3 border rounded-2xl p-5 bg-emerald-500/5 border-emerald-500/20 text-left">
-          <div className="flex items-center justify-between pb-2 border-b border-border/50">
-            <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 uppercase tracking-wider">
-              <CheckCircle2 className="w-4 h-4" />
-              Action Completed & Logged
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* Logged Reflections History */}
-      {existingReflections.length > 0 && (
-        <div className="space-y-3">
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-            Logged Reflections ({existingReflections.length}):
-          </span>
-
-          <div className="space-y-2">
-            {existingReflections.map((entry, idx) => (
-              <div key={entry.id || idx} className="p-3.5 rounded-xl border border-border/80 bg-card space-y-1">
-                <div className="flex items-center justify-between text-[10px] text-muted-foreground font-mono">
-                  <span className="font-bold text-primary uppercase">
-                    Rep #{entry.count_index || idx + 1}
-                  </span>
-                  <span>{new Date(entry.logged_at).toLocaleDateString()}</span>
-                </div>
-                <p className="text-xs text-foreground font-medium italic leading-relaxed">
-                  "{entry.reflection_text}"
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* STEP 2: Reflection Form */}
+      {/* STEP 3: REFLECTION INPUT FORM */}
       {(!isCompleted || isAddingNew) && showReflectionInput && (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4 p-5 rounded-2xl border border-primary/30 bg-card/60 shadow-sm animate-in fade-in zoom-in-95 duration-200">
           <div className="space-y-2">
@@ -374,31 +363,14 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
               {isSubmitting ? (
                 <span className="flex items-center gap-2">
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  Logging Reflection ...
+                  Logging Rep...
                 </span>
               ) : (
-                `Save Reflection & Mark Complete`
+                `Submit Reflection & Complete Task (+${task.grant_points} XP)`
               )}
             </Button>
           </div>
         </form>
-      )}
-
-      {/* Allow adding extra log entries if finished */}
-      {isCompleted && !isAddingNew && (
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => {
-            setIsAddingNew(true);
-            setShowReflectionInput(false);
-            setActionScheduled(false);
-          }}
-          className="w-full h-9 text-xs font-semibold gap-1.5 cursor-pointer"
-        >
-          <Plus className="w-3.5 h-3.5" />
-          Log Additional Reflection Rep
-        </Button>
       )}
     </div>
   );

@@ -239,3 +239,38 @@ export async function getMyProgressTracker(): Promise<ActionResponse<ProgressRow
     return { success: false, error: err.message || 'Failed to fetch user progress dataset' };
   }
 }
+
+export async function setTaskStatusInProgressAction(
+  taskId: string
+): Promise<ActionResponse<ProgressRow>> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) {
+      return { success: false, error: 'Authentication required' };
+    }
+
+    const { data, error } = await supabase
+      .from('user_progress')
+      .upsert(
+        {
+          user_id: user.id,
+          task_id: taskId,
+          item_type: 'task', // ⚡ Added required item_type field
+          status: 'in_progress',
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id,task_id' }
+      )
+      .select()
+      .single();
+
+    if (error || !data) throw error;
+
+    revalidatePath('/program');
+    return { success: true, data };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to update task status' };
+  }
+}
