@@ -331,7 +331,7 @@ const mission2: MissionSchema = {
                             title: "People Are the Best Problem Sources"
                         }
                     ],
-                    component_key: "DetectiveObservationForm",
+                    component_key: "ObservationForm",
                     reflection_prompt: "Look at your observations. Which problem feels the most urgent? Which one do you think you could help solve?",
                     observation_context: {
                         category: "zone_of_influence",
@@ -382,9 +382,12 @@ const mission2: MissionSchema = {
                             title: "Opportunities Are All Around You"
                         }
                     ],
-                    component_key: "PeopleOpportunityForm",
+                    component_key: "OpportunityForm",
                     reflection_prompt: "Which of these problems could be the foundation of a business? Why?",
-                    observation_context: null,
+                    observation_context: {
+                        category: "zone_of_influence",
+                        reference: "user_opportunities"
+                    },
                     grant_points: 25,
                     challenges: null,
                     ai_config: null,
