@@ -14,6 +14,7 @@ import { AuditForm } from './mission1/AuditForm';
 
 // mission 2 task components
 import { ObservationForm } from './common/ObservationForm';
+import { OpportunityForm } from './mission2/OpportunityForm';
 
 
 
@@ -32,6 +33,7 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   AuditForm: AuditForm,
   //mission 2
   ObservationForm: ObservationForm,
+  OpportunityForm: OpportunityForm,
 
 
 

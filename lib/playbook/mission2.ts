@@ -148,7 +148,7 @@ const mission2: MissionSchema = {
                             title: "Why Frustrations Make the Best Businesses"
                         }
                     ],
-                    component_key: "OpportunityFromFrustrationForm",
+                    component_key: "OpportunityForm",
                     reflection_prompt: "Which of your frustrations could someone pay to have solved? Why?",
                     observation_context: null,
                     grant_points: 20,
@@ -190,7 +190,7 @@ const mission2: MissionSchema = {
                             title: "How to Identify Your Most Valuable Skills"
                         }
                     ],
-                    component_key: "SkillObservationForm",
+                    component_key: "ObservationForm",
                     reflection_prompt: "Which of your skills could help someone solve a problem? Who needs this skill?",
                     observation_context: {
                         category: "skills",
