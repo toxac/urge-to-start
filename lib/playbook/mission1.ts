@@ -508,6 +508,13 @@ const mission1: MissionSchema = {
                     ai_config: null,
                     dependencies: ["mission1_quest3_task1"],
                     target_count: 1,
+                    "metadata": {
+                        "scenarios": [
+                        "Ask a local coffee shop barista for a 10% founder discount.",
+                        "Ask a colleague or peer for a 15-minute quick feedback session on your idea.",
+                        "Ask a software tool vendor or provider if they offer a extended trial or founder tier."
+                        ]
+                    },
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 }

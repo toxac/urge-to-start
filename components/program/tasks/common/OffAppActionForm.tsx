@@ -50,8 +50,9 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
   const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
   // Extract Scenarios / Approaches from task payload or fallback defaults
-  const scenarios: string[] = (task as any).action_scenarios || (task as any).metadata?.scenarios || [
-    "Ask a coffee shop barista for a 10% discount just to practice handled rejection.",
+  // Extract Scenarios / Approaches dynamically from task.metadata
+  const scenarios: string[] = task.metadata?.scenarios || [
+    "Ask a coffee shop barista for a 10% discount just to practice handling rejection.",
     "Ask a store manager if they offer a student, founder, or local business discount.",
     "Ask a colleague or friend for a quick 10-minute favor or advice on a challenge.",
     "Ask a vendor or service provider to waive a minor fee or extend a trial period."
