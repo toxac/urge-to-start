@@ -3,6 +3,8 @@
 
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useStore } from '@nanostores/react';
+import { $actionStore, setActionStoreRow } from '@/lib/stores/actionStore';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -13,7 +15,6 @@ import { recordAccomplishment } from '@/actions/accomplishments';
 import { createUserAction } from '@/actions/userActions';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
 import { setAccomplishmentStoreRow } from '@/lib/stores/accomplishmentStore';
-import { setActionStoreRow } from '@/lib/stores/actionStore';
 import { BaseTaskComponentProps } from '../types';
 import { ReferenceSchema } from '@/types/playbook';
 import { 
@@ -37,6 +38,7 @@ interface ReflectionFormInputs {
 }
 
 export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
+  const actionsMap = useStore($actionStore);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSchedulingAction, setIsSchedulingAction] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -48,14 +50,18 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
 
   const completedLogsCount = existingReflections.length;
   
-  // ⚡ Explicit status flags derived directly from DB progress state
+  // ⚡ Check if an active user_action exists in store for this task
+  const existingTaskAction = Object.values(actionsMap).find(
+    (a) => a.task_id === task.id && a.status !== 'dismissed'
+  );
+
   const isCompleted = existingProgress?.status === 'completed' || completedLogsCount >= targetCount;
-  const isInProgress = existingProgress?.status === 'in_progress';
+  
+  // ⚡ Task is in_progress if explicitly set in user_progress OR if an active user_action exists
+  const isInProgress = existingProgress?.status === 'in_progress' || !!existingTaskAction;
 
   const [isAddingNew, setIsAddingNew] = useState(!isCompleted);
   const [selectedScenarioIndex, setSelectedScenarioIndex] = useState<number | null>(null);
-  
-  // ⚡ Show reflection input directly if task is in_progress or user toggled it
   const [showReflectionInput, setShowReflectionInput] = useState(false);
 
   // Extract REQUIRED resources
@@ -98,7 +104,7 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         return;
       }
 
-      // Hydrate $actionStore
+      // Hydrate $actionStore locally
       setActionStoreRow({
         id: actionRes.data.actionId,
         user_id: '',
@@ -116,10 +122,17 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         updated_at: new Date().toISOString()
       });
 
-      // Step B: Set user_progress.status = 'in_progress'
-      const statusRes = await setTaskStatusInProgressAction(task.id);
+      // Step B: Set user_progress.status = 'in_progress' with quest_id & mission_id
+      const statusRes = await setTaskStatusInProgressAction({
+        taskId: task.id,
+        questId: (task as any).quest_id,
+        missionId: (task as any).mission_id,
+      });
+
       if (statusRes.success && statusRes.data) {
         setProgressStoreRow(statusRes.data as any);
+      } else if (statusRes.error) {
+        setErrorMessage(statusRes.error);
       }
 
     } catch (err: any) {
@@ -199,7 +212,7 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         </p>
       </div>
 
-      {/* ⚡ ACTIVE USER ACTION CARD (Renders automatically if an action exists) */}
+      {/* ⚡ ACTIVE USER ACTION CARD (Renders automatically if an action exists in $actionStore) */}
       <ActionItemCard taskId={task.id} />
 
       {/* REQUIRED RESOURCES BANNER */}
@@ -222,6 +235,40 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
                 <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
               </a>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Counter Progress Tracker (Shown if target_count > 1) */}
+      {targetCount > 1 && (
+        <div className="p-4 rounded-xl border border-border bg-card/60 flex items-center justify-between">
+          <div className="space-y-0.5">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+              <Target className="w-3.5 h-3.5 text-primary" />
+              Action Progress Tracker
+            </span>
+            <p className="text-sm font-bold text-foreground">
+              {completedLogsCount} of {targetCount} Reps Completed
+            </p>
+          </div>
+
+          <Badge 
+            variant={isCompleted ? 'default' : 'outline'}
+            className={isCompleted ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30' : ''}
+          >
+            {isCompleted ? '✓ Target Met' : `${targetCount - completedLogsCount} Remaining`}
+          </Badge>
+        </div>
+      )}
+
+      {/* Completed Banner if finished */}
+      {targetCount <= 1 && isCompleted && !isAddingNew && (
+        <div className="w-full space-y-3 border rounded-2xl p-5 bg-emerald-500/5 border-emerald-500/20 text-left">
+          <div className="flex items-center justify-between pb-2 border-b border-border/50">
+            <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 uppercase tracking-wider">
+              <CheckCircle2 className="w-4 h-4" />
+              Action Completed & Logged
+            </span>
           </div>
         </div>
       )}
@@ -300,8 +347,8 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         </div>
       )}
 
-      {/* ⚡ STEP 2: IN-PROGRESS PROMPT (Shown when status == 'in_progress') */}
-      {isInProgress && !showReflectionInput && (
+      {/* ⚡ STEP 2: IN-PROGRESS PROMPT (Shown when status == 'in_progress' or action exists) */}
+      {isInProgress && !isCompleted && !showReflectionInput && (
         <div className="p-5 rounded-2xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-0.5">
             <span className="text-xs font-bold text-foreground block">
@@ -319,6 +366,31 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
             <span>Log Reflection</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Button>
+        </div>
+      )}
+
+      {/* Logged Reflections History */}
+      {existingReflections.length > 0 && (
+        <div className="space-y-3">
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
+            Logged Reflections ({existingReflections.length}):
+          </span>
+
+          <div className="space-y-2">
+            {existingReflections.map((entry, idx) => (
+              <div key={entry.id || idx} className="p-3.5 rounded-xl border border-border/80 bg-card space-y-1">
+                <div className="flex items-center justify-between text-[10px] text-muted-foreground font-mono">
+                  <span className="font-bold text-primary uppercase">
+                    Rep #{entry.count_index || idx + 1}
+                  </span>
+                  <span>{new Date(entry.logged_at).toLocaleDateString()}</span>
+                </div>
+                <p className="text-xs text-foreground font-medium italic leading-relaxed">
+                  "{entry.reflection_text}"
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
@@ -371,6 +443,22 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
             </Button>
           </div>
         </form>
+      )}
+
+      {/* Allow adding extra log entries if finished */}
+      {isCompleted && !isAddingNew && (
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => {
+            setIsAddingNew(true);
+            setShowReflectionInput(false);
+          }}
+          className="w-full h-9 text-xs font-semibold gap-1.5 cursor-pointer"
+        >
+          <Plus className="w-3.5 h-3.5" />
+          Log Additional Reflection Rep
+        </Button>
       )}
     </div>
   );
