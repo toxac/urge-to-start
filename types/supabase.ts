@@ -1056,6 +1056,7 @@ export type Database = {
           updated_at: string | null
           user_id: string
           what: string
+          when_context: string
           where_location: string
           who: string
         }
@@ -1068,6 +1069,7 @@ export type Database = {
           updated_at?: string | null
           user_id: string
           what: string
+          when_context: string
           where_location: string
           who: string
         }
@@ -1080,6 +1082,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
           what?: string
+          when_context?: string
           where_location?: string
           who?: string
         }

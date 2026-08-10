@@ -97,7 +97,7 @@ const mission2: MissionSchema = {
                             title: "How to Spot Frustrations in Your Daily Life"
                         }
                     ],
-                    component_key: "FrustrationObservationForm",
+                    component_key: "ObservationForm",
                     reflection_prompt: "Look at your frustrations. Which one feels the most urgent? Which one do you wish someone would solve?",
                     observation_context: {
                         category: "personal_problems",
