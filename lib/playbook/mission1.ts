@@ -661,6 +661,15 @@ const mission1: MissionSchema = {
                     ai_config: null,
                     dependencies: ["mission1_quest4_task1"],
                     target_count: 1,
+                    metadata: {
+                        scenarios: [
+                            "Ask a brand or company you love if you can become an official ambassador, tester, or campus rep.",
+                            "Ask an event host or conference organizer if you can give a 5-minute lightning talk or join a panel.",
+                            "Ask a local business, creator, or community if you can design custom merch, posters, or graphics for them.",
+                            "Ask someone directly if they would be willing to pay you  to solve a specific problem or chore for them.",
+                            "Ask a neighbor or classmate if you can join them for a home-cooked dinner or host a shared potluck meal."
+                        ]
+                    },
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 },
