@@ -9,7 +9,7 @@ import { z } from 'zod';
 // =========================================================================
 export type EducationLevel = Database['public']['Enums']['education_level'];
 
-export type UserRole = Database['public']['Enums']['user_platform_role'] ;
+export type UserRole = Database['public']['Enums']['user_role'] ;
 
 export type UserAgeGroup = Database['public']['Enums']['user_age_group'] ;
 
