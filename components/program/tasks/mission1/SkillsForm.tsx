@@ -291,16 +291,6 @@ export function SkillsForm({ task, existingProgress, onSuccess }: BaseTaskCompon
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {/* Skill Title */}
-                    <div className="space-y-1 md:col-span-1">
-                      <Label className="text-[11px] font-semibold text-foreground">Skill Name *</Label>
-                      <Input
-                        className="text-xs h-9"
-                        placeholder="e.g. Cold Emailing, Figma, Python"
-                        {...register(`skills.${index}.title` as const, { required: true })}
-                      />
-                    </div>
-
                     {/* Category */}
                     <div className="space-y-1">
                       <Label className="text-[11px] font-semibold text-foreground">Category</Label>
@@ -321,6 +311,18 @@ export function SkillsForm({ task, existingProgress, onSuccess }: BaseTaskCompon
                         </SelectContent>
                       </Select>
                     </div>
+
+                    {/* Skill Title */}
+                    <div className="space-y-1 md:col-span-1">
+                      <Label className="text-[11px] font-semibold text-foreground">Skill Name *</Label>
+                      <Input
+                        className="text-xs h-9"
+                        placeholder="e.g. Cold Emailing, Figma, Python"
+                        {...register(`skills.${index}.title` as const, { required: true })}
+                      />
+                    </div>
+
+                    
 
                     {/* Level */}
                     <div className="space-y-1">
@@ -367,12 +369,12 @@ export function SkillsForm({ task, existingProgress, onSuccess }: BaseTaskCompon
             {isSubmitting ? (
               <span className="flex items-center gap-2">
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                Saving Skill Inventory...
+                Saving Skills...
               </span>
             ) : isInitiallyCompleted ? (
-              'Update Skill Inventory'
+              'Update Skills'
             ) : (
-              `Lock in Skill Assets & Earn +${task.grant_points} XP`
+              `Save Skills & Complete Task`
             )}
           </Button>
         </div>
