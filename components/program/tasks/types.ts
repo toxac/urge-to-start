@@ -1,9 +1,9 @@
 // components/program/tasks/types.ts
-import { Task } from '@/types/playbook';
+import { TaskSchema } from '@/types/playbook';
 
 export interface BaseTaskComponentProps {
   /** Full task object from playbook */
-  task: Task;
+  task: TaskSchema;
   /** Current user ID for storage operations */
   userId: string;
   /** Existing progress data if task was previously started/completed */
