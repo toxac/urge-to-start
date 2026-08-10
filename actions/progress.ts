@@ -19,6 +19,11 @@ export type ActionResponse<T> =
 // =========================================================================
 // ZOD SCHEMAS
 // =========================================================================
+interface SetInProgressParams {
+  taskId: string;
+  questId?: string;
+  missionId?: string;
+}
 
 const RecordProgressSchema = z.object({
   taskId: z.string().min(1, 'Task ID is required'),
@@ -243,9 +248,11 @@ export async function getMyProgressTracker(): Promise<ActionResponse<ProgressRow
 /**
  * Ensures a user_progress row exists with status = 'in_progress'
  */
-export async function setTaskStatusInProgressAction(
-  taskId: string
-): Promise<ActionResponse<ProgressRow>> {
+export async function setTaskStatusInProgressAction({
+  taskId,
+  questId,
+  missionId,
+}: SetInProgressParams): Promise<ActionResponse<ProgressRow>> {
   try {
     const supabase = await createClient();
     const { data: { user }, error: authErr } = await supabase.auth.getUser();
@@ -254,13 +261,19 @@ export async function setTaskStatusInProgressAction(
       return { success: false, error: 'Authentication required' };
     }
 
-    // ⚡ UPSERT creates the row if missing, or updates if already exists
+    // ⚡ Derive mission_id and quest_id if not explicitly provided
+    // e.g. "mission1_quest3_task3" -> quest_id = "mission1_quest3", mission_id = "mission-1"
+    const resolvedQuestId = questId || taskId.split('_task')[0];
+    const resolvedMissionId = missionId || 'mission-1';
+
     const { data, error } = await supabase
       .from('user_progress')
       .upsert(
         {
           user_id: user.id,
           task_id: taskId,
+          quest_id: resolvedQuestId,
+          mission_id: resolvedMissionId,
           item_type: 'task',
           status: 'in_progress',
           updated_at: new Date().toISOString(),
