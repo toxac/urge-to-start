@@ -21,7 +21,10 @@ import {
   ExternalLink,
   Plus,
   MessageSquareQuote,
-  Target
+  Target,
+  Globe,
+  Lightbulb,
+  Check
 } from 'lucide-react';
 
 interface ReflectionFormInputs {
@@ -41,9 +44,18 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
   const isCompleted = existingProgress?.status === 'completed' || completedLogsCount >= targetCount;
   
   const [isAddingNew, setIsAddingNew] = useState(!isCompleted);
+  const [showReflectionInput, setShowReflectionInput] = useState(false);
 
   // Extract REQUIRED resources to display at top
   const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
+
+  // Extract Scenarios / Approaches from task payload or fallback defaults
+  const scenarios: string[] = (task as any).action_scenarios || (task as any).metadata?.scenarios || [
+    "Ask a coffee shop barista for a 10% discount just to practice handled rejection.",
+    "Ask a store manager if they offer a student, founder, or local business discount.",
+    "Ask a colleague or friend for a quick 10-minute favor or advice on a challenge.",
+    "Ask a vendor or service provider to waive a minor fee or extend a trial period."
+  ];
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ReflectionFormInputs>();
 
@@ -67,6 +79,7 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
 
       setProgressStoreRow(res.data.progressRow as any);
       reset();
+      setShowReflectionInput(false);
 
       // 2. Award Task XP when rep target count is reached
       if (res.data.isCompleted) {
@@ -101,6 +114,22 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         </div>
       )}
 
+      {/* 🌐 REAL-WORLD ACTION BANNER */}
+      <div className="p-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold text-amber-500 uppercase tracking-wider flex items-center gap-2">
+            <Globe className="w-4 h-4 shrink-0" />
+            Real-World Action Required
+          </span>
+          <Badge variant="outline" className="text-[10px] uppercase border-amber-500/40 text-amber-500 font-mono">
+            Off-App Challenge
+          </Badge>
+        </div>
+        <p className="text-xs text-foreground font-medium leading-relaxed">
+          This task requires step-away execution! Head out into the real world or reach out directly to people online. Do not complete this sitting at your browser without taking the real action first.
+        </p>
+      </div>
+
       {/* REQUIRED RESOURCES BANNER */}
       {requiredResources.length > 0 && (
         <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
@@ -122,6 +151,24 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
               </a>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* 💡 SCENARIOS & APPROACHES GUIDANCE */}
+      {(!isCompleted || isAddingNew) && (
+        <div className="p-4 rounded-xl border border-border bg-card space-y-3">
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+            <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
+            Suggested Approaches & Scenarios
+          </span>
+          <ul className="space-y-2">
+            {scenarios.map((scenario, idx) => (
+              <li key={idx} className="text-xs text-foreground font-medium flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-1.5" />
+                <span>{scenario}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
@@ -184,20 +231,37 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         </div>
       )}
 
-      {/* New Reflection Entry Form */}
-      {(!isCompleted || isAddingNew) && (
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4 p-4 rounded-xl border border-border bg-card/40">
+      {/* STEP 1: Action Completion Button */}
+      {(!isCompleted || isAddingNew) && !showReflectionInput && (
+        <div className="p-5 rounded-2xl border border-primary/20 bg-primary/5 space-y-3 text-center">
+          <p className="text-xs font-semibold text-foreground">
+            Have you completed Rep #{completedLogsCount + 1} in the real world?
+          </p>
+          <Button
+            type="button"
+            onClick={() => setShowReflectionInput(true)}
+            className="w-full h-11 text-xs font-bold tracking-wider uppercase cursor-pointer gap-2"
+          >
+            <Check className="w-4 h-4" />
+            I Completed This Action — Log My Reflection
+          </Button>
+        </div>
+      )}
+
+      {/* STEP 2: Reflection Textarea Form (Revealed after clicking completion button) */}
+      {(!isCompleted || isAddingNew) && showReflectionInput && (
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4 p-5 rounded-2xl border border-primary/30 bg-card/60 shadow-sm animate-in fade-in zoom-in-95 duration-200">
           <div className="space-y-2">
             <Label className="text-xs font-bold text-foreground block flex items-center gap-1.5">
               <MessageSquareQuote className="w-3.5 h-3.5 text-primary" />
               {targetCount > 1 
-                ? `Log Action #${completedLogsCount + 1}: What was your key takeaway / reflection? *`
-                : 'Share a quick reflection to mark this off-app action complete *'}
+                ? `Rep #${completedLogsCount + 1} Reflection: How did the ask go and what did you notice? *`
+                : 'Reflection: What happened, how did you feel, and what did you learn? *'}
             </Label>
 
             <Textarea
-              className="w-full min-h-[90px] text-xs leading-relaxed resize-none"
-              placeholder="What happened? What did you learn or notice during this action?"
+              className="w-full min-h-[100px] text-xs leading-relaxed resize-none"
+              placeholder="e.g. I asked the barista for a 10% discount. They looked surprised but laughed and gave me 5% off! It felt scary for 3 seconds, but the outcome was completely harmless."
               {...register('reflection_text', { required: true, minLength: 5 })}
             />
             {errors.reflection_text && (
@@ -207,20 +271,31 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
             )}
           </div>
 
-          <Button
-            type="submit"
-            className="w-full h-10 text-xs font-bold tracking-wider uppercase cursor-pointer"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <span className="flex items-center gap-2">
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                Logging Action...
-              </span>
-            ) : (
-              `Log Rep & Earn Progress (+${task.grant_points} XP)`
-            )}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowReflectionInput(false)}
+              className="text-xs font-semibold cursor-pointer"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="flex-1 h-10 text-xs font-bold tracking-wider uppercase cursor-pointer"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  Logging Rep...
+                </span>
+              ) : (
+                `Submit Reflection & Lock Progress (+${task.grant_points} XP)`
+              )}
+            </Button>
+          </div>
         </form>
       )}
 
@@ -229,11 +304,14 @@ export function OffAppActionForm({ task, existingProgress, onSuccess }: BaseTask
         <Button
           type="button"
           variant="outline"
-          onClick={() => setIsAddingNew(true)}
+          onClick={() => {
+            setIsAddingNew(true);
+            setShowReflectionInput(false);
+          }}
           className="w-full h-9 text-xs font-semibold gap-1.5 cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" />
-          Log Additional Reflection
+          Log Additional Reflection Rep
         </Button>
       )}
     </div>

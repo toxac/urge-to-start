@@ -489,9 +489,9 @@ const mission1: MissionSchema = {
                         {
                             type: "guide",
                             isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/guides/how-to-ask-for-a-discount",
-                            title: "How to Ask for a Discount"
+                            isRequired: true,
+                            url_link: "/resources/guides/art-of-asking",
+                            title: "The Art of Asking"
                         }
                     ],
                     component_key: "OffAppActionForm",
