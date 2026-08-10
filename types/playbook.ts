@@ -55,16 +55,21 @@ export type ObservationContextSchema = {
 };
 
 // 4. COMBINED TYPED SCHEMAS FOR APPLICATION RENDERING & PLAYBOOK CACHE
+export type TaskMetadata = {
+    scenarios?: string[];
+    [key: string]: any;
+};
 
 export type TaskSchema = Omit<
     TaskRow,
-    'resources' | 'observation_context' | 'on_success' | 'challenges' | 'ai_config'
+    'resources' | 'observation_context' | 'on_success' | 'challenges' | 'ai_config' | 'metadata'
 > & {
     resources: ReferenceSchema[];
     observation_context: ObservationContextSchema | null;
     grant_points: number; // ⚡ Direct point reward per task
     challenges: ChallengeSchema[] | null;
     ai_config: AIConfigSchema | null;
+    metadata?: TaskMetadata;
 };
 
 export type QuestSchema = Omit<
