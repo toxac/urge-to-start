@@ -108,8 +108,6 @@ const mission3: MissionSchema = {
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 },
-                
-
                 // Task 1.2: Talk to Customers
                 {
                     id: "mission3_quest1_task2",
