@@ -463,7 +463,7 @@ const mission2: MissionSchema = {
                         {
                             type: "guide",
                             isInternal: true,
-                            isRequired: false,
+                            isRequired: true,
                             url_link: "/resources/guides/how-to-find-problems-in-online-communities",
                             title: "How to Find Problems in Online Communities"
                         },
@@ -517,7 +517,7 @@ const mission2: MissionSchema = {
                         {
                             type: "guide",
                             isInternal: true,
-                            isRequired: false,
+                            isRequired: true,
                             url_link: "/resources/guides/how-to-spot-problems-in-trends",
                             title: "How to Spot Problems in Trends"
                         },
@@ -565,7 +565,7 @@ const mission2: MissionSchema = {
                         {
                             type: "guide",
                             isInternal: true,
-                            isRequired: false,
+                            isRequired: true,
                             url_link: "/resources/guides/how-to-spot-opportunities-in-marketplaces",
                             title: "How to Spot Opportunities in Marketplaces"
                         },
