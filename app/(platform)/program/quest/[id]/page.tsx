@@ -1,31 +1,26 @@
 // app/(platform)/program/quest/[id]/page.tsx
 'use client';
 
-import React, { use, useEffect, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { use, useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { $playbookStore } from '@/lib/stores/playbookStore';
 import { $progressStore } from '@/lib/stores/progressStore';
 import { $profileStore } from '@/lib/stores/profileStore';
-import { $accomplishmentStore } from '@/lib/stores/accomplishmentStore';
 import { setCompanionFocus } from '@/lib/stores/companionStore';
 import { TaskFormRegistry } from '@/components/program/TaskFormRegistry';
 import { ProgramHeader } from '@/components/program/ProgramHeader';
+import { QuestCompletionCard } from '@/components/program/QuestCompletionCard';
+import { MissionCompletionCard } from '@/components/program/MissionCompletionCard';
 import { 
   CheckCircle2, 
   Lock, 
   Eye, 
   Play, 
   Loader2, 
-  ArrowRight, 
-  Trophy, 
-  Award, 
-  Sparkles,
-  ArrowUpRight
+  ArrowRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { MissionSchema, QuestSchema, TaskSchema } from '@/types/playbook';
+import { MissionSchema, QuestSchema, TaskSchema, PlaybookConfig } from '@/types/playbook';
 
 export default function QuestActionCenterPage({
   params,
@@ -35,13 +30,9 @@ export default function QuestActionCenterPage({
   const resolvedParams = use(params);
   const questParamId = resolvedParams.id;
 
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
-  const playbook = useStore($playbookStore);
+  const playbook = useStore($playbookStore) as PlaybookConfig | null;
   const progress = useStore($progressStore);
   const profile = useStore($profileStore);
-  const accomplishments = useStore($accomplishmentStore);
 
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
   const [markdownHtml, setMarkdownHtml] = useState<string | null>(null);
@@ -62,7 +53,7 @@ export default function QuestActionCenterPage({
   }
 
   const tasks: TaskSchema[] = currentQuest?.tasks || [];
-  const currentUserId = profile?.id || '';
+  const currentUserId = profile?.user_id || profile?.id || '';
 
   const completedCount = tasks.filter((t: TaskSchema) => progress[t.id]?.status === 'completed').length;
   const isQuestFullyCompleted = tasks.length > 0 && completedCount === tasks.length;
@@ -71,13 +62,12 @@ export default function QuestActionCenterPage({
 
   // Determine Next Quest in the sequence
   const currentQuestIndex = activeMission?.quests?.findIndex((q) => q.id === currentQuest?.id) ?? -1;
-  const nextQuest = currentQuestIndex >= 0 && activeMission?.quests?.[currentQuestIndex + 1] 
+  const nextQuest: QuestSchema | null = currentQuestIndex >= 0 && activeMission?.quests?.[currentQuestIndex + 1] 
     ? activeMission.quests[currentQuestIndex + 1] 
     : null;
 
-  // Determine if entire mission is complete (no next quest AND current quest finished)
+  // Mission is fully completed if there are no more quests in the mission and the current quest is finished
   const isMissionFullyCompleted = !nextQuest && isQuestFullyCompleted;
-  const nextMissionId = 'mission-2'; // Next mission in sequence
 
   // Sync Companion Focus
   useEffect(() => {
@@ -154,119 +144,21 @@ export default function QuestActionCenterPage({
         </>
       )}
 
-      {/* ─── QUEST / MISSION COMPLETED CELEBRATION BANNER ─── */}
+      {/* ─── QUEST / MISSION COMPLETED CELEBRATION CARDS ─── */}
       {isQuestFullyCompleted && !activeTaskId && (
-        <div className={`w-full border rounded-2xl p-6 shadow-md space-y-5 animate-in slide-in-from-top-4 duration-300 ${
-          isMissionFullyCompleted 
-            ? 'bg-gradient-to-r from-amber-500/10 via-primary/10 to-emerald-500/10 border-amber-500/40' 
-            : 'bg-gradient-to-r from-emerald-500/10 via-primary/5 to-amber-500/10 border-emerald-500/30'
-        }`}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/50 pb-4">
-            <div className="flex items-center gap-3">
-              <div className={`w-12 h-12 rounded-2xl border flex items-center justify-center shrink-0 ${
-                isMissionFullyCompleted 
-                  ? 'bg-amber-500/20 border-amber-500/40 text-amber-500' 
-                  : 'bg-emerald-500/20 border-emerald-500/30 text-emerald-500'
-              }`}>
-                <Trophy className="w-6 h-6" />
-              </div>
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-2">
-                  <span className={`text-xs font-bold uppercase tracking-wider ${
-                    isMissionFullyCompleted ? 'text-amber-500' : 'text-emerald-500'
-                  }`}>
-                    {isMissionFullyCompleted ? '🎉 Mission Mastered!' : 'Quest Accomplished!'}
-                  </span>
-                  <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/30 text-[9px] font-mono">
-                    100% Complete
-                  </Badge>
-                </div>
-                <h3 className="text-base font-bold text-foreground">
-                  {isMissionFullyCompleted ? `Completed ${activeMission?.title || 'Mission 1'}` : currentQuest.title}
-                </h3>
-              </div>
-            </div>
-
-            {/* Action Button: Next Quest OR Next Mission */}
-            <div className="shrink-0">
-              {nextQuest ? (
-                <Button
-                  onClick={() => {
-                    startTransition(() => {
-                      router.push(`/program/quest/${nextQuest.id}`);
-                    });
-                  }}
-                  disabled={isPending}
-                  className="h-10 px-5 text-xs font-bold tracking-wider uppercase cursor-pointer gap-2 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md"
-                >
-                  {isPending ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <>
-                      <span>Start Quest {nextQuest.sequence}: {nextQuest.title}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              ) : (
-                /* 🎓 MISSION GRADUATION CTA */
-                <Button
-                  onClick={() => {
-                    startTransition(() => {
-                      router.push(`/program/mission/${nextMissionId}`);
-                    });
-                  }}
-                  disabled={isPending}
-                  className="h-11 px-6 text-xs font-bold tracking-wider uppercase cursor-pointer gap-2 bg-gradient-to-r from-amber-500 to-primary text-white shadow-lg hover:brightness-110 transition"
-                >
-                  {isPending ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4 text-amber-200" />
-                      <span>Graduate & Unlock Mission 2</span>
-                      <ArrowUpRight className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              )}
-            </div>
-          </div>
-
-          {/* Displays Mission Success Message if whole mission completed */}
-          {isMissionFullyCompleted && activeMission?.success_message && (
-            <div className="p-4 rounded-xl bg-card/80 border border-amber-500/30 space-y-1.5">
-              <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                Mission Milestone Achievement
-              </span>
-              <p className="text-xs text-foreground font-medium leading-relaxed italic">
-                "{activeMission.success_message}"
-              </p>
-            </div>
-          )}
-
-          {/* Badge & XP Rewards Summary */}
-          <div className="p-4 rounded-xl bg-card border border-border/60 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-3">
-              <Award className="w-5 h-5 text-amber-500 shrink-0" />
-              <div>
-                <span className="font-bold text-foreground block">
-                  {isMissionFullyCompleted ? 'Mission 1 Founder Badge Unlocked' : (currentQuest.badge_config?.title || 'Quest Badge Unlocked')}
-                </span>
-                <p className="text-muted-foreground text-[11px]">
-                  {isMissionFullyCompleted 
-                    ? 'You have faced rejection, built real-world momentum, and completed your mindset audit.' 
-                    : 'All quest challenges successfully validated.'}
-                </p>
-              </div>
-            </div>
-            <Badge variant="secondary" className="text-xs font-mono font-bold text-amber-500 shrink-0 flex items-center gap-1">
-              <Sparkles className="w-3 h-3" />
-              {isMissionFullyCompleted ? '+200 Bonus XP' : '+100 Bonus XP'}
-            </Badge>
-          </div>
-        </div>
+        <>
+          {isMissionFullyCompleted && activeMission ? (
+            <MissionCompletionCard 
+              activeMission={activeMission} 
+              playbook={playbook} 
+            />
+          ) : nextQuest ? (
+            <QuestCompletionCard 
+              currentQuest={currentQuest} 
+              nextQuest={nextQuest} 
+            />
+          ) : null}
+        </>
       )}
 
       {/* ─── TASK FORM OR CHECKLIST ─── */}
