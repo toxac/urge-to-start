@@ -334,3 +334,44 @@ export async function updateProjectViabilityAction(
     return { success: false, error: err.message || 'Failed to update viability check' };
   }
 }
+
+
+/**
+ * Generic update helper for specific project JSONB sections
+ */
+export async function updateProjectSectionAction(
+  projectId: string,
+  sectionKey: 'compliance_checklist' | 'discovery_metrics' | 'solution_design' | 'viability_check' | 'competitive_landscape',
+  payload: Record<string, any>
+): Promise<ActionResponse<UserProjectRow>> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) return { success: false, error: 'Authentication required' };
+
+    // Build explicit update payload based on sectionKey to satisfy Supabase strict typings
+    const updateData: Record<string, any> = {
+      updated_at: new Date().toISOString()
+    };
+
+    if (sectionKey === 'compliance_checklist') updateData.compliance_checklist = payload;
+    if (sectionKey === 'discovery_metrics') updateData.discovery_metrics = payload;
+    if (sectionKey === 'solution_design') updateData.solution_design = payload;
+    if (sectionKey === 'viability_check') updateData.viability_check = payload;
+    if (sectionKey === 'competitive_landscape') updateData.competitive_landscape = payload;
+
+    const { data, error } = await supabase
+      .from('user_projects')
+      .update(updateData as any)
+      .eq('id', projectId)
+      .eq('user_id', user.id)
+      .select()
+      .single();
+
+    if (error || !data) throw error;
+    return { success: true, data };
+  } catch (err: any) {
+    return { success: false, error: err.message || `Failed to update project ${sectionKey}` };
+  }
+}
