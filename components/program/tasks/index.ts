@@ -22,6 +22,7 @@ import { CustomerInterviewLogger } from './mission3/CustomerInterviewLogger';
 import { ProblemDefinitionForm } from './mission3/ProblemDefinitionForm';
 import { CustomerPersonaForm } from './mission3/CustomerPersonaForm';
 import { SolutionTypeForm } from './mission3/SolutionTypeForm';
+import { MSPDefinitionForm } from './mission3/MSPDefinitionForm';
 
 
 
@@ -49,7 +50,8 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   ProblemDefinitionForm: ProblemDefinitionForm,
   CustomerPersonaForm: CustomerPersonaForm,
   SolutionTypeForm: SolutionTypeForm,
-  
+  MSPDefinitionForm: MSPDefinitionForm,
+
 
 
 };
