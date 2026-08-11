@@ -31,25 +31,18 @@ interface FounderProfileContext {
   roadblocks?: any;
 }
 
-interface OpportunityReviewInput {
+interface OpportunityAssessmentInput {
   opportunityTitle: string;
   opportunityDescription: string;
   coreProblem?: string;
   targetAudience?: string;
-  currentScores: {
-    passion: number;
-    urgency: number;
-    workaround_spend: number;
-    unfair_advantage: number;
-    msp_feasibility: number;
-  };
   founderProfile?: FounderProfileContext;
 }
 
-interface OpportunityReviewOutput {
-  feedback: string;
-  suggestion: string;
-  blindSpot: string;
+interface OpportunityAssessmentOutput {
+  founderAlignment: string;
+  opportunityStrength: string;
+  keyRiskOrBlindSpot: string;
 }
 
 /**
@@ -183,13 +176,13 @@ Return ONLY valid JSON matching this schema:
 }
 
 /**
- * Reviews an opportunity score against the founder's real profile context (demographics, skills, motivations, roadblocks)
- * and provides direct mentorship feedback. Logs output to public.ai_logs.
+ * Provides an AI mentorship assessment of an opportunity based on the founder's profile context.
+ * Does NOT evaluate or assign numerical scores. Logs output to public.ai_logs.
  */
-export async function runOpportunityScoreReviewAction(
-  input: OpportunityReviewInput,
+export async function runOpportunityAssessmentAction(
+  input: OpportunityAssessmentInput,
   taskId?: string
-): Promise<ActionResponse<OpportunityReviewOutput>> {
+): Promise<ActionResponse<OpportunityAssessmentOutput>> {
   try {
     const supabase = await createClient();
     const { data: { user }, error: authErr } = await supabase.auth.getUser();
@@ -200,19 +193,19 @@ export async function runOpportunityScoreReviewAction(
 
     const p = input.founderProfile;
 
-    const systemPrompt = `You are a candid, supportive venture mentor analyzing an early-stage startup opportunity score.
+    const systemPrompt = `You are a candid, supportive venture mentor analyzing an early-stage startup opportunity.
 
 GOAL:
-Evaluate the founder's self-assessed opportunity scores by cross-referencing the problem details with their profile context (demographics, reported skills, motivations, and potential roadblocks).
+Provide qualitative insights on the opportunity itself and how well it matches the founder's background. DO NOT assign, mention, or evaluate numerical scores.
 
 TONE & STYLE:
-- Conversational, direct, clear, and actionable. Zero fluff, no corporate jargon.
+- Direct, clear, grounded, and actionable. Zero fluff, no corporate jargon.
 
 Return ONLY valid JSON matching this schema:
 {
-  "feedback": "string (2 concise sentences evaluating their scores against their personal profile edge, skills, and background)",
-  "blindSpot": "string (1 critical question or blind spot given their motivations or reported roadblocks)",
-  "suggestion": "string (1 actionable micro-step to validate their highest-risk score given their location/market)"
+  "founderAlignment": "string (2 concise sentences on how well this opportunity leverages the founder's reported background, skills, and motivations)",
+  "opportunityStrength": "string (1 strong signal or market advantage about this specific problem/solution concept)",
+  "keyRiskOrBlindSpot": "string (1 challenge, market risk, or execution bottleneck given reported roadblocks or location)"
 }`;
 
     const userPrompt = JSON.stringify({
@@ -230,11 +223,10 @@ Return ONLY valid JSON matching this schema:
         description: input.opportunityDescription,
         coreProblem: input.coreProblem || 'N/A',
         targetAudience: input.targetAudience || 'N/A',
-        selfAssessedScores: input.currentScores,
       },
     }, null, 2);
 
-    let parsedResult: OpportunityReviewOutput;
+    let parsedResult: OpportunityAssessmentOutput;
 
     try {
       const response = await deepseek.chat.completions.create({
@@ -242,22 +234,22 @@ Return ONLY valid JSON matching this schema:
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Evaluate this opportunity against founder context:\n${userPrompt}` }
+          { role: 'user', content: `Analyze opportunity against founder context:\n${userPrompt}` }
         ]
       });
 
       const raw = JSON.parse(response.choices[0].message.content || '{}');
       parsedResult = {
-        feedback: raw.feedback || "Your self-assessment reflects strong enthusiasm. Ensure your perceived unfair advantage matches your reported technical and domain skills.",
-        blindSpot: raw.blindSpot || "Are potential customers in your target market actively paying for workarounds today?",
-        suggestion: raw.suggestion || "Talk to 3 target users to confirm how much time or money they currently spend on existing workarounds."
+        founderAlignment: raw.founderAlignment || "This opportunity leverages your skill set well and offers a practical problem space.",
+        opportunityStrength: raw.opportunityStrength || "The problem addresses an immediate operational bottleneck with clear customer pain.",
+        keyRiskOrBlindSpot: raw.keyRiskOrBlindSpot || "Validate whether target users actively pay for workarounds or rely on free alternatives."
       };
     } catch (err) {
-      console.error('AI Review fallback triggered:', err);
+      console.error('AI Assessment fallback triggered:', err);
       parsedResult = {
-        feedback: "Your scores indicate solid alignment with your reported skills. Double check if the urgency score reflects true customer willingness to pay.",
-        blindSpot: "Given your current schedule and roadblocks, can you realistically deliver a Minimum Sellable Product quickly?",
-        suggestion: "Ask 3 target users what hacky workaround they currently use to solve this."
+        founderAlignment: "This problem aligns with your domain background and reported skills.",
+        opportunityStrength: "Targeting a specific audience with explicit friction makes initial validation straightforward.",
+        keyRiskOrBlindSpot: "Ensure customer urgency translates to willingness to pay before building."
       };
     }
 
@@ -265,13 +257,13 @@ Return ONLY valid JSON matching this schema:
     await supabase.from('ai_logs').insert({
       user_id: user.id,
       task_id: taskId || null,
-      context_type: 'opportunity_score_review',
+      context_type: 'opportunity_context_assessment',
       user_input: userPrompt,
       generated_output: parsedResult as any,
     });
 
     return { success: true, data: parsedResult };
   } catch (err: any) {
-    return { success: false, error: err.message || 'Failed to generate AI review' };
+    return { success: false, error: err.message || 'Failed to generate opportunity assessment' };
   }
 }

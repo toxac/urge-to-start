@@ -145,7 +145,7 @@ export function OpportunityScoringForm({ task, existingProgress, onSuccess }: Ba
           >
             {isCompleting ? <Loader2 className="w-4 h-4 animate-spin" /> : (
               <>
-                <span>Complete Task (+{task.grant_points} XP)</span>
+                <span>Complete Task</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}

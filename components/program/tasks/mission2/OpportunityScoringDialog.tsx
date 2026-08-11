@@ -17,9 +17,17 @@ import {
   DialogFooter
 } from '@/components/ui/dialog';
 import { scoreOpportunityAction } from '@/actions/opportunities';
-import { runOpportunityScoreReviewAction } from '@/actions/assessments';
+import { runOpportunityAssessmentAction } from '@/actions/assessments';
 import { Database } from '@/types/supabase';
-import { Loader2, Star, Sparkles, Brain, AlertCircle } from 'lucide-react';
+import { 
+  Loader2, 
+  Star, 
+  Sparkles, 
+  Brain, 
+  AlertCircle, 
+  ChevronDown, 
+  ChevronUp 
+} from 'lucide-react';
 
 type UserOpportunityRow = Database['public']['Tables']['user_opportunities']['Row'];
 
@@ -31,11 +39,12 @@ interface OpportunityScoringDialogProps {
   taskId?: string;
 }
 
-interface OpportunityReviewOutput {
-  feedback: string;
-  suggestion: string;
-  blindSpot: string;
+interface OpportunityAssessmentOutput {
+  founderAlignment: string;
+  opportunityStrength: string;
+  keyRiskOrBlindSpot: string;
 }
+
 
 const CRITERIA = [
   { id: 'passion', label: 'Passion', hint: 'How excited are you about this problem?' },
@@ -63,9 +72,12 @@ export function OpportunityScoringDialog({
   });
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isAiLoading, setIsAiLoading] = useState(false);
-  const [aiFeedback, setAiFeedback] = useState<OpportunityReviewOutput | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // AI Assessment State
+  const [isAiLoading, setIsAiLoading] = useState(false);
+  const [aiInsight, setAiInsight] = useState<OpportunityAssessmentOutput | null>(null);
+  const [isAiMinimized, setIsAiMinimized] = useState(false);
 
   useEffect(() => {
     if (opportunity) {
@@ -74,24 +86,24 @@ export function OpportunityScoringDialog({
       if (existingScores) setScores(existingScores);
       else setScores({ passion: 3, urgency: 3, workaround_spend: 3, unfair_advantage: 3, msp_feasibility: 3 });
       setNotes(existingNotes || '');
-      setAiFeedback(null);
+      setAiInsight(null);
+      setIsAiMinimized(false);
       setErrorMsg(null);
     }
   }, [opportunity]);
 
-  const handleRequestAiReview = async () => {
+  const handleRequestAiInsight = async () => {
     if (!opportunity) return;
     setIsAiLoading(true);
     setErrorMsg(null);
 
     const meta = (opportunity.capture_metadata as any) || {};
 
-    const res = await runOpportunityScoreReviewAction({
+    const res = await runOpportunityAssessmentAction({
       opportunityTitle: opportunity.title,
       opportunityDescription: opportunity.description,
       coreProblem: meta.core_problem,
       targetAudience: meta.target_audience,
-      currentScores: scores as any,
       founderProfile: {
         fullname: profile?.fullname,
         country: profile?.country,
@@ -104,9 +116,10 @@ export function OpportunityScoringDialog({
     }, taskId);
 
     if (res.success && res.data) {
-      setAiFeedback(res.data);
+      setAiInsight(res.data);
+      setIsAiMinimized(false);
     } else {
-      setErrorMsg(res.error || 'Failed to fetch AI feedback');
+      setErrorMsg(res.error || 'Failed to fetch AI assessment');
     }
     setIsAiLoading(false);
   };
@@ -135,7 +148,7 @@ export function OpportunityScoringDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="text-left space-y-1">
           <DialogTitle className="text-sm font-bold flex items-center gap-2">
             <Star className="w-4 h-4 text-amber-500" />
@@ -153,24 +166,92 @@ export function OpportunityScoringDialog({
           </div>
         )}
 
-        <div className="space-y-4 py-2 text-left">
-          {/* CRITERIA SLIDERS */}
-          {CRITERIA.map((c) => (
-            <div key={c.id} className="space-y-2 p-3 rounded-xl border border-border/80 bg-card/60">
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span>{c.label}</span>
-                <span className="text-primary font-mono">{scores[c.id] || 3} / 5</span>
+        <div className="space-y-4 py-1 text-left">
+          {/* TOP SECTION: AI OPPORTUNITY INSIGHT (COLLAPSIBLE) */}
+          <div className="rounded-xl border border-primary/20 bg-primary/5 overflow-hidden transition-all">
+            <div className="p-3 flex items-center justify-between border-b border-primary/10 bg-primary/10">
+              <span className="text-[11px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+                <Brain className="w-3.5 h-3.5 text-amber-500" />
+                AI Opportunity Insight
+              </span>
+
+              <div className="flex items-center gap-1">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleRequestAiInsight}
+                  disabled={isAiLoading}
+                  className="text-[10px] font-bold h-6 px-2 gap-1 text-primary hover:bg-primary/20 cursor-pointer"
+                >
+                  {isAiLoading ? (
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                  ) : (
+                    <>
+                      <Sparkles className="w-3 h-3 text-amber-500" />
+                      {aiInsight ? 'Re-Analyze' : 'Get Insight'}
+                    </>
+                  )}
+                </Button>
+
+                {aiInsight && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setIsAiMinimized(!isAiMinimized)}
+                    className="h-6 w-6 text-primary hover:bg-primary/20 cursor-pointer"
+                  >
+                    {isAiMinimized ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
+                  </Button>
+                )}
               </div>
-              <p className="text-[11px] text-muted-foreground">{c.hint}</p>
-              <Slider
-                value={[scores[c.id] || 3]}
-                onValueChange={(val) => setScores(prev => ({ ...prev, [c.id]: Array.isArray(val) ? val[0] : val }))}
-                min={1}
-                max={5}
-                step={1}
-              />
             </div>
-          ))}
+
+            {/* EXPANDABLE AI CONTENT */}
+            {aiInsight && !isAiMinimized && (
+              <div className="p-3.5 space-y-2 text-xs border-t border-primary/10">
+                <div>
+                  <strong className="text-foreground block text-[11px]">Founder Context Alignment:</strong>
+                  <p className="text-muted-foreground leading-relaxed">{aiInsight.founderAlignment}</p>
+                </div>
+
+                <div>
+                  <strong className="text-foreground block text-[11px]">Key Strength:</strong>
+                  <p className="text-muted-foreground leading-relaxed">{aiInsight.opportunityStrength}</p>
+                </div>
+
+                <div>
+                  <strong className="text-amber-500 block text-[11px]">Potential Risk / Blindspot:</strong>
+                  <p className="text-muted-foreground leading-relaxed">{aiInsight.keyRiskOrBlindSpot}</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* CRITERIA SLIDERS */}
+          <div className="space-y-3 pt-1">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
+              Self-Assessment Criteria (1 = Low, 5 = High)
+            </span>
+
+            {CRITERIA.map((c) => (
+              <div key={c.id} className="space-y-2 p-3 rounded-xl border border-border/80 bg-card/60">
+                <div className="flex items-center justify-between text-xs font-bold">
+                  <span>{c.label}</span>
+                  <span className="text-primary font-mono">{scores[c.id] || 3} / 5</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground">{c.hint}</p>
+                <Slider
+                  value={[scores[c.id] || 3]}
+                  onValueChange={(val) => setScores(prev => ({ ...prev, [c.id]: Array.isArray(val) ? val[0] : val }))}
+                  min={1}
+                  max={5}
+                  step={1}
+                />
+              </div>
+            ))}
+          </div>
 
           {/* SCORING NOTES */}
           <div className="space-y-1.5 pt-1">
@@ -181,51 +262,6 @@ export function OpportunityScoringDialog({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />
-          </div>
-
-          {/* AI MENTOR FEEDBACK */}
-          <div className="p-3.5 rounded-xl border border-primary/20 bg-primary/5 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-                <Brain className="w-3.5 h-3.5 text-amber-500" />
-                AI Mentor Feedback
-              </span>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={handleRequestAiReview}
-                disabled={isAiLoading}
-                className="text-[11px] font-bold h-7 gap-1 text-primary hover:bg-primary/10 cursor-pointer"
-              >
-                {isAiLoading ? (
-                  <Loader2 className="w-3 h-3 animate-spin" />
-                ) : (
-                  <>
-                    <Sparkles className="w-3 h-3" />
-                    Get AI Feedback
-                  </>
-                )}
-              </Button>
-            </div>
-
-            {aiFeedback && (
-              <div className="space-y-2 pt-1 border-t border-primary/10 text-xs">
-                <p className="text-foreground leading-relaxed font-medium">
-                  "{aiFeedback.feedback}"
-                </p>
-                {aiFeedback.blindSpot && (
-                  <p className="text-amber-500 text-[11px] font-semibold">
-                    ⚠️ Blindspot: {aiFeedback.blindSpot}
-                  </p>
-                )}
-                {aiFeedback.suggestion && (
-                  <p className="text-muted-foreground text-[11px] italic">
-                    💡 <strong>Tip:</strong> {aiFeedback.suggestion}
-                  </p>
-                )}
-              </div>
-            )}
           </div>
         </div>
 
