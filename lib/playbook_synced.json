@@ -55,8 +55,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: The New Beginning. You know your 'why,' you've made a commitment, and you've faced your fears. That's more than most people ever do. On to the next quest.",
-        "created_at": "2026-08-09T16:34:21.377Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission1_quest1_task1",
@@ -108,8 +108,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission1_quest1_task2",
@@ -148,8 +148,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission1_quest1_task3",
@@ -188,8 +188,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       },
@@ -228,8 +228,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: What You've Got. You've mapped your network and skills. You're not starting from zero—you have assets. Now let's put them to work.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission1_quest2_task1",
@@ -253,6 +253,13 @@
                 "title": "How to Network Without Being Creepy"
               },
               {
+                "type": "tools",
+                "isInternal": true,
+                "isRequired": true,
+                "url_link": "/resources/tools/build-your-presence",
+                "title": "Launch yourself before your business - Guide to building your presence"
+              },
+              {
                 "type": "insights",
                 "isInternal": true,
                 "isRequired": false,
@@ -274,8 +281,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission1_quest2_task2",
@@ -314,8 +321,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       },
@@ -360,8 +367,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: Start Asking. You've built your squad, introduced yourself to the community, and asked for a discount. You're now officially an 'asker.' The fear of asking is fading. Next up: chasing rejection.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission1_quest3_task1",
@@ -407,8 +414,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission1_quest3_task2",
@@ -442,8 +449,8 @@
               "mission1_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission1_quest3_task3",
@@ -462,9 +469,9 @@
               {
                 "type": "guide",
                 "isInternal": true,
-                "isRequired": false,
-                "url_link": "/resources/guides/how-to-ask-for-a-discount",
-                "title": "How to Ask for a Discount"
+                "isRequired": true,
+                "url_link": "/resources/guides/art-of-asking",
+                "title": "The Art of Asking"
               }
             ],
             "component_key": "OffAppActionForm",
@@ -483,8 +490,15 @@
               "mission1_quest3_task1"
             ],
             "target_count": 1,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "metadata": {
+              "scenarios": [
+                "Ask a local coffee shop barista for a 10% founder discount.",
+                "Ask a colleague or peer for a 15-minute quick feedback session on your idea.",
+                "Ask an Uber driver if you can play DJ and connect to their car audio to play your custom hype song."
+              ]
+            },
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       },
@@ -529,8 +543,8 @@
           }
         ],
         "success_message": "You've completed Quest 4: No Is Just Data. You've faced rejection, made bold asks, and survived. You're now more resilient than 99% of people who never ask. You're ready for Mission 2.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission1_quest4_task1",
@@ -568,9 +582,17 @@
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
-            "target_count": 2,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "target_count": 1,
+            "metadata": {
+              "scenarios": [
+                "Ask a coffee shop barista if you can step behind the counter and steam your own milk / pour your own espresso shot.",
+                "Ask a flight attendant or gate agent if you can get a free upgrade to First Class on your flight.",
+                "Ask a stranger on the street if they would be willing to learn a dramatic 10-second secret handshake with you.",
+                "Ask a bookshop or retail staff member if you can make a quick announcement on their store loudspeaker."
+              ]
+            },
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission1_quest4_task2",
@@ -617,16 +639,25 @@
               "mission1_quest4_task1"
             ],
             "target_count": 1,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "metadata": {
+              "scenarios": [
+                "Ask a brand or company you love if you can become an official ambassador, tester, or campus rep.",
+                "Ask an event host or conference organizer if you can give a 5-minute lightning talk or join a panel.",
+                "Ask a local business, creator, or community if you can design custom merch, posters, or graphics for them.",
+                "Ask someone directly if they would be willing to pay you  to solve a specific problem or chore for them.",
+                "Ask a neighbor or classmate if you can join them for a home-cooked dinner or host a shared potluck meal."
+              ]
+            },
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission1_quest4_task3",
-            "title": "Rejection Mastery",
+            "title": "Are You Ready to Get Started?",
             "sequence": 3,
             "execution_type": "standard-form",
             "estimated_minutes": 15,
-            "briefing_text": "You've done the hard work. You've asked, been rejected, and survived. Now let's turn those experiences into fuel by defining your next milestone targets.",
+            "briefing_text": "You've done the hard work—you asked, faced rejection, and proved to yourself that it's completely harmless. Now, reflect on your journey, measure your mindset shift across key confidence metrics, and lock in your key takeaways.",
             "mission_id": "mission-1",
             "quest_id": "mission1_quest4",
             "execution_environment": null,
@@ -653,14 +684,14 @@
               "mission1_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-09T16:34:21.378Z",
-    "updated_at": "2026-08-09T16:34:21.378Z"
+    "created_at": "2026-08-11T11:51:58.619Z",
+    "updated_at": "2026-08-11T11:51:58.619Z"
   },
   "mission2": {
     "id": "mission-2",
@@ -725,8 +756,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: Mine Yourself. You've identified problems from your own life and skills. You're building a foundation for your business.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission2_quest1_task1",
@@ -757,7 +788,7 @@
                 "title": "How to Spot Frustrations in Your Daily Life"
               }
             ],
-            "component_key": "FrustrationObservationForm",
+            "component_key": "ObservationForm",
             "reflection_prompt": "Look at your frustrations. Which one feels the most urgent? Which one do you wish someone would solve?",
             "observation_context": {
               "category": "personal_problems",
@@ -774,8 +805,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission2_quest1_task2",
@@ -806,9 +837,12 @@
                 "title": "Why Frustrations Make the Best Businesses"
               }
             ],
-            "component_key": "OpportunityFromFrustrationForm",
+            "component_key": "OpportunityForm",
             "reflection_prompt": "Which of your frustrations could someone pay to have solved? Why?",
-            "observation_context": null,
+            "observation_context": {
+              "category": "personal_problems",
+              "reference": "user_opportunities"
+            },
             "grant_points": 20,
             "challenges": null,
             "ai_config": null,
@@ -816,8 +850,8 @@
               "mission2_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission2_quest1_task3",
@@ -848,7 +882,7 @@
                 "title": "How to Identify Your Most Valuable Skills"
               }
             ],
-            "component_key": "SkillObservationForm",
+            "component_key": "ObservationForm",
             "reflection_prompt": "Which of your skills could help someone solve a problem? Who needs this skill?",
             "observation_context": {
               "category": "skills",
@@ -859,8 +893,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission2_quest1_task4",
@@ -891,9 +925,12 @@
                 "title": "What Skills Are People Willing to Pay For"
               }
             ],
-            "component_key": "SkillsOpportunityForm",
+            "component_key": "OpportunityForm",
             "reflection_prompt": "How could you package your skills as a service or product? What would be the simplest version?",
-            "observation_context": null,
+            "observation_context": {
+              "category": "skills",
+              "reference": "user_opportunities"
+            },
             "grant_points": 20,
             "challenges": null,
             "ai_config": null,
@@ -901,8 +938,8 @@
               "mission2_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       },
@@ -947,8 +984,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: People Watching. You've observed problems in your immediate circle. These people are your first potential customers.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission2_quest2_task1",
@@ -979,7 +1016,7 @@
                 "title": "People Are the Best Problem Sources"
               }
             ],
-            "component_key": "DetectiveObservationForm",
+            "component_key": "ObservationForm",
             "reflection_prompt": "Look at your observations. Which problem feels the most urgent? Which one do you think you could help solve?",
             "observation_context": {
               "category": "zone_of_influence",
@@ -996,8 +1033,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission2_quest2_task2",
@@ -1028,9 +1065,12 @@
                 "title": "Opportunities Are All Around You"
               }
             ],
-            "component_key": "PeopleOpportunityForm",
+            "component_key": "OpportunityForm",
             "reflection_prompt": "Which of these problems could be the foundation of a business? Why?",
-            "observation_context": null,
+            "observation_context": {
+              "category": "zone_of_influence",
+              "reference": "user_opportunities"
+            },
             "grant_points": 25,
             "challenges": null,
             "ai_config": null,
@@ -1038,8 +1078,8 @@
               "mission2_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       },
@@ -1084,8 +1124,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: The Wider World. You've discovered problems beyond your immediate circle. Your opportunity set is now diverse.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission2_quest3_task1",
@@ -1093,7 +1133,7 @@
             "sequence": 1,
             "execution_type": "standard-form",
             "estimated_minutes": 30,
-            "briefing_text": "Online communities are goldmines. Reddit, Facebook Groups, LinkedIn communities, Quora—people are actively discussing their problems. Go find them.",
+            "briefing_text": "Online communities are goldmines. Reddit, Facebook Groups, LinkedIn communities, Quora—people are actively discussing their problems. Go find them and turn a repeated complaint into a business opportunity seed.",
             "mission_id": "mission-2",
             "quest_id": "mission2_quest3",
             "execution_environment": null,
@@ -1104,7 +1144,7 @@
               {
                 "type": "guide",
                 "isInternal": true,
-                "isRequired": false,
+                "isRequired": true,
                 "url_link": "/resources/guides/how-to-find-problems-in-online-communities",
                 "title": "How to Find Problems in Online Communities"
               },
@@ -1116,9 +1156,15 @@
                 "title": "Problem-Spotting Techniques for Founders"
               }
             ],
-            "component_key": "CommunityProblemForm",
+            "component_key": "OpportunityForm",
             "reflection_prompt": "What's the most common problem you're seeing in these communities? Why do you think it's common?",
-            "observation_context": null,
+            "observation_context": {
+              "category": "broader_search",
+              "reference": "user_opportunities"
+            },
+            "metadata": {
+              "opportunity_source_type": "broader_search"
+            },
             "grant_points": 20,
             "challenges": [
               {
@@ -1130,8 +1176,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission2_quest3_task2",
@@ -1139,7 +1185,7 @@
             "sequence": 2,
             "execution_type": "standard-form",
             "estimated_minutes": 30,
-            "briefing_text": "Trends are signals. What's changing? What's new? What's growing? These changes create new problems—and new opportunities.",
+            "briefing_text": "Trends are signals. What's changing? What's new? What's growing? These changes create new problems—and new opportunities. Capture a trend-driven opportunity seed.",
             "mission_id": "mission-2",
             "quest_id": "mission2_quest3",
             "execution_environment": null,
@@ -1150,7 +1196,7 @@
               {
                 "type": "guide",
                 "isInternal": true,
-                "isRequired": false,
+                "isRequired": true,
                 "url_link": "/resources/guides/how-to-spot-problems-in-trends",
                 "title": "How to Spot Problems in Trends"
               },
@@ -1162,16 +1208,22 @@
                 "title": "Trends Are Trouble (And That's Good)"
               }
             ],
-            "component_key": "TrendProblemForm",
+            "component_key": "OpportunityForm",
             "reflection_prompt": "What trend is creating new problems? Who is being affected by these changes?",
-            "observation_context": null,
+            "observation_context": {
+              "category": "broader_search",
+              "reference": "user_opportunities"
+            },
+            "metadata": {
+              "opportunity_source_type": "broader_search"
+            },
             "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission2_quest3_task3",
@@ -1179,7 +1231,7 @@
             "sequence": 3,
             "execution_type": "standard-form",
             "estimated_minutes": 30,
-            "briefing_text": "Marketplaces tell you what people are already paying for. They reveal gaps, complaints, and underserved needs. Go scan Etsy, Fiverr, Upwork, Amazon—what problems are being solved? What's missing?",
+            "briefing_text": "Marketplaces tell you what people are already paying for. They reveal gaps, complaints, and underserved needs. Go scan Etsy, Fiverr, Upwork, Amazon—what problems are being solved poorly? Seed the opportunity gap.",
             "mission_id": "mission-2",
             "quest_id": "mission2_quest3",
             "execution_environment": null,
@@ -1190,7 +1242,7 @@
               {
                 "type": "guide",
                 "isInternal": true,
-                "isRequired": false,
+                "isRequired": true,
                 "url_link": "/resources/guides/how-to-spot-opportunities-in-marketplaces",
                 "title": "How to Spot Opportunities in Marketplaces"
               },
@@ -1202,16 +1254,22 @@
                 "title": "Marketplace Love Notes and Breakup Letters"
               }
             ],
-            "component_key": "MarketplaceProblemForm",
+            "component_key": "OpportunityForm",
             "reflection_prompt": "What's a problem that people are trying to solve but no one is solving well? Where's the gap?",
-            "observation_context": null,
+            "observation_context": {
+              "category": "broader_search",
+              "reference": "user_opportunities"
+            },
+            "metadata": {
+              "opportunity_source_type": "broader_search"
+            },
             "grant_points": 20,
             "challenges": null,
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       },
@@ -1257,8 +1315,8 @@
           }
         ],
         "success_message": "You've completed Quest 4: The Decision. You've evaluated your opportunities, picked the best one, and committed to a direction. You're no longer searching—you're building. Mission 3 awaits.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission2_quest4_task1",
@@ -1297,8 +1355,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission2_quest4_task2",
@@ -1339,8 +1397,8 @@
               "mission2_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission2_quest4_task3",
@@ -1374,14 +1432,14 @@
               "mission2_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-09T16:34:21.378Z",
-    "updated_at": "2026-08-09T16:34:21.378Z"
+    "created_at": "2026-08-11T11:51:58.619Z",
+    "updated_at": "2026-08-11T11:51:58.619Z"
   },
   "mission3": {
     "id": "mission-3",
@@ -1449,11 +1507,53 @@
           }
         ],
         "success_message": "You've completed Quest 1: The Deep Dive. You now understand your problem intimately—when it happens, who it affects, and what people do about it.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission3_quest1_task1",
+            "title": "Talk to Customers",
+            "sequence": 2,
+            "execution_type": "log_counter",
+            "estimated_minutes": 45,
+            "briefing_text": "This is the most important task in Mission 3. Talk to 5 real people who have this problem. Don't pitch your solution—just listen. Understand their pain.",
+            "mission_id": "mission-3",
+            "quest_id": "mission3_quest1",
+            "execution_environment": null,
+            "checkback_delay_days": 3,
+            "recurring": false,
+            "interval": null,
+            "resources": [
+              {
+                "type": "guide",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/guides/how-to-conduct-customer-interviews",
+                "title": "How to Conduct Customer Interviews"
+              },
+              {
+                "type": "insights",
+                "isInternal": true,
+                "isRequired": false,
+                "url_link": "/resources/insights/customer-interviews-are-gold",
+                "title": "Customer Interviews Are Gold"
+              }
+            ],
+            "component_key": "CustomerInterviewLogger",
+            "reflection_prompt": "What surprised you most in these interviews? What did you learn that you didn't expect?",
+            "observation_context": null,
+            "grant_points": 30,
+            "challenges": null,
+            "ai_config": null,
+            "dependencies": [
+              "mission3_quest1_task1"
+            ],
+            "target_count": 5,
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
+          },
+          {
+            "id": "mission3_quest1_task2",
             "title": "Define the Problem",
             "sequence": 1,
             "execution_type": "standard-form",
@@ -1495,50 +1595,8 @@
             "ai_config": null,
             "dependencies": [],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
-          },
-          {
-            "id": "mission3_quest1_task2",
-            "title": "Talk to Customers",
-            "sequence": 2,
-            "execution_type": "log_counter",
-            "estimated_minutes": 45,
-            "briefing_text": "This is the most important task in Mission 3. Talk to 5 real people who have this problem. Don't pitch your solution—just listen. Understand their pain.",
-            "mission_id": "mission-3",
-            "quest_id": "mission3_quest1",
-            "execution_environment": null,
-            "checkback_delay_days": 3,
-            "recurring": false,
-            "interval": null,
-            "resources": [
-              {
-                "type": "guide",
-                "isInternal": true,
-                "isRequired": false,
-                "url_link": "/resources/guides/how-to-conduct-customer-interviews",
-                "title": "How to Conduct Customer Interviews"
-              },
-              {
-                "type": "insights",
-                "isInternal": true,
-                "isRequired": false,
-                "url_link": "/resources/insights/customer-interviews-are-gold",
-                "title": "Customer Interviews Are Gold"
-              }
-            ],
-            "component_key": "CustomerInterviewLogger",
-            "reflection_prompt": "What surprised you most in these interviews? What did you learn that you didn't expect?",
-            "observation_context": null,
-            "grant_points": 30,
-            "challenges": null,
-            "ai_config": null,
-            "dependencies": [
-              "mission3_quest1_task1"
-            ],
-            "target_count": 5,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission3_quest1_task3",
@@ -1579,8 +1637,8 @@
               "mission3_quest1_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       },
@@ -1626,8 +1684,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: Build to Sell. You've defined your Minimum Sellable Product. It's small, focused, and ready to sell.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission3_quest2_task1",
@@ -1667,8 +1725,8 @@
               "mission3_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission3_quest2_task2",
@@ -1709,8 +1767,8 @@
               "mission3_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission3_quest2_task3",
@@ -1744,8 +1802,8 @@
               "mission3_quest2_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       },
@@ -1791,8 +1849,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: Know the Battlefield. You understand the landscape, the trends, and the compliance requirements. You're ready to make an informed decision.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission3_quest3_task1",
@@ -1833,8 +1891,8 @@
               "mission3_quest2_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission3_quest3_task2",
@@ -1868,8 +1926,8 @@
               "mission3_quest3_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       },
@@ -1915,8 +1973,8 @@
           }
         ],
         "success_message": "You've completed Mission 3: Getting Real. You've validated your problem, defined your MSP, understood the environment, and made a conscious decision. You're no longer dreaming—you're building with intention. Mission 4 awaits.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission3_quest4_task1",
@@ -1957,8 +2015,8 @@
               "mission3_quest3_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission3_quest4_task2",
@@ -1992,8 +2050,8 @@
               "mission3_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission3_quest4_task3",
@@ -2034,14 +2092,14 @@
               "mission3_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-09T16:34:21.378Z",
-    "updated_at": "2026-08-09T16:34:21.378Z"
+    "created_at": "2026-08-11T11:51:58.619Z",
+    "updated_at": "2026-08-11T11:51:58.619Z"
   },
   "mission4": {
     "id": "mission-4",
@@ -2107,8 +2165,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: Shape Your Offer. You have a clear value proposition, a focused feature set, and a mapped customer experience. You know what you're selling.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission4_quest1_task1",
@@ -2155,8 +2213,8 @@
               "mission3_quest4_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission4_quest1_task2",
@@ -2197,8 +2255,8 @@
               "mission4_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission4_quest1_task3",
@@ -2239,8 +2297,8 @@
               "mission4_quest1_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission4_quest1_task4",
@@ -2281,8 +2339,8 @@
               "mission4_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       },
@@ -2328,8 +2386,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: Price It Right. You have a confident price based on value, not fear.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission4_quest2_task1",
@@ -2376,8 +2434,8 @@
               "mission4_quest1_task4"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           },
           {
             "id": "mission4_quest2_task2",
@@ -2411,8 +2469,8 @@
               "mission4_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.619Z",
+            "updated_at": "2026-08-11T11:51:58.619Z"
           }
         ]
       },
@@ -2458,8 +2516,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: Find Your Customers. You have a focused channel, a clear message, and a realistic acquisition plan.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.619Z",
+        "updated_at": "2026-08-11T11:51:58.619Z",
         "tasks": [
           {
             "id": "mission4_quest3_task1",
@@ -2506,8 +2564,8 @@
               "mission4_quest2_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           },
           {
             "id": "mission4_quest3_task2",
@@ -2541,8 +2599,8 @@
               "mission4_quest3_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           },
           {
             "id": "mission4_quest3_task3",
@@ -2576,8 +2634,8 @@
               "mission4_quest3_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           }
         ]
       },
@@ -2623,8 +2681,8 @@
           }
         ],
         "success_message": "You've completed Quest 4: The Financials. You understand your costs, your unit economics, and your profitability. The numbers tell a story—are you listening?",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.620Z",
+        "updated_at": "2026-08-11T11:51:58.620Z",
         "tasks": [
           {
             "id": "mission4_quest4_task1",
@@ -2658,8 +2716,8 @@
               "mission4_quest3_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           },
           {
             "id": "mission4_quest4_task2",
@@ -2693,8 +2751,8 @@
               "mission4_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           },
           {
             "id": "mission4_quest4_task3",
@@ -2728,8 +2786,8 @@
               "mission4_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           }
         ]
       },
@@ -2775,8 +2833,8 @@
           }
         ],
         "success_message": "You've completed Mission 4: The Business Engine. You've made a conscious decision based on real numbers. This is what building a real business looks like.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.620Z",
+        "updated_at": "2026-08-11T11:51:58.620Z",
         "tasks": [
           {
             "id": "mission4_quest5_task1",
@@ -2818,14 +2876,14 @@
               "mission4_quest4_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-09T16:34:21.378Z",
-    "updated_at": "2026-08-09T16:34:21.378Z"
+    "created_at": "2026-08-11T11:51:58.620Z",
+    "updated_at": "2026-08-11T11:51:58.620Z"
   },
   "mission5": {
     "id": "mission-5",
@@ -2893,8 +2951,8 @@
           }
         ],
         "success_message": "You've completed Quest 1: Plan the Build. You have a timeline, a resource plan, and a build checklist. Now it's time to execute.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.620Z",
+        "updated_at": "2026-08-11T11:51:58.620Z",
         "tasks": [
           {
             "id": "mission5_quest1_task1",
@@ -2934,8 +2992,8 @@
               "mission4_quest5_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           },
           {
             "id": "mission5_quest1_task2",
@@ -2969,8 +3027,8 @@
               "mission5_quest1_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           },
           {
             "id": "mission5_quest1_task3",
@@ -3004,8 +3062,8 @@
               "mission5_quest1_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           }
         ]
       },
@@ -3052,8 +3110,8 @@
           }
         ],
         "success_message": "You've completed Quest 2: The Build. You've built your product, tracked your costs, and have something testers can test. The foundation is solid.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.620Z",
+        "updated_at": "2026-08-11T11:51:58.620Z",
         "tasks": [
           {
             "id": "mission5_quest2_task1",
@@ -3085,8 +3143,8 @@
               "mission5_quest1_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           }
         ]
       },
@@ -3133,8 +3191,8 @@
           }
         ],
         "success_message": "You've completed Quest 3: Get Testers. You've recruited, onboarded, and collected feedback from testers. You have real data to work with.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.620Z",
+        "updated_at": "2026-08-11T11:51:58.620Z",
         "tasks": [
           {
             "id": "mission5_quest3_task1",
@@ -3174,8 +3232,8 @@
               "mission5_quest2_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           },
           {
             "id": "mission5_quest3_task2",
@@ -3209,8 +3267,8 @@
               "mission5_quest3_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           },
           {
             "id": "mission5_quest3_task3",
@@ -3244,8 +3302,8 @@
               "mission5_quest3_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           }
         ]
       },
@@ -3291,8 +3349,8 @@
           }
         ],
         "success_message": "You've completed Quest 4: Validate & Tweak. You've validated your product with real users and made meaningful improvements. You're ready to launch.",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.620Z",
+        "updated_at": "2026-08-11T11:51:58.620Z",
         "tasks": [
           {
             "id": "mission5_quest4_task1",
@@ -3326,8 +3384,8 @@
               "mission5_quest3_task3"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           },
           {
             "id": "mission5_quest4_task2",
@@ -3361,8 +3419,8 @@
               "mission5_quest4_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           }
         ]
       },
@@ -3408,8 +3466,8 @@
           }
         ],
         "success_message": "You've completed Mission 5: Build & Launch. You've launched your business. You're no longer a person with an idea—you're a founder with a live business. Welcome to the other side. 🎉",
-        "created_at": "2026-08-09T16:34:21.378Z",
-        "updated_at": "2026-08-09T16:34:21.378Z",
+        "created_at": "2026-08-11T11:51:58.620Z",
+        "updated_at": "2026-08-11T11:51:58.620Z",
         "tasks": [
           {
             "id": "mission5_quest5_task1",
@@ -3449,8 +3507,8 @@
               "mission5_quest4_task2"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           },
           {
             "id": "mission5_quest5_task2",
@@ -3493,13 +3551,13 @@
               "mission5_quest5_task1"
             ],
             "target_count": null,
-            "created_at": "2026-08-09T16:34:21.378Z",
-            "updated_at": "2026-08-09T16:34:21.378Z"
+            "created_at": "2026-08-11T11:51:58.620Z",
+            "updated_at": "2026-08-11T11:51:58.620Z"
           }
         ]
       }
     ],
-    "created_at": "2026-08-09T16:34:21.378Z",
-    "updated_at": "2026-08-09T16:34:21.378Z"
+    "created_at": "2026-08-11T11:51:58.620Z",
+    "updated_at": "2026-08-11T11:51:58.620Z"
   }
 }

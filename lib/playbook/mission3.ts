@@ -70,6 +70,49 @@ const mission3: MissionSchema = {
                 // Task 1.1: The Problem
                 {
                     id: "mission3_quest1_task1",
+                    title: "Talk to Customers",
+                    sequence: 2,
+                    execution_type: "log_counter",
+                    estimated_minutes: 45,
+                    briefing_text: "This is the most important task in Mission 3. Talk to 5 real people who have this problem. Don't pitch your solution—just listen. Understand their pain.",
+                    mission_id: "mission-3",
+                    quest_id: "mission3_quest1",
+                    execution_environment: null,
+                    checkback_delay_days: 3,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/how-to-conduct-customer-interviews",
+                            title: "How to Conduct Customer Interviews"
+                        },
+                        {
+                            type: "insights",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/insights/customer-interviews-are-gold",
+                            title: "Customer Interviews Are Gold"
+                        }
+                    ],
+                    component_key: "CustomerInterviewLogger",
+                    reflection_prompt: "What surprised you most in these interviews? What did you learn that you didn't expect?",
+                    observation_context: null,
+                    grant_points: 30,
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission3_quest1_task1"],
+                    target_count: 5,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+                
+
+                // Task 1.2: Talk to Customers
+                {
+                    id: "mission3_quest1_task2",
                     title: "Define the Problem",
                     sequence: 1,
                     execution_type: "standard-form",
@@ -111,48 +154,6 @@ const mission3: MissionSchema = {
                     ai_config: null,
                     dependencies: [],
                     target_count: null,
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString()
-                },
-
-                // Task 1.2: Talk to Customers
-                {
-                    id: "mission3_quest1_task2",
-                    title: "Talk to Customers",
-                    sequence: 2,
-                    execution_type: "log_counter",
-                    estimated_minutes: 45,
-                    briefing_text: "This is the most important task in Mission 3. Talk to 5 real people who have this problem. Don't pitch your solution—just listen. Understand their pain.",
-                    mission_id: "mission-3",
-                    quest_id: "mission3_quest1",
-                    execution_environment: null,
-                    checkback_delay_days: 3,
-                    recurring: false,
-                    interval: null,
-                    resources: [
-                        {
-                            type: "guide",
-                            isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/guides/how-to-conduct-customer-interviews",
-                            title: "How to Conduct Customer Interviews"
-                        },
-                        {
-                            type: "insights",
-                            isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/insights/customer-interviews-are-gold",
-                            title: "Customer Interviews Are Gold"
-                        }
-                    ],
-                    component_key: "CustomerInterviewLogger",
-                    reflection_prompt: "What surprised you most in these interviews? What did you learn that you didn't expect?",
-                    observation_context: null,
-                    grant_points: 30,
-                    challenges: null,
-                    ai_config: null,
-                    dependencies: ["mission3_quest1_task1"],
-                    target_count: 5,
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 },
