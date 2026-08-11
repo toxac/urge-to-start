@@ -644,7 +644,7 @@ const mission3: MissionSchema = {
                             title: "The Decision That Matters"
                         }
                     ],
-                    component_key: "DecisionGateForm",
+                    component_key: "ViabilityDecisionGateForm",
                     reflection_prompt: "What's the one thing that pushed you to this decision?",
                     observation_context: null,
                     grant_points: 15,

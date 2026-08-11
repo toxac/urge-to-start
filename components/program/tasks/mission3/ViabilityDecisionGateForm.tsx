@@ -46,7 +46,7 @@ const DECISION_OPTIONS = [
   }
 ];
 
-export function DecisionGateForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
+export function ViabilityDecisionGateForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const [activeProject, setActiveProject] = useState<UserProjectRow | null>(null);
   const [selectedDecision, setSelectedDecision] = useState<'go' | 'pivot' | 'no_go'>('go');
   

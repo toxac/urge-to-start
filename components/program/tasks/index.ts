@@ -18,6 +18,8 @@ import { OpportunityForm } from './mission2/OpportunityForm';
 import { OpportunityScoringForm } from './mission2/OpportunityScoringForm';
 import { OpportunityPickerForm } from './mission2/OpportunityPickerForm';
 import { DecisionGateForm } from './mission2/DecisionGateForm';
+
+// mission 3 task components
 import { CustomerInterviewLogger } from './mission3/CustomerInterviewLogger';
 import { ProblemDefinitionForm } from './mission3/ProblemDefinitionForm';
 import { CustomerPersonaForm } from './mission3/CustomerPersonaForm';
@@ -25,7 +27,10 @@ import { SolutionTypeForm } from './mission3/SolutionTypeForm';
 import { MSPDefinitionForm } from './mission3/MSPDefinitionForm';
 import { MSPBuildForm } from './mission3/MSPBuildForm';
 import { LandscapeForm } from './mission3/LandscapeForm';
-import {ComplianceForm}  from './mission3/ComplainceChecklist';
+import { ComplianceForm } from './mission3/ComplainceChecklist';
+import { ViabilityCheckForm } from './mission3/ViabilityCheckForm';
+import { WorstCaseForm } from './mission3/WorstCaseForm';
+import { ViabilityDecisionGateForm } from './mission3/ViabilityDecisionGateForm';
 
 
 
@@ -36,7 +41,7 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   //mission 1
   MotivationForm: MotivationForm,
   CommitmentForm: CommitmentForm,
-  RoadblockForm: RoadblockForm, 
+  RoadblockForm: RoadblockForm,
   SocialFootprintForm: SocialFootprintForm,
   SkillsForm: SkillsForm,
   CheerSquadForm: CheerSquadForm,
@@ -56,7 +61,10 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   MSPDefinitionForm: MSPDefinitionForm,
   MSPBuildForm: MSPBuildForm,
   LandscapeForm: LandscapeForm,
-  ComplianceForm: ComplianceForm
+  ComplianceForm: ComplianceForm,
+  ViabilityCheckForm: ViabilityCheckForm,
+  WorstCaseForm: WorstCaseForm,
+  ViabilityDecisionGateForm: ViabilityDecisionGateForm
 
 
 
