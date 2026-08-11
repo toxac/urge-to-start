@@ -19,6 +19,7 @@ import { OpportunityScoringForm } from './mission2/OpportunityScoringForm';
 import { OpportunityPickerForm } from './mission2/OpportunityPickerForm';
 import { DecisionGateForm } from './mission2/DecisionGateForm';
 import { CustomerInterviewLogger } from './mission3/CustomerInterviewLogger';
+import { ProblemDefinitionForm } from './mission3/ProblemDefinitionForm';
 
 
 
@@ -43,6 +44,7 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   DecisionGateForm: DecisionGateForm,
   //mission 3
   CustomerInterviewLogger: CustomerInterviewLogger,
+  ProblemDefinitionForm: ProblemDefinitionForm,
 
 
 
