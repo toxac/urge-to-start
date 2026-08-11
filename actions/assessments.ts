@@ -21,6 +21,34 @@ interface SocialAssessmentOutput {
   suggestedActions: ChallengeOption[];
 }
 
+interface FounderProfileContext {
+  headline?: string;
+  bio?: string;
+  target_skills?: string[];
+  domain_expertise?: string[];
+}
+
+interface OpportunityReviewInput {
+  opportunityTitle: string;
+  opportunityDescription: string;
+  coreProblem?: string;
+  targetAudience?: string;
+  currentScores: {
+    passion: number;
+    urgency: number;
+    workaround_spend: number;
+    unfair_advantage: number;
+    msp_feasibility: number;
+  };
+  founderProfile?: FounderProfileContext;
+}
+
+interface OpportunityReviewOutput {
+  feedback: string;
+  suggestion: string;
+  blindSpot: string;
+}
+
 /**
  * Evaluates social channels and produces presence, follower growth, and engagement actions.
  * Saves raw generated output to public.ai_logs.
@@ -148,5 +176,93 @@ Return ONLY valid JSON matching this schema:
     return { success: true, data: parsedResult };
   } catch (err: any) {
     return { success: false, error: err.message || 'Failed to analyze network footprint' };
+  }
+}
+
+/**
+ * Reviews an opportunity score against the founder's profile and provides direct mentorship feedback.
+ * Logs output to public.ai_logs.
+ */
+export async function runOpportunityScoreReviewAction(
+  input: OpportunityReviewInput,
+  taskId?: string
+): Promise<ActionResponse<OpportunityReviewOutput>> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) {
+      return { success: false, error: 'Authentication required.' };
+    }
+
+    const systemPrompt = `You are a candid, supportive venture mentor analyzing an early-stage startup opportunity score.
+
+GOAL:
+Evaluate the founder's self-assessed opportunity scores based on the problem details and their profile.
+
+TONE & STYLE:
+- Conversational, direct, clear, and actionable. Zero fluff, no corporate jargon.
+
+Return ONLY valid JSON matching this schema:
+{
+  "feedback": "string (2 concise sentences on whether their self-scores seem realistic given the problem description and founder edge)",
+  "blindSpot": "string (1 critical question or blind spot they must consider before committing)",
+  "suggestion": "string (1 actionable micro-step to validate their highest-risk score)"
+}`;
+
+    const userPrompt = JSON.stringify({
+      founderProfile: {
+        headline: input.founderProfile?.headline || 'N/A',
+        domainExpertise: input.founderProfile?.domain_expertise || [],
+        targetSkills: input.founderProfile?.target_skills || [],
+      },
+      opportunity: {
+        title: input.opportunityTitle,
+        description: input.opportunityDescription,
+        coreProblem: input.coreProblem || 'N/A',
+        targetAudience: input.targetAudience || 'N/A',
+        currentScores: input.currentScores,
+      },
+    }, null, 2);
+
+    let parsedResult: OpportunityReviewOutput;
+
+    try {
+      const response = await deepseek.chat.completions.create({
+        model: 'deepseek-chat',
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: `Opportunity to evaluate:\n${userPrompt}` }
+        ]
+      });
+
+      const raw = JSON.parse(response.choices[0].message.content || '{}');
+      parsedResult = {
+        feedback: raw.feedback || "Your self-assessment reflects strong enthusiasm. Ensure your perceived unfair advantage matches actual domain experience.",
+        blindSpot: raw.blindSpot || "Are users actively paying for existing workarounds, or just enduring the hassle?",
+        suggestion: raw.suggestion || "Talk to 3 potential customers to confirm how much time or money they currently spend on workarounds."
+      };
+    } catch (err) {
+      console.error('AI Review fallback triggered:', err);
+      parsedResult = {
+        feedback: "Your score indicates a solid alignment with your skills. Double check if the urgency score reflects true customer pain.",
+        blindSpot: "How quickly can you realistically deliver a Minimum Sellable Product without over-engineering?",
+        suggestion: "Ask 3 target users what hacky workaround they currently use to solve this."
+      };
+    }
+
+    // Audit Logging
+    await supabase.from('ai_logs').insert({
+      user_id: user.id,
+      task_id: taskId || null,
+      context_type: 'opportunity_score_review',
+      user_input: userPrompt,
+      generated_output: parsedResult as any,
+    });
+
+    return { success: true, data: parsedResult };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to generate AI review' };
   }
 }
