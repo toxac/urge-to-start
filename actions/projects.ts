@@ -375,3 +375,75 @@ export async function updateProjectSectionAction(
     return { success: false, error: err.message || `Failed to update project ${sectionKey}` };
   }
 }
+
+/**
+ * Extracts pending compliance items and creates corresponding records in user_actions table
+ */
+export async function syncComplianceToUserActionsAction(
+  projectId: string
+): Promise<ActionResponse<{ created_count: number }>> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) return { success: false, error: 'Authentication required' };
+
+    // Fetch active project compliance data
+    const { data: project } = await supabase
+      .from('user_projects')
+      .select('compliance_checklist, biz_name')
+      .eq('id', projectId)
+      .single();
+
+    if (!project) return { success: false, error: 'Project not found' };
+
+    const complianceData = (project.compliance_checklist as any) || {};
+    const statuses: Record<string, { status: string; notes?: string }> = complianceData.statuses || {};
+    const answers = complianceData.answers || {};
+
+    // Filter items from REQUIREMENTS that are applicable and NOT yet filed/done
+    const { REQUIREMENTS } = await import('@/lib/data/compliance');
+
+    const pendingRequirements = REQUIREMENTS.filter((item) => {
+      // Check applicability
+      if (item.modes && !item.modes.includes(answers.mode)) return false;
+      if (item.structures && answers.structure !== "not-decided" && !item.structures.includes(answers.structure)) return false;
+      if (item.sectors && !item.sectors.includes(answers.sector)) return false;
+
+      // Filter out items already marked 'done' or 'not-applicable'
+      const itemStatus = statuses[item.id]?.status || 'not-started';
+      return itemStatus !== 'done' && itemStatus !== 'not-applicable';
+    });
+
+    if (pendingRequirements.length === 0) {
+      return { success: true, data: { created_count: 0 } };
+    }
+
+    // Format compliance items into user_actions table rows
+    const actionRows = pendingRequirements.map((req) => ({
+      user_id: user.id,
+      project_id: projectId,
+      title: `[Compliance] ${req.title}`,
+      description: `${req.what}\n\nOfficial Portal: ${req.link}`,
+      action_type: 'compliance_filing',
+      status: 'pending',
+      priority: req.threshold?.type === 'always' ? 'high' : 'medium',
+      metadata: {
+        compliance_id: req.id,
+        official_link: req.link,
+        tagline: req.tagline,
+        notes: statuses[req.id]?.notes || ''
+      }
+    }));
+
+    const { error: insertErr } = await supabase
+      .from('user_actions')
+      .insert(actionRows as any);
+
+    if (insertErr) throw insertErr;
+
+    return { success: true, data: { created_count: actionRows.length } };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to sync compliance items to actions' };
+  }
+}
