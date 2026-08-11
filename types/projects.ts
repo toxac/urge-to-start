@@ -1,31 +1,84 @@
-import { z } from 'zod';
+// types/projects.ts
 
-export const CreateProjectSchema = z.object({
-  biz_name: z.string().min(1).max(255).trim(),
-  five_word_hook: z.string().max(100).nullable().optional(),
-  // ⚡ No opportunity_id here - it's handled by opportunities table
-});
+export interface ProblemHypothesis {
+  problem_statement: string;
+  when_context: string;
+  where_location: string;
+  affected_audience: string;
+  frequency: 'daily' | 'weekly' | 'monthly' | 'occasionally' | 'seasonal';
+  current_workaround: string;
+  defined_at: string;
+}
 
-export const UpdateProjectSchema = z.object({
-  // Core fields
-  biz_name: z.string().min(1).max(255).trim().optional(),
-  five_word_hook: z.string().max(255).nullable().optional(),
-  tagline: z.string().nullable().optional(),
-  is_active: z.boolean().optional(),
-  status: z.enum(['ideation', 'validation', 'planning', 'building', 'launched', 'growing', 'reviewing', 'completed', 'archived']).optional(),
-  current_mission: z.enum(['1', '2', '3', '4', '5', '6', '7', '8']).optional(),
-  
-  // JSON fields - each can be updated individually
-  discovery_metrics: z.record(z.string(), z.any()).optional(),
-  financial_blueprint: z.record(z.string(), z.any()).optional(), 
-  infrastructure_nodes: z.record(z.string(), z.any()).optional(),
-  validation_data: z.record(z.string(), z.any()).optional(),
-  competitive_landscape: z.record(z.string(), z.any()).optional(),
-  compliance_checklist: z.record(z.string(), z.any()).optional(),
-  solution_design: z.record(z.string(), z.any()).optional(),
-  viability_check: z.record(z.string(), z.any()).optional(),
-  build_data: z.record(z.string(), z.any()).optional(),
-  launch_data: z.record(z.string(), z.any()).optional(),
-  operations_data: z.record(z.string(), z.any()).optional(),
-  review_data: z.record(z.string(), z.any()).optional(),
-});
+export interface InterviewRecord {
+  id: string;
+  interviewee_name: string;
+  role_or_context: string;
+  problem_confirmed: 'yes' | 'sort_of' | 'no';
+  current_workaround: string;
+  existing_spend_or_time: string; // Customer's willingness to pay proxy
+  buying_signal: 'offer_to_pay' | 'asked_to_buy' | 'introduced' | 'none';
+  key_quote_or_surprise?: string;
+  logged_at: string;
+}
+
+export interface ValidationDataPayload {
+  interviews: InterviewRecord[];
+  total_interviews: number;
+  last_updated_at?: string;
+}
+
+export interface CustomerPersona {
+  persona_name: string;
+  job_title_or_role: string;
+  age_range: string;
+  ranked_pain_points: string[];
+  desired_gains: string;
+  current_spend: string;
+  watering_holes: string; // Where they hang out online/offline
+  verbatim_problem_quote: string; // Exact customer words
+}
+
+export interface DiscoveryMetricsPayload {
+  problem_hypothesis?: ProblemHypothesis;
+  customer_personas?: CustomerPersona[];
+  source_opportunity_id?: string;
+}
+
+export interface MSPPayload {
+  solution_type: 'product_service' | 'tools_saas' | 'marketplace' | 'content';
+  industry_sector: string;
+  rationale: string;
+  access_type: string;
+  one_sentence_description: string;
+  perceived_value_price: string;
+  delivery_channel: string;
+  resources_needed: string;
+  time_to_first_sale: 'hours' | 'days' | 'weeks' | 'months';
+  differentiation_vs_diy: string;
+}
+
+export interface SolutionDesignPayload {
+  msp?: MSPPayload;
+  updated_at?: string;
+}
+
+export interface CompetitiveLandscapePayload {
+  macro_trend: string;
+  competitors_and_diy: string;
+  what_is_working: string;
+  what_is_failing_or_hard: string;
+  customer_gather_spots: string;
+}
+
+export interface ViabilityCheckPayload {
+  first_sale_14_days: 'yes' | 'maybe' | 'no';
+  resources_available: 'yes' | 'mostly' | 'no';
+  stamina_6_months: 'absolutely' | 'probably' | 'uncertain' | 'probably_not';
+  biggest_risk: string;
+  kill_criteria: string;
+  worst_case_scenario?: string;
+  regret_test?: 'starting' | 'not_starting';
+  final_decision?: 'go' | 'pivot' | 'no_go';
+  decision_rationale?: string;
+}
