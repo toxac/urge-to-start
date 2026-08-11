@@ -22,10 +22,13 @@ interface SocialAssessmentOutput {
 }
 
 interface FounderProfileContext {
-  headline?: string;
-  bio?: string;
-  target_skills?: string[];
-  domain_expertise?: string[];
+  fullname?: string | null;
+  country?: string | null;
+  age_group?: string | null;
+  bio?: string | null;
+  skills?: any;
+  motivations?: any;
+  roadblocks?: any;
 }
 
 interface OpportunityReviewInput {
@@ -180,8 +183,8 @@ Return ONLY valid JSON matching this schema:
 }
 
 /**
- * Reviews an opportunity score against the founder's profile and provides direct mentorship feedback.
- * Logs output to public.ai_logs.
+ * Reviews an opportunity score against the founder's real profile context (demographics, skills, motivations, roadblocks)
+ * and provides direct mentorship feedback. Logs output to public.ai_logs.
  */
 export async function runOpportunityScoreReviewAction(
   input: OpportunityReviewInput,
@@ -195,33 +198,39 @@ export async function runOpportunityScoreReviewAction(
       return { success: false, error: 'Authentication required.' };
     }
 
+    const p = input.founderProfile;
+
     const systemPrompt = `You are a candid, supportive venture mentor analyzing an early-stage startup opportunity score.
 
 GOAL:
-Evaluate the founder's self-assessed opportunity scores based on the problem details and their profile.
+Evaluate the founder's self-assessed opportunity scores by cross-referencing the problem details with their profile context (demographics, reported skills, motivations, and potential roadblocks).
 
 TONE & STYLE:
 - Conversational, direct, clear, and actionable. Zero fluff, no corporate jargon.
 
 Return ONLY valid JSON matching this schema:
 {
-  "feedback": "string (2 concise sentences on whether their self-scores seem realistic given the problem description and founder edge)",
-  "blindSpot": "string (1 critical question or blind spot they must consider before committing)",
-  "suggestion": "string (1 actionable micro-step to validate their highest-risk score)"
+  "feedback": "string (2 concise sentences evaluating their scores against their personal profile edge, skills, and background)",
+  "blindSpot": "string (1 critical question or blind spot given their motivations or reported roadblocks)",
+  "suggestion": "string (1 actionable micro-step to validate their highest-risk score given their location/market)"
 }`;
 
     const userPrompt = JSON.stringify({
-      founderProfile: {
-        headline: input.founderProfile?.headline || 'N/A',
-        domainExpertise: input.founderProfile?.domain_expertise || [],
-        targetSkills: input.founderProfile?.target_skills || [],
+      founderContext: {
+        fullname: p?.fullname || 'Founder',
+        country: p?.country || 'Unknown',
+        ageGroup: p?.age_group || 'Unspecified',
+        bio: p?.bio || 'None provided',
+        skills: p?.skills || [],
+        motivations: p?.motivations || {},
+        roadblocks: p?.roadblocks || {},
       },
       opportunity: {
         title: input.opportunityTitle,
         description: input.opportunityDescription,
         coreProblem: input.coreProblem || 'N/A',
         targetAudience: input.targetAudience || 'N/A',
-        currentScores: input.currentScores,
+        selfAssessedScores: input.currentScores,
       },
     }, null, 2);
 
@@ -233,21 +242,21 @@ Return ONLY valid JSON matching this schema:
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Opportunity to evaluate:\n${userPrompt}` }
+          { role: 'user', content: `Evaluate this opportunity against founder context:\n${userPrompt}` }
         ]
       });
 
       const raw = JSON.parse(response.choices[0].message.content || '{}');
       parsedResult = {
-        feedback: raw.feedback || "Your self-assessment reflects strong enthusiasm. Ensure your perceived unfair advantage matches actual domain experience.",
-        blindSpot: raw.blindSpot || "Are users actively paying for existing workarounds, or just enduring the hassle?",
-        suggestion: raw.suggestion || "Talk to 3 potential customers to confirm how much time or money they currently spend on workarounds."
+        feedback: raw.feedback || "Your self-assessment reflects strong enthusiasm. Ensure your perceived unfair advantage matches your reported technical and domain skills.",
+        blindSpot: raw.blindSpot || "Are potential customers in your target market actively paying for workarounds today?",
+        suggestion: raw.suggestion || "Talk to 3 target users to confirm how much time or money they currently spend on existing workarounds."
       };
     } catch (err) {
       console.error('AI Review fallback triggered:', err);
       parsedResult = {
-        feedback: "Your score indicates a solid alignment with your skills. Double check if the urgency score reflects true customer pain.",
-        blindSpot: "How quickly can you realistically deliver a Minimum Sellable Product without over-engineering?",
+        feedback: "Your scores indicate solid alignment with your reported skills. Double check if the urgency score reflects true customer willingness to pay.",
+        blindSpot: "Given your current schedule and roadblocks, can you realistically deliver a Minimum Sellable Product quickly?",
         suggestion: "Ask 3 target users what hacky workaround they currently use to solve this."
       };
     }
