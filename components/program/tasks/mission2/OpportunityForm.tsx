@@ -27,7 +27,10 @@ import {
   Sparkles, 
   ArrowRight,
   Eye,
-  Check
+  Check,
+  Globe,
+  Users,
+  Award
 } from 'lucide-react';
 
 type UserOpportunityRow = Database['public']['Tables']['user_opportunities']['Row'];
@@ -36,10 +39,12 @@ type OpportunitySourceType = Database['public']['Enums']['opportunity_source_typ
 
 interface OpportunityInputs {
   title: string;
+  core_problem: string;
   description: string;
   linked_observation_id?: string;
   target_audience?: string;
   potential_solution?: string;
+  source_url?: string;
 }
 
 export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
@@ -63,6 +68,31 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
 
   const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
+  // Dynamic context framing based on sourceType
+  const formConfig = sourceType === 'zone_of_influence'
+    ? {
+        headerTitle: "Turn People's Problems into Opportunities",
+        headerIcon: <Users className="w-3.5 h-3.5 text-primary" />,
+        pickerLabel: 'Select from Your Logged People Observations:'
+      }
+    : sourceType === 'skills'
+    ? {
+        headerTitle: 'Turn Skill Assets into Opportunities',
+        headerIcon: <Award className="w-3.5 h-3.5 text-amber-500" />,
+        pickerLabel: 'Select from Your Audited Skills:'
+      }
+    : sourceType === 'broader_search'
+    ? {
+        headerTitle: 'Seed Opportunity from Market Research',
+        headerIcon: <Globe className="w-3.5 h-3.5 text-primary" />,
+        pickerLabel: null
+      }
+    : {
+        headerTitle: 'Turn Personal Frustration into Opportunity',
+        headerIcon: <Sparkles className="w-3.5 h-3.5 text-amber-500" />,
+        pickerLabel: 'Select from Your Logged Frustrations:'
+      };
+
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<OpportunityInputs>();
 
   // Fetch logged opportunities and matching observations
@@ -77,7 +107,6 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
         setOpportunities(oppRes.data);
       }
       if (obsRes.success && obsRes.data) {
-        // ⚡ Filter observations to ONLY show those matching the current sourceType / category
         const filtered = obsRes.data.filter((obs) => {
           const cat = (obs.metadata as any)?.category || 'personal_problems';
           return cat === sourceType;
@@ -92,6 +121,7 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
     setSelectedObsId(obs.id);
     setValue('linked_observation_id', obs.id);
     setValue('title', `Solving: ${obs.what.slice(0, 60)}${obs.what.length > 60 ? '...' : ''}`);
+    setValue('core_problem', obs.what);
     setValue('target_audience', obs.who);
   };
 
@@ -107,9 +137,11 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
         sourceType,
         status: 'raw_seed',
         captureMetadata: {
+          core_problem: formData.core_problem,
           linked_observation_id: formData.linked_observation_id || null,
           target_audience: formData.target_audience || null,
           potential_solution: formData.potential_solution || null,
+          source_url: formData.source_url || null,
           source_task_id: task.id
         }
       });
@@ -123,7 +155,6 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
       const newOpportunity = oppRes.data;
       setOpportunities(prev => [newOpportunity, ...prev]);
 
-      // Switch task progress to 'in_progress' if not set
       if (!isCompleted && existingProgress?.status !== 'in_progress') {
         const progressRes = await setTaskStatusInProgressAction({
           taskId: task.id,
@@ -139,10 +170,12 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
       setSelectedObsId(null);
       reset({
         title: '',
+        core_problem: '',
         description: '',
         linked_observation_id: '',
         target_audience: '',
-        potential_solution: ''
+        potential_solution: '',
+        source_url: ''
       });
 
     } catch (err: any) {
@@ -259,22 +292,41 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
           </div>
 
           <div className="grid grid-cols-1 gap-3">
-            {opportunities.map((opp) => (
-              <div key={opp.id} className="p-4 rounded-xl border border-border bg-card space-y-2">
-                <div className="flex items-center justify-between text-xs font-bold text-foreground">
-                  <span className="flex items-center gap-1.5 text-primary">
-                    <Lightbulb className="w-3.5 h-3.5" />
-                    {opp.title}
-                  </span>
-                  <Badge variant="secondary" className="text-[9px] font-mono uppercase">
-                    {opp.status}
-                  </Badge>
+            {opportunities.map((opp) => {
+              const meta = (opp.capture_metadata as any) || {};
+              return (
+                <div key={opp.id} className="p-4 rounded-xl border border-border bg-card space-y-2">
+                  <div className="flex items-center justify-between text-xs font-bold text-foreground">
+                    <span className="flex items-center gap-1.5 text-primary">
+                      <Lightbulb className="w-3.5 h-3.5" />
+                      {opp.title}
+                    </span>
+                    <Badge variant="secondary" className="text-[9px] font-mono uppercase">
+                      {opp.status}
+                    </Badge>
+                  </div>
+                  {meta.core_problem && (
+                    <p className="text-xs text-foreground font-medium">
+                      <strong className="text-muted-foreground">Problem:</strong> {meta.core_problem}
+                    </p>
+                  )}
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {opp.description}
+                  </p>
+                  {meta.source_url && (
+                    <a
+                      href={meta.source_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline font-mono pt-1"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      View Research Source / Link
+                    </a>
+                  )}
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  {opp.description}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -284,20 +336,20 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
         <form onSubmit={handleSubmit(onSubmitOpportunity)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-5">
           <div className="space-y-1">
             <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              Turn Frustration or Skill into Opportunity
+              {formConfig.headerIcon}
+              {formConfig.headerTitle}
             </span>
             <p className="text-xs text-muted-foreground leading-relaxed">
               {task.briefing_text}
             </p>
           </div>
 
-          {/* LINKED OBSERVATION QUICK-PICKER (FILTERED BY CURRENT SOURCE TYPE ONLY) */}
-          {filteredObservations.length > 0 && (
+          {/* LINKED OBSERVATION QUICK-PICKER */}
+          {sourceType !== 'broader_search' && filteredObservations.length > 0 && (
             <div className="p-3.5 rounded-xl border border-primary/20 bg-primary/5 space-y-2">
               <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1">
                 <Eye className="w-3 h-3" />
-                Select from Your Relevant Logged Observations:
+                {formConfig.pickerLabel}
               </span>
               <div className="flex flex-col gap-2">
                 {filteredObservations.map((obs) => {
@@ -322,6 +374,21 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
             </div>
           )}
 
+          {/* Broader Search Source URL Input */}
+          {sourceType === 'broader_search' && (
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-foreground block">
+                Research Source URL or Community Page (Optional)
+              </Label>
+              <Input
+                type="text"
+                placeholder="e.g. https://reddit.com/r/SaaS/comments/... or Subreddit / Marketplace link"
+                className="text-xs h-9 bg-background"
+                {...register('source_url')}
+              />
+            </div>
+          )}
+
           {/* Opportunity Title */}
           <div className="space-y-1.5">
             <Label className="text-xs font-semibold text-foreground block">
@@ -340,6 +407,23 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
             )}
           </div>
 
+          {/* Explicit Core Problem Field */}
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-foreground block">
+              What is the exact core problem / pain point? *
+            </Label>
+            <Textarea
+              className="text-xs leading-relaxed bg-background resize-none min-h-[70px]"
+              placeholder="e.g. People spend 30 minutes every Sunday deciding what groceries to buy, resulting in leftover food waste and frequent takeout ordering."
+              {...register('core_problem', { required: true, minLength: 5 })}
+            />
+            {errors.core_problem && (
+              <p className="text-[11px] text-destructive font-semibold">
+                Please state the core problem clearly.
+              </p>
+            )}
+          </div>
+
           {/* Target Audience */}
           <div className="space-y-1.5">
             <Label className="text-xs font-semibold text-foreground block">
@@ -347,13 +431,13 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
             </Label>
             <Input
               type="text"
-              placeholder="e.g. Busy students, working professionals, myself"
+              placeholder="e.g. Busy students, working professionals, small business owners"
               className="text-xs h-9 bg-background"
               {...register('target_audience')}
             />
           </div>
 
-          {/* Potential Concept / Solution Idea (Textarea) */}
+          {/* Potential Concept / Solution Idea */}
           <div className="space-y-1.5">
             <Label className="text-xs font-semibold text-foreground block">
               Potential Concept / Solution Idea
@@ -365,19 +449,19 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
             />
           </div>
 
-          {/* Opportunity Description */}
+          {/* Opportunity Description / Value */}
           <div className="space-y-1.5">
             <Label className="text-xs font-semibold text-foreground block">
               Opportunity Description / Why is this valuable? *
             </Label>
             <Textarea
-              className="text-xs leading-relaxed bg-background resize-none min-h-[85px]"
+              className="text-xs leading-relaxed bg-background resize-none min-h-[80px]"
               placeholder="e.g. Grocery waste is high and people end up ordering takeout because planning meals takes mental energy. Solving this saves $100+/month and reduces daily decision fatigue."
               {...register('description', { required: true, minLength: 10 })}
             />
             {errors.description && (
               <p className="text-[11px] text-destructive font-semibold">
-                Please write a short description (at least 10 characters).
+                Please write a short value description (at least 10 characters).
               </p>
             )}
           </div>
