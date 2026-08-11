@@ -23,6 +23,7 @@ import { ProblemDefinitionForm } from './mission3/ProblemDefinitionForm';
 import { CustomerPersonaForm } from './mission3/CustomerPersonaForm';
 import { SolutionTypeForm } from './mission3/SolutionTypeForm';
 import { MSPDefinitionForm } from './mission3/MSPDefinitionForm';
+import { MSPBuildForm } from './mission3/MSPBuildForm';
 
 
 
@@ -51,6 +52,7 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   CustomerPersonaForm: CustomerPersonaForm,
   SolutionTypeForm: SolutionTypeForm,
   MSPDefinitionForm: MSPDefinitionForm,
+  MSPBuildForm: MSPBuildForm,
 
 
 
