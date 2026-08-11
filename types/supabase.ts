@@ -1268,6 +1268,92 @@ export type Database = {
           },
         ]
       }
+      user_projects: {
+        Row: {
+          biz_name: string | null
+          build_data: Json | null
+          competitive_landscape: Json | null
+          compliance_checklist: Json | null
+          created_at: string | null
+          current_mission: string | null
+          discovery_metrics: Json | null
+          financial_blueprint: Json | null
+          five_word_hook: string | null
+          id: string
+          infrastructure_nodes: Json | null
+          is_active: boolean | null
+          launch_data: Json | null
+          operations_data: Json | null
+          opportunity_id: string | null
+          review_data: Json | null
+          solution_design: Json | null
+          status: string | null
+          tagline: string | null
+          updated_at: string | null
+          user_id: string
+          validation_data: Json | null
+          viability_check: Json | null
+        }
+        Insert: {
+          biz_name?: string | null
+          build_data?: Json | null
+          competitive_landscape?: Json | null
+          compliance_checklist?: Json | null
+          created_at?: string | null
+          current_mission?: string | null
+          discovery_metrics?: Json | null
+          financial_blueprint?: Json | null
+          five_word_hook?: string | null
+          id?: string
+          infrastructure_nodes?: Json | null
+          is_active?: boolean | null
+          launch_data?: Json | null
+          operations_data?: Json | null
+          opportunity_id?: string | null
+          review_data?: Json | null
+          solution_design?: Json | null
+          status?: string | null
+          tagline?: string | null
+          updated_at?: string | null
+          user_id: string
+          validation_data?: Json | null
+          viability_check?: Json | null
+        }
+        Update: {
+          biz_name?: string | null
+          build_data?: Json | null
+          competitive_landscape?: Json | null
+          compliance_checklist?: Json | null
+          created_at?: string | null
+          current_mission?: string | null
+          discovery_metrics?: Json | null
+          financial_blueprint?: Json | null
+          five_word_hook?: string | null
+          id?: string
+          infrastructure_nodes?: Json | null
+          is_active?: boolean | null
+          launch_data?: Json | null
+          operations_data?: Json | null
+          opportunity_id?: string | null
+          review_data?: Json | null
+          solution_design?: Json | null
+          status?: string | null
+          tagline?: string | null
+          updated_at?: string | null
+          user_id?: string
+          validation_data?: Json | null
+          viability_check?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_projects_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "user_opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_questions: {
         Row: {
           admin_answer: string | null
