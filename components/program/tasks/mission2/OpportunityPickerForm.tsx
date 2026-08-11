@@ -157,7 +157,7 @@ export function OpportunityPickerForm({ task, existingProgress, onSuccess }: Bas
           >
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : (
               <>
-                <span>Commit to Opportunity & Complete Task (+{task.grant_points} XP)</span>
+                <span>Commit to Opportunity & Complete Task</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}

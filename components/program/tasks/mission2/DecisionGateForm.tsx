@@ -211,7 +211,7 @@ export function DecisionGateForm({ task, existingProgress, onSuccess }: BaseTask
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : (
               <>
                 <Sparkles className="w-4 h-4" />
-                <span>Complete Mission 2 & Graduate (+{task.grant_points} XP)</span>
+                <span>Complete Mission 2</span>
               </>
             )}
           </Button>
