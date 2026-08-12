@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Database } from '@/types/supabase';
+import { synthesizeProblemFromInterviewsAction } from '@/actions/assessments';
 import { 
   Select, 
   SelectContent, 
@@ -92,43 +93,32 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
 
   // AI Synthesis Handler
   const handleAiSynthesize = async () => {
-    if (loggedInterviews.length === 0) {
-      setErrorMessage('Please log at least one customer interview before synthesizing with AI.');
-      return;
-    }
+  if (loggedInterviews.length === 0) {
+    setErrorMessage('Please log at least one customer interview before synthesizing with AI.');
+    return;
+  }
 
-    setIsAiLoading(true);
-    setErrorMessage(null);
+  setIsAiLoading(true);
+  setErrorMessage(null);
 
-    try {
-      // Call server action / endpoint to process interviews
-      const response = await fetch('/api/ai/synthesize-problem', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          projectTitle: activeProject?.biz_name,
-          interviews: loggedInterviews
-        })
-      });
+  const res = await synthesizeProblemFromInterviewsAction({
+    opportunityTitle: activeProject?.biz_name || undefined,
+    interviews: loggedInterviews
+  });
 
-      const result = await response.json();
+  if (res.success && res.data) {
+    if (res.data.problem_statement) setValue('problem_statement', res.data.problem_statement);
+    if (res.data.affected_audience) setValue('affected_audience', res.data.affected_audience);
+    if (res.data.when_context) setValue('when_context', res.data.when_context);
+    if (res.data.where_location) setValue('where_location', res.data.where_location);
+    if (res.data.current_workaround) setValue('current_workaround', res.data.current_workaround);
+    if (res.data.frequency) setValue('frequency', res.data.frequency as any);
+  } else {
+    setErrorMessage(res.error || 'Failed to generate AI problem synthesis.');
+  }
 
-      if (response.ok && result.data) {
-        if (result.data.problem_statement) setValue('problem_statement', result.data.problem_statement);
-        if (result.data.affected_audience) setValue('affected_audience', result.data.affected_audience);
-        if (result.data.when_context) setValue('when_context', result.data.when_context);
-        if (result.data.where_location) setValue('where_location', result.data.where_location);
-        if (result.data.current_workaround) setValue('current_workaround', result.data.current_workaround);
-        if (result.data.frequency) setValue('frequency', result.data.frequency);
-      } else {
-        setErrorMessage(result.error || 'Failed to generate AI problem synthesis.');
-      }
-    } catch (err: any) {
-      setErrorMessage(err.message || 'An unexpected error occurred during synthesis.');
-    } finally {
-      setIsAiLoading(false);
-    }
-  };
+  setIsAiLoading(false);
+};
 
   const onSubmitProblem = async (data: ProblemInputs) => {
     if (!activeProject) return;
