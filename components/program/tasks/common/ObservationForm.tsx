@@ -14,13 +14,11 @@ import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
 import { Database } from '@/types/supabase';
 import { BaseTaskComponentProps } from '../types';
-import { ReferenceSchema } from '@/types/playbook';
+import { TaskResourcesList } from '../TaskResourcesList';
 import { 
   Loader2, 
   CheckCircle2, 
   AlertCircle, 
-  BookOpen, 
-  ExternalLink, 
   Plus, 
   Eye, 
   MapPin, 
@@ -51,8 +49,6 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
   const isInProgress = existingProgress?.status === 'in_progress' || observations.length > 0;
 
   const [showForm, setShowForm] = useState(!isCompleted);
-
-  const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
   const category = task.observation_context?.category || 'personal_problems';
 
@@ -238,29 +234,8 @@ export function ObservationForm({ task, existingProgress, onSuccess }: BaseTaskC
         </div>
       )}
 
-      {/* REQUIRED RESOURCES BANNER */}
-      {requiredResources.length > 0 && (
-        <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5" />
-            Required Action Guides (Read First)
-          </span>
-          <div className="space-y-1.5">
-            {requiredResources.map((res, idx) => (
-              <a
-                key={idx}
-                href={res.url_link}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2.5 rounded-lg border bg-card hover:bg-muted/30 transition flex items-center justify-between text-xs font-semibold text-foreground group"
-              >
-                <span>{res.title}</span>
-                <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
 
       {/* COMPLETED BANNER */}
       {isCompleted && !showForm && (
