@@ -16,7 +16,8 @@ import {
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { BaseTaskComponentProps } from '../types';
 import { ViabilityCheckPayload } from '@/types/projects';
-import { Loader2, AlertCircle, Rocket, RefreshCw, PauseCircle, ArrowRight, Sparkles } from 'lucide-react';
+import { TaskResourcesList } from '../TaskResourcesList';
+import { Loader2, AlertCircle, Rocket, ArrowRight, Sparkles, CheckCircle2, Edit2 } from 'lucide-react';
 
 type UserProjectRow = Database['public']['Tables']['user_projects']['Row'];
 
@@ -49,6 +50,10 @@ const DECISION_OPTIONS = [
 export function ViabilityDecisionGateForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const [activeProject, setActiveProject] = useState<UserProjectRow | null>(null);
   const [selectedDecision, setSelectedDecision] = useState<'go' | 'pivot' | 'no_go'>('go');
+  const [savedDecision, setSavedDecision] = useState<DecisionInputs | null>(null);
+
+  const isCompleted = existingProgress?.status === 'completed';
+  const [isEditing, setIsEditing] = useState(!isCompleted);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -62,19 +67,23 @@ export function ViabilityDecisionGateForm({ task, existingProgress, onSuccess }:
   useEffect(() => {
     async function loadData() {
       const res = await getActiveProjectAction();
-      if (res.success) {
+      if (res.success && res.data) {
         setActiveProject(res.data);
         const viability = (res.data.viability_check as any) || {};
 
         if (viability.final_decision) {
           setSelectedDecision(viability.final_decision);
           setValue('final_decision', viability.final_decision);
+          setSavedDecision({
+            final_decision: viability.final_decision,
+            decision_rationale: viability.decision_rationale || ''
+          });
         }
         if (viability.decision_rationale) {
           setValue('decision_rationale', viability.decision_rationale);
         }
       } else {
-        setErrorMessage(res.error || 'Failed to load active project');
+        setErrorMessage(!res.success ? res.error : 'Failed to load active project');
       }
     }
     loadData();
@@ -117,12 +126,14 @@ export function ViabilityDecisionGateForm({ task, existingProgress, onSuccess }:
       }
     });
 
-    if (taskRes.success && onSuccess) {
-      onSuccess();
+    if (taskRes.success) {
+      setSavedDecision({ final_decision: selectedDecision, decision_rationale: data.decision_rationale });
+      setIsEditing(false);
+      if (onSuccess) onSuccess();
     } else {
       setErrorMessage(taskRes.error || 'Failed to complete decision gate');
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   return (
@@ -134,85 +145,134 @@ export function ViabilityDecisionGateForm({ task, existingProgress, onSuccess }:
         </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmitDecision)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-5">
-        <div className="space-y-1">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <Rocket className="w-3.5 h-3.5 text-amber-500" />
-            Mission 3 Decision Gate: Make the Call
-          </span>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            {task.briefing_text}
-          </p>
-        </div>
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
 
-        {/* DECISION SELECTION CARDS */}
-        <div className="space-y-2">
-          <Label className="text-xs font-semibold text-foreground">
-            Select Your Intentional Direction *
-          </Label>
-          <div className="grid grid-cols-1 gap-2.5">
-            {DECISION_OPTIONS.map((opt) => {
-              const isSelected = selectedDecision === opt.id;
-              return (
-                <button
-                  key={opt.id}
-                  type="button"
-                  onClick={() => {
-                    setSelectedDecision(opt.id as any);
-                    setValue('final_decision', opt.id as any);
-                  }}
-                  className={`p-4 rounded-xl border text-left transition cursor-pointer flex items-start justify-between ${
-                    isSelected 
-                      ? 'border-primary bg-primary/10 text-foreground font-semibold shadow-xs' 
-                      : 'border-border bg-card hover:border-primary/30 text-muted-foreground'
-                  }`}
-                >
-                  <div className="space-y-1">
-                    <span className="text-xs font-bold text-foreground block">{opt.title}</span>
-                    <p className="text-[11px] leading-relaxed">{opt.description}</p>
-                  </div>
-                  {isSelected && (
-                    <Badge variant="outline" className="text-[9px] font-mono border-primary text-primary shrink-0">
-                      Selected
-                    </Badge>
-                  )}
-                </button>
-              );
-            })}
+      {/* READ-ONLY COMPLETED VIEW */}
+      {savedDecision && !isEditing ? (
+        <div className="w-full space-y-5 border rounded-2xl p-6 bg-emerald-500/5 border-emerald-500/20 text-left">
+          <div className="flex items-center justify-between pb-3 border-b border-border/50">
+            <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 uppercase tracking-wider">
+              <CheckCircle2 className="w-4 h-4" />
+              Mission 3 Decision Locked In
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsEditing(true)}
+              className="h-8 text-xs font-semibold cursor-pointer gap-1.5"
+            >
+              <Edit2 className="w-3.5 h-3.5" />
+              Edit Decision
+            </Button>
+          </div>
+
+          <div className="space-y-3 text-xs">
+            <div className="p-3.5 rounded-xl bg-card border border-border/60">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase block">Decision Call</span>
+              <p className="text-xs font-bold text-foreground uppercase tracking-wider">{savedDecision.final_decision}</p>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-card border border-border/60 space-y-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase block">Rationale</span>
+              <p className="text-xs font-medium text-foreground leading-relaxed">{savedDecision.decision_rationale}</p>
+            </div>
           </div>
         </div>
+      ) : (
+        /* FORM VIEW */
+        <form onSubmit={handleSubmit(onSubmitDecision)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-5">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+              <Rocket className="w-3.5 h-3.5 text-amber-500" />
+              Mission 3 Decision Gate: Make the Call
+            </span>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {task.briefing_text}
+            </p>
+          </div>
 
-        {/* RATIONALE */}
-        <div className="space-y-1.5 pt-2">
-          <Label className="text-xs font-semibold text-foreground">
-            What is your 1-paragraph reasoning behind this decision? *
-          </Label>
-          <Textarea
-            className="text-xs bg-background min-h-[85px]"
-            placeholder="e.g. I am going because 4 out of 5 café owners confirmed intense Sunday friction and 2 offered to pay for a weekly template pack. The compliance roadmap is manageable and my MSP takes 5 days to launch."
-            {...register('decision_rationale', { required: true, minLength: 10 })}
-          />
-          {errors.decision_rationale && (
-            <p className="text-[11px] text-destructive font-semibold">Please provide your decision rationale.</p>
-          )}
-        </div>
+          {/* DECISION SELECTION CARDS */}
+          <div className="space-y-2">
+            <Label className="text-xs font-semibold text-foreground">
+              Select Your Intentional Direction *
+            </Label>
+            <div className="grid grid-cols-1 gap-2.5">
+              {DECISION_OPTIONS.map((opt) => {
+                const isSelected = selectedDecision === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedDecision(opt.id as any);
+                      setValue('final_decision', opt.id as any);
+                    }}
+                    className={`p-4 rounded-xl border text-left transition cursor-pointer flex items-start justify-between ${
+                      isSelected 
+                        ? 'border-primary bg-primary/10 text-foreground font-semibold shadow-xs' 
+                        : 'border-border bg-card hover:border-primary/30 text-muted-foreground'
+                    }`}
+                  >
+                    <div className="space-y-1">
+                      <span className="text-xs font-bold text-foreground block">{opt.title}</span>
+                      <p className="text-[11px] leading-relaxed">{opt.description}</p>
+                    </div>
+                    {isSelected && (
+                      <Badge variant="outline" className="text-[9px] font-mono border-primary text-primary shrink-0">
+                        Selected
+                      </Badge>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full h-11 text-xs font-bold uppercase tracking-wider cursor-pointer gap-2 bg-gradient-to-r from-amber-500 to-primary text-white shadow-lg"
-        >
-          {isSubmitting ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <>
-              <Sparkles className="w-4 h-4 text-amber-200" />
-              <span>Lock In Decision & Complete Mission 3 (+{task.grant_points} XP)</span>
-              <ArrowRight className="w-4 h-4" />
-            </>
-          )}
-        </Button>
-      </form>
+          {/* RATIONALE */}
+          <div className="space-y-1.5 pt-2">
+            <Label className="text-xs font-semibold text-foreground">
+              What is your 1-paragraph reasoning behind this decision? *
+            </Label>
+            <Textarea
+              className="text-xs bg-background min-h-[85px]"
+              placeholder="e.g. I am going because 4 out of 5 café owners confirmed intense Sunday friction and 2 offered to pay for a weekly template pack. The compliance roadmap is manageable and my MSP takes 5 days to launch."
+              {...register('decision_rationale', { required: true, minLength: 10 })}
+            />
+            {errors.decision_rationale && (
+              <p className="text-[11px] text-destructive font-semibold">Please provide your decision rationale.</p>
+            )}
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            {isCompleted && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setIsEditing(false)}
+                className="h-10 text-xs font-semibold cursor-pointer"
+              >
+                Cancel
+              </Button>
+            )}
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex-1 h-11 text-xs font-bold uppercase tracking-wider cursor-pointer gap-2 bg-gradient-to-r from-amber-500 to-primary text-white shadow-lg"
+            >
+              {isSubmitting ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4 text-amber-200" />
+                  <span>Lock In Decision & Complete Mission 3 (+{task.grant_points} XP)</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </Button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }

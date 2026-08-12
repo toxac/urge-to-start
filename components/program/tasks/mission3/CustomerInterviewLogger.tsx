@@ -33,7 +33,8 @@ import {
     Check,
     MessageSquare,
     ArrowRight,
-    Link2
+    Link2,
+    Edit2
 } from 'lucide-react';
 
 type UserProjectRow = Database['public']['Tables']['user_projects']['Row'];
@@ -65,6 +66,7 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
 
     const targetCount = task.target_count || 3;
     const isCompleted = existingProgress?.status === 'completed';
+    const [isEditing, setIsEditing] = useState(!isCompleted);
 
     const { register, handleSubmit, reset, setValue, watch } = useForm<InterviewInputs>({
         defaultValues: {
@@ -139,12 +141,13 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
             }
         });
 
-        if (res.success && onSuccess) {
-            onSuccess();
+        if (res.success) {
+            setIsEditing(false);
+            if (onSuccess) onSuccess();
         } else {
             setErrorMessage(res.error || 'Failed to complete step');
-            setIsCompleting(false);
         }
+        setIsCompleting(false);
     };
 
     return (
@@ -206,12 +209,26 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
                         <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
                             Logged Customer Conversations ({interviews.length} / {targetCount} required)
                         </span>
-                        <Badge variant="outline" className={`text-[10px] font-mono ${interviews.length >= targetCount
-                            ? 'border-emerald-500/40 text-emerald-500 bg-emerald-500/10'
-                            : 'border-amber-500/40 text-amber-500 bg-amber-500/10'
-                            }`}>
-                            {interviews.length >= targetCount ? 'Target Met' : `${targetCount - interviews.length} More Needed`}
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                            <Badge variant="outline" className={`text-[10px] font-mono ${interviews.length >= targetCount
+                                ? 'border-emerald-500/40 text-emerald-500 bg-emerald-500/10'
+                                : 'border-amber-500/40 text-amber-500 bg-amber-500/10'
+                                }`}>
+                                {interviews.length >= targetCount ? 'Target Met' : `${targetCount - interviews.length} More Needed`}
+                            </Badge>
+                            {isCompleted && !isEditing && (
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setIsEditing(true)}
+                                    className="h-7 text-[11px] font-semibold cursor-pointer gap-1"
+                                >
+                                    <Edit2 className="w-3 h-3" />
+                                    Manage Logs
+                                </Button>
+                            )}
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 gap-3">
@@ -248,7 +265,7 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
             )}
 
             {/* NEW INTERVIEW LOG FORM */}
-            {(!isCompleted || interviews.length < targetCount) && (
+            {(isEditing || interviews.length < targetCount) && (
                 <form onSubmit={handleSubmit(onSubmitInterview)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-4">
                     <div className="space-y-1">
                         <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
@@ -378,7 +395,7 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
             )}
 
             {/* COMPLETE STEP CTA */}
-            {!isCompleted && interviews.length >= targetCount && (
+            {(!isCompleted || isEditing) && interviews.length >= targetCount && (
                 <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 flex items-center justify-between gap-3">
                     <div className="space-y-0.5">
                         <span className="text-xs font-bold text-foreground block">

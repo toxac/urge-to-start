@@ -33,10 +33,19 @@ import {
   Link2,
   ChevronDown,
   ChevronUp,
-  Sparkles
+  Sparkles,
+  CheckCircle2,
+  Edit2
 } from 'lucide-react';
 
-type UserProjectRow = Database['public']['Tables']['user_projects']['Row'];
+type UserProjectRow = Omit<
+  Database['public']['Tables']['user_projects']['Row'],
+  'created_at' | 'current_mission'
+> & {
+  created_at?: string | null;
+  current_mission?: string | null;
+  opportunity_id?: string | null;
+};
 
 interface ProblemInputs {
   problem_statement: string;
@@ -51,7 +60,11 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
   const [activeProject, setActiveProject] = useState<UserProjectRow | null>(null);
   const [loggedInterviews, setLoggedInterviews] = useState<InterviewRecord[]>([]);
   const [showInterviews, setShowInterviews] = useState(true);
+  const [savedProblem, setSavedProblem] = useState<ProblemHypothesis | null>(null);
   
+  const isCompleted = existingProgress?.status === 'completed';
+  const [isEditing, setIsEditing] = useState(!isCompleted);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -65,8 +78,8 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
   useEffect(() => {
     async function loadProject() {
       const res = await getActiveProjectAction();
-      if (res.success) {
-        setActiveProject(res.data);
+      if (res.success && res.data) {
+        setActiveProject(res.data as UserProjectRow);
         const discovery = (res.data.discovery_metrics as any) || {};
         const validation = (res.data.validation_data as any) || {};
 
@@ -74,6 +87,7 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
 
         if (discovery.problem_hypothesis) {
           const hyp: ProblemHypothesis = discovery.problem_hypothesis;
+          setSavedProblem(hyp);
           reset({
             problem_statement: hyp.problem_statement || '',
             when_context: hyp.when_context || '',
@@ -84,13 +98,12 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
           });
         }
       } else {
-        setErrorMessage(res.error || 'Failed to load active project');
+        setErrorMessage(!res.success ? res.error : 'Failed to load active project');
       }
     }
     loadProject();
   }, [reset]);
 
-  // AI Synthesis Handler using Server Action
   const handleAiSynthesize = async () => {
     if (loggedInterviews.length === 0) {
       setErrorMessage('Please log at least one customer interview before synthesizing with AI.');
@@ -148,12 +161,14 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
       }
     });
 
-    if (taskRes.success && onSuccess) {
-      onSuccess();
+    if (taskRes.success) {
+      setSavedProblem(problemPayload);
+      setIsEditing(false);
+      if (onSuccess) onSuccess();
     } else {
       setErrorMessage(taskRes.error || 'Failed to complete step');
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   return (
@@ -185,178 +200,235 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
       {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
       <TaskResourcesList resources={task.resources} />
 
-      {/* COLLAPSIBLE GROUNDING BANNER: SHOW ALL LOGGED INTERVIEW QUOTES */}
-      {loggedInterviews.length > 0 && (
-        <div className="rounded-xl border border-primary/20 bg-primary/5 overflow-hidden transition-all">
-          <div 
-            className="p-3.5 flex items-center justify-between cursor-pointer hover:bg-primary/10 transition"
-            onClick={() => setShowInterviews(!showInterviews)}
-          >
-            <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-              <Quote className="w-3.5 h-3.5 text-amber-500" />
-              Customer Evidence ({loggedInterviews.length} Conversations Logged)
+      {/* READ-ONLY COMPLETED VIEW */}
+      {savedProblem && !isEditing ? (
+        <div className="w-full space-y-5 border rounded-2xl p-6 bg-emerald-500/5 border-emerald-500/20 text-left">
+          <div className="flex items-center justify-between pb-3 border-b border-border/50">
+            <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 uppercase tracking-wider">
+              <CheckCircle2 className="w-4 h-4" />
+              Core Problem Synthesized
             </span>
-            <Button type="button" variant="ghost" size="sm" className="h-6 w-6 p-0 text-primary">
-              {showInterviews ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsEditing(true)}
+              className="h-8 text-xs font-semibold cursor-pointer gap-1.5"
+            >
+              <Edit2 className="w-3.5 h-3.5" />
+              Edit Problem Definition
             </Button>
           </div>
 
-          {showInterviews && (
-            <div className="p-3.5 pt-0 grid grid-cols-1 gap-2">
-              {loggedInterviews.map((item) => (
-                <div key={item.id} className="p-2.5 rounded-lg border border-border/80 bg-card text-xs space-y-1">
-                  <div className="flex items-center justify-between">
-                    <strong className="text-foreground">{item.interviewee_name} ({item.role_or_context}):</strong>
-                    <Badge variant="outline" className="text-[9px] font-mono uppercase border-muted text-muted-foreground">
-                      Signal: {item.buying_signal.replace(/_/g, ' ')}
-                    </Badge>
-                  </div>
-                  <p className="text-muted-foreground"><strong>Workaround:</strong> "{item.current_workaround}"</p>
-                  {item.key_quote_or_surprise && (
-                    <p className="text-[11px] text-foreground/90 italic bg-muted/30 p-2 rounded-md">
-                      "{item.key_quote_or_surprise}"
-                    </p>
-                  )}
+          <div className="space-y-3 text-xs">
+            <div className="p-3.5 rounded-xl bg-card border border-border/60 space-y-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase block">Problem Statement</span>
+              <p className="text-xs font-bold text-foreground leading-relaxed">"{savedProblem.problem_statement}"</p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="p-3 rounded-xl bg-card border border-border/60">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase block">Confirmed Audience</span>
+                <p className="text-xs text-foreground font-medium">{savedProblem.affected_audience}</p>
+              </div>
+              <div className="p-3 rounded-xl bg-card border border-border/60">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase block">Frequency</span>
+                <p className="text-xs text-foreground font-medium capitalize">{savedProblem.frequency}</p>
+              </div>
+            </div>
+
+            <div className="p-3 rounded-xl bg-card border border-border/60 space-y-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase block">Existing Workaround</span>
+              <p className="text-xs text-foreground font-medium">{savedProblem.current_workaround}</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* FORM CONTENT */
+        <div className="space-y-5">
+          {/* COLLAPSIBLE GROUNDING BANNER */}
+          {loggedInterviews.length > 0 && (
+            <div className="rounded-xl border border-primary/20 bg-primary/5 overflow-hidden transition-all">
+              <div 
+                className="p-3.5 flex items-center justify-between cursor-pointer hover:bg-primary/10 transition"
+                onClick={() => setShowInterviews(!showInterviews)}
+              >
+                <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+                  <Quote className="w-3.5 h-3.5 text-amber-500" />
+                  Customer Evidence ({loggedInterviews.length} Conversations Logged)
+                </span>
+                <Button type="button" variant="ghost" size="sm" className="h-6 w-6 p-0 text-primary">
+                  {showInterviews ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </Button>
+              </div>
+
+              {showInterviews && (
+                <div className="p-3.5 pt-0 grid grid-cols-1 gap-2">
+                  {loggedInterviews.map((item) => (
+                    <div key={item.id} className="p-2.5 rounded-lg border border-border/80 bg-card text-xs space-y-1">
+                      <div className="flex items-center justify-between">
+                        <strong className="text-foreground">{item.interviewee_name} ({item.role_or_context}):</strong>
+                        <Badge variant="outline" className="text-[9px] font-mono uppercase border-muted text-muted-foreground">
+                          Signal: {item.buying_signal.replace(/_/g, ' ')}
+                        </Badge>
+                      </div>
+                      <p className="text-muted-foreground"><strong>Workaround:</strong> "{item.current_workaround}"</p>
+                      {item.key_quote_or_surprise && (
+                        <p className="text-[11px] text-foreground/90 italic bg-muted/30 p-2 rounded-md">
+                          "{item.key_quote_or_surprise}"
+                        </p>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
           )}
+
+          <form onSubmit={handleSubmit(onSubmitProblem)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-border/40">
+              <div className="space-y-1">
+                <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+                  <Target className="w-3.5 h-3.5 text-amber-500" />
+                  Rethink & Synthesize the Core Problem
+                </span>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Refine your core problem based on evidence gathered from your interviews.
+                </p>
+              </div>
+
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleAiSynthesize}
+                disabled={isAiLoading || loggedInterviews.length === 0}
+                className="h-8 px-3 text-xs font-bold gap-1.5 text-primary border-primary/30 hover:bg-primary/10 shrink-0 cursor-pointer"
+              >
+                {isAiLoading ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                )}
+                <span>{isAiLoading ? 'Synthesizing...' : 'Draft with AI'}</span>
+              </Button>
+            </div>
+
+            {/* Problem Statement */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-foreground">
+                How do you see the core problem now? (In one sharp sentence) *
+              </Label>
+              <Textarea
+                className="text-xs leading-relaxed bg-background min-h-[75px]"
+                placeholder="e.g. Independent coffee shop owners spend 3 hours every Sunday manually copying schedule posts across 4 platforms because existing tools are built for big marketing teams."
+                {...register('problem_statement', { required: true, minLength: 10 })}
+              />
+              {errors.problem_statement && (
+                <p className="text-[11px] text-destructive font-semibold">
+                  Please state the problem clearly (at least 10 characters).
+                </p>
+              )}
+            </div>
+
+            {/* Affected Audience */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-foreground">
+                Who specifically confirmed this problem in your interviews? *
+              </Label>
+              <Textarea
+                className="text-xs leading-relaxed bg-background min-h-[60px]"
+                placeholder="e.g. Solo café owners with less than 5 employees who manage their own marketing"
+                {...register('affected_audience', { required: true })}
+              />
+            </div>
+
+            {/* When Context */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-foreground">
+                When does this problem happen? *
+              </Label>
+              <Textarea
+                className="text-xs leading-relaxed bg-background min-h-[60px]"
+                placeholder="e.g. Every Sunday evening during week planning or after a busy shift"
+                {...register('when_context', { required: true })}
+              />
+            </div>
+
+            {/* Where Location */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-foreground">
+                Where does it happen? *
+              </Label>
+              <Textarea
+                className="text-xs leading-relaxed bg-background min-h-[60px]"
+                placeholder="e.g. At home on laptop or on mobile device in the back office"
+                {...register('where_location', { required: true })}
+              />
+            </div>
+
+            {/* Frequency */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-foreground">
+                How often does this problem occur? *
+              </Label>
+              <Select
+                value={watch('frequency')}
+                onValueChange={(val) => setValue('frequency', (val ?? 'daily') as any)}
+              >
+                <SelectTrigger className="w-full text-xs h-9 bg-background">
+                  <SelectValue placeholder="Select frequency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">Daily (High intensity)</SelectItem>
+                  <SelectItem value="weekly">Weekly (Regular friction)</SelectItem>
+                  <SelectItem value="monthly">Monthly (Periodic headache)</SelectItem>
+                  <SelectItem value="occasionally">Occasionally</SelectItem>
+                  <SelectItem value="seasonal">Seasonal</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Current Workaround */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-foreground">
+                What is their actual workaround based on interviews? *
+              </Label>
+              <Textarea
+                className="text-xs leading-relaxed bg-background min-h-[70px]"
+                placeholder="e.g. They use free Canva templates and post inconsistently, or pay $500/month for an agency that delivers generic content."
+                {...register('current_workaround', { required: true })}
+              />
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              {isCompleted && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => setIsEditing(false)}
+                  className="h-10 text-xs font-semibold cursor-pointer"
+                >
+                  Cancel
+                </Button>
+              )}
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="flex-1 h-10 text-xs font-bold uppercase tracking-wider cursor-pointer gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
+              >
+                {isSubmitting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <span>Save Problem Definition & Complete Task</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </Button>
+            </div>
+          </form>
         </div>
       )}
-
-      {/* FORM CONTENT */}
-      <form onSubmit={handleSubmit(onSubmitProblem)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-border/40">
-          <div className="space-y-1">
-            <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-              <Target className="w-3.5 h-3.5 text-amber-500" />
-              Rethink & Synthesize the Core Problem
-            </span>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Refine your core problem based on evidence gathered from your interviews.
-            </p>
-          </div>
-
-          {/* AI SYNTHESIZE BUTTON NEXT TO TITLE */}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleAiSynthesize}
-            disabled={isAiLoading || loggedInterviews.length === 0}
-            className="h-8 px-3 text-xs font-bold gap-1.5 text-primary border-primary/30 hover:bg-primary/10 shrink-0 cursor-pointer"
-          >
-            {isAiLoading ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-            ) : (
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            )}
-            <span>{isAiLoading ? 'Synthesizing...' : 'Draft with AI'}</span>
-          </Button>
-        </div>
-
-        {/* Problem Statement */}
-        <div className="space-y-1.5">
-          <Label className="text-xs font-semibold text-foreground">
-            How do you see the core problem now? (In one sharp sentence) *
-          </Label>
-          <Textarea
-            className="text-xs leading-relaxed bg-background min-h-[75px]"
-            placeholder="e.g. Independent coffee shop owners spend 3 hours every Sunday manually copying schedule posts across 4 platforms because existing tools are built for big marketing teams."
-            {...register('problem_statement', { required: true, minLength: 10 })}
-          />
-          {errors.problem_statement && (
-            <p className="text-[11px] text-destructive font-semibold">
-              Please state the problem clearly (at least 10 characters).
-            </p>
-          )}
-        </div>
-
-        {/* Affected Audience (NOW TEXTAREA ON SEPARATE ROW) */}
-        <div className="space-y-1.5">
-          <Label className="text-xs font-semibold text-foreground">
-            Who specifically confirmed this problem in your interviews? *
-          </Label>
-          <Textarea
-            className="text-xs leading-relaxed bg-background min-h-[60px]"
-            placeholder="e.g. Solo café owners with less than 5 employees who manage their own marketing"
-            {...register('affected_audience', { required: true })}
-          />
-        </div>
-
-        {/* When Context (NOW TEXTAREA ON SEPARATE ROW) */}
-        <div className="space-y-1.5">
-          <Label className="text-xs font-semibold text-foreground">
-            When does this problem happen? *
-          </Label>
-          <Textarea
-            className="text-xs leading-relaxed bg-background min-h-[60px]"
-            placeholder="e.g. Every Sunday evening during week planning or after a busy shift"
-            {...register('when_context', { required: true })}
-          />
-        </div>
-
-        {/* Where Location (NOW TEXTAREA ON SEPARATE ROW) */}
-        <div className="space-y-1.5">
-          <Label className="text-xs font-semibold text-foreground">
-            Where does it happen? *
-          </Label>
-          <Textarea
-            className="text-xs leading-relaxed bg-background min-h-[60px]"
-            placeholder="e.g. At home on laptop or on mobile device in the back office"
-            {...register('where_location', { required: true })}
-          />
-        </div>
-
-        {/* Frequency */}
-        <div className="space-y-1.5">
-          <Label className="text-xs font-semibold text-foreground">
-            How often does this problem occur? *
-          </Label>
-          <Select
-            value={watch('frequency')}
-            onValueChange={(val) => setValue('frequency', (val ?? 'daily') as any)}
-          >
-            <SelectTrigger className="text-xs h-9 bg-background">
-              <SelectValue placeholder="Select frequency" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="daily">Daily (High intensity)</SelectItem>
-              <SelectItem value="weekly">Weekly (Regular friction)</SelectItem>
-              <SelectItem value="monthly">Monthly (Periodic headache)</SelectItem>
-              <SelectItem value="occasionally">Occasionally</SelectItem>
-              <SelectItem value="seasonal">Seasonal</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Current Workaround */}
-        <div className="space-y-1.5">
-          <Label className="text-xs font-semibold text-foreground">
-            What is their actual workaround based on interviews? *
-          </Label>
-          <Textarea
-            className="text-xs leading-relaxed bg-background min-h-[70px]"
-            placeholder="e.g. They use free Canva templates and post inconsistently, or pay $500/month for an agency that delivers generic content."
-            {...register('current_workaround', { required: true })}
-          />
-        </div>
-
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full h-10 text-xs font-bold uppercase tracking-wider cursor-pointer gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
-        >
-          {isSubmitting ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <>
-              <span>Save Problem Definition & Complete Task</span>
-              <ArrowRight className="w-4 h-4" />
-            </>
-          )}
-        </Button>
-      </form>
     </div>
   );
 }

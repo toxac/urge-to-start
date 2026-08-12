@@ -33,11 +33,20 @@ import {
   ArrowRight,
   Plus,
   Trash2,
-  Sparkles,
-  Link2
+  Link2,
+  CheckCircle2,
+  Edit2
 } from 'lucide-react';
 
-type UserProjectRow = Database['public']['Tables']['user_projects']['Row'];
+// Local type re-declaration to avoid importing types from server action files
+type UserProjectRow = Omit<
+  Database['public']['Tables']['user_projects']['Row'],
+  'created_at' | 'current_mission'
+> & {
+  created_at?: string | null;
+  current_mission?: string | null;
+  opportunity_id?: string | null;
+};
 
 interface PersonaInputs {
   persona_name: string;
@@ -51,7 +60,11 @@ interface PersonaInputs {
 export function CustomerPersonaForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const [activeProject, setActiveProject] = useState<UserProjectRow | null>(null);
   const [groundedProblem, setGroundedProblem] = useState<ProblemHypothesis | null>(null);
+  const [savedPersona, setSavedPersona] = useState<CustomerPersona | null>(null);
   
+  const isInitiallyCompleted = existingProgress?.status === 'completed';
+  const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
+
   // Dynamic arrays for Pain Points and Desired Gains
   const [painPoints, setPainPoints] = useState<string[]>(['']);
   const [desiredGains, setDesiredGains] = useState<string[]>(['']);
@@ -68,8 +81,8 @@ export function CustomerPersonaForm({ task, existingProgress, onSuccess }: BaseT
   useEffect(() => {
     async function loadData() {
       const res = await getActiveProjectAction();
-      if (res.success) {
-        setActiveProject(res.data);
+      if (res.success && res.data) {
+        setActiveProject(res.data as UserProjectRow);
         const discovery = (res.data.discovery_metrics as any) || {};
 
         if (discovery.problem_hypothesis) {
@@ -79,6 +92,7 @@ export function CustomerPersonaForm({ task, existingProgress, onSuccess }: BaseT
         // Pre-fill existing persona if present
         if (discovery.customer_personas && discovery.customer_personas.length > 0) {
           const persona: CustomerPersona = discovery.customer_personas[0];
+          setSavedPersona(persona);
           reset({
             persona_name: persona.persona_name || '',
             job_title_or_role: persona.job_title_or_role || '',
@@ -98,7 +112,7 @@ export function CustomerPersonaForm({ task, existingProgress, onSuccess }: BaseT
           }
         }
       } else {
-        setErrorMessage(res.error || 'Failed to load active project');
+        setErrorMessage(!res.success ? res.error : 'Failed to load active project');
       }
     }
     loadData();
@@ -181,12 +195,14 @@ export function CustomerPersonaForm({ task, existingProgress, onSuccess }: BaseT
       }
     });
 
-    if (taskRes.success && onSuccess) {
-      onSuccess();
+    if (taskRes.success) {
+      setSavedPersona(personaPayload);
+      setIsEditing(false);
+      if (onSuccess) onSuccess();
     } else {
       setErrorMessage(taskRes.error || 'Failed to complete step');
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   return (
@@ -218,230 +234,285 @@ export function CustomerPersonaForm({ task, existingProgress, onSuccess }: BaseT
       {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
       <TaskResourcesList resources={task.resources} />
 
-      {/* GROUNDED PROBLEM BANNER */}
-      {groundedProblem && (
-        <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-1.5">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <Target className="w-3.5 h-3.5 text-amber-500" />
-            Targeting Grounded Problem
-          </span>
-          <p className="text-xs font-semibold text-foreground">
-            "{groundedProblem.problem_statement}"
-          </p>
-        </div>
-      )}
-
-      {/* PERSONA FORM */}
-      <form onSubmit={handleSubmit(onSubmitPersona)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-5">
-        <div className="space-y-1">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <UserCheck className="w-3.5 h-3.5 text-amber-500" />
-            Define Your Target Customer Persona
-          </span>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            {task.briefing_text}
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* Persona Name */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">
-              Persona Archetype / Name *
-            </Label>
-            <Input
-              type="text"
-              placeholder="e.g. Sarah the Busy Café Owner"
-              className="text-xs h-9 bg-background"
-              {...register('persona_name', { required: true })}
-            />
-          </div>
-
-          {/* Job Title / Role */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">
-              Role / Context *
-            </Label>
-            <Input
-              type="text"
-              placeholder="e.g. Independent Coffee Shop Owner & Manager"
-              className="text-xs h-9 bg-background"
-              {...register('job_title_or_role', { required: true })}
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* Age Range */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">
-              Age Range *
-            </Label>
-            <Select
-              value={watch('age_range')}
-              onValueChange={(val) => setValue('age_range', val ?? '25_34')}
-            >
-              <SelectTrigger className="text-xs h-9 bg-background">
-                <SelectValue placeholder="Select age group" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="18_24">18–24</SelectItem>
-                <SelectItem value="25_34">25–34</SelectItem>
-                <SelectItem value="35_44">35–44</SelectItem>
-                <SelectItem value="45_54">45–54</SelectItem>
-                <SelectItem value="55_plus">55+</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Current Spend */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">
-              Current Spend / Time Invested in Workarounds *
-            </Label>
-            <Input
-              type="text"
-              placeholder="e.g. $200-$500/month on freelancer apps or 4 hours/week"
-              className="text-xs h-9 bg-background"
-              {...register('current_spend', { required: true })}
-            />
-          </div>
-        </div>
-
-        {/* Verbatim Quote */}
-        <div className="space-y-1.5">
-          <Label className="text-xs font-semibold text-foreground">
-            How do they describe this problem in their OWN exact words? *
-          </Label>
-          <Textarea
-            className="text-xs bg-background min-h-[65px]"
-            placeholder='e.g. "I spend 3 hours every Sunday on social media and I hate every minute of it. It feels disconnected from my actual coffee shop."'
-            {...register('verbatim_problem_quote', { required: true })}
-          />
-        </div>
-
-        {/* DYNAMIC LIST 1: RANKED PAIN POINTS */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-xs font-semibold text-foreground">
-              Ranked Pain Points (Most critical first) *
-            </Label>
+      {/* READ-ONLY SAVED VIEW WITH EDIT TOGGLE */}
+      {savedPersona && !isEditing ? (
+        <div className="w-full space-y-5 border rounded-2xl p-6 bg-emerald-500/5 border-emerald-500/20 text-left">
+          <div className="flex items-center justify-between pb-3 border-b border-border/50">
+            <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 uppercase tracking-wider">
+              <CheckCircle2 className="w-4 h-4" />
+              Customer Persona Defined
+            </span>
             <Button
-              type="button"
-              variant="ghost"
+              variant="outline"
               size="sm"
-              onClick={handleAddPainPoint}
-              className="h-7 text-[11px] font-bold gap-1 text-primary hover:bg-primary/10 cursor-pointer"
+              onClick={() => setIsEditing(true)}
+              className="h-8 text-xs font-semibold cursor-pointer gap-1.5"
             >
-              <Plus className="w-3 h-3" />
-              Add Pain Point
+              <Edit2 className="w-3.5 h-3.5" />
+              Edit Persona
             </Button>
           </div>
 
-          <div className="space-y-2">
-            {painPoints.map((point, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-muted-foreground shrink-0 w-5">
-                  #{index + 1}
-                </span>
-                <Input
-                  type="text"
-                  value={point}
-                  onChange={(e) => handlePainPointChange(index, e.target.value)}
-                  placeholder={`Pain Point ${index + 1} (e.g., Takes too much time away from operations)`}
-                  className="text-xs h-9 bg-background flex-1"
-                />
-                {painPoints.length > 1 && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleRemovePainPoint(index)}
-                    className="h-9 w-9 text-muted-foreground hover:text-destructive shrink-0 cursor-pointer"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </Button>
-                )}
+          <div className="space-y-3 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="p-3 rounded-xl bg-card border border-border/60">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase block">Persona Archetype</span>
+                <p className="text-xs font-bold text-foreground">{savedPersona.persona_name} ({savedPersona.job_title_or_role})</p>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* DYNAMIC LIST 2: DESIRED GAINS */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-xs font-semibold text-foreground">
-              Desired Gains (What makes this pain go away?) *
-            </Label>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={handleAddDesiredGain}
-              className="h-7 text-[11px] font-bold gap-1 text-primary hover:bg-primary/10 cursor-pointer"
-            >
-              <Plus className="w-3 h-3" />
-              Add Desired Gain
-            </Button>
-          </div>
-
-          <div className="space-y-2">
-            {desiredGains.map((gain, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-muted-foreground shrink-0 w-5">
-                  #{index + 1}
-                </span>
-                <Input
-                  type="text"
-                  value={gain}
-                  onChange={(e) => handleDesiredGainChange(index, e.target.value)}
-                  placeholder={`Desired Gain ${index + 1} (e.g., A 20-minute weekly workflow that generates authentic posts)`}
-                  className="text-xs h-9 bg-background flex-1"
-                />
-                {desiredGains.length > 1 && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleRemoveDesiredGain(index)}
-                    className="h-9 w-9 text-muted-foreground hover:text-destructive shrink-0 cursor-pointer"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </Button>
-                )}
+              <div className="p-3 rounded-xl bg-card border border-border/60">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase block">Age / Current Spend</span>
+                <p className="text-xs font-bold text-foreground">{savedPersona.age_range.replace('_', '–')} | {savedPersona.current_spend}</p>
               </div>
-            ))}
+            </div>
+
+            <div className="p-3 rounded-xl bg-card border border-border/60 space-y-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase block">Exact Problem Quote</span>
+              <p className="text-xs italic text-foreground font-medium">"{savedPersona.verbatim_problem_quote}"</p>
+            </div>
+
+            <div className="p-3 rounded-xl bg-card border border-border/60 space-y-1">
+              <span className="text-[10px] font-bold text-muted-foreground uppercase block">Watering Holes</span>
+              <p className="text-xs text-foreground font-medium">{savedPersona.watering_holes}</p>
+            </div>
           </div>
         </div>
-
-        {/* Watering Holes / Channels */}
-        <div className="space-y-1.5">
-          <Label className="text-xs font-semibold text-foreground flex items-center gap-1">
-            <MapPin className="w-3.5 h-3.5 text-primary" />
-            Where to find them? (Watering Holes - Online & Offline) *
-          </Label>
-          <Textarea
-            className="text-xs bg-background min-h-[65px]"
-            placeholder="e.g. Local Specialty Coffee Association Facebook groups, Instagram DMs, regional roaster meetups."
-            {...register('watering_holes', { required: true })}
-          />
-        </div>
-
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full h-10 text-xs font-bold uppercase tracking-wider cursor-pointer gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
-        >
-          {isSubmitting ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <>
-              <span>Save Customer Persona & Complete Quest 1</span>
-              <ArrowRight className="w-4 h-4" />
-            </>
+      ) : (
+        /* PERSONA EDITABLE FORM */
+        <form onSubmit={handleSubmit(onSubmitPersona)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-5">
+          {groundedProblem && (
+            <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-1.5">
+              <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+                <Target className="w-3.5 h-3.5 text-amber-500" />
+                Targeting Grounded Problem
+              </span>
+              <p className="text-xs font-semibold text-foreground">
+                "{groundedProblem.problem_statement}"
+              </p>
+            </div>
           )}
-        </Button>
-      </form>
+
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+              <UserCheck className="w-3.5 h-3.5 text-amber-500" />
+              Define Your Target Customer Persona
+            </span>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {task.briefing_text}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Persona Name */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-foreground">
+                Persona Archetype / Name *
+              </Label>
+              <Input
+                type="text"
+                placeholder="e.g. Sarah the Busy Café Owner"
+                className="text-xs h-9 bg-background"
+                {...register('persona_name', { required: true })}
+              />
+            </div>
+
+            {/* Job Title / Role */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-foreground">
+                Role / Context *
+              </Label>
+              <Input
+                type="text"
+                placeholder="e.g. Independent Coffee Shop Owner & Manager"
+                className="text-xs h-9 bg-background"
+                {...register('job_title_or_role', { required: true })}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Age Range */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-foreground">
+                Age Range *
+              </Label>
+              <Select
+                value={watch('age_range')}
+                onValueChange={(val) => setValue('age_range', val ?? '25_34')}
+              >
+                <SelectTrigger className="w-full text-xs h-9 bg-background">
+                  <SelectValue placeholder="Select age group" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="18_24">18–24</SelectItem>
+                  <SelectItem value="25_34">25–34</SelectItem>
+                  <SelectItem value="35_44">35–44</SelectItem>
+                  <SelectItem value="45_54">45–54</SelectItem>
+                  <SelectItem value="55_plus">55+</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Current Spend */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-semibold text-foreground">
+                Current Spend / Time Invested in Workarounds *
+              </Label>
+              <Input
+                type="text"
+                placeholder="e.g. $200-$500/month on freelancer apps or 4 hours/week"
+                className="text-xs h-9 bg-background"
+                {...register('current_spend', { required: true })}
+              />
+            </div>
+          </div>
+
+          {/* Verbatim Quote */}
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-foreground">
+              How do they describe this problem in their OWN exact words? *
+            </Label>
+            <Textarea
+              className="text-xs bg-background min-h-[65px]"
+              placeholder='e.g. "I spend 3 hours every Sunday on social media and I hate every minute of it. It feels disconnected from my actual coffee shop."'
+              {...register('verbatim_problem_quote', { required: true })}
+            />
+          </div>
+
+          {/* DYNAMIC LIST 1: RANKED PAIN POINTS */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs font-semibold text-foreground">
+                Ranked Pain Points (Most critical first) *
+              </Label>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleAddPainPoint}
+                className="h-7 text-[11px] font-bold gap-1 text-primary hover:bg-primary/10 cursor-pointer"
+              >
+                <Plus className="w-3 h-3" />
+                Add Pain Point
+              </Button>
+            </div>
+
+            <div className="space-y-2">
+              {painPoints.map((point, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold text-muted-foreground shrink-0 w-5">
+                    #{index + 1}
+                  </span>
+                  <Input
+                    type="text"
+                    value={point}
+                    onChange={(e) => handlePainPointChange(index, e.target.value)}
+                    placeholder={`Pain Point ${index + 1} (e.g., Takes too much time away from operations)`}
+                    className="text-xs h-9 bg-background flex-1"
+                  />
+                  {painPoints.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemovePainPoint(index)}
+                      className="h-9 w-9 text-muted-foreground hover:text-destructive shrink-0 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* DYNAMIC LIST 2: DESIRED GAINS */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs font-semibold text-foreground">
+                Desired Gains (What makes this pain go away?) *
+              </Label>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleAddDesiredGain}
+                className="h-7 text-[11px] font-bold gap-1 text-primary hover:bg-primary/10 cursor-pointer"
+              >
+                <Plus className="w-3 h-3" />
+                Add Desired Gain
+              </Button>
+            </div>
+
+            <div className="space-y-2">
+              {desiredGains.map((gain, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold text-muted-foreground shrink-0 w-5">
+                    #{index + 1}
+                  </span>
+                  <Input
+                    type="text"
+                    value={gain}
+                    onChange={(e) => handleDesiredGainChange(index, e.target.value)}
+                    placeholder={`Desired Gain ${index + 1} (e.g., A 20-minute weekly workflow that generates authentic posts)`}
+                    className="text-xs h-9 bg-background flex-1"
+                  />
+                  {desiredGains.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemoveDesiredGain(index)}
+                      className="h-9 w-9 text-muted-foreground hover:text-destructive shrink-0 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Watering Holes / Channels */}
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-foreground flex items-center gap-1">
+              <MapPin className="w-3.5 h-3.5 text-primary" />
+              Where to find them? (Watering Holes - Online & Offline) *
+            </Label>
+            <Textarea
+              className="text-xs bg-background min-h-[65px]"
+              placeholder="e.g. Local Specialty Coffee Association Facebook groups, Instagram DMs, regional roaster meetups."
+              {...register('watering_holes', { required: true })}
+            />
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            {isInitiallyCompleted && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setIsEditing(false)}
+                className="h-10 text-xs font-semibold cursor-pointer"
+              >
+                Cancel
+              </Button>
+            )}
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex-1 h-10 text-xs font-bold uppercase tracking-wider cursor-pointer gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              {isSubmitting ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <>
+                  <span>Save Customer Persona & Complete Quest 1</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </Button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }

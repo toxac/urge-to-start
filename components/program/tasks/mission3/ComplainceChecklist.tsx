@@ -8,21 +8,20 @@ import {
   Clock,
   AlertTriangle,
   ExternalLink,
-  Download,
-  RotateCcw,
   ChevronDown,
   ChevronRight,
   Building2,
   Globe,
-  FileText,
   ArrowRight,
   ArrowLeft,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  Edit2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Database } from "@/types/supabase";
 import { BaseTaskComponentProps } from '../types';
+import { TaskResourcesList } from '../TaskResourcesList';
 import { getActiveProjectAction, updateProjectSectionAction } from '@/actions/projects';
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 
@@ -31,7 +30,6 @@ import {
   EMPLOYEE_BUCKETS,
   REQUIREMENTS,
   URGENCY,
-  GROUP_META,
   STATUS_OPTIONS,
   type ComplianceRequirement,
   type UserAnswers,
@@ -166,7 +164,6 @@ export function ComplianceForm({ task, existingProgress, onSuccess }: BaseTaskCo
     setIsCompleting(true);
     setErrorMessage(null);
 
-    // Persist final project state
     await saveStateToProject({ answers, statuses, stage, activeId });
 
     const taskRes = await processTaskCompletion({
@@ -246,6 +243,9 @@ export function ComplianceForm({ task, existingProgress, onSuccess }: BaseTaskCo
         </div>
       )}
 
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
+
       <header className="flex items-center justify-between border-b border-border pb-4">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl border border-primary/30 bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
@@ -277,6 +277,17 @@ export function ComplianceForm({ task, existingProgress, onSuccess }: BaseTaskCo
                 <div className="h-full bg-primary transition-all duration-300" style={{ width: `${progressPct}%` }} />
               </div>
             </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setStage("intake")}
+              className="w-full h-8 text-[11px] font-bold gap-1.5 cursor-pointer text-muted-foreground hover:text-foreground"
+            >
+              <Edit2 size={12} />
+              Edit Business Profile
+            </Button>
 
             <div className="space-y-1">
               {Object.entries(grouped).map(([key, items]) => {
