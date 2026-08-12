@@ -340,7 +340,7 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
                         ) : (
                             <>
                                 <Plus className="w-3.5 h-3.5" />
-                                Save Conversation Log
+                                Save Interview Log
                             </>
                         )}
                     </Button>
@@ -352,7 +352,7 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
                 <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 flex items-center justify-between gap-3">
                     <div className="space-y-0.5">
                         <span className="text-xs font-bold text-foreground block">
-                            Target Conversations Reached ({interviews.length}/{targetCount})
+                            Target Interviews Reached ({interviews.length}/{targetCount})
                         </span>
                         <p className="text-[11px] text-muted-foreground">
                             Ready to synthesize your findings into a grounded problem statement.

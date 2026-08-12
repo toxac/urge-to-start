@@ -70,9 +70,9 @@ const mission3: MissionSchema = {
                 // Task 1.1: The Problem
                 {
                     id: "mission3_quest1_task1",
-                    title: "Talk to Customers",
-                    sequence: 2,
-                    execution_type: "log_counter",
+                    title: "Talk to Customers (5 or more)",
+                    sequence: 1,
+                    execution_type: "standard-form",
                     estimated_minutes: 45,
                     briefing_text: "This is the most important task in Mission 3. Talk to 5 real people who have this problem. Don't pitch your solution—just listen. Understand their pain.",
                     mission_id: "mission-3",
@@ -85,9 +85,9 @@ const mission3: MissionSchema = {
                         {
                             type: "guide",
                             isInternal: true,
-                            isRequired: false,
+                            isRequired: true,
                             url_link: "/resources/guides/how-to-conduct-customer-interviews",
-                            title: "How to Conduct Customer Interviews"
+                            title: "How to Conduct Customer Interviews (includes Google Form template)"
                         },
                         {
                             type: "insights",
@@ -112,7 +112,7 @@ const mission3: MissionSchema = {
                 {
                     id: "mission3_quest1_task2",
                     title: "Define the Problem",
-                    sequence: 1,
+                    sequence: 2,
                     execution_type: "standard-form",
                     estimated_minutes: 25,
                     briefing_text: "You found an opportunity. Now let's turn it into a clear problem statement. The better you understand the problem, the better your solution will be.",
