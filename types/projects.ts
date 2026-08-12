@@ -72,13 +72,17 @@ export interface CompetitiveLandscapePayload {
 }
 
 export interface ViabilityCheckPayload {
-  first_sale_14_days: 'yes' | 'maybe' | 'no';
-  resources_available: 'yes' | 'mostly' | 'no';
-  stamina_6_months: 'absolutely' | 'probably' | 'uncertain' | 'probably_not';
-  biggest_risk: string;
-  kill_criteria: string;
-  worst_case_scenario?: string;
-  regret_test?: 'starting' | 'not_starting';
+  months_commitment?: 'all_in' | 'mostly_ready' | 'unsure' | 'not_ready';
+  excitement_level?: 'super_excited' | 'still_curious' | 'feeling_meh' | 'lost_interest';
+  biggest_obstacle?: string;
+  when_to_pause?: string;
+  
+  // Optional backward compatibility
+  first_sale_14_days?: string;
+  resources_available?: string;
+  stamina_6_months?: string;
+  biggest_risk?: string;
+  kill_criteria?: string;
   final_decision?: 'go' | 'pivot' | 'no_go';
   decision_rationale?: string;
 }

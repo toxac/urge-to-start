@@ -351,3 +351,47 @@ RULES:
     return { success: false, error: err.message || 'Failed to synthesize problem statement' };
   }
 }
+
+
+export async function analyzeMarketLandscapeAction(
+  projectData: Record<string, any>
+): Promise<ActionResponse<{
+  macro_trend: string;
+  competitors_and_diy: string;
+  what_is_working: string;
+  what_is_failing_or_hard: string;
+}>> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) return { success: false, error: 'Authentication required' };
+
+    const systemPrompt = `You are a supportive startup mentor helping a high school student or first-time founder analyze the market around their idea.
+
+RULES:
+1. Speak in plain, simple, everyday English. Avoid business school jargon (e.g. no "incumbents", "macro-economic shifts", "market capture").
+2. Write realistic, practical answers based on the project's details, customer interviews, and problem statement.
+3. Return ONLY valid JSON with this exact structure:
+{
+  "macro_trend": "string (Why is this idea important or popular right now? What changed in tech or habits?)",
+  "competitors_and_diy": "string (Who else solves this or what hacky DIY fixes do people use instead?)",
+  "what_is_working": "string (What are current solutions or apps doing really well?)",
+  "what_is_failing_or_hard": "string (Where are current options falling short, or why do people hate them?)"
+}`;
+
+    const response = await deepseek.chat.completions.create({
+      model: 'deepseek-chat',
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Analyze this venture's market landscape in simple terms:\n${JSON.stringify(projectData, null, 2)}` }
+      ]
+    });
+
+    const parsed = JSON.parse(response.choices[0].message.content || '{}');
+    return { success: true, data: parsed };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to analyze market landscape' };
+  }
+}

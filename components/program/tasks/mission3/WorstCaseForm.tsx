@@ -20,8 +20,8 @@ import {
 } from '@/actions/projects';
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { BaseTaskComponentProps } from '../types';
-import { ViabilityCheckPayload } from '@/types/projects';
-import { Loader2, AlertCircle, AlertTriangle, ArrowRight } from 'lucide-react';
+import { TaskResourcesList } from '../TaskResourcesList';
+import { Loader2, AlertCircle, ShieldAlert, ArrowRight } from 'lucide-react';
 
 type UserProjectRow = Database['public']['Tables']['user_projects']['Row'];
 
@@ -62,10 +62,10 @@ export function WorstCaseForm({ task, existingProgress, onSuccess }: BaseTaskCom
     setIsSubmitting(true);
     setErrorMessage(null);
 
-    const updateRes = await updateProjectViabilityAction(activeProject.id, data);
+    const updateRes = await updateProjectViabilityAction(activeProject.id, data as any);
 
     if (!updateRes.success) {
-      setErrorMessage(updateRes.error || 'Failed to save worst-case analysis');
+      setErrorMessage(updateRes.error || 'Failed to save reflection');
       setIsSubmitting(false);
       return;
     }
@@ -95,47 +95,50 @@ export function WorstCaseForm({ task, existingProgress, onSuccess }: BaseTaskCom
         </div>
       )}
 
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
+
       <form onSubmit={handleSubmit(onSubmitWorstCase)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-5">
         <div className="space-y-1">
           <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider flex items-center gap-1.5">
-            <AlertTriangle className="w-3.5 h-3.5" />
-            Face the Worst-Case Scenario
+            <ShieldAlert className="w-3.5 h-3.5" />
+            What If Things Don't Go To Plan?
           </span>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            {task.briefing_text}
+            Every project comes with uncertainty. Taking a quick moment to think about the outcome helps you build confidence before making your final decision.
           </p>
         </div>
 
-        {/* Worst Case Scenario */}
+        {/* 1. Realistic Worst Outcome */}
         <div className="space-y-1.5">
           <Label className="text-xs font-semibold text-foreground">
-            What is the actual worst-case scenario if this venture fails? *
+            1. What's the realistic worst thing that happens if this project doesn't work out? *
           </Label>
           <Textarea
-            className="text-xs bg-background min-h-[75px]"
-            placeholder="e.g. I spend $200 and 3 weeks trying to get café owners to subscribe, make zero sales, feel embarrassed, but learn how to do direct sales outreach."
+            className="text-xs leading-relaxed bg-background min-h-[75px]"
+            placeholder="e.g. I spend 2 weeks trying to get café owners to sign up, nobody buys, but I learn how to build a landing page and do outreach."
             {...register('worst_case_scenario', { required: true, minLength: 10 })}
           />
           {errors.worst_case_scenario && (
-            <p className="text-[11px] text-destructive font-semibold">Please describe your worst-case scenario.</p>
+            <p className="text-[11px] text-destructive font-semibold">Please write a short reflection on the worst outcome.</p>
           )}
         </div>
 
-        {/* The Regret Test */}
+        {/* 2. Regret Comparison (Full-Width Select) */}
         <div className="space-y-1.5">
           <Label className="text-xs font-semibold text-foreground">
-            The Regret Minimization Test: What would you regret more? *
+            2. Looking back a few months from now, what would bother you more? *
           </Label>
           <Select
             value={watch('regret_test') || 'not_starting'}
             onValueChange={(val) => setValue('regret_test', (val ?? 'not_starting') as any)}
           >
-            <SelectTrigger className="text-xs h-9 bg-background">
-              <SelectValue placeholder="Select regret test result" />
+            <SelectTrigger className="w-full text-xs h-9 bg-background">
+              <SelectValue placeholder="Select your perspective" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="not_starting">🚀 Not starting at all and always wondering "what if"</SelectItem>
-              <SelectItem value="starting">⚠️ Starting, failing, and losing the time/money invested</SelectItem>
+              <SelectItem value="not_starting">🚀 Never trying at all and always wondering "what if"</SelectItem>
+              <SelectItem value="starting">⚠️ Trying, failing, and losing the time or effort spent</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -149,7 +152,7 @@ export function WorstCaseForm({ task, existingProgress, onSuccess }: BaseTaskCom
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             <>
-              <span>Save Resilience Assessment & Proceed to Decision Gate (+{task.grant_points} XP)</span>
+              <span>Save Reflection & Go To Decision </span>
               <ArrowRight className="w-4 h-4" />
             </>
           )}
