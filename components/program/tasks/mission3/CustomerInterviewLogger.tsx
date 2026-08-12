@@ -26,14 +26,14 @@ import { InterviewRecord } from '@/types/projects';
 import { TaskResourcesList } from '../TaskResourcesList';
 import {
     Loader2,
-    CheckCircle2,
     AlertCircle,
     Plus,
     Users,
     Copy,
     Check,
     MessageSquare,
-    ArrowRight
+    ArrowRight,
+    Link2
 } from 'lucide-react';
 
 type UserProjectRow = Database['public']['Tables']['user_projects']['Row'];
@@ -153,6 +153,23 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
                 <div className="p-4 border rounded-xl bg-destructive/10 border-destructive/20 text-destructive text-xs font-semibold flex items-center gap-2">
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     <span>{errorMessage}</span>
+                </div>
+            )}
+
+            {/* LINKED ACTIVE PROJECT BANNER */}
+            {activeProject && (
+                <div className="p-3.5 rounded-xl border border-border bg-card flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                        <Link2 className="w-4 h-4 text-primary shrink-0" />
+                        <span className="font-bold text-foreground">
+                            Active Project: <span className="text-primary">{activeProject.biz_name || 'Untitled Venture'}</span>
+                        </span>
+                    </div>
+                    {activeProject.opportunity_id && (
+                        <Badge variant="outline" className="text-[10px] font-mono border-emerald-500/30 text-emerald-500 bg-emerald-500/10">
+                            Opportunity Linked
+                        </Badge>
+                    )}
                 </div>
             )}
 
