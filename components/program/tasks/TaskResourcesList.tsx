@@ -11,16 +11,19 @@ interface TaskResourcesListProps {
 }
 
 export function TaskResourcesList({ resources }: TaskResourcesListProps) {
-  if (!resources || resources.length === 0) return null;
+  // Filter ONLY required resources
+  const requiredResources = resources?.filter((res) => res.isRequired) || [];
+
+  if (requiredResources.length === 0) return null;
 
   return (
-    <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-2 text-left">
-      <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-        <Compass className="w-3.5 h-3.5 text-amber-500" />
-        Recommended Reading & Insights
+    <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-2 text-left">
+      <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider flex items-center gap-1.5">
+        <Compass className="w-3.5 h-3.5" />
+        Required Reading & Context
       </span>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-        {resources.map((res, index) => {
+        {requiredResources.map((res, index) => {
           const isGuide = res.type === 'guide';
           const Icon = isGuide ? BookOpen : Lightbulb;
 
@@ -29,11 +32,11 @@ export function TaskResourcesList({ resources }: TaskResourcesListProps) {
               key={index}
               href={res.url_link}
               target={res.isInternal ? '_self' : '_blank'}
-              className="p-2.5 rounded-lg border border-border bg-card hover:border-primary/40 transition flex items-center justify-between text-xs group"
+              className="p-2.5 rounded-lg border border-border bg-card hover:border-amber-500/50 transition flex items-center justify-between text-xs group"
             >
               <div className="flex items-center gap-2 min-w-0">
                 <Icon className={`w-3.5 h-3.5 shrink-0 ${isGuide ? 'text-primary' : 'text-amber-500'}`} />
-                <span className="font-semibold text-foreground truncate group-hover:text-primary transition">
+                <span className="font-semibold text-foreground truncate group-hover:text-amber-500 transition">
                   {res.title}
                 </span>
               </div>
