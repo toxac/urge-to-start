@@ -52,12 +52,13 @@ interface SynthesizeProblemInput {
   interviews: InterviewRecord[];
 }
 
-interface SynthesizeProblemOutput {
+export interface SynthesizeProblemOutput {
   problem_statement: string;
   affected_audience: string;
   when_context: string;
   where_location: string;
   current_workaround: string;
+  frequency?: 'daily' | 'weekly' | 'monthly' | 'occasionally' | 'seasonal';
 }
 
 /**
@@ -284,33 +285,37 @@ Return ONLY valid JSON matching this schema:
 }
 
 
+/**
+ * Uses AI to synthesize customer interview logs and opportunity context into a grounded problem statement.
+ */
 export async function synthesizeProblemFromInterviewsAction(
   input: SynthesizeProblemInput
 ): Promise<ActionResponse<SynthesizeProblemOutput>> {
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return { success: false, error: 'Authentication required' };
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
 
-    const systemPrompt = `You are an expert startup venture mentor helping a founder synthesize customer research into a concrete problem statement.
+    if (authErr || !user) {
+      return { success: false, error: 'Authentication required.' };
+    }
+
+    const systemPrompt = `You are a candid, supportive venture mentor helping an early-stage founder synthesize customer research into a concrete problem statement.
 
 RULES:
 1. Base your synthesis PRIMARILY on the provided customer interviews.
-2. Be specific, grounded, and concise. Avoid vague marketing fluff.
+2. Be specific, concrete, grounded, and actionable. Zero fluff or generic corporate jargon.
 3. Return ONLY valid JSON matching this schema:
 {
-  "problem_statement": "string (One sharp sentence articulating the core pain revealed in interviews)",
+  "problem_statement": "string (1 concrete sentence articulating the core pain revealed in interviews)",
   "affected_audience": "string (Specific target audience who confirmed this friction)",
   "when_context": "string (Specific trigger or context when the problem happens)",
-  "where_location": "string (Physical or digital location where it happens)",
-  "current_workaround": "string (The actual workaround or hacky solution customers currently use)"
+  "where_location": "string (Physical or digital context where it happens)",
+  "current_workaround": "string (The hacky workaround or solution customers currently use)",
+  "frequency": "string (One of: daily, weekly, monthly, occasionally, seasonal)"
 }`;
 
     const userPrompt = JSON.stringify({
-      opportunity: {
-        title: input.opportunityTitle || 'N/A',
-        description: input.opportunityDescription || 'N/A',
-      },
+      opportunityTitle: input.opportunityTitle || 'N/A',
       interviews: input.interviews.map(i => ({
         interviewee: i.interviewee_name,
         role: i.role_or_context,
@@ -331,8 +336,17 @@ RULES:
       ]
     });
 
-    const parsed = JSON.parse(response.choices[0].message.content || '{}');
-    return { success: true, data: parsed };
+    const raw = JSON.parse(response.choices[0].message.content || '{}');
+    const data: SynthesizeProblemOutput = {
+      problem_statement: raw.problem_statement || '',
+      affected_audience: raw.affected_audience || '',
+      when_context: raw.when_context || '',
+      where_location: raw.where_location || '',
+      current_workaround: raw.current_workaround || '',
+      frequency: raw.frequency || 'daily'
+    };
+
+    return { success: true, data };
   } catch (err: any) {
     return { success: false, error: err.message || 'Failed to synthesize problem statement' };
   }
