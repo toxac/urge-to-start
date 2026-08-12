@@ -7,13 +7,12 @@ import { checkUsernameAvailability, signup } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, CheckCircle2, XCircle, MailCheck } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
 
 export function SignupCard() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [emailSentTo, setEmailSentTo] = useState<string | null>(null);
 
   const [username, setUsername] = useState('');
   const [usernameLoading, setUsernameLoading] = useState(false);
@@ -51,7 +50,6 @@ export function SignupCard() {
     setError(null);
 
     const formData = new FormData(e.currentTarget);
-    const formEmail = formData.get('email') as string;
 
     const result = await signup(formData);
 
@@ -61,33 +59,15 @@ export function SignupCard() {
       return;
     }
 
-    // ⚡ If userId is returned and user is authenticated (Confirm Email disabled), redirect straight to /setup
+    // ⚡ Redirect straight to onboarding since email confirmation is disabled
     if (result?.userId) {
-      router.push(`/setup?id=${result.userId}`);
+      router.push(`/onboarding`);
       router.refresh();
       return;
     }
 
-    // Otherwise, show email confirmation instructions
-    setEmailSentTo(formEmail);
     setLoading(false);
   };
-
-  if (emailSentTo) {
-    return (
-      <div className="bg-card border border-border rounded-2xl p-8 shadow-lg text-center space-y-5 animate-in fade-in duration-300">
-        <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-          <MailCheck className="w-6 h-6" />
-        </div>
-        <div className="space-y-2">
-          <h3 className="text-base font-serif font-bold text-foreground">Check your inbox.</h3>
-          <p className="text-xs text-muted-foreground leading-relaxed font-medium px-2">
-            We sent a verification link to <strong className="text-foreground">{emailSentTo}</strong>. Click that link to complete your setup.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="bg-card border border-border rounded-2xl p-8 shadow-lg space-y-6 animate-in fade-in duration-200 text-left">

@@ -48,7 +48,8 @@ export async function signup(formData: FormData) {
     email,
     password,
     options: {
-      emailRedirectTo: `${siteUrl}/api/auth/callback?next=/setup`,
+      // Changed from /setup to /onboarding
+      emailRedirectTo: `${siteUrl}/api/auth/callback?next=/onboarding`,
       data: {
         username: username.toLowerCase().trim(),
         provider_metadata: { is_subscribed_to_newsletter: isNewsletterChecked },
