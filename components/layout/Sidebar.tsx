@@ -51,10 +51,10 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         <nav className="space-y-1 font-sans text-xs font-semibold tracking-normal">
           {/* 1. Dashboard */}
           <Link
-            href="/platform/dashboard"
+            href="/dashboard"
             onClick={onNavigate}
             className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${
-              isActive('/platform/dashboard') 
+              isActive('/dashboard') 
                 ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' 
                 : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
             }`}
@@ -65,10 +65,10 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
           {/* 2. Program */}
           <Link
-            href="/platform/program"
+            href="/program"
             onClick={onNavigate}
             className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${
-              isActive('/platform/program') 
+              isActive('/program') 
                 ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' 
                 : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
             }`}
@@ -92,10 +92,10 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
           {/* 4. Events */}
           <Link
-            href="/open-events"
+            href="/events"
             onClick={onNavigate}
             className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${
-              isActive('/open-events') 
+              isActive('/events') 
                 ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' 
                 : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
             }`}
@@ -106,10 +106,10 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
           {/* 5. Project */}
           <Link
-            href="/platform/program/project"
+            href="/program/project"
             onClick={onNavigate}
             className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${
-              isActive('/platform/program/project') 
+              isActive('/program/project') 
                 ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' 
                 : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
             }`}
@@ -119,10 +119,10 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
           {/* 6. Community */}
           <Link
-            href="/platform/network"
+            href="/network"
             onClick={onNavigate}
             className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${
-              isActive('/platform/network') 
+              isActive('/network') 
                 ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' 
                 : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
             }`}
