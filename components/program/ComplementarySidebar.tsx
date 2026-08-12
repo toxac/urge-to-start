@@ -4,11 +4,10 @@
 import React from 'react';
 import { useStore } from '@nanostores/react';
 import { $companionFocus } from '@/lib/stores/companionStore';
-import { $progressStore } from '@/lib/stores/progressStore';
 import { $profileStore } from '@/lib/stores/profileStore';
 import { $accomplishmentStore } from '@/lib/stores/accomplishmentStore';
 import { urgePlaybook } from '@/lib/playbook';
-import { DevFeedback } from './DevFeedback'; // ⚡ NEW IMPORT
+import { DevFeedback } from './DevFeedback';
 import {
   BookOpen,
   Trophy,
@@ -26,7 +25,6 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from 
 
 export function ComplementarySidebar() {
   const focus = useStore($companionFocus);
-  const progress = useStore($progressStore);
   const profile = useStore($profileStore);
   const accomplishments = useStore($accomplishmentStore);
 
@@ -34,20 +32,36 @@ export function ComplementarySidebar() {
   const questId = focus.activeQuestId;
   const activeTaskId = focus.activeTaskId || null;
 
-  const mission = missionId ? urgePlaybook[missionId] : null;
-  const quest = mission && questId ? mission.quests.find((q) => q.id === questId) : null;
-  const task = quest && activeTaskId ? quest.tasks.find((t) => t.id === activeTaskId) : null;
+  // 1. Resolve Mission / Quest / Task entities from playbook
+  let mission = missionId ? urgePlaybook[missionId] : null;
+  let quest = mission && questId ? mission.quests.find((q) => q.id === questId) : null;
+  let task = quest && activeTaskId ? quest.tasks.find((t) => t.id === activeTaskId) : null;
 
-  // Total XP Points Tally
+  // Fallback search across entire playbook if activeTaskId is set without mission/quest context
+  if (activeTaskId && !task) {
+    for (const m of Object.values(urgePlaybook || {})) {
+      for (const q of m.quests || []) {
+        const foundTask = q.tasks?.find((t) => t.id === activeTaskId);
+        if (foundTask) {
+          task = foundTask;
+          quest = q;
+          mission = m;
+          break;
+        }
+      }
+      if (task) break;
+    }
+  }
+
   const totalPoints = profile?.accumulated_xp ?? 0;
 
-  // Badges earned in active quest and mission
+  // Filter quest and mission badges earned
   const questBadges = Object.values(accomplishments).filter(
-    (a) => a.related_table === 'quests' && a.related_reference_id === questId
+    (a) => a.related_table === 'quests' && a.related_reference_id === (quest?.id || questId)
   );
 
   const missionBadges = Object.values(accomplishments).filter(
-    (a) => a.related_table === 'missions' && a.related_reference_id === missionId
+    (a) => a.related_table === 'missions' && a.related_reference_id === (mission?.id || missionId)
   );
 
   const renderNoteIcon = (type: string) => {
@@ -66,7 +80,7 @@ export function ComplementarySidebar() {
   const renderContent = () => {
     return (
       <div className="space-y-6 text-xs text-left animate-in fade-in duration-200">
-        {/* GLOBAL POINTS TALLY */}
+        {/* GLOBAL POINTS TALLY (ALWAYS VISIBLE AT TOP) */}
         <div className="p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/10 flex items-center justify-between">
           <div className="space-y-0.5">
             <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-amber-500 flex items-center gap-1">
@@ -79,18 +93,20 @@ export function ComplementarySidebar() {
           </Badge>
         </div>
 
-        {/* ─── 1. TASK CONTEXT ─── */}
-        {activeTaskId && task ? (
+        {/* ─── EXCLUSIVE CONTEXT 1: TASK LEVEL ─── */}
+        {activeTaskId ? (
           <div className="space-y-4 pt-1 border-t border-border/60">
             <div className="space-y-1">
               <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1">
                 <Target className="w-3.5 h-3.5 text-amber-500" /> Task Context
               </span>
-              <h3 className="text-sm font-bold text-foreground">{task.title}</h3>
+              <h3 className="text-sm font-bold text-foreground">
+                {task?.title || 'Active Step'}
+              </h3>
             </div>
 
             {/* Non-Required Helpful Resources */}
-            {task.resources && task.resources.filter((r) => !r.isRequired).length > 0 && (
+            {task?.resources && task.resources.filter((r) => !r.isRequired).length > 0 && (
               <div className="space-y-2">
                 <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
                   <BookOpen className="w-3.5 h-3.5 text-primary" />
@@ -116,7 +132,7 @@ export function ComplementarySidebar() {
             )}
 
             {/* Task Challenges */}
-            {task.challenges && task.challenges.length > 0 && (
+            {task?.challenges && task.challenges.length > 0 && (
               <div className="space-y-2">
                 <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
                   <Flame className="w-3.5 h-3.5 text-orange-500" />
@@ -150,13 +166,13 @@ export function ComplementarySidebar() {
               </div>
             )}
 
-            {/* ⚡ DEV FEEDBACK MODULE */}
-            <DevFeedback taskId={task.id} />
+            {/* DEV FEEDBACK COMPONENT */}
+            <DevFeedback taskId={activeTaskId} />
           </div>
-        ) : null}
+        ) : 
 
-        {/* ─── 2. QUEST CONTEXT ─── */}
-        {quest && (
+        /* ─── EXCLUSIVE CONTEXT 2: QUEST LEVEL ─── */
+        focus.pageType === 'quest' && quest ? (
           <div className="space-y-4 pt-1 border-t border-border/60">
             <div className="space-y-1">
               <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1">
@@ -188,7 +204,7 @@ export function ComplementarySidebar() {
               </div>
             )}
 
-            {/* Badges Earned in Quest */}
+            {/* Quest Badges */}
             <div className="space-y-1.5">
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
                 Quest Badges Earned ({questBadges.length})
@@ -206,19 +222,24 @@ export function ComplementarySidebar() {
               )}
             </div>
           </div>
-        )}
+        ) : 
 
-        {/* ─── 3. MISSION CONTEXT ─── */}
-        {mission && (
+        /* ─── EXCLUSIVE CONTEXT 3: MISSION LEVEL (FALLBACK) ─── */
+        mission ? (
           <div className="space-y-4 pt-1 border-t border-border/60">
             <div className="space-y-1">
               <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1">
                 <BookOpen className="w-3.5 h-3.5 text-amber-500" /> Mission Context
               </span>
               <h3 className="text-sm font-bold text-foreground">{mission.title}</h3>
+              {mission.big_question && (
+                <p className="text-[11px] text-muted-foreground italic leading-relaxed pt-1">
+                  "{mission.big_question}"
+                </p>
+              )}
             </div>
 
-            {/* Badges Earned in Mission */}
+            {/* Mission Badges */}
             <div className="space-y-1.5">
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
                 Mission Badges Earned ({missionBadges.length})
@@ -232,11 +253,11 @@ export function ComplementarySidebar() {
                   ))}
                 </div>
               ) : (
-                <p className="text-[11px] text-muted-foreground italic">Complete mission tasks to unlock major milestone badges.</p>
+                <p className="text-[11px] text-muted-foreground italic">Complete mission tasks to unlock milestone badges.</p>
               )}
             </div>
           </div>
-        )}
+        ) : null}
       </div>
     );
   };
@@ -246,7 +267,7 @@ export function ComplementarySidebar() {
 
   return (
     <>
-      {/* DESKTOP PANEL – visible from lg upward */}
+      {/* DESKTOP PANEL */}
       <aside className="hidden lg:block fixed right-0 top-0 h-screen w-80 border-l border-border bg-card overflow-hidden shadow-sm z-20">
         <div className="p-4 border-b border-border bg-muted/20 flex items-center justify-between shrink-0">
           <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
@@ -261,7 +282,7 @@ export function ComplementarySidebar() {
         <div className="h-[calc(100%-56px)] overflow-y-auto p-4">{renderContent()}</div>
       </aside>
 
-      {/* TABLET OVERLAY – visible only on md, hidden on lg+ and below sm */}
+      {/* TABLET OVERLAY */}
       <div className="hidden md:flex lg:hidden fixed right-5 bottom-5 z-40">
         <Sheet>
           <SheetTrigger className={triggerStyles}>
@@ -278,7 +299,7 @@ export function ComplementarySidebar() {
         </Sheet>
       </div>
 
-      {/* MOBILE BOTTOM DRAWER – visible only below md */}
+      {/* MOBILE BOTTOM DRAWER */}
       <div className="md:hidden fixed bottom-5 right-5 z-40">
         <Drawer>
           <DrawerTrigger className={triggerStyles}>

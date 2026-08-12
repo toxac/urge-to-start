@@ -1,13 +1,14 @@
 // components/program/TaskFormRegistry.tsx
 'use client';
 
-import React from 'react';
-import { Task } from '@/types/playbook';
+import React, { useEffect } from 'react'; // ⚡ 1. Import useEffect
+import { TaskSchema } from '@/types/playbook';
 import { TaskComponentMap } from './tasks';
 import { BaseTaskComponentProps } from './tasks/types';
+import { activateTaskFocus, deactivateTaskFocus } from '@/lib/stores/companionStore'; // ⚡ 2. Import companion store helpers
 
 interface TaskFormRegistryProps {
-  task: Task;
+  task: TaskSchema;
   userId: string;
   existingProgress?: {
     id: string;
@@ -18,6 +19,19 @@ interface TaskFormRegistryProps {
 }
 
 export function TaskFormRegistry({ task, userId, existingProgress, onSuccess }: TaskFormRegistryProps) {
+  // ⚡ 3. Automatically activate task focus when this component renders, and deactivate on unmount
+  useEffect(() => {
+    if (task?.id) {
+      // 1. Activate Task Focus when form opens
+      activateTaskFocus(task.id);
+    }
+
+    return () => {
+      // 2. Clear Task Focus when form closes / unmounts
+      deactivateTaskFocus();
+    };
+  }, [task?.id]);
+
   const Component = TaskComponentMap[task.component_key];
 
   if (!Component) {
@@ -47,9 +61,9 @@ export function TaskFormRegistry({ task, userId, existingProgress, onSuccess }: 
             </span>
             <h3 className="text-base font-bold tracking-tight text-foreground">{task.title}</h3>
           </div>
-          {task.description && (
+          {task.briefing_text && (
             <p className="text-xs font-medium leading-relaxed text-muted-foreground max-w-2xl">
-              {task.description}
+              {task.briefing_text}
             </p>
           )}
         </div>

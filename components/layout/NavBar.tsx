@@ -81,7 +81,7 @@ export function NavigationHeader() {
           {/* Dynamic Auth Button: Shows Dashboard if logged in, otherwise Sign In */}
           {isAuthenticated ? (
             <Button variant="default" size="sm" className="font-bold hidden sm:flex items-center gap-1.5">
-              <Link href="/platform/dashboard">
+              <Link href="/dashboard">
                 <LayoutDashboard className="w-4 h-4" />
                 <span>Dashboard</span>
               </Link>
