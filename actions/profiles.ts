@@ -19,7 +19,7 @@ import {
 // Helper to safely cast to UserRole[]
 function asUserRoles(roles: string[]): UserRole[] {
   const validRoles: UserRole[] = [
-    'base', 'trial', 'enrolled', 'member', 'provider', 'mentor', 
+     'trial', 'member', 'mentor', 
     'superadmin', 'admin_marketing', 'admin_accounts'
   ];
   return roles.filter((r): r is UserRole => validRoles.includes(r as UserRole));
