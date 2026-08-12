@@ -1,107 +1,90 @@
-// actions/contacts.ts
-'use server';
-
-import { revalidatePath } from 'next/cache';
+// app/api/squad/confirm/route.ts
+import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { z } from 'zod';
-import { ActionResponse } from '@/types/profiles';
-import { 
-  UserContactRow, 
-  BulkSquadContactsSchema, 
-  CreateSquadContactSchema 
-} from '@/types/contacts';
 
 /**
- * Adds one or more Cheer Squad contacts to user_contacts table
+ * GET Handler for confirming squad contacts via magic link or URL query params
+ * Example usage: GET /api/squad/confirm?token=<contact_id_or_token>
  */
-export async function addSquadContactsAction(
-  rawInput: z.infer<typeof BulkSquadContactsSchema>
-): Promise<ActionResponse<UserContactRow[]>> {
+export async function GET(request: Request) {
   try {
-    const validated = BulkSquadContactsSchema.parse(rawInput);
-    const supabase = await createClient();
+    const { searchParams } = new URL(request.url);
+    const contactId = searchParams.get('id') || searchParams.get('token');
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
-      return { success: false, error: 'Authentication required' };
+    if (!contactId) {
+      return NextResponse.json(
+        { success: false, error: 'Missing contact ID or token' },
+        { status: 400 }
+      );
     }
 
-    const payload = validated.contacts.map((c) => ({
-      user_id: user.id,
-      email: c.email.trim().toLowerCase(),
-      first_name: c.first_name?.trim() || null,
-      last_name: c.last_name?.trim() || null,
-      note: c.note?.trim() || null,
-      categories: ['squad' as const],
-      status: 'unconfirmed' as const,
-      source: 'personal_network' as const,
-      stage: 'lead' as const,
-    }));
+    const supabase = await createClient();
 
+    // Update the squad contact status to confirmed
     const { data, error } = await supabase
       .from('user_contacts')
-      .insert(payload)
-      .select();
-
-    if (error || !data) throw error;
-
-    revalidatePath('/program');
-    return { success: true, data: data as UserContactRow[] };
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Failed to save squad contacts' };
-  }
-}
-
-/**
- * Fetches all Cheer Squad contacts for the current user
- */
-export async function getSquadContactsAction(): Promise<ActionResponse<UserContactRow[]>> {
-  try {
-    const supabase = await createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return { success: false, error: 'Authentication required' };
-    }
-
-    const { data, error } = await supabase
-      .from('user_contacts')
-      .select('*')
-      .eq('user_id', user.id)
-      .contains('categories', ['squad'])
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-
-    return { success: true, data: (data || []) as UserContactRow[] };
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Failed to fetch squad contacts' };
-  }
-}
-
-/**
- * Deletes a squad contact
- */
-export async function deleteSquadContactAction(contactId: string): Promise<ActionResponse<{ id: string }>> {
-  try {
-    const supabase = await createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return { success: false, error: 'Authentication required' };
-    }
-
-    const { error } = await supabase
-      .from('user_contacts')
-      .delete()
+      .update({ status: 'active' })
       .eq('id', contactId)
-      .eq('user_id', user.id);
+      .select()
+      .single();
 
-    if (error) throw error;
+    if (error || !data) {
+      return NextResponse.json(
+        { success: false, error: error?.message || 'Contact not found or invalid token' },
+        { status: 404 }
+      );
+    }
 
-    revalidatePath('/program');
-    return { success: true, data: { id: contactId } };
+    // Redirect to a success page or return JSON confirmation
+    return NextResponse.json({
+      success: true,
+      message: 'Squad contact confirmed successfully',
+      data
+    });
   } catch (err: any) {
-    return { success: false, error: err.message || 'Failed to delete contact' };
+    return NextResponse.json(
+      { success: false, error: err.message || 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * POST Handler for confirming squad contacts via direct API invocation
+ */
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { contactId } = body;
+
+    if (!contactId) {
+      return NextResponse.json(
+        { success: false, error: 'Missing contactId in request body' },
+        { status: 400 }
+      );
+    }
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from('user_contacts')
+      .update({ status: 'active' })
+      .eq('id', contactId)
+      .select()
+      .single();
+
+    if (error || !data) {
+      return NextResponse.json(
+        { success: false, error: error?.message || 'Failed to update squad contact' },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({ success: true, data });
+  } catch (err: any) {
+    return NextResponse.json(
+      { success: false, error: err.message || 'Failed to confirm squad contact' },
+      { status: 500 }
+    );
   }
 }

@@ -1,11 +1,11 @@
 // components/program/TaskFormRegistry.tsx
 'use client';
 
-import React, { useEffect } from 'react'; // ⚡ 1. Import useEffect
+import React, { useEffect } from 'react';
 import { TaskSchema } from '@/types/playbook';
 import { TaskComponentMap } from './tasks';
 import { BaseTaskComponentProps } from './tasks/types';
-import { activateTaskFocus, deactivateTaskFocus } from '@/lib/stores/companionStore'; // ⚡ 2. Import companion store helpers
+import { activateTaskFocus, deactivateTaskFocus } from '@/lib/stores/companionStore';
 
 interface TaskFormRegistryProps {
   task: TaskSchema;
@@ -19,15 +19,12 @@ interface TaskFormRegistryProps {
 }
 
 export function TaskFormRegistry({ task, userId, existingProgress, onSuccess }: TaskFormRegistryProps) {
-  // ⚡ 3. Automatically activate task focus when this component renders, and deactivate on unmount
   useEffect(() => {
     if (task?.id) {
-      // 1. Activate Task Focus when form opens
       activateTaskFocus(task.id);
     }
 
     return () => {
-      // 2. Clear Task Focus when form closes / unmounts
       deactivateTaskFocus();
     };
   }, [task?.id]);

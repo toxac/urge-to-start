@@ -69,17 +69,17 @@ export default function QuestActionCenterPage({
   // Mission is fully completed if there are no more quests in the mission and the current quest is finished
   const isMissionFullyCompleted = !nextQuest && isQuestFullyCompleted;
 
-  // Sync Companion Focus
+  // ⚡ Sync Companion Focus: Retain current activeTaskId state instead of overwriting with null/undefined
   useEffect(() => {
     if (currentQuest) {
       setCompanionFocus({
-        pageType: 'quest',
+        pageType: activeTaskId ? 'quest' : 'quest',
         activeMissionId,
         activeQuestId: currentQuest.id,
         activeTaskId,
       });
     }
-  }, [activeTaskId, activeMissionId, currentQuest]);
+  }, [activeMissionId, currentQuest, activeTaskId]);
 
   // Fetch markdown content for quest
   useEffect(() => {

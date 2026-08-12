@@ -1,3 +1,4 @@
+// app/api/markdown/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
@@ -13,8 +14,10 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // Resolve the full path (assumes content/ is in the project root)
-    const fullPath = path.join(process.cwd(), filePath);
+    // ⚡ Add /*turbopackIgnore: true*/ to prevent Turbopack from tracing process.cwd()
+    const safePath = path.normalize(filePath).replace(/^(\.\.[\/\\])+/, '');
+    const fullPath = path.join(/*turbopackIgnore: true*/ process.cwd(), safePath);
+
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const processed = await remark().use(html).process(fileContents);
     const htmlContent = processed.toString();
