@@ -4,12 +4,10 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Database } from '@/types/supabase';
-import { synthesizeProblemFromInterviewsAction } from '@/actions/assessments';
 import { 
   Select, 
   SelectContent, 
@@ -21,6 +19,7 @@ import {
   getActiveProjectAction, 
   updateProjectDiscoveryMetricsAction
 } from '@/actions/projects';
+import { synthesizeProblemFromInterviewsAction } from '@/actions/assessments';
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { BaseTaskComponentProps } from '../types';
 import { ProblemHypothesis, InterviewRecord } from '@/types/projects';
@@ -91,34 +90,34 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
     loadProject();
   }, [reset]);
 
-  // AI Synthesis Handler
+  // AI Synthesis Handler using Server Action
   const handleAiSynthesize = async () => {
-  if (loggedInterviews.length === 0) {
-    setErrorMessage('Please log at least one customer interview before synthesizing with AI.');
-    return;
-  }
+    if (loggedInterviews.length === 0) {
+      setErrorMessage('Please log at least one customer interview before synthesizing with AI.');
+      return;
+    }
 
-  setIsAiLoading(true);
-  setErrorMessage(null);
+    setIsAiLoading(true);
+    setErrorMessage(null);
 
-  const res = await synthesizeProblemFromInterviewsAction({
-    opportunityTitle: activeProject?.biz_name || undefined,
-    interviews: loggedInterviews
-  });
+    const res = await synthesizeProblemFromInterviewsAction({
+      opportunityTitle: activeProject?.biz_name || undefined,
+      interviews: loggedInterviews
+    });
 
-  if (res.success && res.data) {
-    if (res.data.problem_statement) setValue('problem_statement', res.data.problem_statement);
-    if (res.data.affected_audience) setValue('affected_audience', res.data.affected_audience);
-    if (res.data.when_context) setValue('when_context', res.data.when_context);
-    if (res.data.where_location) setValue('where_location', res.data.where_location);
-    if (res.data.current_workaround) setValue('current_workaround', res.data.current_workaround);
-    if (res.data.frequency) setValue('frequency', res.data.frequency as any);
-  } else {
-    setErrorMessage(res.error || 'Failed to generate AI problem synthesis.');
-  }
+    if (res.success && res.data) {
+      if (res.data.problem_statement) setValue('problem_statement', res.data.problem_statement);
+      if (res.data.affected_audience) setValue('affected_audience', res.data.affected_audience);
+      if (res.data.when_context) setValue('when_context', res.data.when_context);
+      if (res.data.where_location) setValue('where_location', res.data.where_location);
+      if (res.data.current_workaround) setValue('current_workaround', res.data.current_workaround);
+      if (res.data.frequency) setValue('frequency', res.data.frequency as any);
+    } else {
+      setErrorMessage(res.error || 'Failed to generate AI problem synthesis.');
+    }
 
-  setIsAiLoading(false);
-};
+    setIsAiLoading(false);
+  };
 
   const onSubmitProblem = async (data: ProblemInputs) => {
     if (!activeProject) return;
@@ -273,45 +272,40 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
           )}
         </div>
 
-        {/* Affected Audience */}
+        {/* Affected Audience (NOW TEXTAREA ON SEPARATE ROW) */}
         <div className="space-y-1.5">
           <Label className="text-xs font-semibold text-foreground">
             Who specifically confirmed this problem in your interviews? *
           </Label>
-          <Input
-            type="text"
+          <Textarea
+            className="text-xs leading-relaxed bg-background min-h-[60px]"
             placeholder="e.g. Solo café owners with less than 5 employees who manage their own marketing"
-            className="text-xs h-9 bg-background"
             {...register('affected_audience', { required: true })}
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* When Context */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">
-              When does this problem trigger friction? *
-            </Label>
-            <Input
-              type="text"
-              placeholder="e.g. Every Sunday evening during week planning"
-              className="text-xs h-9 bg-background"
-              {...register('when_context', { required: true })}
-            />
-          </div>
+        {/* When Context (NOW TEXTAREA ON SEPARATE ROW) */}
+        <div className="space-y-1.5">
+          <Label className="text-xs font-semibold text-foreground">
+            When does this problem happen? *
+          </Label>
+          <Textarea
+            className="text-xs leading-relaxed bg-background min-h-[60px]"
+            placeholder="e.g. Every Sunday evening during week planning or after a busy shift"
+            {...register('when_context', { required: true })}
+          />
+        </div>
 
-          {/* Where Location */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">
-              Where does it happen? *
-            </Label>
-            <Input
-              type="text"
-              placeholder="e.g. At home on laptop or back office desktop"
-              className="text-xs h-9 bg-background"
-              {...register('where_location', { required: true })}
-            />
-          </div>
+        {/* Where Location (NOW TEXTAREA ON SEPARATE ROW) */}
+        <div className="space-y-1.5">
+          <Label className="text-xs font-semibold text-foreground">
+            Where does it happen? *
+          </Label>
+          <Textarea
+            className="text-xs leading-relaxed bg-background min-h-[60px]"
+            placeholder="e.g. At home on laptop or on mobile device in the back office"
+            {...register('where_location', { required: true })}
+          />
         </div>
 
         {/* Frequency */}
