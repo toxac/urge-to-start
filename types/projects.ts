@@ -33,7 +33,7 @@ export interface CustomerPersona {
   job_title_or_role: string;
   age_range: string;
   ranked_pain_points: string[];
-  desired_gains: string;
+  desired_gains: string[];
   current_spend: string;
   watering_holes: string; // Where they hang out online/offline
   verbatim_problem_quote: string; // Exact customer words

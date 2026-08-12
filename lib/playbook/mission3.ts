@@ -159,7 +159,7 @@ const mission3: MissionSchema = {
                 // Task 1.3: The Customer Persona
                 {
                     id: "mission3_quest1_task3",
-                    title: "Create Your Customer",
+                    title: "Your Ideal Customer",
                     sequence: 3,
                     execution_type: "standard-form",
                     estimated_minutes: 25,
