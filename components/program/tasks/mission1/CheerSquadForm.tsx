@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { addSquadContactsAction, getSquadContactsAction, deleteSquadContactAction } from '@/actions/contacts';
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { BaseTaskComponentProps } from '../types';
-import { ReferenceSchema } from '@/types/playbook';
+import { TaskResourcesList } from '../TaskResourcesList';
 import { UserContactRow } from '@/types/contacts';
 import { 
   Loader2, 
@@ -20,11 +20,8 @@ import {
   AlertCircle, 
   Plus, 
   Trash2, 
-  ExternalLink, 
-  BookOpen, 
   Copy, 
   Check, 
-  Send,
   Users,
   Heart
 } from 'lucide-react';
@@ -48,9 +45,6 @@ export function CheerSquadForm({ task, existingProgress, onSuccess }: BaseTaskCo
 
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
-
-  // Extract REQUIRED resources to display at the top of the form
-  const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
   // 1. Fetch existing cheer squad contacts on mount
   useEffect(() => {
@@ -259,29 +253,8 @@ export function CheerSquadForm({ task, existingProgress, onSuccess }: BaseTaskCo
         </div>
       )}
 
-      {/* REQUIRED RESOURCES BANNER */}
-      {requiredResources.length > 0 && (
-        <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5" />
-            Required Action Guides (Read First)
-          </span>
-          <div className="space-y-1.5">
-            {requiredResources.map((res, idx) => (
-              <a
-                key={idx}
-                href={res.url_link}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2.5 rounded-lg border bg-card hover:bg-muted/30 transition flex items-center justify-between text-xs font-semibold text-foreground group"
-              >
-                <span>{res.title}</span>
-                <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
 
       {/* Existing Squad Members Section (if any already saved) */}
       {squadList.length > 0 && (
@@ -389,7 +362,7 @@ export function CheerSquadForm({ task, existingProgress, onSuccess }: BaseTaskCo
                   <div className="space-y-1">
                     <Label className="text-[11px] font-semibold text-foreground">First Name</Label>
                     <Input
-                      className="text-xs h-9"
+                      className="text-xs h-9 bg-background"
                       placeholder="e.g. Sarah"
                       {...register(`contacts.${index}.first_name` as const)}
                     />
@@ -400,7 +373,7 @@ export function CheerSquadForm({ task, existingProgress, onSuccess }: BaseTaskCo
                     <Label className="text-[11px] font-semibold text-foreground">Email Address *</Label>
                     <Input
                       type="email"
-                      className="text-xs h-9"
+                      className="text-xs h-9 bg-background"
                       placeholder="e.g. sarah@example.com"
                       {...register(`contacts.${index}.email` as const, { 
                         required: fields.length === 1 && squadList.length === 0 
@@ -415,7 +388,7 @@ export function CheerSquadForm({ task, existingProgress, onSuccess }: BaseTaskCo
                     Personal Note / Ask (Included in invite message)
                   </Label>
                   <Textarea
-                    className="text-xs min-h-[60px] resize-none"
+                    className="text-xs min-h-[60px] resize-none bg-background"
                     placeholder="e.g. Thanks for always keeping me grounded. Would love if you checked in on me once a month!"
                     {...register(`contacts.${index}.note` as const)}
                   />

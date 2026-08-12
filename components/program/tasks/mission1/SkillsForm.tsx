@@ -14,7 +14,7 @@ import { updateProfileStoreFields, $profileStore } from '@/lib/stores/profileSto
 import { useStore } from '@nanostores/react';
 import { BaseTaskComponentProps } from '../types';
 import { ProfileSkills } from '@/types/profiles';
-import { ReferenceSchema } from '@/types/playbook';
+import { TaskResourcesList } from '../TaskResourcesList';
 import { 
   Loader2, 
   Edit2, 
@@ -22,9 +22,7 @@ import {
   AlertCircle, 
   Plus, 
   Trash2, 
-  ExternalLink, 
   Wrench,
-  BookOpen,
   Sparkles
 } from 'lucide-react';
 
@@ -49,16 +47,13 @@ export function SkillsForm({ task, existingProgress, onSuccess }: BaseTaskCompon
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
 
-  // Filter required resources to display at top of form
-  const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
-
   // Pre-fill hierarchy: Task Execution Payload -> Profile Store Column -> Default 1 item
   const savedSkills: ProfileSkills[] = 
     existingProgress?.saved_payload?.formData?.skills || profile?.skills || [
       { category: 'business', title: '', level: 'intermediate' }
     ];
 
-  const { register, handleSubmit, control, setValue, watch, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, control, setValue, watch } = useForm<FormValues>({
     defaultValues: {
       skills: savedSkills.length > 0 ? savedSkills : [
         { category: 'business', title: '', level: 'intermediate' }
@@ -193,29 +188,8 @@ export function SkillsForm({ task, existingProgress, onSuccess }: BaseTaskCompon
         </div>
       )}
 
-      {/* REQUIRED RESOURCES BANNER */}
-      {requiredResources.length > 0 && (
-        <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5" />
-            Required Action Guides (Read First)
-          </span>
-          <div className="space-y-1.5">
-            {requiredResources.map((res, idx) => (
-              <a
-                key={idx}
-                href={res.url_link}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2.5 rounded-lg border bg-card hover:bg-muted/30 transition flex items-center justify-between text-xs font-semibold text-foreground group"
-              >
-                <span>{res.title}</span>
-                <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
 
       {/* Quick Presets Section */}
       <div className="p-4 rounded-xl border bg-muted/20 border-border space-y-2">
@@ -298,7 +272,7 @@ export function SkillsForm({ task, existingProgress, onSuccess }: BaseTaskCompon
                         value={currentCategory || undefined}
                         onValueChange={(val) => setValue(`skills.${index}.category` as const, (val as string) || '')}
                       >
-                        <SelectTrigger className="w-full text-xs h-9">
+                        <SelectTrigger className="w-full text-xs h-9 bg-background">
                           <SelectValue placeholder="Category..." />
                         </SelectTrigger>
                         <SelectContent>
@@ -316,13 +290,11 @@ export function SkillsForm({ task, existingProgress, onSuccess }: BaseTaskCompon
                     <div className="space-y-1 md:col-span-1">
                       <Label className="text-[11px] font-semibold text-foreground">Skill Name *</Label>
                       <Input
-                        className="text-xs h-9"
+                        className="text-xs h-9 bg-background"
                         placeholder="e.g. Cold Emailing, Figma, Python"
                         {...register(`skills.${index}.title` as const, { required: true })}
                       />
                     </div>
-
-                    
 
                     {/* Level */}
                     <div className="space-y-1">
@@ -331,7 +303,7 @@ export function SkillsForm({ task, existingProgress, onSuccess }: BaseTaskCompon
                         value={currentLevel || undefined}
                         onValueChange={(val) => setValue(`skills.${index}.level` as const, (val as string) || '')}
                       >
-                        <SelectTrigger className="w-full text-xs h-9">
+                        <SelectTrigger className="w-full text-xs h-9 bg-background">
                           <SelectValue placeholder="Proficiency..." />
                         </SelectTrigger>
                         <SelectContent>

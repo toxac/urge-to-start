@@ -14,14 +14,12 @@ import { setAccomplishmentStoreRow } from '@/lib/stores/accomplishmentStore';
 import { useStore } from '@nanostores/react';
 import { $profileStore } from '@/lib/stores/profileStore';
 import { BaseTaskComponentProps } from '../types';
-import { ReferenceSchema } from '@/types/playbook';
+import { TaskResourcesList } from '../TaskResourcesList';
 import { 
   Loader2, 
   Edit2, 
   CheckCircle2, 
   AlertCircle, 
-  BookOpen, 
-  ExternalLink,
   MessageSquare
 } from 'lucide-react';
 
@@ -37,9 +35,6 @@ export function CommunityIntroForm({ task, existingProgress, onSuccess }: BaseTa
 
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
-
-  // Filter required resources to display at top of form
-  const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
   const preSavedPayload = existingProgress?.saved_payload || {};
 
@@ -150,29 +145,8 @@ export function CommunityIntroForm({ task, existingProgress, onSuccess }: BaseTa
         </div>
       )}
 
-      {/* REQUIRED RESOURCES BANNER */}
-      {requiredResources.length > 0 && (
-        <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5" />
-            Required Action Guides (Read First)
-          </span>
-          <div className="space-y-1.5">
-            {requiredResources.map((res, idx) => (
-              <a
-                key={idx}
-                href={res.url_link}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2.5 rounded-lg border bg-card hover:bg-muted/30 transition flex items-center justify-between text-xs font-semibold text-foreground group"
-              >
-                <span>{res.title}</span>
-                <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
 
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
         
@@ -182,7 +156,7 @@ export function CommunityIntroForm({ task, existingProgress, onSuccess }: BaseTa
             1. Introduction Post Headline *
           </Label>
           <Input
-            className="text-xs h-10 w-full"
+            className="text-xs h-10 w-full bg-background"
             placeholder="e.g. Hello Urge Community! Building an AI workspace tool."
             {...register('headline', { required: true, minLength: 3 })}
           />
@@ -199,7 +173,7 @@ export function CommunityIntroForm({ task, existingProgress, onSuccess }: BaseTa
             2. Introduce Yourself & Your Mission *
           </Label>
           <Textarea
-            className="w-full min-h-[120px] text-xs leading-relaxed"
+            className="w-full min-h-[120px] text-xs leading-relaxed bg-background"
             placeholder="Share who you are, what problem you care about solving, and what you hope to build during this program..."
             {...register('intro_content', { required: true, minLength: 10 })}
           />

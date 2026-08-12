@@ -14,8 +14,8 @@ import { updateProfileStoreFields, $profileStore } from '@/lib/stores/profileSto
 import { useStore } from '@nanostores/react';
 import { BaseTaskComponentProps } from '../types';
 import { ProfileRoadblockSchema } from '@/types/profiles';
-import { ReferenceSchema } from '@/types/playbook';
-import { Loader2, Edit2, CheckCircle2, AlertCircle, BookOpen, ExternalLink } from 'lucide-react';
+import { TaskResourcesList } from '../TaskResourcesList';
+import { Loader2, Edit2, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const ROADBLOCK_OPTIONS = [
   { id: 'no_buyers', label: "Afraid no one will buy what I'm selling" },
@@ -34,9 +34,6 @@ export function RoadblockForm({ task, existingProgress, onSuccess }: BaseTaskCom
 
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
-
-  // Extract REQUIRED resources to display at the top of the form
-  const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
   // Pre-fill hierarchy: Task Execution Payload -> Profile Store Column -> Default Values
   const preSavedRoadblock: ProfileRoadblockSchema = 
@@ -156,29 +153,8 @@ export function RoadblockForm({ task, existingProgress, onSuccess }: BaseTaskCom
         </div>
       )}
 
-      {/* REQUIRED RESOURCES BANNER */}
-      {requiredResources.length > 0 && (
-        <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5" />
-            Required Action Guides (Read First)
-          </span>
-          <div className="space-y-1.5">
-            {requiredResources.map((res, idx) => (
-              <a
-                key={idx}
-                href={res.url_link}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2.5 rounded-lg border bg-card hover:bg-muted/30 transition flex items-center justify-between text-xs font-semibold text-foreground group"
-              >
-                <span>{res.title}</span>
-                <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
 
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
         
@@ -240,7 +216,7 @@ export function RoadblockForm({ task, existingProgress, onSuccess }: BaseTaskCom
             Any other specific concerns on your mind? (Optional)
           </Label>
           <Input
-            className="text-xs h-10 w-full"
+            className="text-xs h-10 w-full bg-background"
             placeholder="e.g. Balancing this with caring for my aging parents..."
             {...register('roadblocks_other')}
           />

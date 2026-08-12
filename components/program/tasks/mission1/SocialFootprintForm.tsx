@@ -16,7 +16,7 @@ import { updateProfileStoreFields, $profileStore } from '@/lib/stores/profileSto
 import { useStore } from '@nanostores/react';
 import { BaseTaskComponentProps } from '../types';
 import { ProfileSocialFootprintSchema } from '@/types/profiles';
-import { ReferenceSchema } from '@/types/playbook';
+import { TaskResourcesList } from '../TaskResourcesList';
 import { 
   Loader2, 
   Edit2, 
@@ -24,9 +24,7 @@ import {
   AlertCircle, 
   Plus, 
   Trash2, 
-  ExternalLink, 
   Users, 
-  BookOpen,
   Share2,
   Sparkles,
   Target,
@@ -71,8 +69,6 @@ export function SocialFootprintForm({ task, existingProgress }: BaseTaskComponen
 
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
-
-  const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
   const savedList: ProfileSocialFootprintSchema[] = 
     existingProgress?.saved_payload?.formData?.items || profile?.social_footprint || [
@@ -165,7 +161,6 @@ export function SocialFootprintForm({ task, existingProgress }: BaseTaskComponen
       });
 
       if (taskResult.success) {
-        // Keep component open in view mode so user can immediately choose action goals
         setIsEditing(false);
       } else {
         setErrorMessage(taskResult.error || 'Failed to mark task complete');
@@ -312,28 +307,8 @@ export function SocialFootprintForm({ task, existingProgress }: BaseTaskComponen
         </div>
       )}
 
-      {requiredResources.length > 0 && (
-        <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5" />
-            Required Action Guides (Read First)
-          </span>
-          <div className="space-y-1.5">
-            {requiredResources.map((res, idx) => (
-              <a
-                key={idx}
-                href={res.url_link}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2.5 rounded-lg border bg-card hover:bg-muted/30 transition flex items-center justify-between text-xs font-semibold text-foreground group"
-              >
-                <span>{res.title}</span>
-                <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
 
       {/* Quick Add Presets */}
       <div className="p-4 rounded-xl border bg-muted/20 border-border space-y-2">
@@ -408,7 +383,7 @@ export function SocialFootprintForm({ task, existingProgress }: BaseTaskComponen
                         value={currentType}
                         onValueChange={(val) => setValue(`items.${index}.type` as const, val as any)}
                       >
-                        <SelectTrigger className="w-full text-xs h-9">
+                        <SelectTrigger className="w-full text-xs h-9 bg-background">
                           <SelectValue placeholder="Select type..." />
                         </SelectTrigger>
                         <SelectContent>
@@ -424,7 +399,7 @@ export function SocialFootprintForm({ task, existingProgress }: BaseTaskComponen
                     <div className="space-y-1">
                       <Label className="text-[11px] font-semibold text-foreground">Name *</Label>
                       <Input
-                        className="text-xs h-9"
+                        className="text-xs h-9 bg-background"
                         placeholder="e.g. LinkedIn, Local Meetup"
                         {...register(`items.${index}.name` as const, { required: true })}
                       />
@@ -433,7 +408,7 @@ export function SocialFootprintForm({ task, existingProgress }: BaseTaskComponen
                     <div className="space-y-1">
                       <Label className="text-[11px] font-semibold text-foreground">Link (Optional)</Label>
                       <Input
-                        className="text-xs h-9"
+                        className="text-xs h-9 bg-background"
                         placeholder="e.g. https://linkedin.com/in/yourname"
                         {...register(`items.${index}.profile_link_url` as const)}
                       />
@@ -444,7 +419,7 @@ export function SocialFootprintForm({ task, existingProgress }: BaseTaskComponen
                       <Input
                         type="number"
                         min={0}
-                        className="text-xs h-9"
+                        className="text-xs h-9 bg-background"
                         placeholder="e.g. 250"
                         {...register(`items.${index}.total_connections` as const)}
                       />

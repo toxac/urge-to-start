@@ -14,8 +14,8 @@ import { updateProfileStoreFields, $profileStore } from '@/lib/stores/profileSto
 import { useStore } from '@nanostores/react';
 import { BaseTaskComponentProps } from '../types';
 import { ProfileMotivationSchema } from '@/types/profiles';
-import { ReferenceSchema } from '@/types/playbook';
-import { Loader2, Edit2, CheckCircle2, AlertCircle, BookOpen, ExternalLink } from 'lucide-react';
+import { TaskResourcesList } from '../TaskResourcesList';
+import { Loader2, Edit2, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskComponentProps) {
   const profile = useStore($profileStore);
@@ -24,8 +24,6 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
 
   const isInitiallyCompleted = existingProgress?.status === 'completed';
   const [isEditing, setIsEditing] = useState(!isInitiallyCompleted);
-
-  const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
   const preSavedMotivation: ProfileMotivationSchema =
     existingProgress?.saved_payload?.formData || profile?.motivations || {
@@ -164,28 +162,8 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
         </div>
       )}
 
-      {requiredResources.length > 0 && (
-        <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5" />
-            Required Action Guides (Read First)
-          </span>
-          <div className="space-y-1.5">
-            {requiredResources.map((res, idx) => (
-              <a
-                key={idx}
-                href={res.url_link}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2.5 rounded-lg border bg-card hover:bg-muted/30 transition flex items-center justify-between text-xs font-semibold text-foreground group"
-              >
-                <span>{res.title}</span>
-                <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
 
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
 
@@ -198,7 +176,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
             value={selectedPush ?? ''}
             onValueChange={(val) => setValue('push', val ?? '', { shouldValidate: true })}
           >
-            <SelectTrigger className="w-full text-xs h-10">
+            <SelectTrigger className="w-full text-xs h-10 bg-background">
               <SelectValue placeholder="Select what is pushing you to start..." />
             </SelectTrigger>
             <SelectContent>
@@ -214,7 +192,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
 
           {selectedPush === 'other' && (
             <Input
-              className="text-xs h-9 mt-2"
+              className="text-xs h-9 mt-2 bg-background"
               placeholder="Specify what you are running from..."
               {...register('push_other', { required: selectedPush === 'other' })}
             />
@@ -230,7 +208,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
             value={selectedPull ?? ''}
             onValueChange={(val) => setValue('pull', val ?? '', { shouldValidate: true })}
           >
-            <SelectTrigger className="w-full text-xs h-10">
+            <SelectTrigger className="w-full text-xs h-10 bg-background">
               <SelectValue placeholder="Select what is pulling you forward..." />
             </SelectTrigger>
             <SelectContent>
@@ -246,7 +224,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
 
           {selectedPull === 'other' && (
             <Input
-              className="text-xs h-9 mt-2"
+              className="text-xs h-9 mt-2 bg-background"
               placeholder="Specify what you are running toward..."
               {...register('pull_other', { required: selectedPull === 'other' })}
             />
@@ -262,7 +240,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
             value={selectedUrgency ?? ''}
             onValueChange={(val) => setValue('urgency', val ?? '', { shouldValidate: true })}
           >
-            <SelectTrigger className="w-full text-xs h-10">
+            <SelectTrigger className="w-full text-xs h-10 bg-background">
               <SelectValue placeholder="Select your urgency catalyst..." />
             </SelectTrigger>
             <SelectContent>
@@ -278,7 +256,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
 
           {selectedUrgency === 'other' && (
             <Input
-              className="text-xs h-9 mt-2"
+              className="text-xs h-9 mt-2 bg-background"
               placeholder="Specify why now..."
               {...register('urgency_other', { required: selectedUrgency === 'other' })}
             />
@@ -292,7 +270,7 @@ export function MotivationForm({ task, existingProgress, onSuccess }: BaseTaskCo
           </Label>
 
           <Textarea
-            className="w-full min-h-[80px] resize-none text-xs"
+            className="w-full min-h-[80px] resize-none text-xs bg-background"
             placeholder="e.g. I am starting because I refuse to waste another year in a corporate box, and I want complete freedom over my time for my family."
             {...register('why_statement', { required: true, minLength: 10 })}
           />
