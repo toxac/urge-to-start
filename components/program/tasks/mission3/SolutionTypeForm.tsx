@@ -22,6 +22,7 @@ import {
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { BaseTaskComponentProps } from '../types';
 import { MSPPayload } from '@/types/projects';
+import { TaskResourcesList } from '../TaskResourcesList';
 import { 
   Loader2, 
   AlertCircle, 
@@ -77,12 +78,10 @@ export function SolutionTypeForm({ task, existingProgress, onSuccess }: BaseTask
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const isCompleted = existingProgress?.status === 'completed';
-
   const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<SolutionInputs>({
     defaultValues: {
       solution_type: 'product_service',
-      access_type: 'saas_subscription'
+      access_type: 'transactional_checkout'
     }
   });
 
@@ -154,10 +153,13 @@ export function SolutionTypeForm({ task, existingProgress, onSuccess }: BaseTask
         </div>
       )}
 
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
+
       <form onSubmit={handleSubmit(onSubmitSolution)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-5">
         <div className="space-y-1">
           <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <Layers className="w-3.5 h-3.5" />
+            <Layers className="w-3.5 h-3.5 text-amber-500" />
             Choose Your Solution Approach
           </span>
           <p className="text-xs text-muted-foreground leading-relaxed">
@@ -221,21 +223,24 @@ export function SolutionTypeForm({ task, existingProgress, onSuccess }: BaseTask
             How will customers pay / access this? *
           </Label>
           <Select
-            value={watch('access_type') || 'saas_subscription'}
-            onValueChange={(val) => setValue('access_type', val ?? 'saas_subscription')}
+            value={watch('access_type') || 'transactional_checkout'}
+            onValueChange={(val) => setValue('access_type', val ?? 'transactional_checkout')}
           >
-            <SelectTrigger className="text-xs h-9 bg-background">
+            {/* Added w-full so trigger stretches across the whole form width */}
+            <SelectTrigger className="w-full text-xs h-9 bg-background">
               <SelectValue placeholder="Select access type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="one_time_purchase">One-time purchase (Buy once, keep forever)</SelectItem>
-              <SelectItem value="saas_subscription">SaaS Subscription (Monthly/Yearly recurring)</SelectItem>
-              <SelectItem value="service_retainer">Service Retainer (Ongoing monthly service)</SelectItem>
-              <SelectItem value="service_project">Service (Per session / per project)</SelectItem>
-              <SelectItem value="digital_download">Digital Download / Template</SelectItem>
-              <SelectItem value="membership">Community / Membership Access</SelectItem>
-              <SelectItem value="freemium">Freemium (Free tier + paid upgrades)</SelectItem>
-              <SelectItem value="marketplace_commission">Marketplace Transaction Fee</SelectItem>
+              <SelectItem value="transactional_checkout">🛒 Transactional / Pay-per-order (E-commerce or Grocery checkout)</SelectItem>
+              <SelectItem value="saas_subscription">🔄 SaaS Subscription (Monthly/Yearly recurring)</SelectItem>
+              <SelectItem value="one_time_purchase">📦 One-time purchase (Buy once, keep forever)</SelectItem>
+              <SelectItem value="usage_based">⚡ Pay-per-use / Metered (Pay for consumption)</SelectItem>
+              <SelectItem value="service_retainer">🤝 Service Retainer (Ongoing monthly service)</SelectItem>
+              <SelectItem value="service_project">💼 Service (Per session / per project)</SelectItem>
+              <SelectItem value="digital_download">📄 Digital Download / Template</SelectItem>
+              <SelectItem value="membership">👥 Community / Membership Access</SelectItem>
+              <SelectItem value="freemium">🎁 Freemium (Free tier + paid upgrades)</SelectItem>
+              <SelectItem value="marketplace_commission">📈 Marketplace Transaction Fee / Commission</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -247,7 +252,7 @@ export function SolutionTypeForm({ task, existingProgress, onSuccess }: BaseTask
           </Label>
           <Textarea
             className="text-xs bg-background min-h-[75px]"
-            placeholder="e.g., Coffee shop owners are too busy to learn complex new software; they want an easy monthly service that handles posts for them."
+            placeholder="e.g., Customers expect a simple cart checkout per order rather than subscribing to a recurring service."
             {...register('rationale', { required: true, minLength: 10 })}
           />
           {errors.rationale && (
@@ -264,7 +269,7 @@ export function SolutionTypeForm({ task, existingProgress, onSuccess }: BaseTask
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             <>
-              <span>Save Solution Type & Continue (+{task.grant_points} XP)</span>
+              <span>Save & Complete Task</span>
               <ArrowRight className="w-4 h-4" />
             </>
           )}

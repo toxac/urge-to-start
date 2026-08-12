@@ -141,7 +141,7 @@ export function MSPDefinitionForm({ task, existingProgress, onSuccess }: BaseTas
 
         <div className="space-y-1.5">
           <Label className="text-xs font-semibold text-foreground">
-            Describe your MSP in one crisp sentence *
+            Describe in one sentence what solution will customers pay for*
           </Label>
           <Textarea
             className="text-xs leading-relaxed bg-background min-h-[85px]"
@@ -164,7 +164,7 @@ export function MSPDefinitionForm({ task, existingProgress, onSuccess }: BaseTas
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             <>
-              <span>Save MSP Definition & Continue (+{task.grant_points} XP)</span>
+              <span>Save MSP Definition & Continue</span>
               <ArrowRight className="w-4 h-4" />
             </>
           )}

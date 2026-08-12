@@ -22,14 +22,15 @@ import {
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { BaseTaskComponentProps } from '../types';
 import { MSPPayload } from '@/types/projects';
+import { TaskResourcesList } from '../TaskResourcesList';
 import { 
   Loader2, 
   AlertCircle, 
-  Wrench, 
+  Send, 
   DollarSign, 
   Clock, 
-  ArrowRight,
-  CheckCircle2
+  Wrench,
+  ArrowRight
 } from 'lucide-react';
 
 type UserProjectRow = Database['public']['Tables']['user_projects']['Row'];
@@ -37,8 +38,8 @@ type UserProjectRow = Database['public']['Tables']['user_projects']['Row'];
 interface MSPBuildInputs {
   perceived_value_price: string;
   delivery_channel: string;
-  resources_needed: string;
-  time_to_first_sale: 'hours' | 'days' | 'weeks' | 'months';
+  development_time: string;
+  resources_readiness: string;
   differentiation_vs_diy: string;
 }
 
@@ -49,12 +50,11 @@ export function MSPBuildForm({ task, existingProgress, onSuccess }: BaseTaskComp
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const isCompleted = existingProgress?.status === 'completed';
-
   const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<MSPBuildInputs>({
     defaultValues: {
-      delivery_channel: 'video_call',
-      time_to_first_sale: 'days'
+      delivery_channel: 'web_app',
+      development_time: '1_to_2_weeks',
+      resources_readiness: 'yes_all_available'
     }
   });
 
@@ -69,9 +69,11 @@ export function MSPBuildForm({ task, existingProgress, onSuccess }: BaseTaskComp
         if (msp.one_sentence_description) setMspSummary(msp.one_sentence_description);
         if (msp.perceived_value_price) setValue('perceived_value_price', msp.perceived_value_price);
         if (msp.delivery_channel) setValue('delivery_channel', msp.delivery_channel);
-        if (msp.resources_needed) setValue('resources_needed', msp.resources_needed);
-        if (msp.time_to_first_sale) setValue('time_to_first_sale', msp.time_to_first_sale);
         if (msp.differentiation_vs_diy) setValue('differentiation_vs_diy', msp.differentiation_vs_diy);
+        
+        const mspAny = msp as any;
+        if (mspAny.development_time) setValue('development_time', mspAny.development_time);
+        if (mspAny.resources_readiness) setValue('resources_readiness', mspAny.resources_readiness);
       } else {
         setErrorMessage(res.error || 'Failed to load active project');
       }
@@ -84,14 +86,19 @@ export function MSPBuildForm({ task, existingProgress, onSuccess }: BaseTaskComp
     setIsSubmitting(true);
     setErrorMessage(null);
 
-    const mspPartial: Partial<MSPPayload> = {
-      ...data
+    const mspPartial = {
+      perceived_value_price: data.perceived_value_price,
+      delivery_channel: data.delivery_channel,
+      development_time: data.development_time,
+      resources_readiness: data.resources_readiness,
+      differentiation_vs_diy: data.differentiation_vs_diy,
+      resources_needed: data.resources_readiness
     };
 
     const updateRes = await updateProjectSolutionDesignAction(activeProject.id, mspPartial);
 
     if (!updateRes.success) {
-      setErrorMessage(updateRes.error || 'Failed to save MSP build details');
+      setErrorMessage(updateRes.error || 'Failed to save solution delivery details');
       setIsSubmitting(false);
       return;
     }
@@ -100,7 +107,7 @@ export function MSPBuildForm({ task, existingProgress, onSuccess }: BaseTaskComp
       task,
       savedPayload: {
         project_id: activeProject.id,
-        msp_build: data
+        msp_delivery: data
       }
     });
 
@@ -125,7 +132,7 @@ export function MSPBuildForm({ task, existingProgress, onSuccess }: BaseTaskComp
       {mspSummary && (
         <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-1">
           <span className="text-[10px] font-bold text-primary uppercase tracking-wider block">
-            Your Minimum Sellable Product:
+            Your Defined Minimum Sellable Product:
           </span>
           <p className="text-xs font-semibold text-foreground leading-relaxed">
             "{mspSummary}"
@@ -133,105 +140,116 @@ export function MSPBuildForm({ task, existingProgress, onSuccess }: BaseTaskComp
         </div>
       )}
 
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
+
       <form onSubmit={handleSubmit(onSubmitMSPBuild)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-5">
         <div className="space-y-1">
           <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <Wrench className="w-3.5 h-3.5" />
-            Build Specifications & Willingness-to-Pay
+            <Send className="w-3.5 h-3.5 text-amber-500" />
+            Delivering Your Solution to Customers
           </span>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            {task.briefing_text}
+            Round off your product vision by clarifying how much customers will pay, how they will receive the solution, and what resources you need to deliver your first sale.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* Price / Willingness to Pay */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">
-              Initial Price Point (Based on customer feedback) *
-            </Label>
-            <Input
-              type="text"
-              placeholder="e.g., $97/month or $250 one-time"
-              className="text-xs h-9 bg-background"
-              {...register('perceived_value_price', { required: true })}
-            />
-          </div>
-
-          {/* Delivery Channel */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">
-              Primary Delivery Channel *
-            </Label>
-            <Select
-              value={watch('delivery_channel') || 'video_call'}
-              onValueChange={(val) => setValue('delivery_channel', val ?? 'video_call')}
-            >
-              <SelectTrigger className="text-xs h-9 bg-background">
-                <SelectValue placeholder="Select delivery channel" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="video_call">Video Call (Zoom / Google Meet)</SelectItem>
-                <SelectItem value="email">Email / Direct Delivery</SelectItem>
-
-                <SelectItem value="simple_website">Simple Web Page / Landing Page</SelectItem>
-                <SelectItem value="instagram_dm">Instagram / Social DM</SelectItem>
-                <SelectItem value="pdf_download">PDF Download / Digital Asset</SelectItem>
-                <SelectItem value="in_person">In-Person Service</SelectItem>
-                <SelectItem value="other">Other Channel</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* Time to First Sale */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">
-              Estimated Time to First Sale *
-            </Label>
-            <Select
-              value={watch('time_to_first_sale') || 'days'}
-              onValueChange={(val) => setValue('time_to_first_sale', (val ?? 'days') as any)}
-            >
-              <SelectTrigger className="text-xs h-9 bg-background">
-                <SelectValue placeholder="Select timeframe" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="hours">⚡ Hours (Can sell today)</SelectItem>
-                <SelectItem value="days">🚀 Days (Can sell within 1 week)</SelectItem>
-                <SelectItem value="weeks">📅 Weeks (Needs light prep)</SelectItem>
-                <SelectItem value="months">⏳ Months (Higher complexity)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Resources Needed */}
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-foreground">
-              Resources Needed for First Sale *
-            </Label>
-            <Input
-              type="text"
-              placeholder="e.g., Simple payment link + 30 mins of prep time"
-              className="text-xs h-9 bg-background"
-              {...register('resources_needed', { required: true })}
-            />
-          </div>
-        </div>
-
-        {/* Differentiation vs DIY Workaround */}
+        {/* 1. Pricing / Willingness to Pay */}
         <div className="space-y-1.5">
           <Label className="text-xs font-semibold text-foreground">
-            Why will customers choose this over their current hacky workaround? *
+            1. How much will customers pay for this solution? *
+          </Label>
+          <Input
+            type="text"
+            placeholder="e.g., $49/month, $199 one-time, or $15 per order"
+            className="text-xs h-9 bg-background"
+            {...register('perceived_value_price', { required: true })}
+          />
+          {errors.perceived_value_price && (
+            <p className="text-[11px] text-destructive font-semibold">Please state the price or payment structure.</p>
+          )}
+        </div>
+
+        {/* 2. Delivery Method (Full-width Select) */}
+        <div className="space-y-1.5">
+          <Label className="text-xs font-semibold text-foreground">
+            2. How will the solution be delivered to the customer? *
+          </Label>
+          <Select
+            value={watch('delivery_channel') || 'web_app'}
+            onValueChange={(val) => setValue('delivery_channel', val ?? 'web_app')}
+          >
+            <SelectTrigger className="w-full text-xs h-9 bg-background">
+              <SelectValue placeholder="Select delivery format" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="web_app">🌐 Web Application (SaaS / Browser-based tool)</SelectItem>
+              <SelectItem value="mobile_app">📱 Mobile Application (iOS / Android App)</SelectItem>
+              <SelectItem value="digital_direct">📩 Digital Direct (Video Call, Email, PDF, eBook, Template)</SelectItem>
+              <SelectItem value="content_channel">📢 Content & Channels (Instagram, Blog, Newsletter, Community)</SelectItem>
+              <SelectItem value="physical_dtc">📦 Physical Product (Direct-To-Consumer / E-Commerce)</SelectItem>
+              <SelectItem value="physical_retail">🏪 Physical Product (Retail Store / Offline Distribution)</SelectItem>
+              <SelectItem value="in_person_service">🤝 In-Person Service or Consultation</SelectItem>
+              <SelectItem value="other">⚙️ Other Custom Format</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* 3. Development Time (Full-width Select) */}
+        <div className="space-y-1.5">
+          <Label className="text-xs font-semibold text-foreground">
+            3. How much time do you need to develop the first version? *
+          </Label>
+          <Select
+            value={watch('development_time') || '1_to_2_weeks'}
+            onValueChange={(val) => setValue('development_time', val ?? '1_to_2_weeks')}
+          >
+            <SelectTrigger className="w-full text-xs h-9 bg-background">
+              <SelectValue placeholder="Select estimated time" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="24_hours">⚡ 24 to 48 Hours (Ready immediately / No-code)</SelectItem>
+              <SelectItem value="1_to_2_weeks">🚀 1 to 2 Weeks (Lean MSP build)</SelectItem>
+              <SelectItem value="1_month">📅 1 Month (Requires light setup or custom assembly)</SelectItem>
+              <SelectItem value="2_to_3_months">⏳ 2 to 3 Months (Complex software or hardware production)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* 4. Resource Readiness (Full-width Select) */}
+        <div className="space-y-1.5">
+          <Label className="text-xs font-semibold text-foreground">
+            4. Do you have all the resources required to build and deliver this solution? *
+          </Label>
+          <Select
+            value={watch('resources_readiness') || 'yes_all_available'}
+            onValueChange={(val) => setValue('resources_readiness', val ?? 'yes_all_available')}
+          >
+            <SelectTrigger className="w-full text-xs h-9 bg-background">
+              <SelectValue placeholder="Select resource status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="yes_all_available">✅ Yes, I have all skills, tools, and budget needed right now</SelectItem>
+              <SelectItem value="mostly_need_nocode">🛠️ Mostly, but need no-code tools or AI assistance</SelectItem>
+              <SelectItem value="need_freelancer">💼 Missing specific skills (need to hire a freelancer/contractor)</SelectItem>
+              <SelectItem value="need_cofounder">🤝 Missing technical execution (need a technical co-founder)</SelectItem>
+              <SelectItem value="need_capital">💰 Missing capital/inventory funds to produce</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* 5. Differentiation vs Workarounds */}
+        <div className="space-y-1.5">
+          <Label className="text-xs font-semibold text-foreground">
+            5. Why will customers pick this solution over their current workarounds/alternatives? *
           </Label>
           <Textarea
-            className="text-xs bg-background min-h-[75px]"
-            placeholder="e.g., Because doing it themselves takes 3 hours every Sunday; our MSP gives them their weekends back for under $100."
+            className="text-xs leading-relaxed bg-background min-h-[75px]"
+            placeholder="e.g., Doing it manually takes 3 hours every week; our web tool automates the process in 5 minutes for less than $50."
             {...register('differentiation_vs_diy', { required: true, minLength: 10 })}
           />
           {errors.differentiation_vs_diy && (
-            <p className="text-[11px] text-destructive font-semibold">Please explain your differentiation against workarounds.</p>
+            <p className="text-[11px] text-destructive font-semibold">Please explain why customers will switch to your solution.</p>
           )}
         </div>
 
@@ -244,7 +262,7 @@ export function MSPBuildForm({ task, existingProgress, onSuccess }: BaseTaskComp
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             <>
-              <span>Save Specifications & Complete Quest 2 (+{task.grant_points} XP)</span>
+              <span>Save Delivery Specifications & Complete Quest 2 </span>
               <ArrowRight className="w-4 h-4" />
             </>
           )}
