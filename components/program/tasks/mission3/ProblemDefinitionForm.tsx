@@ -32,7 +32,8 @@ import {
   ArrowRight,
   Link2,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Sparkles
 } from 'lucide-react';
 
 type UserProjectRow = Database['public']['Tables']['user_projects']['Row'];
@@ -52,6 +53,7 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
   const [showInterviews, setShowInterviews] = useState(true);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAiLoading, setIsAiLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<ProblemInputs>({
@@ -87,6 +89,46 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
     }
     loadProject();
   }, [reset]);
+
+  // AI Synthesis Handler
+  const handleAiSynthesize = async () => {
+    if (loggedInterviews.length === 0) {
+      setErrorMessage('Please log at least one customer interview before synthesizing with AI.');
+      return;
+    }
+
+    setIsAiLoading(true);
+    setErrorMessage(null);
+
+    try {
+      // Call server action / endpoint to process interviews
+      const response = await fetch('/api/ai/synthesize-problem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          projectTitle: activeProject?.biz_name,
+          interviews: loggedInterviews
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.data) {
+        if (result.data.problem_statement) setValue('problem_statement', result.data.problem_statement);
+        if (result.data.affected_audience) setValue('affected_audience', result.data.affected_audience);
+        if (result.data.when_context) setValue('when_context', result.data.when_context);
+        if (result.data.where_location) setValue('where_location', result.data.where_location);
+        if (result.data.current_workaround) setValue('current_workaround', result.data.current_workaround);
+        if (result.data.frequency) setValue('frequency', result.data.frequency);
+      } else {
+        setErrorMessage(result.error || 'Failed to generate AI problem synthesis.');
+      }
+    } catch (err: any) {
+      setErrorMessage(err.message || 'An unexpected error occurred during synthesis.');
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
 
   const onSubmitProblem = async (data: ProblemInputs) => {
     if (!activeProject) return;
@@ -195,14 +237,33 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
 
       {/* FORM CONTENT */}
       <form onSubmit={handleSubmit(onSubmitProblem)} className="p-5 rounded-2xl border border-border bg-card/60 space-y-5">
-        <div className="space-y-1">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <Target className="w-3.5 h-3.5 text-amber-500" />
-            Rethink & Synthesize the Core Problem
-          </span>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Now that you have spoken directly to customers, refine how you see the problem. Move past initial assumptions and articulate the exact pain revealed through your real-world conversations.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-border/40">
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+              <Target className="w-3.5 h-3.5 text-amber-500" />
+              Rethink & Synthesize the Core Problem
+            </span>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Refine your core problem based on evidence gathered from your interviews.
+            </p>
+          </div>
+
+          {/* AI SYNTHESIZE BUTTON NEXT TO TITLE */}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleAiSynthesize}
+            disabled={isAiLoading || loggedInterviews.length === 0}
+            className="h-8 px-3 text-xs font-bold gap-1.5 text-primary border-primary/30 hover:bg-primary/10 shrink-0 cursor-pointer"
+          >
+            {isAiLoading ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            )}
+            <span>{isAiLoading ? 'Synthesizing...' : 'Draft with AI'}</span>
+          </Button>
         </div>
 
         {/* Problem Statement */}
@@ -270,7 +331,7 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
           </Label>
           <Select
             value={watch('frequency')}
-            onValueChange={(val) => setValue('frequency', val as any)}
+            onValueChange={(val) => setValue('frequency', (val ?? 'daily') as any)}
           >
             <SelectTrigger className="text-xs h-9 bg-background">
               <SelectValue placeholder="Select frequency" />
@@ -306,7 +367,7 @@ export function ProblemDefinitionForm({ task, existingProgress, onSuccess }: Bas
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
             <>
-              <span>Save Problem Definition & Complete (+{task.grant_points} XP)</span>
+              <span>Save Problem Definition & Complete Task</span>
               <ArrowRight className="w-4 h-4" />
             </>
           )}
