@@ -16,15 +16,14 @@ import {
   Layers,
   Users,
   Calendar,
-  ShoppingBag,
+  BookOpen,
+  FolderKanban,
   LogOut,
-  UserSquare2,
   Sun,
   Moon,
   Menu
 } from 'lucide-react';
 
-/* ─── DYNAMIC NAV LINKS MODULE ─── */
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const profile = useStore($profileStore);
   const pathname = usePathname();
@@ -50,69 +49,90 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
         {/* Link Tree Items */}
         <nav className="space-y-1 font-sans text-xs font-semibold tracking-normal">
+          {/* 1. Dashboard */}
           <Link
             href="/platform/dashboard"
             onClick={onNavigate}
-            className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${isActive('/platform/dashboard') ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
-              }`}
+            className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${
+              isActive('/platform/dashboard') 
+                ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
+            }`}
           >
             <span className="flex items-center gap-3"><Layers className="h-4 w-4 shrink-0" /> Dashboard</span>
             <span className="text-[11px] opacity-0 group-hover:opacity-100 text-primary pr-1">→</span>
           </Link>
 
-          {profile?.roles?.includes('member') && (
-            <Link
-              href="/platform/program"
-              onClick={onNavigate}
-              className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${isActive('/platform/program') ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                }`}
-            >
-              <span className="flex items-center gap-3"><Compass className="h-4 w-4 shrink-0" /> Program Track</span>
-              <span className="bg-primary/10 text-primary text-[9px] font-bold px-1.5 py-0.5 rounded-md">Active</span>
-            </Link>
-          )}
+          {/* 2. Program */}
+          <Link
+            href="/platform/program"
+            onClick={onNavigate}
+            className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${
+              isActive('/platform/program') 
+                ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
+            }`}
+          >
+            <span className="flex items-center gap-3"><Compass className="h-4 w-4 shrink-0" /> Program</span>
+            <span className="bg-primary/10 text-primary text-[9px] font-bold px-1.5 py-0.5 rounded-md">Active</span>
+          </Link>
 
+          {/* 3. Resources */}
+          <Link
+            href="/blog"
+            onClick={onNavigate}
+            className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${
+              isActive('/blog') 
+                ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
+            }`}
+          >
+            <span className="flex items-center gap-3"><BookOpen className="h-4 w-4 shrink-0" /> Resources</span>
+          </Link>
+
+          {/* 4. Events */}
+          <Link
+            href="/open-events"
+            onClick={onNavigate}
+            className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${
+              isActive('/open-events') 
+                ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
+            }`}
+          >
+            <span className="flex items-center gap-3"><Calendar className="h-4 w-4 shrink-0" /> Events</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shrink-0 mr-1" />
+          </Link>
+
+          {/* 5. Project */}
+          <Link
+            href="/platform/program/project"
+            onClick={onNavigate}
+            className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${
+              isActive('/platform/program/project') 
+                ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
+            }`}
+          >
+            <span className="flex items-center gap-3"><FolderKanban className="h-4 w-4 shrink-0" /> Project</span>
+          </Link>
+
+          {/* 6. Community */}
           <Link
             href="/platform/network"
             onClick={onNavigate}
-            className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${isActive('/platform/network') ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
-              }`}
+            className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${
+              isActive('/platform/network') 
+                ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
+            }`}
           >
-            <span className="flex items-center gap-3"><Users className="h-4 w-4 shrink-0" /> Peer Network</span>
-          </Link>
-
-          <Link
-            href="/platform/events"
-            onClick={onNavigate}
-            className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${isActive('/platform/events') ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
-              }`}
-          >
-            <span className="flex items-center gap-3"><Calendar className="h-4 w-4 shrink-0" /> Live Sprints</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shrink-0 mr-1"></span>
-          </Link>
-
-          <Link
-            href="/platform/mentors"
-            onClick={onNavigate}
-            className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${isActive('/platform/mentors') ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
-              }`}
-          >
-            {/* ⚡ FIXED: Stripped out the rogue m-0 property completely */}
-            <span className="flex items-center gap-3"><UserSquare2 className="h-4 w-4 shrink-0" /> Industry Advisors</span>
-          </Link>
-
-          <Link
-            href="/platform/marketplace"
-            onClick={onNavigate}
-            className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition group border ${isActive('/platform/marketplace') ? 'bg-primary/5 text-primary border-primary/20 shadow-sm' : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
-              }`}
-          >
-            <span className="flex items-center gap-3"><ShoppingBag className="h-4 w-4 shrink-0" /> Perks & Solutions</span>
+            <span className="flex items-center gap-3"><Users className="h-4 w-4 shrink-0" /> Community</span>
           </Link>
         </nav>
       </div>
 
-      {/* Profile/Footer Area */}
+      {/* Profile / Footer Controls */}
       <div className="space-y-3 pt-4 border-t border-border">
         {mounted && (
           <div className="flex items-center justify-between bg-muted/40 p-2 rounded-xl border border-border/40 text-xs text-muted-foreground font-medium px-3">
@@ -121,7 +141,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
               variant="ghost"
               size="icon"
               onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-              className="h-7 w-7 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              className="h-7 w-7 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
             >
               {resolvedTheme === 'dark' ? <Sun className="h-3.5 w-3.5 text-primary" /> : <Moon className="h-3.5 w-3.5" />}
             </Button>
@@ -147,7 +167,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           <Button
             type="submit"
             variant="ghost"
-            className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive font-sans text-xs font-semibold h-10 hover:bg-destructive/5 rounded-xl transition-all"
+            className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive font-sans text-xs font-semibold h-10 hover:bg-destructive/5 rounded-xl transition-all cursor-pointer"
           >
             <LogOut className="h-4 w-4" /> Disconnect Account
           </Button>
@@ -157,21 +177,17 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-/* ─── MAIN MASTER WRAPPER VIEW ─── */
 export function SidebarComponent() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <>
-      {/* DESKTOP SIDEBAR: Sticky, standard view for screens md and wider */}
       <aside className="hidden md:flex w-64 h-full border-r border-border flex-col select-none shrink-0 overflow-hidden">
         <SidebarContent />
       </aside>
 
-      {/* MOBILE TRIGGER HEADER: Displays on viewports under md, adding a sleek navigation bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-card border-b border-border z-40 flex items-center justify-between px-4 select-none">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          {/* Base UI standard layout trigger configuration */}
           <SheetTrigger className="inline-flex items-center justify-center p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition cursor-pointer focus-visible:outline-none">
             <Menu className="w-5 h-5" />
           </SheetTrigger>
@@ -185,7 +201,7 @@ export function SidebarComponent() {
           Urge Start
         </span>
 
-        <div className="w-9 h-9" /> {/* Visual Balance Spacing Weight */}
+        <div className="w-9 h-9" />
       </div>
     </>
   );

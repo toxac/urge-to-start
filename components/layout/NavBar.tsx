@@ -1,19 +1,35 @@
+// components/navigation/NavigationHeader.tsx
 'use client';
 
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
-import { Sun, Moon, Menu } from 'lucide-react';
+import { Sun, Moon, Menu, LayoutDashboard } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { createClient } from '@/lib/supabase/client';
 
 export function NavigationHeader() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    const supabase = createClient();
+
+    async function checkAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    }
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const navItems = [
@@ -32,7 +48,7 @@ export function NavigationHeader() {
           <span className="text-xl font-black tracking-wider text-foreground font-mono">URGE</span>
         </Link>
 
-        {/* Desktop Nav */}
+        {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <Link
@@ -45,14 +61,14 @@ export function NavigationHeader() {
           ))}
         </div>
 
-        {/* Right Side */}
+        {/* Right Action Controls */}
         <div className="flex items-center gap-3">
           {mounted && (
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-              className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full"
+              className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-full cursor-pointer"
             >
               {resolvedTheme === 'dark' ? (
                 <Sun className="h-4 w-4" />
@@ -62,13 +78,23 @@ export function NavigationHeader() {
             </Button>
           )}
 
-          <Button variant="default" size="sm" className="font-medium hidden sm:flex">
-            <Link href="/auth">Sign In</Link>
-          </Button>
+          {/* Dynamic Auth Button: Shows Dashboard if logged in, otherwise Sign In */}
+          {isAuthenticated ? (
+            <Button variant="default" size="sm" className="font-bold hidden sm:flex items-center gap-1.5">
+              <Link href="/platform/dashboard">
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Dashboard</span>
+              </Link>
+            </Button>
+          ) : (
+            <Button variant="default" size="sm" className="font-medium hidden sm:flex">
+              <Link href="/auth">Sign In</Link>
+            </Button>
+          )}
 
-          {/* Mobile Menu - Fixed: SheetTrigger directly with no nested Button */}
+          {/* Mobile Sheet Navigation */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger className="md:hidden h-9 w-9 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
+            <SheetTrigger className="md:hidden h-9 w-9 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors cursor-pointer">
               <Menu className="h-5 w-5" />
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px] p-6">
@@ -84,11 +110,20 @@ export function NavigationHeader() {
                   </Link>
                 ))}
                 <div className="pt-4 border-t border-border">
-                  <Button className="w-full font-medium">
-                    <Link href="/auth" onClick={() => setMobileOpen(false)}>
-                      Sign In
-                    </Link>
-                  </Button>
+                  {isAuthenticated ? (
+                    <Button className="w-full font-bold gap-2">
+                      <Link href="/platform/dashboard" onClick={() => setMobileOpen(false)}>
+                        <LayoutDashboard className="w-4 h-4" />
+                        <span>Go to Dashboard</span>
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button className="w-full font-medium">
+                      <Link href="/auth" onClick={() => setMobileOpen(false)}>
+                        Sign In
+                      </Link>
+                    </Button>
+                  )}
                 </div>
               </div>
             </SheetContent>
