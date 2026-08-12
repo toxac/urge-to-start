@@ -4,6 +4,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { ActionResponse } from '@/actions/progress';
 import { deepseek } from '@/lib/ai/deepseekClient';
+import { InterviewRecord } from '@/types/projects';
 
 interface ChallengeOption {
   id: string;
@@ -43,6 +44,20 @@ interface OpportunityAssessmentOutput {
   founderAlignment: string;
   opportunityStrength: string;
   keyRiskOrBlindSpot: string;
+}
+
+interface SynthesizeProblemInput {
+  opportunityTitle?: string;
+  opportunityDescription?: string;
+  interviews: InterviewRecord[];
+}
+
+interface SynthesizeProblemOutput {
+  problem_statement: string;
+  affected_audience: string;
+  when_context: string;
+  where_location: string;
+  current_workaround: string;
 }
 
 /**
@@ -265,5 +280,60 @@ Return ONLY valid JSON matching this schema:
     return { success: true, data: parsedResult };
   } catch (err: any) {
     return { success: false, error: err.message || 'Failed to generate opportunity assessment' };
+  }
+}
+
+
+export async function synthesizeProblemFromInterviewsAction(
+  input: SynthesizeProblemInput
+): Promise<ActionResponse<SynthesizeProblemOutput>> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { success: false, error: 'Authentication required' };
+
+    const systemPrompt = `You are an expert startup venture mentor helping a founder synthesize customer research into a concrete problem statement.
+
+RULES:
+1. Base your synthesis PRIMARILY on the provided customer interviews.
+2. Be specific, grounded, and concise. Avoid vague marketing fluff.
+3. Return ONLY valid JSON matching this schema:
+{
+  "problem_statement": "string (One sharp sentence articulating the core pain revealed in interviews)",
+  "affected_audience": "string (Specific target audience who confirmed this friction)",
+  "when_context": "string (Specific trigger or context when the problem happens)",
+  "where_location": "string (Physical or digital location where it happens)",
+  "current_workaround": "string (The actual workaround or hacky solution customers currently use)"
+}`;
+
+    const userPrompt = JSON.stringify({
+      opportunity: {
+        title: input.opportunityTitle || 'N/A',
+        description: input.opportunityDescription || 'N/A',
+      },
+      interviews: input.interviews.map(i => ({
+        interviewee: i.interviewee_name,
+        role: i.role_or_context,
+        confirmed: i.problem_confirmed,
+        workaround: i.current_workaround,
+        spend_or_time: i.existing_spend_or_time,
+        buying_signal: i.buying_signal,
+        quote: i.key_quote_or_surprise
+      }))
+    }, null, 2);
+
+    const response = await deepseek.chat.completions.create({
+      model: 'deepseek-chat',
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Synthesize research into problem definition:\n${userPrompt}` }
+      ]
+    });
+
+    const parsed = JSON.parse(response.choices[0].message.content || '{}');
+    return { success: true, data: parsed };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to synthesize problem statement' };
   }
 }
