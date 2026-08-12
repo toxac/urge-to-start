@@ -15,13 +15,11 @@ import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { setProgressStoreRow } from '@/lib/stores/progressStore';
 import { Database } from '@/types/supabase';
 import { BaseTaskComponentProps } from '../types';
-import { ReferenceSchema } from '@/types/playbook';
+import { TaskResourcesList } from '../TaskResourcesList';
 import { 
   Loader2, 
   CheckCircle2, 
   AlertCircle, 
-  BookOpen, 
-  ExternalLink, 
   Plus, 
   Lightbulb, 
   Sparkles, 
@@ -30,7 +28,8 @@ import {
   Check,
   Globe,
   Users,
-  Award
+  Award,
+  ExternalLink
 } from 'lucide-react';
 
 type UserOpportunityRow = Database['public']['Tables']['user_opportunities']['Row'];
@@ -65,8 +64,6 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
   const isInProgress = existingProgress?.status === 'in_progress' || opportunities.length > 0;
 
   const [showForm, setShowForm] = useState(!isCompleted);
-
-  const requiredResources: ReferenceSchema[] = (task.resources || []).filter((r: ReferenceSchema) => r.isRequired);
 
   // Dynamic context framing based on sourceType
   const formConfig = sourceType === 'zone_of_influence'
@@ -228,29 +225,8 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
         </div>
       )}
 
-      {/* REQUIRED RESOURCES BANNER */}
-      {requiredResources.length > 0 && (
-        <div className="p-4 rounded-xl border bg-primary/5 border-primary/20 space-y-2">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5" />
-            Required Action Guides (Read First)
-          </span>
-          <div className="space-y-1.5">
-            {requiredResources.map((res, idx) => (
-              <a
-                key={idx}
-                href={res.url_link}
-                target="_blank"
-                rel="noreferrer"
-                className="p-2.5 rounded-lg border bg-card hover:bg-muted/30 transition flex items-center justify-between text-xs font-semibold text-foreground group"
-              >
-                <span>{res.title}</span>
-                <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0" />
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
 
       {/* COMPLETED BANNER */}
       {isCompleted && !showForm && (
@@ -298,7 +274,7 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
                 <div key={opp.id} className="p-4 rounded-xl border border-border bg-card space-y-2">
                   <div className="flex items-center justify-between text-xs font-bold text-foreground">
                     <span className="flex items-center gap-1.5 text-primary">
-                      <Lightbulb className="w-3.5 h-3.5" />
+                      <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
                       {opp.title}
                     </span>
                     <Badge variant="secondary" className="text-[9px] font-mono uppercase">
@@ -348,7 +324,7 @@ export function OpportunityForm({ task, existingProgress, onSuccess }: BaseTaskC
           {sourceType !== 'broader_search' && filteredObservations.length > 0 && (
             <div className="p-3.5 rounded-xl border border-primary/20 bg-primary/5 space-y-2">
               <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1">
-                <Eye className="w-3 h-3" />
+                <Eye className="w-3 h-3 text-amber-500" />
                 {formConfig.pickerLabel}
               </span>
               <div className="flex flex-col gap-2">

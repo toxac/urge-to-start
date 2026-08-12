@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { getUserOpportunitiesAction, selectOpportunityAction } from '@/actions/opportunities';
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { BaseTaskComponentProps } from '../types';
+import { TaskResourcesList } from '../TaskResourcesList';
 import { Database } from '@/types/supabase';
 import { Loader2, CheckCircle2, AlertCircle, Trophy, Check, ArrowRight } from 'lucide-react';
 
@@ -47,7 +48,7 @@ export function OpportunityPickerForm({ task, existingProgress, onSuccess }: Bas
 
   const handleSubmitSelection = async () => {
     if (!selectedOppId || !justification.trim()) {
-      setErrorMessage('Please select an opportunity and write a brief justification.');
+      setErrorMessage('Please pick an opportunity and write a brief reason why you selected it.');
       return;
     }
 
@@ -88,6 +89,9 @@ export function OpportunityPickerForm({ task, existingProgress, onSuccess }: Bas
         </div>
       )}
 
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
+
       {isCompleted ? (
         <div className="p-5 border rounded-2xl bg-emerald-500/5 border-emerald-500/20 space-y-2">
           <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 uppercase">
@@ -102,7 +106,7 @@ export function OpportunityPickerForm({ task, existingProgress, onSuccess }: Bas
           <div className="space-y-1">
             <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
               <Trophy className="w-3.5 h-3.5 text-amber-500" />
-              Rank & Pick Your Target Opportunity
+              Pick Your Target Opportunity
             </span>
             <p className="text-xs text-muted-foreground">{task.briefing_text}</p>
           </div>
@@ -143,7 +147,7 @@ export function OpportunityPickerForm({ task, existingProgress, onSuccess }: Bas
             <Label className="text-xs font-semibold text-foreground">Why did you pick this one? *</Label>
             <Textarea
               className="text-xs bg-background min-h-[80px]"
-              placeholder="What made this opportunity stand out? Why is it the right one for you?"
+              placeholder="What made this opportunity stand out to you? Why is it the best one to start building now?"
               value={justification}
               onChange={(e) => setJustification(e.target.value)}
             />
@@ -157,7 +161,7 @@ export function OpportunityPickerForm({ task, existingProgress, onSuccess }: Bas
           >
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : (
               <>
-                <span>Commit to Opportunity & Complete Task</span>
+                <span>Commit to Opportunity & Complete Task (+{task.grant_points} XP)</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}

@@ -45,13 +45,12 @@ interface OpportunityAssessmentOutput {
   keyRiskOrBlindSpot: string;
 }
 
-
 const CRITERIA = [
-  { id: 'passion', label: 'Passion', hint: 'How excited are you about this problem?' },
-  { id: 'urgency', label: 'Urgency', hint: 'How badly do people need this solved?' },
-  { id: 'workaround_spend', label: 'Workaround Spend', hint: 'Are people already paying or spending time to fix this?' },
-  { id: 'unfair_advantage', label: 'Unfair Advantage', hint: 'Do you have unique skills, access, or insights?' },
-  { id: 'msp_feasibility', label: 'MSP Feasibility', hint: 'Can you build a Minimum Sellable Product quickly?' },
+  { id: 'passion', label: 'Personal Interest', hint: 'How excited are you to work on this problem?' },
+  { id: 'urgency', label: 'Problem Pain', hint: 'How badly do people want this fixed right now?' },
+  { id: 'workaround_spend', label: 'Willingness to Spend', hint: 'Are people already paying money or spending time to deal with this?' },
+  { id: 'unfair_advantage', label: 'Your Unique Advantage', hint: 'Do you have special skills, insider knowledge, or easy access to these customers?' },
+  { id: 'msp_feasibility', label: 'Speed to Build', hint: 'Can you create a simple first version in 1 to 2 weeks?' },
 ];
 
 export function OpportunityScoringDialog({
@@ -172,7 +171,7 @@ export function OpportunityScoringDialog({
             <div className="p-3 flex items-center justify-between border-b border-primary/10 bg-primary/10">
               <span className="text-[11px] font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
                 <Brain className="w-3.5 h-3.5 text-amber-500" />
-                AI Opportunity Insight
+                AI Opportunity Feedback
               </span>
 
               <div className="flex items-center gap-1">
@@ -189,7 +188,7 @@ export function OpportunityScoringDialog({
                   ) : (
                     <>
                       <Sparkles className="w-3 h-3 text-amber-500" />
-                      {aiInsight ? 'Re-Analyze' : 'Get Insight'}
+                      {aiInsight ? 'Re-Analyze' : 'Get AI Advice'}
                     </>
                   )}
                 </Button>
@@ -212,7 +211,7 @@ export function OpportunityScoringDialog({
             {aiInsight && !isAiMinimized && (
               <div className="p-3.5 space-y-2 text-xs border-t border-primary/10">
                 <div>
-                  <strong className="text-foreground block text-[11px]">Founder Context Alignment:</strong>
+                  <strong className="text-foreground block text-[11px]">How Well It Fits You:</strong>
                   <p className="text-muted-foreground leading-relaxed">{aiInsight.founderAlignment}</p>
                 </div>
 
@@ -222,7 +221,7 @@ export function OpportunityScoringDialog({
                 </div>
 
                 <div>
-                  <strong className="text-amber-500 block text-[11px]">Potential Risk / Blindspot:</strong>
+                  <strong className="text-amber-500 block text-[11px]">Main Risk to Watch For:</strong>
                   <p className="text-muted-foreground leading-relaxed">{aiInsight.keyRiskOrBlindSpot}</p>
                 </div>
               </div>
@@ -232,7 +231,7 @@ export function OpportunityScoringDialog({
           {/* CRITERIA SLIDERS */}
           <div className="space-y-3 pt-1">
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-              Self-Assessment Criteria (1 = Low, 5 = High)
+              Rate from 1 (Low) to 5 (High)
             </span>
 
             {CRITERIA.map((c) => (
@@ -248,6 +247,7 @@ export function OpportunityScoringDialog({
                   min={1}
                   max={5}
                   step={1}
+                  className="cursor-pointer"
                 />
               </div>
             ))}
@@ -255,10 +255,10 @@ export function OpportunityScoringDialog({
 
           {/* SCORING NOTES */}
           <div className="space-y-1.5 pt-1">
-            <Label className="text-xs font-semibold">Notes on Scoring (Optional)</Label>
+            <Label className="text-xs font-semibold">Notes / Reflection (Optional)</Label>
             <Textarea
               className="text-xs bg-background min-h-[60px]"
-              placeholder="Why did you give these scores?"
+              placeholder="What made you give these scores?"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />
@@ -278,7 +278,7 @@ export function OpportunityScoringDialog({
             type="button"
             onClick={handleSaveScore}
             disabled={isSubmitting}
-            className="text-xs h-9 font-bold uppercase tracking-wider gap-1.5 cursor-pointer"
+            className="text-xs h-9 font-bold uppercase tracking-wider gap-1.5 cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white"
           >
             {isSubmitting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Save Scores'}
           </Button>

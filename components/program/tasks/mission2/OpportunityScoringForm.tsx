@@ -8,6 +8,7 @@ import { getUserOpportunitiesAction } from '@/actions/opportunities';
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { OpportunityScoringDialog } from './OpportunityScoringDialog';
 import { BaseTaskComponentProps } from '../types';
+import { TaskResourcesList } from '../TaskResourcesList';
 import { Database } from '@/types/supabase';
 import { Loader2, AlertCircle, Star, ArrowRight } from 'lucide-react';
 
@@ -71,6 +72,9 @@ export function OpportunityScoringForm({ task, existingProgress, onSuccess }: Ba
         </div>
       )}
 
+      {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+      <TaskResourcesList resources={task.resources} />
+
       {/* CARDS LIST */}
       <div className="space-y-3">
         <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
@@ -108,7 +112,7 @@ export function OpportunityScoringForm({ task, existingProgress, onSuccess }: Ba
                   onClick={() => handleOpenScoring(opp)}
                   className="text-xs font-bold gap-1.5 cursor-pointer"
                 >
-                  <Star className="w-3.5 h-3.5" />
+                  <Star className="w-3.5 h-3.5 text-amber-500" />
                   {isScored ? 'Edit Scores' : 'Score Opportunity'}
                 </Button>
               </div>
@@ -145,7 +149,7 @@ export function OpportunityScoringForm({ task, existingProgress, onSuccess }: Ba
           >
             {isCompleting ? <Loader2 className="w-4 h-4 animate-spin" /> : (
               <>
-                <span>Complete Task</span>
+                <span>Complete Task (+{task.grant_points} XP)</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
