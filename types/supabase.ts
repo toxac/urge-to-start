@@ -53,6 +53,39 @@ export type Database = {
         }
         Relationships: []
       }
+      dev_feedbacks: {
+        Row: {
+          created_at: string
+          id: string
+          status: string
+          task_id: string
+          text: string
+          title: string
+          user_id: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          status?: string
+          task_id: string
+          text: string
+          title: string
+          user_id: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          status?: string
+          task_id?: string
+          text?: string
+          title?: string
+          user_id?: string
+          username?: string
+        }
+        Relationships: []
+      }
       discounts: {
         Row: {
           applicable_currencies: string[]

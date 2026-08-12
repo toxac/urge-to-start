@@ -8,6 +8,7 @@ import { $progressStore } from '@/lib/stores/progressStore';
 import { $profileStore } from '@/lib/stores/profileStore';
 import { $accomplishmentStore } from '@/lib/stores/accomplishmentStore';
 import { urgePlaybook } from '@/lib/playbook';
+import { DevFeedback } from './DevFeedback'; // ⚡ NEW IMPORT
 import {
   BookOpen,
   Trophy,
@@ -17,7 +18,6 @@ import {
   Info,
   Sparkles,
   Flame,
-  Clock,
   Target
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -149,6 +149,9 @@ export function ComplementarySidebar() {
                 </div>
               </div>
             )}
+
+            {/* ⚡ DEV FEEDBACK MODULE */}
+            <DevFeedback taskId={task.id} />
           </div>
         ) : null}
 
