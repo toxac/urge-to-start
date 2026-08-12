@@ -20,7 +20,7 @@ export default function OnboardingLayout({
           </div>
         }
       >
-        <NavigationHeader variant="auth" />
+        <NavigationHeader />
         <main className="flex-1 flex items-center justify-center p-6">
           {children}
         </main>
