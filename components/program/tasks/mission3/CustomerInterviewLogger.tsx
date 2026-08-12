@@ -23,6 +23,7 @@ import {
 import { processTaskCompletion } from '@/lib/utils/taskExecution';
 import { BaseTaskComponentProps } from '../types';
 import { InterviewRecord } from '@/types/projects';
+import { TaskResourcesList } from '../TaskResourcesList';
 import {
     Loader2,
     CheckCircle2,
@@ -32,9 +33,7 @@ import {
     Copy,
     Check,
     MessageSquare,
-    DollarSign,
-    ArrowRight,
-    ExternalLink
+    ArrowRight
 } from 'lucide-react';
 
 type UserProjectRow = Database['public']['Tables']['user_projects']['Row'];
@@ -67,12 +66,14 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
     const targetCount = task.target_count || 3;
     const isCompleted = existingProgress?.status === 'completed';
 
-    const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<InterviewInputs>({
+    const { register, handleSubmit, reset, setValue, watch } = useForm<InterviewInputs>({
         defaultValues: {
             problem_confirmed: 'yes',
             buying_signal: 'none'
         }
     });
+
+    const currentProblemConfirmed = watch('problem_confirmed');
 
     useEffect(() => {
         async function loadProjectData() {
@@ -107,7 +108,6 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
             return;
         }
 
-        // TypeScript now knows res.success is true and res.data exists
         const updatedValidation = (res.data.validation_data as any) || {};
         setInterviews(updatedValidation.interviews || []);
         setActiveProject(res.data);
@@ -155,6 +155,9 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
                     <span>{errorMessage}</span>
                 </div>
             )}
+
+            {/* RECOMMENDED RESOURCES / PLAYBOOK GUIDES */}
+            <TaskResourcesList resources={task.resources} />
 
             {/* INTERVIEW GUIDE & SCRIPT ACCORDION/BANNER */}
             <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-3">
@@ -262,41 +265,51 @@ export function CustomerInterviewLogger({ task, existingProgress, onSuccess }: B
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="space-y-1">
-                            <Label className="text-xs font-semibold">Did they confirm the problem exists? *</Label>
-                            <Select
-                                value={watch('problem_confirmed')}
-                                onValueChange={(val) => setValue('problem_confirmed', val as any)}
-                            >
-                                <SelectTrigger className="text-xs h-9 bg-background">
-                                    <SelectValue placeholder="Select outcome" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="yes">Yes - Intense pain</SelectItem>
-                                    <SelectItem value="sort_of">Sort of - Mild annoyance</SelectItem>
-                                    <SelectItem value="no">No - Not a real problem</SelectItem>
-                                </SelectContent>
-                            </Select>
+                    {/* TOGGLE BUTTON GROUP: DID THEY CONFIRM THE PROBLEM EXISTS? */}
+                    <div className="space-y-1.5">
+                        <Label className="text-xs font-semibold">Did they confirm the problem exists? *</Label>
+                        <div className="grid grid-cols-3 gap-2">
+                            {[
+                                { id: 'yes', label: '✅ Yes (Intense Pain)' },
+                                { id: 'sort_of', label: '🤔 Sort of (Mild)' },
+                                { id: 'no', label: '❌ No (Not a problem)' }
+                            ].map((opt) => {
+                                const isSelected = currentProblemConfirmed === opt.id;
+                                return (
+                                    <button
+                                        key={opt.id}
+                                        type="button"
+                                        onClick={() => setValue('problem_confirmed', opt.id as any)}
+                                        className={`py-2 px-3 rounded-xl border text-xs font-bold transition cursor-pointer text-center ${
+                                            isSelected
+                                                ? 'border-primary bg-primary/10 text-primary shadow-xs'
+                                                : 'border-border bg-background hover:bg-muted/40 text-muted-foreground'
+                                        }`}
+                                    >
+                                        {opt.label}
+                                    </button>
+                                );
+                            })}
                         </div>
+                    </div>
 
-                        <div className="space-y-1">
-                            <Label className="text-xs font-semibold">Buying / Demand Signal *</Label>
-                            <Select
-                                value={watch('buying_signal')}
-                                onValueChange={(val) => setValue('buying_signal', val as any)}
-                            >
-                                <SelectTrigger className="text-xs h-9 bg-background">
-                                    <SelectValue placeholder="Select signal" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="offer_to_pay">💰 Offered to pay immediately</SelectItem>
-                                    <SelectItem value="asked_to_buy">🛍️ Asked when it will be ready to buy</SelectItem>
-                                    <SelectItem value="introduced">🤝 Introduced me to another prospect</SelectItem>
-                                    <SelectItem value="none">😶 No explicit buying signal</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
+                    {/* SEPARATE ROW: BUYING / DEMAND SIGNAL */}
+                    <div className="space-y-1">
+                        <Label className="text-xs font-semibold">Buying / Demand Signal *</Label>
+                        <Select
+                            value={watch('buying_signal')}
+                            onValueChange={(val) => setValue('buying_signal', (val ?? 'none') as any)}
+                        >
+                            <SelectTrigger className="text-xs h-9 bg-background w-full">
+                                <SelectValue placeholder="Select signal" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="offer_to_pay">💰 Offered to pay immediately</SelectItem>
+                                <SelectItem value="asked_to_buy">🛍️ Asked when it will be ready to buy</SelectItem>
+                                <SelectItem value="introduced">🤝 Introduced me to another prospect</SelectItem>
+                                <SelectItem value="none">😶 No explicit buying signal</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div className="space-y-1">
