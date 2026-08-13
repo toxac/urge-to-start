@@ -56,7 +56,7 @@ export default function ProgramDashboardPage() {
             Start
           </span>
           <h1 className="text-2xl md:text-3xl font-heading font-bold tracking-tight text-foreground">
-            Your Missions
+            Urge Program
           </h1>
           <p className="text-xs text-muted-foreground font-medium max-w-md leading-relaxed">
             No spreadsheets, no hype. Focus entirely on the immediate task in front of you.
