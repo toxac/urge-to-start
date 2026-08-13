@@ -61,7 +61,7 @@ export function SignupCard() {
 
     // ⚡ Redirect straight to onboarding since email confirmation is disabled
     if (result?.userId) {
-      router.push(`/onboarding`);
+      router.push(`/setup`);
       router.refresh();
       return;
     }
