@@ -34,6 +34,8 @@ import { ViabilityDecisionGateForm } from './mission3/ViabilityDecisionGateForm'
 
 // mission 4 components
 import { ValuePropositionForm } from './mission4/ValuePropositionForm';
+import { FeatureBrainstormForm } from './mission4/FeatureBrainstormForm';
+import { FeaturePrioritizationForm } from './mission4/FeaturePrioritizationForm';
 
 
 
@@ -68,7 +70,10 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   WorstCaseForm: WorstCaseForm,
   ViabilityDecisionGateForm: ViabilityDecisionGateForm,
   //mission 4
-  ValuePropositionForm: ValuePropositionForm
+  ValuePropositionForm: ValuePropositionForm,
+  FeatureBrainstormForm: FeatureBrainstormForm,
+  FeaturePrioritizationForm: FeaturePrioritizationForm,
+  
 
 
 
