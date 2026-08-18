@@ -152,9 +152,43 @@ const mission4: MissionSchema = {
 
                 // Task 1.3: Feature Prioritization
                 {
+                    id: "mission4_quest1_task4",
+                    title: "The Customer Journey",
+                    sequence: 3,
+                    execution_type: "standard-form",
+                    estimated_minutes: 20,
+                    briefing_text: "Map out what happens step-by-step from the moment a customer finds you, to when they pay, to how they get what they bought, and how you stay in touch. This prepares you directly for understanding your costs next.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest1",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/mapping-the-customer-experience",
+                            title: "Mapping the Customer Experience"
+                        }
+                    ],
+                    component_key: "CustomerJourneyForm",
+                    reflection_prompt: "Put yourself in your customer's shoes. At which step in the journey might they feel confused or stuck?",
+                    observation_context: null,
+                    grant_points: 20,
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission4_quest1_task3"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+                // Task 1.4: Customer Experience Journey
+                {
                     id: "mission4_quest1_task3",
                     title: "Pick What Matters Most",
-                    sequence: 3,
+                    sequence: 4,
                     execution_type: "standard-form",
                     estimated_minutes: 20,
                     briefing_text: "Now let's sort through your list. Separate what is absolutely essential for Day 1 from what is just nice to have later. Leaving things out for now is how you get to launch quickly.",
@@ -184,41 +218,7 @@ const mission4: MissionSchema = {
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 },
-
-                // Task 1.4: Customer Experience Journey
-                {
-                    id: "mission4_quest1_task4",
-                    title: "The Customer Journey",
-                    sequence: 4,
-                    execution_type: "standard-form",
-                    estimated_minutes: 20,
-                    briefing_text: "Map out what happens step-by-step from the moment a customer finds you, to when they pay, to how they get what they bought, and how you stay in touch. This prepares you directly for understanding your costs next.",
-                    mission_id: "mission-4",
-                    quest_id: "mission4_quest1",
-                    execution_environment: null,
-                    checkback_delay_days: null,
-                    recurring: false,
-                    interval: null,
-                    resources: [
-                        {
-                            type: "guide",
-                            isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/guides/mapping-the-customer-experience",
-                            title: "Mapping the Customer Experience"
-                        }
-                    ],
-                    component_key: "CustomerJourneyForm",
-                    reflection_prompt: "Put yourself in your customer's shoes. At which step in the journey might they feel confused or stuck?",
-                    observation_context: null,
-                    grant_points: 20,
-                    challenges: null,
-                    ai_config: null,
-                    dependencies: ["mission4_quest1_task3"],
-                    target_count: null,
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString()
-                }
+                
             ]
         },
 
