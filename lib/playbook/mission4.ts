@@ -38,43 +38,43 @@ const mission4: MissionSchema = {
             badge_config: {
                 key: "badge_quest_4_1",
                 title: "Offer Architect",
-                description: "Completed Quest 1: Defined your promise, focused feature sets, and mapped the customer experience.",
+                description: "Completed Quest 1: Defined your promise, focused what you're building, and mapped how customers experience your product.",
                 unlocked_identity: "Value Creator",
                 icon_key: "Gift"
             },
             notes: [
                 {
-                    title: "Your offer is your promise",
+                    title: "Your offer is your main promise",
                     type: "guide",
-                    content: "Your offer isn't just a list of features. It's a promise to solve a problem. Get the promise right, and the features follow.",
+                    content: "Your offer isn't just a list of things you built. It's a simple promise to fix a specific problem. Get the promise clear first, and everything else falls into place naturally.",
                     related_url: null
                 },
                 {
-                    title: "Start with the customer",
+                    title: "Focus on what they get, not what you built",
                     type: "nudge",
-                    content: "What does your customer actually want? Not what you want to build. What they want to buy.",
+                    content: "What does your customer actually care about? They don't care about your behind-the-scenes effort—they care about how their life gets easier or better.",
                     related_url: null
                 },
                 {
-                    title: "Resist the temptation to add more",
+                    title: "Keep it simple",
                     type: "warning",
-                    content: "A clear offer beats a complicated one every time. The best offers are simple.",
+                    content: "It's tempting to add a million things to make your product feel valuable. But a simple offer that works beats a complicated one every single time.",
                     related_url: null
                 }
             ],
-            success_message: "You've completed Quest 1: Shape Your Offer. You have a clear value proposition, a focused feature set, and a mapped customer experience. You know what you're selling.",
+            success_message: "You've completed Quest 1: Shape Your Offer! You have a crystal-clear promise, a focused list of what you're building, and a step-by-step map of how your customer will experience it.",
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
 
             tasks: [
-                // Task 1.1: Value Proposition
+                // Task 1.1: Your Promise
                 {
                     id: "mission4_quest1_task1",
                     title: "Your Promise",
                     sequence: 1,
                     execution_type: "standard-form",
                     estimated_minutes: 20,
-                    briefing_text: "What's the core promise you're making to your customer? What's the one thing they get that they can't get elsewhere? Your value proposition is the heartbeat of your offer.",
+                    briefing_text: "What is the main promise you're making to your customer? What's the dream result they get when they buy from you? Let's break down who this is for, what's bothering them, and how you fix it.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest1",
                     execution_environment: null,
@@ -86,26 +86,26 @@ const mission4: MissionSchema = {
                             type: "guide",
                             isInternal: true,
                             isRequired: false,
-                            url_link: "/resources/guides/how-to-write-a-value-proposition",
-                            title: "How to Write a Value Proposition"
+                            url_link: "/resources/guides/how-to-write-a-clear-promise",
+                            title: "How to Write a Clear Promise"
                         },
                         {
                             type: "insights",
                             isInternal: true,
                             isRequired: false,
-                            url_link: "/resources/insights/the-value-proposition-is-not-the-features",
-                            title: "The Value Proposition Is Not the Features"
+                            url_link: "/resources/insights/focus-on-outcomes-not-stuff",
+                            title: "Focus on Outcomes, Not Stuff"
                         }
                     ],
                     component_key: "ValuePropositionForm",
-                    reflection_prompt: "If your customer could only remember one thing about your offer, what should it be? That's your value proposition.",
+                    reflection_prompt: "If your customer could only remember one single sentence about what you do, what would you want that to be?",
                     observation_context: null,
                     grant_points: 20,
                     challenges: [
                         {
-                            title: "The 2-Minute Test",
-                            description: "Can you explain your offer in 2 minutes to a stranger? Practice until they say 'I get it.'",
-                            link: "/resources/challenges/the-2-minute-test"
+                            title: "The Simple Pitch Test",
+                            description: "Can you explain your promise in two simple sentences to a friend? Try it until they immediately say 'Ah, that makes total sense!'",
+                            link: "/resources/challenges/the-simple-pitch-test"
                         }
                     ],
                     ai_config: null,
@@ -115,14 +115,14 @@ const mission4: MissionSchema = {
                     updated_at: new Date().toISOString()
                 },
 
-                // Task 1.2: Feature Set
+                // Task 1.2: Feature Brainstorm
                 {
                     id: "mission4_quest1_task2",
-                    title: "What's In, What's Out",
+                    title: "What Needs to Be Built?",
                     sequence: 2,
                     execution_type: "standard-form",
                     estimated_minutes: 20,
-                    briefing_text: "Brain dump all the features your solution could have. Don't filter, don't prioritize. Just list everything you can imagine. We'll filter in the next task.",
+                    briefing_text: "Keeping your promise in mind, list everything your product or service needs to actually deliver on that promise. Don't worry about order or cost yet—just brain dump all the requirements.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest1",
                     execution_environment: null,
@@ -134,19 +134,12 @@ const mission4: MissionSchema = {
                             type: "guide",
                             isInternal: true,
                             isRequired: false,
-                            url_link: "/resources/guides/feature-brainstorming",
-                            title: "Feature Brainstorming"
-                        },
-                        {
-                            type: "insights",
-                            isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/insights/mvp-means-elimination",
-                            title: "MVP Means Elimination"
+                            url_link: "/resources/guides/brainstorming-product-requirements",
+                            title: "Brainstorming What You Need to Build"
                         }
                     ],
                     component_key: "FeatureBrainstormForm",
-                    reflection_prompt: "Look at your list. What features are you most excited about? Which ones are you dreading? That's a signal.",
+                    reflection_prompt: "Looking at your list, which of these items are directly tied to keeping your promise, and which ones are just extra ideas?",
                     observation_context: null,
                     grant_points: 15,
                     challenges: null,
@@ -160,11 +153,11 @@ const mission4: MissionSchema = {
                 // Task 1.3: Feature Prioritization
                 {
                     id: "mission4_quest1_task3",
-                    title: "Pick Your Focus",
+                    title: "Pick What Matters Most",
                     sequence: 3,
                     execution_type: "standard-form",
                     estimated_minutes: 20,
-                    briefing_text: "Now let's be ruthless. From your brainstorm, pick 3 must-have features for your first version. Then list what you explicitly won't include. This is where the magic happens.",
+                    briefing_text: "Now let's sort through your list. Separate what is absolutely essential for Day 1 from what is just nice to have later. Leaving things out for now is how you get to launch quickly.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest1",
                     execution_environment: null,
@@ -176,19 +169,12 @@ const mission4: MissionSchema = {
                             type: "guide",
                             isInternal: true,
                             isRequired: false,
-                            url_link: "/resources/guides/prioritizing-features",
-                            title: "Prioritizing Features"
-                        },
-                        {
-                            type: "insights",
-                            isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/insights/you-are-not-your-features",
-                            title: "You Are Not Your Features"
+                            url_link: "/resources/guides/deciding-what-to-build-first",
+                            title: "Deciding What to Build First"
                         }
                     ],
                     component_key: "FeaturePrioritizationForm",
-                    reflection_prompt: "You're saying 'no' to features. How does that feel? The best founders get comfortable with saying 'no' to good ideas so they can say 'yes' to great ones.",
+                    reflection_prompt: "Saying 'not right now' to good ideas can feel scary. What's one feature you chose to leave out for launch that actually feels like a relief?",
                     observation_context: null,
                     grant_points: 20,
                     challenges: null,
@@ -199,14 +185,14 @@ const mission4: MissionSchema = {
                     updated_at: new Date().toISOString()
                 },
 
-                // Task 1.4: Customer Experience
+                // Task 1.4: Customer Experience Journey
                 {
                     id: "mission4_quest1_task4",
-                    title: "The Journey",
+                    title: "The Customer Journey",
                     sequence: 4,
                     execution_type: "standard-form",
-                    estimated_minutes: 15,
-                    briefing_text: "Map the customer experience from payment to delivery. What happens after they give you money? Walk through each step.",
+                    estimated_minutes: 20,
+                    briefing_text: "Map out what happens step-by-step from the moment a customer finds you, to when they pay, to how they get what they bought, and how you stay in touch. This prepares you directly for understanding your costs next.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest1",
                     execution_environment: null,
@@ -218,19 +204,12 @@ const mission4: MissionSchema = {
                             type: "guide",
                             isInternal: true,
                             isRequired: false,
-                            url_link: "/resources/guides/mapping-the-customer-journey",
-                            title: "Mapping the Customer Journey"
-                        },
-                        {
-                            type: "insights",
-                            isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/insights/customer-experience-is-the-product",
-                            title: "Customer Experience Is the Product"
+                            url_link: "/resources/guides/mapping-the-customer-experience",
+                            title: "Mapping the Customer Experience"
                         }
                     ],
-                    component_key: "CustomerExperienceForm",
-                    reflection_prompt: "Put yourself in your customer's shoes. What are they feeling at each step? Where does the anxiety or confusion happen?",
+                    component_key: "CustomerJourneyForm",
+                    reflection_prompt: "Put yourself in your customer's shoes. At which step in the journey might they feel confused or stuck?",
                     observation_context: null,
                     grant_points: 20,
                     challenges: null,
