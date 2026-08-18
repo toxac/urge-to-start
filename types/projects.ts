@@ -86,3 +86,38 @@ export interface ViabilityCheckPayload {
   final_decision?: 'go' | 'pivot' | 'no_go';
   decision_rationale?: string;
 }
+
+
+export interface PromisePayload {
+  target_customer: string;      // Who specifically is this for?
+  core_struggle: string;        // What pain are they suffering through?
+  promised_outcome: string;     // What dream result do they achieve?
+  mechanism_secret_sauce: string; // How do you deliver it faster/better?
+  final_value_prop: string;     // The synthesized 1-sentence promise
+}
+
+export interface FeatureRequirement {
+  id: string;
+  title: string;
+  description?: string;
+  category: 'core_product' | 'customer_ops' | 'delivery' | 'marketing_sales';
+  priority: 'must_have' | 'should_have' | 'excluded'; // MoSCoW Prioritization
+  created_at: string;
+}
+
+export interface CustomerJourneyStep {
+  step_number: number;
+  stage: 'discovery' | 'buying' | 'delivery' | 'post_sales';
+  title: string;
+  what_happens: string; // Action taking place
+  how_it_happens: string; // Tool/software/manual process
+  why_it_matters: string; // Customer motivation/psychology
+}
+
+export interface SolutionDesignPayload {
+  msp?: MSPPayload;
+  promise?: PromisePayload;
+  requirements?: FeatureRequirement[];
+  customer_journey?: CustomerJourneyStep[];
+  updated_at?: string;
+}

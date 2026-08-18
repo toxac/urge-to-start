@@ -130,10 +130,55 @@ create table user_materials (
 ## Quest 1: Shape Your Offer
 
 ### Task 1: Your Promise (Value Proposition)
-  - 
+- we will need to add value_prop or promise column to user_projects. Also i am thinking if we should have a different table to capture product details rather than have it all stores inside of user_projects table, what do you think?
+- I want to design the form ValuePropForm to let user explore what their offer is rather than ask them to just write a sentence. This is not an academic exercise. I want the promise to be the anchor of the product, communication, marketing, sales and operations. lets brainstorm how we are going to have users arrive at this.   
 
 ### Task 2: What features your product needs (Feature Brainstorm)
+- I want this to tie back to the promise and we should have promise on top and ask users the question which features would deliver on the promise. We have to make sure users think through these features/requirements from all angles as it will have implication on the costs. 
+- we don't currently have a column to capture this data. If we are creating new table then it should be under requirements json array
 
 ### Task 3: Feature Prioritization (Must-haves / Final List)
+- We will let users pick on the requirements and have qualify each in the list whether it is critical, nice to have, or not important for msp ( you can suggest categories) We can update requirement json field to reflect the status
 
 ### Task 4: Customer Journey Mapping (Step-by-step experience from payment to delivery)
+- We want to take user through process diagram from discovering the product/offer -> Buying it -> Getting delivered the product -> Leaving feedback/post-sales
+- we can save this in customer map and order the stages as sequential number. Each stages capturing what.how and why.
+
+```ts
+// current user_projects schema
+
+user_projects: {
+        Row: {
+          biz_name: string | null
+          build_data: Json | null
+          competitive_landscape: Json | null
+          compliance_checklist: Json | null
+          created_at: string | null
+          current_mission: string | null
+          discovery_metrics: Json | null
+          financial_blueprint: Json | null
+          five_word_hook: string | null
+          id: string
+          infrastructure_nodes: Json | null
+          is_active: boolean | null
+          launch_data: Json | null
+          operations_data: Json | null
+          opportunity_id: string | null
+          review_data: Json | null
+          solution_design: Json | null
+          status: string | null
+          tagline: string | null
+          updated_at: string | null
+          user_id: string
+          validation_data: Json | null
+          viability_check: Json | null
+        }
+
+```
+
+
+## Task
+- Go through the detail and tell me what u think about my suggestion
+- We will need to update mission4.ts -> quest 1
+- Examine the database and options, If we need a new table or are we going to use user_projects table
+- once we have tackled playbook, database, server actions, then we will implemente task forms one by one.
