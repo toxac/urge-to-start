@@ -36,7 +36,7 @@ import { ViabilityDecisionGateForm } from './mission3/ViabilityDecisionGateForm'
 import { ValuePropositionForm } from './mission4/ValuePropositionForm';
 import { FeatureBrainstormForm } from './mission4/FeatureBrainstormForm';
 import { FeaturePrioritizationForm } from './mission4/FeaturePrioritizationForm';
-
+import { CustomerJourneyForm } from './mission4/CustomerJourneyForm';
 
 
 export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskComponentProps>> = {
@@ -73,7 +73,8 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   ValuePropositionForm: ValuePropositionForm,
   FeatureBrainstormForm: FeatureBrainstormForm,
   FeaturePrioritizationForm: FeaturePrioritizationForm,
-  
+  CustomerJourneyForm: CustomerJourneyForm,
+
 
 
 
