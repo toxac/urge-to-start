@@ -1,70 +1,139 @@
-## Task : 
-can you simply text which i am planning to have in the header of my onboarding page to a app for first time entrepreneurs. I want it to sound brief, simple and exciting and language should be as one would speak to a friend. 
-## Issues
-- Text is too long
-- Language could be improved
-- doesn't need two paragraphs
+## Mission 4
 
-## Content to reword
-- Title: First, let's get you set up.
-- Paragraph1: We split this program into simple, step-by-step goals so you don't get overwhelmed. As you finish each step, you'll get honest feedback from our community, get to launch your progress out loud, and get direct advice from people who have actually built successful businesses before. 
-- Paragraph 2: Let's start with where you live and how much time you realistically have to spend on this right now.
+Quest 1: Shape you Offer
+- task 1: Your promise
+- task 2: What features your products would need to deliver on the promise ( a list of all features)
+- Customer Journey Mapping - User walks through entire customer journey
+- feature prioritisation and final feature List
 
-## Context
+Quest 2: The cost ( will be saved in budget table rather than user_projects)
+- I want the costs to reflect the user journey which is easier for user to visualize rather than breaking it down in financial terms. task would walk them through the steps and ask then to add the associated costs
+  - Making the product
+  - Getting the customer and sales
+  - Delivery the product
+  - Post sales
+- Once they have added these then we can analyse it financially ( fixed costs, variables costs, cogs, etc)
 
-App is call urge and its designed for first time entrepreneurs.
-### Features
-- program: core program that will guide users through their journey to build businesses. Its designed as simple approachable missions and quests. Mission sets up the broad goal while quests through embedded tasks complete singural objectives towards the goal
-    - program is action focussed
-    - built from personal experience and experience for over a decade of working with entreprenurs and businesses
-    - program is designed in a way that user build their business in real through the missions.
-- Events: Virtual and real events and regular standups to keep useers on track and motivated
-- community: a collective of mentors, experts, users, solution providers
-    - users posts, talking about their journey
-    - forum to share insights, tools, resources etc
-- Marketplace: 
-    - Internal portal where user can launch their business for getting early users inside community and get validation
-    - Listing of product and services from providers which is tailor made for people starting their business
+Quest 3: the Right price 
+- We will help user price their offering and walk them through different approaches
+- Understand revenue
+- making money analysing profitability
+
+Quest 4: Finding Your Customer 
+puttin together a simple practical go-to-market, customer acquisition plan
+
+Quest 5: Decision go-no-go
 
 
-## Mission and Vision
+## New tables for finance and budget Related 
 
-### The Urge Manifesto
+```sql
+-- Planning: one-time startup costs, recurring costs, revenue projections
+create type budget_item_kind as enum ('startup_cost', 'recurring_cost', 'revenue_projection');
+create type budget_frequency as enum ('one_time', 'weekly', 'monthly', 'yearly');
 
-**We reject the myth of the "overnight success."**
+create table user_budget_items (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references profiles(id),
+  project_id uuid references user_projects(id),
+  kind budget_item_kind not null,
+  category text not null,              -- ingredients, tools, software, license, rent, marketing...
+  title text not null,
+  estimated_amount numeric not null default 0,
+  currency text not null default 'INR',
+  frequency budget_frequency not null default 'one_time',
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
 
-We reject the idea that a business is built for an exit, not for a customer. We are turning our backs on the venture capital circus, where the product is a pitch deck and the metric is hype. We believe that business, at its core, is profoundly human.
+-- Actuals: the income/expense ledger
+create type ledger_entry_type as enum ('income', 'expense');
+create type ledger_source as enum ('manual', 'auto_from_order');
 
-**We are returning to the fundamentals.**
+create table user_ledger_entries (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references profiles(id),
+  project_id uuid references user_projects(id),
+  entry_type ledger_entry_type not null,
+  amount numeric not null,
+  currency text not null default 'INR',
+  category text,
+  description text,
+  contact_id uuid references user_contacts(id),   -- who paid / who was paid
+  order_id uuid,                                    -- fk added after user_orders exists (2.D)
+  receipt_url text,
+  source ledger_source not null default 'manual',
+  occurred_at date not null default current_date,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+```
 
-We believe a business is a simple, beautiful equation: **Solve a real problem, for a real person, and get paid for it.**
 
-We are the anti-thesis of the "solution in search of a problem." We don't fall in love with our ideas; we fall in love with the problems our customers have. We start not with a brilliant flash of inspiration, but with a quiet act of observation. We seek friction, frustration, and despair, because within them lie the seeds of the greatest opportunities.
 
-**We are builders, not visionaries.**
+## for mission 5 build dashboard
 
-We believe in the **Minimum Sellable Product (MSP)** over the Minimum Viable Product. We don't build to "validate" for investors. We build to sell. We don't test for "traction"; we test for trust. Our only true investors are our customers, and their currency is their time, their money, and their loyalty.
+```sql
+create type build_task_status as enum ('todo', 'in_progress', 'testing', 'done');
 
-**We are doers, not analysts.**
+create table user_build_tasks (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references profiles(id),
+  project_id uuid references user_projects(id),
+  title text not null,
+  description text,
+  status build_task_status not null default 'todo',
+  category text,                        -- sourcing, production, tech, legal, design...
+  is_requirement boolean not null default false,  -- "must-have to be sellable" checklist flag
+  due_date date,
+  sequence integer not null default 0,
+  source text not null default 'manual',           -- manual | ai_suggested | mission_linked
+  linked_mission_task_id uuid references tasks(id), -- if a Quest/Task spawned this
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
 
-Analysis paralysis is the silent killer of dreams. We trade endless spreadsheets for a single, focused experiment. We understand that the market is a living thing, not a theory to be proven. It speaks to those who are willing to listen—and the best way to listen is to act.
+create type resource_type as enum ('physical', 'service');
+create type resource_cost_structure as enum ('per_unit', 'recurring', 'one_time');
 
-**We believe the journey starts from within.**
+create table user_materials (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references profiles(id),
+  project_id uuid references user_projects(id),
+  name text not null,
+  category text,                         -- ingredients, packaging, tools, software, contractor, legal...
+  resource_type resource_type not null default 'physical',
+  cost_structure resource_cost_structure not null default 'per_unit',
+  frequency budget_frequency,             -- reuse enum from user_budget_items; only set when cost_structure='recurring'
+  unit text not null default 'unit',      -- kg, litre, pc, hour, month, license, call...
+  quantity_needed numeric not null default 1,
+  unit_cost numeric not null default 0,
+  supplier_contact_id uuid references user_contacts(id),
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+-- total_cost = quantity_needed * unit_cost — compute in app, or make it a generated column
 
-Before you can build a product, you must build a mindset. You need the right fuel. Money is not the fuel for a startup; it is the reward for a job well done. The true fuel is a deep, intrinsic urge: the urge to solve, to serve, and to build something of genuine value.
+-- Example rows across both business types:
+-- Flour            | physical | per_unit  | null    | 0.2kg x ₹60/kg
+-- WhatsApp API      | service  | recurring | monthly | 1 x ₹500/month
+-- FSSAI license     | service  | one_time  | null    | 1 x ₹1,200
+-- Freelance logo    | service  | one_time  | null    | 5hr x ₹300/hr
 
-**Urge is not just an app. It is a compass.**
+**Cost-per-unit calculation now handles both:**
 
-It’s for the pragmatist. The tinkerer. The person who is tired of waiting for permission and ready to just **start**. We don't offer a quick fix. We offer a clear path. We turn the overwhelming chaos of a startup into a series of simple, human-sized quests. We strip away the noise and bring you back to what matters: the customer, the problem, and the next action.
+```
 
-**This is a rebellion. Not against success, but against the hollow pursuit of it.**
+# Implementing Mission 4
+## Quest 1: Shape Your Offer
 
-We are here to make business approachable, enjoyable, pragmatic, and action-driven. We are here to help you build something that matters.
+### Task 1: Your Promise (Value Proposition)
+  - 
 
-**This is The Urge. Listen to it. Let’s build.**
+### Task 2: What features your product needs (Feature Brainstorm)
 
----
+### Task 3: Feature Prioritization (Must-haves / Final List)
 
-**How does this feel?** Does it capture the spirit and tone you want for the brand? We can adjust the language to be more or less aggressive, more or less poetic, depending on your preference.
-
-Once you are happy with this, we can move on to Task 2: The Go-To-Market Strategy.
+### Task 4: Customer Journey Mapping (Step-by-step experience from payment to delivery)
