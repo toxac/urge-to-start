@@ -2,15 +2,19 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { revalidatePath } from 'next/cache';
 import { ActionResponse } from '@/types/profiles';
-import { Database } from '@/types/supabase';
+import { Database, Json } from '@/types/supabase';
 import { 
   InterviewRecord, 
   ProblemHypothesis, 
   CustomerPersona, 
   MSPPayload, 
   CompetitiveLandscapePayload, 
-  ViabilityCheckPayload 
+  ViabilityCheckPayload,
+  PromisePayload, 
+  FeatureRequirement, 
+  CustomerJourneyStep
 } from '@/types/projects';
 
 type UserProjectRow = Database['public']['Tables']['user_projects']['Row'];
@@ -445,5 +449,171 @@ export async function syncComplianceToUserActionsAction(
     return { success: true, data: { created_count: actionRows.length } };
   } catch (err: any) {
     return { success: false, error: err.message || 'Failed to sync compliance items to actions' };
+  }
+}
+
+/**
+ * 1. Save Promise / Value Proposition (Task 1.1)
+ */
+export async function updateProjectPromiseAction(
+  projectId: string,
+  promiseData: PromisePayload
+) {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) {
+      return { success: false, error: 'Authentication required' };
+    }
+
+    // Fetch existing solution_design payload
+    const { data: project, error: fetchErr } = await supabase
+      .from('user_projects')
+      .select('solution_design')
+      .eq('id', projectId)
+      .eq('user_id', user.id)
+      .single();
+
+    if (fetchErr || !project) {
+      return { success: false, error: 'Project not found' };
+    }
+
+    const currentSolutionDesign = (project.solution_design as Record<string, any>) || {};
+
+    // ⚡ Cast payload to `unknown as Json` to satisfy Supabase JSONB index signature
+    const updatedSolutionDesign = {
+      ...currentSolutionDesign,
+      promise: promiseData,
+      updated_at: new Date().toISOString()
+    } as unknown as Json;
+
+    const { error: updateErr } = await supabase
+      .from('user_projects')
+      .update({
+        solution_design: updatedSolutionDesign,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', projectId)
+      .eq('user_id', user.id);
+
+    if (updateErr) {
+      return { success: false, error: updateErr.message };
+    }
+
+    revalidatePath('/platform/program');
+    return { success: true, data: promiseData };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to save promise' };
+  }
+}
+
+/**
+ * 2. Save Feature Requirements List / Prioritization (Tasks 1.2 & 1.3)
+ */
+export async function updateProjectRequirementsAction(
+  projectId: string,
+  requirements: FeatureRequirement[]
+) {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) {
+      return { success: false, error: 'Authentication required' };
+    }
+
+    const { data: project, error: fetchErr } = await supabase
+      .from('user_projects')
+      .select('solution_design')
+      .eq('id', projectId)
+      .eq('user_id', user.id)
+      .single();
+
+    if (fetchErr || !project) {
+      return { success: false, error: 'Project not found' };
+    }
+
+    const currentSolutionDesign = (project.solution_design as Record<string, any>) || {};
+
+    // ⚡ Cast payload to `unknown as Json`
+    const updatedSolutionDesign = {
+      ...currentSolutionDesign,
+      requirements,
+      updated_at: new Date().toISOString()
+    } as unknown as Json;
+
+    const { error: updateErr } = await supabase
+      .from('user_projects')
+      .update({
+        solution_design: updatedSolutionDesign,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', projectId)
+      .eq('user_id', user.id);
+
+    if (updateErr) {
+      return { success: false, error: updateErr.message };
+    }
+
+    revalidatePath('/platform/program');
+    return { success: true, data: requirements };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to save requirements' };
+  }
+}
+
+/**
+ * 3. Save Customer Journey Mapping (Task 1.4)
+ */
+export async function updateCustomerJourneyAction(
+  projectId: string,
+  customerJourney: CustomerJourneyStep[]
+) {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) {
+      return { success: false, error: 'Authentication required' };
+    }
+
+    const { data: project, error: fetchErr } = await supabase
+      .from('user_projects')
+      .select('solution_design')
+      .eq('id', projectId)
+      .eq('user_id', user.id)
+      .single();
+
+    if (fetchErr || !project) {
+      return { success: false, error: 'Project not found' };
+    }
+
+    const currentSolutionDesign = (project.solution_design as Record<string, any>) || {};
+
+    // ⚡ Cast payload to `unknown as Json`
+    const updatedSolutionDesign = {
+      ...currentSolutionDesign,
+      customer_journey: customerJourney,
+      updated_at: new Date().toISOString()
+    } as unknown as Json;
+
+    const { error: updateErr } = await supabase
+      .from('user_projects')
+      .update({
+        solution_design: updatedSolutionDesign,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', projectId)
+      .eq('user_id', user.id);
+
+    if (updateErr) {
+      return { success: false, error: updateErr.message };
+    }
+
+    revalidatePath('/platform/program');
+    return { success: true, data: customerJourney };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to save customer journey' };
   }
 }
