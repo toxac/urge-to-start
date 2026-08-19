@@ -684,3 +684,65 @@ export async function updateProjectPricingAction(
     return { success: false, error: err.message || 'Failed to save pricing decisions' };
   }
 }
+
+/**
+ * Save operational design (channels, partners, operational risks) to user_projects.solution_design
+ */
+export async function updateProjectOperationsAction(
+  projectId: string,
+  operationsPayload: {
+    sales_channels?: string[];
+    fulfillment_type?: string;
+    key_partners?: Array<{ name: string; role: string; contact_info?: string }>;
+    operational_risks?: Array<{ risk_title: string; mitigation_plan: string }>;
+  }
+) {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) {
+      return { success: false, error: 'Authentication required' };
+    }
+
+    const { data: project, error: fetchErr } = await supabase
+      .from('user_projects')
+      .select('solution_design')
+      .eq('id', projectId)
+      .eq('user_id', user.id)
+      .single();
+
+    if (fetchErr || !project) {
+      return { success: false, error: 'Project not found' };
+    }
+
+    const currentSolutionDesign = (project.solution_design as Record<string, any>) || {};
+
+    const updatedSolutionDesign = {
+      ...currentSolutionDesign,
+      operations: {
+        ...(currentSolutionDesign.operations || {}),
+        ...operationsPayload,
+        updated_at: new Date().toISOString()
+      }
+    } as unknown as Json;
+
+    const { error: updateErr } = await supabase
+      .from('user_projects')
+      .update({
+        solution_design: updatedSolutionDesign,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', projectId)
+      .eq('user_id', user.id);
+
+    if (updateErr) {
+      return { success: false, error: updateErr.message };
+    }
+
+    revalidatePath('/program');
+    return { success: true, data: operationsPayload };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to save operational decisions' };
+  }
+}
