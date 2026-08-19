@@ -218,7 +218,7 @@ const mission4: MissionSchema = {
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 },
-                
+
             ]
         },
 
@@ -228,54 +228,54 @@ const mission4: MissionSchema = {
         {
             id: "mission4_quest2",
             mission_id: "mission-4",
-            title: "Price It Right",
+            title: "The Costs",
             content_path: "content/missions/mission4/quests/q2.md",
             video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
             sequence: 2,
-            estimated_in_app_minutes: 30,
-            estimated_off_app_minutes: 20,
+            estimated_in_app_minutes: 45,
+            estimated_off_app_minutes: 30,
             content: null,
             context: ["user_profile", "user_projects"],
             badge_config: {
                 key: "badge_quest_4_2",
-                title: "Value Pricer",
-                description: "Completed Quest 2: Named your price confidently based on value perception, not fear.",
-                unlocked_identity: "Monetization Strategist",
-                icon_key: "DollarSign"
+                title: "Cost Analyst",
+                description: "Completed Quest 2: Mapped out unit costs, operational overhead, acquisition budgets, and financial risk.",
+                unlocked_identity: "Cost Realist",
+                icon_key: "Calculator"
             },
             notes: [
                 {
-                    title: "Price is a statement",
+                    title: "Know your true cost per order",
                     type: "guide",
-                    content: "Your price says something about your product. Too cheap and it feels low-quality. Too expensive and it feels out of reach.",
+                    content: "Many first-time founders forget packaging, payment fees, or shipping costs. Make sure every single rupee that leaves your pocket per order is accounted for.",
                     related_url: null
                 },
                 {
-                    title: "Value first, cost second",
-                    type: "guide",
-                    content: "The right price is what your customer would willingly pay for the value they receive. Not what you need to survive.",
-                    related_url: null
-                },
-                {
-                    title: "Don't underprice",
+                    title: "Overhead can sneak up on you",
                     type: "nudge",
-                    content: "First-time founders almost always underprice. You can always go down. Going up is much harder.",
+                    content: "Small monthly software subscriptions and legal fees add up fast. Knowing your monthly baseline helps you understand how many sales you need just to keep the lights on.",
+                    related_url: null
+                },
+                {
+                    title: "Customer acquisition is not free",
+                    type: "warning",
+                    content: "Even if you don't run paid ads, your time, samples, and outreach materials cost money. Plan for it up front so you aren't surprised later.",
                     related_url: null
                 }
             ],
-            success_message: "You've completed Quest 2: Price It Right. You have a confident price based on value, not fear.",
+            success_message: "You've completed Quest 2: The Costs! You now know exactly what it costs to make one item, run your operations monthly, and win new customers. You have a realistic view of your financial foundation.",
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
 
             tasks: [
-                // Task 2.1: Set the Price
+                // Task 2.1: Unit Costs
                 {
                     id: "mission4_quest2_task1",
-                    title: "Name Your Number",
+                    title: "Cost to Make & Deliver One Unit",
                     sequence: 1,
                     execution_type: "standard-form",
-                    estimated_minutes: 20,
-                    briefing_text: "Let's set your price. Start with what the problem costs your customer, then what they pay for alternatives, then name your number.",
+                    estimated_minutes: 15,
+                    briefing_text: "Let's figure out what it costs out-of-pocket every time someone buys from you. List your raw materials, packaging, delivery charges, and payment processing fees.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest2",
                     execution_environment: null,
@@ -287,26 +287,26 @@ const mission4: MissionSchema = {
                             type: "guide",
                             isInternal: true,
                             isRequired: false,
-                            url_link: "/resources/guides/how-to-price-your-offer",
-                            title: "How to Price Your Offer"
+                            url_link: "/resources/guides/finding-your-unit-cost",
+                            title: "How to Calculate Your Cost Per Unit"
                         },
                         {
                             type: "insights",
                             isInternal: true,
                             isRequired: false,
-                            url_link: "/resources/insights/price-is-value-perceived",
-                            title: "Price Is Value Perceived"
+                            url_link: "/resources/insights/the-hidden-costs-of-delivery-and-packaging",
+                            title: "Don't Forget Packaging and Payment Fees"
                         }
                     ],
-                    component_key: "PriceSettingForm",
-                    reflection_prompt: "If you were your customer, would you pay this price? Why or why not?",
+                    component_key: "UnitCostForm",
+                    reflection_prompt: "Looking at your cost to make one item, what was higher or lower than you expected?",
                     observation_context: null,
-                    grant_points: 25,
+                    grant_points: 20,
                     challenges: [
                         {
-                            title: "The $1,000 Test",
-                            description: "If your customer had $1,000 to spend on solving this problem, what would they spend it on? Are you in the top 3 choices?",
-                            link: "/resources/challenges/the-1000-test"
+                            title: "The Packaging Reality Check",
+                            description: "Buy or estimate a single complete shipping box/envelope with tape, label, and filler. Did you account for every small piece?",
+                            link: "/resources/challenges/packaging-reality-check"
                         }
                     ],
                     ai_config: null,
@@ -316,14 +316,14 @@ const mission4: MissionSchema = {
                     updated_at: new Date().toISOString()
                 },
 
-                // Task 2.2: Price Assessment
+                // Task 2.2: Setup & Monthly Overhead
                 {
                     id: "mission4_quest2_task2",
-                    title: "Test Your Price",
+                    title: "Setup & Monthly Overhead",
                     sequence: 2,
                     execution_type: "standard-form",
                     estimated_minutes: 15,
-                    briefing_text: "Now let's stress-test your price. Would customers pay double? Is it fair? Does it feel trustworthy?",
+                    briefing_text: "Now let's map out the one-time costs to start (like permits or equipment) and the regular monthly bills required to keep the business open (like software, rent, or accounting fees).",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest2",
                     execution_environment: null,
@@ -332,20 +332,96 @@ const mission4: MissionSchema = {
                     interval: null,
                     resources: [
                         {
-                            type: "insights",
+                            type: "guide",
                             isInternal: true,
                             isRequired: false,
-                            url_link: "/resources/insights/price-assessment",
-                            title: "Price Assessment"
+                            url_link: "/resources/guides/startup-costs-vs-monthly-bills",
+                            title: "One-Time Setup Costs vs. Monthly Bills"
                         }
                     ],
-                    component_key: "PriceAssessmentForm",
-                    reflection_prompt: "If your price feels 'too cheap,' you might be sending the wrong signal. What would make it feel premium?",
+                    component_key: "OtherCostsForm",
+                    reflection_prompt: "Which of your monthly bills are absolute must-haves, and which ones could you start without?",
+                    observation_context: null,
+                    grant_points: 20,
+                    challenges: null,
+                    ai_config: null,
+                    dependencies: ["mission4_quest2_task1"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 2.3: Finding & Winning Customers
+                {
+                    id: "mission4_quest2_task3",
+                    title: "Finding & Winning Customers",
+                    sequence: 3,
+                    execution_type: "standard-form",
+                    estimated_minutes: 15,
+                    briefing_text: "Getting customers takes budget and effort. Using the target customer persona from Mission 2, map out what you will spend on ads, printed flyers, sample giveaways, or marketing tools.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest2",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/budgeting-for-first-customers",
+                            title: "Budgeting to Get Your First 10 Customers"
+                        }
+                    ],
+                    component_key: "CustomerAcquisitionCostForm",
+                    reflection_prompt: "If your main marketing idea doesn't work, what is your secondary, low-cost backup plan to get buyers?",
+                    observation_context: null,
+                    grant_points: 20,
+                    challenges: [
+                        {
+                            title: "The 10-Sample Test",
+                            description: "If giving out free samples or running local promo, calculate the exact total cost of getting 10 samples into real target hands.",
+                            link: "/resources/challenges/the-10-sample-test"
+                        }
+                    ],
+                    ai_config: null,
+                    dependencies: ["mission4_quest2_task2"],
+                    target_count: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                },
+
+                // Task 2.4: Cost Analysis & Risk Review
+                {
+                    id: "mission4_quest2_task4",
+                    title: "Cost Analysis & Risk Review",
+                    sequence: 4,
+                    execution_type: "standard-form",
+                    estimated_minutes: 15,
+                    briefing_text: "Let's review the big picture. We'll summarize your total setup capital, monthly bills, and unit costs to highlight financial risks and opportunities like bulk savings.",
+                    mission_id: "mission-4",
+                    quest_id: "mission4_quest2",
+                    execution_environment: null,
+                    checkback_delay_days: null,
+                    recurring: false,
+                    interval: null,
+                    resources: [
+                        {
+                            type: "guide",
+                            isInternal: true,
+                            isRequired: false,
+                            url_link: "/resources/guides/spotting-financial-risks-early",
+                            title: "Spotting Financial Risks Before Launching"
+                        }
+                    ],
+                    component_key: "CostAnalysisForm",
+                    reflection_prompt: "How can you reduce your unit costs as your order volume grows over time?",
                     observation_context: null,
                     grant_points: 25,
                     challenges: null,
                     ai_config: null,
-                    dependencies: ["mission4_quest2_task1"],
+                    dependencies: ["mission4_quest2_task3"],
                     target_count: null,
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()

@@ -127,54 +127,84 @@ create table user_materials (
 ```
 
 # Implementing Mission 4
-## Quest 1: Shape Your Offer
+## Quest 2: The Cost
 
-### Task 1: Your Promise (Value Proposition)
-- we will need to add value_prop or promise column to user_projects. Also i am thinking if we should have a different table to capture product details rather than have it all stores inside of user_projects table, what do you think?
-- I want to design the form ValuePropForm to let user explore what their offer is rather than ask them to just write a sentence. This is not an academic exercise. I want the promise to be the anchor of the product, communication, marketing, sales and operations. lets brainstorm how we are going to have users arrive at this.   
+### Feedback on your suggestion:
+- I dont want to start with fixed costs becaue user so far has thought of customer and solution so i think to orient them it will be better to have following order
 
-### Task 2: What features your product needs (Feature Brainstorm)
-- I want this to tie back to the promise and we should have promise on top and ask users the question which features would deliver on the promise. We have to make sure users think through these features/requirements from all angles as it will have implication on the costs. 
-- we don't currently have a column to capture this data. If we are creating new table then it should be under requirements json array
+- Task 1: Build the product/service
+  - each thing they add we can ask them to categorize if its raw material for product or not
+  - if its not then we can asked how frequently do they need it, it is equipment one time or subscription etc
+  - we should check with Ai if they have covered everything they would need and show them list of things they missed out on when the try saving the list
+- Task 2: how much they need to acquire customer: we will have to hand hold them a lot or maybe merge finding customers and customer acquisition cost in one, we can bring up the persona they added in previous mission
+- Task 3: Everything they would need to spend on delivery logitics, wastages, returns etc
+- Task 4: Other costs legal, permissions, comissions etc
 
-### Task 3: Feature Prioritization (Must-haves / Final List)
-- We will let users pick on the requirements and have qualify each in the list whether it is critical, nice to have, or not important for msp ( you can suggest categories) We can update requirement json field to reflect the status
 
-### Task 4: Customer Journey Mapping (Step-by-step experience from payment to delivery)
-- We want to take user through process diagram from discovering the product/offer -> Buying it -> Getting delivered the product -> Leaving feedback/post-sales
-- we can save this in customer map and order the stages as sequential number. Each stages capturing what.how and why.
+Task 1: One-Time Setup Costs (The Starting Line)
+Before a customer ever enters the journey, what one-time assets or approvals are required to open doors?
 
-```ts
-// current user_projects schema
+Guided Prompts:
 
-user_projects: {
-        Row: {
-          biz_name: string | null
-          build_data: Json | null
-          competitive_landscape: Json | null
-          compliance_checklist: Json | null
-          created_at: string | null
-          current_mission: string | null
-          discovery_metrics: Json | null
-          financial_blueprint: Json | null
-          five_word_hook: string | null
-          id: string
-          infrastructure_nodes: Json | null
-          is_active: boolean | null
-          launch_data: Json | null
-          operations_data: Json | null
-          opportunity_id: string | null
-          review_data: Json | null
-          solution_design: Json | null
-          status: string | null
-          tagline: string | null
-          updated_at: string | null
-          user_id: string
-          validation_data: Json | null
-          viability_check: Json | null
-        }
+Physical assets or tools (e.g., machinery, initial sample inventory, laptop, domain name).
 
-```
+Legal, regulatory, or branding costs (e.g., FSSAI license, GST registration, trademark, logo design).
+
+User Input Experience:
+
+Quick-add item list where users name the expense, input the cost, and choose a category (e.g., Legal/Compliance, Setup Assets, Brand/Design).
+
+Data Classification (Under the Hood):
+
+Auto-classified as kind: 'startup_cost' and frequency: 'one_time'.
+
+Task 2: Journey-Based Operating Costs (Walking the Customer Map)
+This is where the magic happens. The user sees their 4 Customer Journey Stages side-by-side or step-by-step:
+
+Stage 1: Discovery & Marketing
+
+Question: "What will it cost to get noticed?"
+
+Examples: Ad spend, domain hosting, print flyers, social media tools.
+
+Stage 2: Buying & Sales
+
+Question: "What does it cost when someone pays you?"
+
+Examples: Payment gateway fees (% or flat rate per transaction), domain SSL, invoicing software.
+
+Stage 3: Making & Delivery
+
+Question: "What does it cost to produce and deliver ONE item/service?"
+
+Examples: Raw materials, packaging boxes, courier/shipping fees, cloud server usage per user.
+
+Stage 4: Post-Sales & Operations
+
+Question: "What ongoing tools or support keep the business running monthly?"
+
+Examples: Customer support software, workspace rent, monthly software subscriptions (SaaS).
+
+Task 3: Cost Analysis & Unit Economics Preview (Making Sense of the Numbers)
+Once the user enters their expenses, the app processes the raw inputs and presents a clear summary without technical jargon:
+
+Startup Budget Total: Total amount needed before launch.
+
+Monthly Overhead (Fixed Costs): What it costs to keep the lights on every month, regardless of sales volume.
+
+Cost Per Sale (Variable Cost / COGS): Exactly how much money leaves the pocket to fulfill a single order.
+
+# Quest 3: The Right Price
+
+Uses the total cost structure derived from Quest 2 to calculate profit margins, explore pricing strategies, and evaluate unit economics.
+
+# Quest 4: Finding Your Customer
+
+Practical Go-To-Market and acquisition channels.
+
+# Quest 5: Decision Gate (Go / No-Go)
+
+Evaluates overall viability before transitioning into Mission 5 (Build).
 
 
 ## Task
