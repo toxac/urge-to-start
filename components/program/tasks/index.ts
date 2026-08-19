@@ -38,6 +38,7 @@ import { FeatureBrainstormForm } from './mission4/FeatureBrainstormForm';
 import { FeaturePrioritizationForm } from './mission4/FeaturePrioritizationForm';
 import { CustomerJourneyForm } from './mission4/CustomerJourneyForm';
 import { UnitCostForm } from './mission4/UnitCostForm';
+import { OtherCostsForm } from './mission4/OtherCostsForm';
 
 
 export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskComponentProps>> = {
@@ -76,6 +77,7 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   FeaturePrioritizationForm: FeaturePrioritizationForm,
   CustomerJourneyForm: CustomerJourneyForm,
   UnitCostForm: UnitCostForm,
+  OtherCostsForm: OtherCostsForm,
 
 
 
