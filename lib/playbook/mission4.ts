@@ -430,59 +430,53 @@ const mission4: MissionSchema = {
         },
 
         // ============================================
-        // QUEST 3: Find Your Customers
+        // QUEST 3: Price It Right
         // ============================================
         {
             id: "mission4_quest3",
             mission_id: "mission-4",
-            title: "Find Your Customers",
+            title: "Price It Right",
+            sequence: 3,
+            estimated_in_app_minutes: 35,
+            estimated_off_app_minutes: 20,
             content_path: "content/missions/mission4/quests/q3.md",
             video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
-            sequence: 3,
-            estimated_in_app_minutes: 45,
-            estimated_off_app_minutes: 60,
             content: null,
             context: ["user_profile", "user_projects"],
             badge_config: {
                 key: "badge_quest_4_3",
-                title: "Acquisition Planner",
-                description: "Completed Quest 3: Selected a focused acquisition channel, crafted compelling messaging, and built an acquisition plan.",
-                unlocked_identity: "Growth Initiator",
-                icon_key: "Target"
+                title: "Pricing Strategist",
+                description: "Completed Quest 3: Simulated pricing models, analyzed profit margins, and set a break-even launch target.",
+                unlocked_identity: "Value Pricer",
+                icon_key: "Tag"
             },
             notes: [
                 {
-                    title: "Focus is everything",
+                    title: "Don't underprice out of fear",
                     type: "guide",
-                    content: "First-time founders die by trying five channels at once. Pick ONE channel and master it.",
+                    content: "First-time founders often charge too little because they fear rejection. Underpricing makes it almost impossible to cover customer acquisition costs.",
                     related_url: null
                 },
                 {
-                    title: "Your first 10 customers",
-                    type: "guide",
-                    content: "If you can't name where you'll find your first 10 customers, you don't have a channel.",
-                    related_url: null
-                },
-                {
-                    title: "Start small",
+                    title: "Value > Cost",
                     type: "nudge",
-                    content: "You don't need a website. You need one customer. Start there.",
+                    content: "Customers don't buy based on what it costs you to make an item. They buy based on how much value or time saving it brings to them.",
                     related_url: null
                 }
             ],
-            success_message: "You've completed Quest 3: Find Your Customers. You have a focused channel, a clear message, and a realistic acquisition plan.",
+            success_message: "You've completed Quest 3: Price It Right! You now have a clear launch price, healthy profit margins, and a precise break-even target.",
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
 
             tasks: [
-                // Task 3.1: Choose Your Channel
+                // Task 3.1: Explore Pricing Strategies
                 {
                     id: "mission4_quest3_task1",
-                    title: "Pick Your Channel",
+                    title: "Explore Pricing Strategies",
                     sequence: 1,
                     execution_type: "standard-form",
-                    estimated_minutes: 20,
-                    briefing_text: "Where do your first 10 customers come from? Be specific. If you can't name the place, you don't have a channel.",
+                    estimated_minutes: 10,
+                    briefing_text: "Let's review your early value estimates from Mission 1 and select the pricing approach that best fits your product positioning.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest3",
                     execution_environment: null,
@@ -493,44 +487,31 @@ const mission4: MissionSchema = {
                         {
                             type: "guide",
                             isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/guides/choosing-your-first-channel",
-                            title: "Choosing Your First Channel"
-                        },
-                        {
-                            type: "insights",
-                            isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/insights/one-channel-first",
-                            title: "One Channel First"
+                            isRequired: true,
+                            url_link: "/resources/guides/the-3-pricing-strategies-for-founders",
+                            title: "Required Reading: The 3 Pricing Strategies Every Founder Must Know"
                         }
                     ],
-                    component_key: "ChannelSelectionForm",
-                    reflection_prompt: "Why did you pick this channel over all others? What makes it your best first bet?",
+                    component_key: "PricingStrategyForm",
+                    reflection_prompt: "Which pricing strategy felt most natural for your product type, and why?",
                     observation_context: null,
                     grant_points: 20,
-                    challenges: [
-                        {
-                            title: "The 1-Customer Challenge",
-                            description: "Try to get just one customer this week. Not 10. Not 100. Just one.",
-                            link: "/resources/challenges/the-1-customer-challenge"
-                        }
-                    ],
+                    challenges: null,
                     ai_config: null,
-                    dependencies: ["mission4_quest2_task2"],
+                    dependencies: ["mission4_quest2_task4"],
                     target_count: null,
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 },
 
-                // Task 3.2: Craft Your Message
+                // Task 3.2: The Price Simulator
                 {
                     id: "mission4_quest3_task2",
-                    title: "Craft Your Message",
+                    title: "The Price Simulator",
                     sequence: 2,
                     execution_type: "standard-form",
                     estimated_minutes: 15,
-                    briefing_text: "What will you say? What's your exact offer or message? Why should they stop scrolling and buy today?",
+                    briefing_text: "Play around with different price points and sales volumes to watch how your profit margins and break-even sales targets react in real time.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest3",
                     execution_environment: null,
@@ -542,15 +523,21 @@ const mission4: MissionSchema = {
                             type: "guide",
                             isInternal: true,
                             isRequired: false,
-                            url_link: "/resources/guides/crafting-your-first-message",
-                            title: "Crafting Your First Message"
+                            url_link: "/resources/guides/understanding-gross-margins-and-breakeven",
+                            title: "Understanding Gross Margins and Break-Even Targets"
                         }
                     ],
-                    component_key: "MessagingForm",
-                    reflection_prompt: "Would you respond to this message? If not, rewrite it until you would.",
+                    component_key: "PriceSimulatorForm",
+                    reflection_prompt: "How did increasing or decreasing your price impact the number of sales you need each month to break even?",
                     observation_context: null,
-                    grant_points: 15,
-                    challenges: null,
+                    grant_points: 25,
+                    challenges: [
+                        {
+                            title: "The 20% Price Sensitivity Test",
+                            description: "Simulate a price 20% higher than your original guess. Notice how many fewer sales you need to cover your fixed monthly bills.",
+                            link: "/resources/challenges/price-sensitivity-test"
+                        }
+                    ],
                     ai_config: null,
                     dependencies: ["mission4_quest3_task1"],
                     target_count: null,
@@ -558,31 +545,23 @@ const mission4: MissionSchema = {
                     updated_at: new Date().toISOString()
                 },
 
-                // Task 3.3: Acquisition Assessment
+                // Task 3.3: Lock In Your Launch Price
                 {
                     id: "mission4_quest3_task3",
-                    title: "Assess Your Plan",
+                    title: "Lock In Your Launch Price",
                     sequence: 3,
                     execution_type: "standard-form",
-                    estimated_minutes: 15,
-                    briefing_text: "Now let's be realistic. How many people do you need to reach for one sale? How many hours will you spend? What do you need to start?",
+                    estimated_minutes: 10,
+                    briefing_text: "Finalize your Day 1 selling price, set your monthly unit target, and lock in your profitability roadmap.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest3",
                     execution_environment: null,
                     checkback_delay_days: null,
                     recurring: false,
                     interval: null,
-                    resources: [
-                        {
-                            type: "insights",
-                            isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/insights/acquisition-math",
-                            title: "Acquisition Math"
-                        }
-                    ],
-                    component_key: "AcquisitionAssessmentForm",
-                    reflection_prompt: "If this acquisition plan fails, what's your backup plan? Always have a Plan B.",
+                    resources: [],
+                    component_key: "PricingLockInForm",
+                    reflection_prompt: "Why is this launch price realistic for your first 10 customers?",
                     observation_context: null,
                     grant_points: 25,
                     challenges: null,
