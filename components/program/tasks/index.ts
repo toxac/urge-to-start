@@ -46,6 +46,7 @@ import { PriceSimulatorForm } from './mission4/PriceSimulatorForm';
 import { PricingLockInForm } from './mission4/PricingLockInForm';
 import { DistributionChannelsForm } from './mission4/DistributionChannelsForm';
 import { KeyPartnersForm } from './mission4/KeyPartnersForm';
+import { RiskMitigationForm } from './mission4/RiskMitigationForm';
 
 
 export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskComponentProps>> = {
@@ -92,6 +93,7 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   PricingLockInForm: PricingLockInForm,
   DistributionChannelsForm: DistributionChannelsForm,
   KeyPartnersForm: KeyPartnersForm,
+  RiskMitigationForm: RiskMitigationForm,
 
 
 
