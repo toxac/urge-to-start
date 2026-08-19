@@ -617,3 +617,70 @@ export async function updateCustomerJourneyAction(
     return { success: false, error: err.message || 'Failed to save customer journey' };
   }
 }
+
+/**
+ * Save pricing strategy and simulation targets to user_projects.solution_design
+ */
+export async function updateProjectPricingAction(
+  projectId: string,
+  pricingPayload: {
+    pricing_strategy: 'value_based' | 'cost_plus' | 'competitor_anchored';
+    perceived_value_anchor?: string;
+    target_price: number;
+    minimum_price?: number;
+    premium_price?: number;
+    expected_gross_margin_percent: number;
+    monthly_breakeven_units: number;
+    monthly_sales_target_units: number;
+    pricing_rationale: string;
+  }
+) {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) {
+      return { success: false, error: 'Authentication required' };
+    }
+
+    // Fetch existing solution_design payload
+    const { data: project, error: fetchErr } = await supabase
+      .from('user_projects')
+      .select('solution_design')
+      .eq('id', projectId)
+      .eq('user_id', user.id)
+      .single();
+
+    if (fetchErr || !project) {
+      return { success: false, error: 'Project not found' };
+    }
+
+    const currentSolutionDesign = (project.solution_design as Record<string, any>) || {};
+
+    const updatedSolutionDesign = {
+      ...currentSolutionDesign,
+      pricing: {
+        ...pricingPayload,
+        updated_at: new Date().toISOString()
+      }
+    } as unknown as Json;
+
+    const { error: updateErr } = await supabase
+      .from('user_projects')
+      .update({
+        solution_design: updatedSolutionDesign,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', projectId)
+      .eq('user_id', user.id);
+
+    if (updateErr) {
+      return { success: false, error: updateErr.message };
+    }
+
+    revalidatePath('/program');
+    return { success: true, data: pricingPayload };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to save pricing decisions' };
+  }
+}
