@@ -575,59 +575,53 @@ const mission4: MissionSchema = {
         },
 
         // ============================================
-        // QUEST 4: The Financials
+        // QUEST 4: The Execution Engine
         // ============================================
         {
             id: "mission4_quest4",
             mission_id: "mission-4",
-            title: "The Financials",
+            title: "The Execution Engine",
+            sequence: 4,
+            estimated_in_app_minutes: 35,
+            estimated_off_app_minutes: 20,
             content_path: "content/missions/mission4/quests/q4.md",
             video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
-            sequence: 4,
-            estimated_in_app_minutes: 60,
-            estimated_off_app_minutes: 90,
             content: null,
             context: ["user_profile", "user_projects"],
             badge_config: {
                 key: "badge_quest_4_4",
-                title: "Financial Master",
-                description: "Completed Quest 4: Modeled cost structures, fixed/variable costs, and unit economics profitability.",
-                unlocked_identity: "Numbers Realist",
-                icon_key: "Calculator"
+                title: "Operations Planner",
+                description: "Completed Quest 4: Defined distribution channels, identified key partners, and mapped operational risks.",
+                unlocked_identity: "Execution Architect",
+                icon_key: "Truck"
             },
             notes: [
                 {
-                    title: "Use the Excel template",
+                    title: "Don't rely on a single channel",
                     type: "guide",
-                    content: "We've provided an Excel template to help you work through the numbers. Use it alongside the app to do the detailed work.",
+                    content: "Relying on just one social platform or vendor creates a single point of failure. Always map a backup option.",
                     related_url: null
                 },
                 {
-                    title: "The math doesn't lie",
-                    type: "guide",
-                    content: "If the numbers don't work, the business doesn't work. Don't ignore the math.",
-                    related_url: null
-                },
-                {
-                    title: "Be honest with yourself",
+                    title: "Partners save you time",
                     type: "nudge",
-                    content: "First-time founders often underestimate costs and overestimate sales. Be brutal about the numbers.",
+                    content: "You don't need to own every part of the process. Great delivery, payment, or manufacturing partners accelerate launch.",
                     related_url: null
                 }
             ],
-            success_message: "You've completed Quest 4: The Financials. You understand your costs, your unit economics, and your profitability. The numbers tell a story—are you listening?",
+            success_message: "You've completed Quest 4: The Execution Engine! You now have a clear distribution model, identified key operational partners, and pre-planned risk backups.",
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
 
             tasks: [
-                // Task 4.1: Cost Structure
+                // Task 4.1: Distribution Channels
                 {
                     id: "mission4_quest4_task1",
-                    title: "What Does It Cost?",
+                    title: "Distribution Channels",
                     sequence: 1,
                     execution_type: "standard-form",
-                    estimated_minutes: 25,
-                    briefing_text: "Let's get real about costs. Don't guess—estimate as accurately as you can. We'll use these numbers to see if your business can make money.",
+                    estimated_minutes: 10,
+                    briefing_text: "Define exactly where customers will find and buy your product, and how you will deliver orders to their hands.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest4",
                     execution_environment: null,
@@ -639,12 +633,12 @@ const mission4: MissionSchema = {
                             type: "guide",
                             isInternal: true,
                             isRequired: false,
-                            url_link: "/resources/guides/understanding-business-costs",
-                            title: "Understanding Business Costs"
+                            url_link: "/resources/guides/choosing-the-right-sales-channel",
+                            title: "Choosing the Right Sales & Fulfillment Channel"
                         }
                     ],
-                    component_key: "CostStructureForm",
-                    reflection_prompt: "Look at your costs. What surprised you? What could you reduce or eliminate?",
+                    component_key: "DistributionChannelsForm",
+                    reflection_prompt: "Why is this sales channel the easiest path for your target persona to buy?",
                     observation_context: null,
                     grant_points: 20,
                     challenges: null,
@@ -655,31 +649,23 @@ const mission4: MissionSchema = {
                     updated_at: new Date().toISOString()
                 },
 
-                // Task 4.2: Cost Analysis
+                // Task 4.2: Key Partners & Vendors
                 {
                     id: "mission4_quest4_task2",
-                    title: "Understand Your Costs",
+                    title: "Key Partners & Allies",
                     sequence: 2,
                     execution_type: "standard-form",
-                    estimated_minutes: 20,
-                    briefing_text: "Now let's look at your costs differently. Fixed vs variable. What happens when you sell more?",
+                    estimated_minutes: 10,
+                    briefing_text: "Log the critical suppliers, delivery partners, software tools, and community allies needed to run smoothly.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest4",
                     execution_environment: null,
                     checkback_delay_days: null,
                     recurring: false,
                     interval: null,
-                    resources: [
-                        {
-                            type: "guide",
-                            isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/guides/fixed-vs-variable-costs",
-                            title: "Fixed vs Variable Costs"
-                        }
-                    ],
-                    component_key: "CostAnalysisForm",
-                    reflection_prompt: "If you had to cut your costs in half, how would you do it? Would the customer experience suffer?",
+                    resources: [],
+                    component_key: "KeyPartnersForm",
+                    reflection_prompt: "Which partner or supplier is most critical for your Day 1 launch?",
                     observation_context: null,
                     grant_points: 20,
                     challenges: null,
@@ -690,14 +676,14 @@ const mission4: MissionSchema = {
                     updated_at: new Date().toISOString()
                 },
 
-                // Task 4.3: Profitability Check
+                // Task 4.3: Operational Risk & Mitigation
                 {
                     id: "mission4_quest4_task3",
-                    title: "Does the Math Work?",
+                    title: "Operational Risk Review",
                     sequence: 3,
                     execution_type: "standard-form",
-                    estimated_minutes: 25,
-                    briefing_text: "The moment of truth. Does your business make money? Let's run the numbers.",
+                    estimated_minutes: 15,
+                    briefing_text: "Spot operational single points of failure—like supplier delays or permit bottlenecks—and pick your backup mitigations.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest4",
                     execution_environment: null,
@@ -709,12 +695,12 @@ const mission4: MissionSchema = {
                             type: "guide",
                             isInternal: true,
                             isRequired: false,
-                            url_link: "/resources/guides/unit-economics",
-                            title: "Unit Economics"
+                            url_link: "/resources/guides/de-risking-your-supply-chain",
+                            title: "De-Risking Early Startup Operations"
                         }
                     ],
-                    component_key: "ProfitabilityCheckForm",
-                    reflection_prompt: "If you're not making a profit, what would need to change? More sales? Higher price? Lower costs? Be specific.",
+                    component_key: "RiskMitigationForm",
+                    reflection_prompt: "What is your backup plan if your primary vendor or platform experiences delays?",
                     observation_context: null,
                     grant_points: 25,
                     challenges: null,
@@ -728,85 +714,59 @@ const mission4: MissionSchema = {
         },
 
         // ============================================
-        // QUEST 5: Go or No-Go
+        // QUEST 5: The Viability Gate (Go / Pivot Decision)
         // ============================================
         {
             id: "mission4_quest5",
             mission_id: "mission-4",
-            title: "Go or No-Go",
-            content_path: "content/missions/mission4/quests/q5.md",
-            video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
+            title: "The Viability Gate",
             sequence: 5,
             estimated_in_app_minutes: 20,
             estimated_off_app_minutes: 10,
+            content_path: "content/missions/mission4/quests/q5.md",
+            video_url: "https://evkkxeuiszjpzjpcmkwe.supabase.co/storage/v1/object/public/mission_videos/test.webm",
             content: null,
             context: ["user_profile", "user_projects"],
             badge_config: {
                 key: "badge_quest_4_5",
-                title: "Commercial Decision Maker",
-                description: "Completed Quest 5: Evaluated unit economics objectively and made a conscious commercial call.",
-                unlocked_identity: "Data-Driven Founder",
-                icon_key: "CheckSquare"
+                title: "Venture Strategist",
+                description: "Completed Mission 4: Generated complete Business Plan & Viability Scorecard, locking in the GO decision.",
+                unlocked_identity: "Validated Founder",
+                icon_key: "Flag"
             },
             notes: [
                 {
-                    title: "The numbers don't lie",
+                    title: "A pivot is not a failure",
                     type: "guide",
-                    content: "This is the moment of truth. If the numbers don't work, the business doesn't work. Be honest with yourself.",
-                    related_url: null
-                },
-                {
-                    title: "Iteration is okay",
-                    type: "guide",
-                    content: "If the numbers don't quite work, you can iterate. Change the price, change the MSP, change the channel. Just be specific about what you'll change.",
-                    related_url: null
-                },
-                {
-                    title: "No-Go is a win too",
-                    type: "nudge",
-                    content: "Saying 'no' to a bad business is a win. You've saved yourself time, money, and stress. Take what you've learned to the next opportunity.",
+                    content: "If the financial numbers look risky, adjusting your pricing or channels now saves thousands of rupees later.",
                     related_url: null
                 }
             ],
-            success_message: "You've completed Mission 4: The Business Engine. You've made a conscious decision based on real numbers. This is what building a real business looks like.",
+            success_message: "Congratulations! You've cleared the Mission 4 Viability Gate. You have a synthesized Business Plan Scorecard and are ready to build in Mission 5!",
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
 
             tasks: [
-                // Task 5.1: Make the Call
                 {
                     id: "mission4_quest5_task1",
-                    title: "Make the Call",
+                    title: "Business Plan Scorecard & Final Decision",
                     sequence: 1,
-                    execution_type: "decision_gate",
+                    execution_type: "standard-form",
                     estimated_minutes: 20,
-                    briefing_text: "You've done the work. You have the numbers. Now make a decision. No overthinking. Just pick.",
+                    briefing_text: "Review your synthesized Business Plan Scorecard summarizing your Promise, Journey, Costs, Pricing, and Channels, then make your formal GO or PIVOT commitment.",
                     mission_id: "mission-4",
                     quest_id: "mission4_quest5",
                     execution_environment: null,
                     checkback_delay_days: null,
                     recurring: false,
                     interval: null,
-                    resources: [
-                        {
-                            type: "guide",
-                            isInternal: true,
-                            isRequired: false,
-                            url_link: "/resources/guides/making-the-call",
-                            title: "Making the Call"
-                        }
-                    ],
-                    component_key: "FinalDecisionForm",
-                    reflection_prompt: "What did you learn from this financial exercise? If you're saying 'no' to this business, what did you learn that you'll take to the next one?",
+                    resources: [],
+                    component_key: "ViabilityGateForm",
+                    reflection_prompt: "Why are you confident in moving this business forward into actual execution?",
                     observation_context: null,
-                    grant_points: 25,
+                    grant_points: 30,
                     challenges: null,
-                    ai_config: {
-                        role: "Financial Decision Advisor",
-                        persona_name: "The Numbers Coach",
-                        persona_prompt: "You are a pragmatic business coach who helps founders make decisions based on numbers. You're direct, honest, and focused on what the data says. You don't sugarcoat—you tell founders what they need to hear, not what they want to hear.",
-                        required_context: ["user_profile", "financial_blueprint"]
-                    },
+                    ai_config: null,
                     dependencies: ["mission4_quest4_task3"],
                     target_count: null,
                     created_at: new Date().toISOString(),
