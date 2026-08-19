@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { ActionResponse } from '@/actions/progress';
 import { deepseek } from '@/lib/ai/deepseekClient';
 import { InterviewRecord } from '@/types/projects';
+import { CostCompletenessCheckOutput, CostAnalysisOutput } from '@/types/ai-schema';
 
 interface ChallengeOption {
   id: string;
@@ -393,5 +394,139 @@ RULES:
     return { success: true, data: parsed };
   } catch (err: any) {
     return { success: false, error: err.message || 'Failed to analyze market landscape' };
+  }
+}
+
+
+/**
+ * 1. Checks Quest 1 and Quest 2 data for obvious missing cost items
+ */
+export async function runCostCompletenessCheckAction(
+  projectData: Record<string, any>
+): Promise<ActionResponse<CostCompletenessCheckOutput>> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) return { success: false, error: 'Authentication required' };
+
+    const systemPrompt = `You are a supportive startup financial mentor checking if an early-stage founder forgot any essential costs.
+
+Review the product promise, requirements, customer journey, unit costs, overhead, and marketing budget.
+
+RULES:
+1. Speak in plain, simple English. Avoid accounting jargon (NO "OpEx", "CapEx", "COGS", "Amortization").
+2. Look for obvious missing items:
+   - Physical shipping product without packaging boxes or courier fees?
+   - Digital service without hosting or domain fees?
+   - Food/bakery item without permits or wastage buffer?
+   - Marketing channel listed without ad/material budget?
+3. Return ONLY valid JSON:
+{
+  "hasGaps": boolean,
+  "overallHealth": "string (1 encouraging sentence on their cost mapping thoroughness)",
+  "missingItems": [
+    {
+      "taskToFix": "unit_cost" | "overhead" | "acquisition",
+      "taskTitle": "string (e.g. Cost to Make & Deliver One Unit)",
+      "missingItemName": "string (e.g. Outer Packaging Boxes)",
+      "reason": "string (1 short sentence explaining why they probably need this)"
+    }
+  ]
+}`;
+
+    const response = await deepseek.chat.completions.create({
+      model: 'deepseek-chat',
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Check project for missing costs:\n${JSON.stringify(projectData, null, 2)}` }
+      ]
+    });
+
+    const parsed = JSON.parse(response.choices[0].message.content || '{}');
+    const data: CostCompletenessCheckOutput = {
+      hasGaps: parsed.hasGaps ?? false,
+      overallHealth: parsed.overallHealth || "You have mapped out your core costs clearly.",
+      missingItems: parsed.missingItems || []
+    };
+
+    return { success: true, data };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to check cost completeness' };
+  }
+}
+
+/**
+ * 2. Analyzes cost ratios, benchmarks, and generates risk checklist & upside insights
+ */
+export async function runCostAnalysisAction(
+  projectData: Record<string, any>
+): Promise<ActionResponse<CostAnalysisOutput>> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authErr } = await supabase.auth.getUser();
+
+    if (authErr || !user) return { success: false, error: 'Authentication required' };
+
+    const systemPrompt = `You are an early-stage startup mentor providing a clear financial reality check.
+
+RULES:
+1. Use warm, simple, conversational English. Zero corporate or VC jargon.
+2. Provide a benchmark comparison for an early-stage business of this type.
+3. Generate 3-4 realistic cost-related risks the founder should be aware of.
+4. Highlight 1 key opportunity for economies of scale (how costs decrease as sales grow).
+5. Return ONLY valid JSON:
+{
+  "summary": "string (2 straightforward sentences summarizing their cost foundation)",
+  "unitCostAnalysis": "string (Feedback on their per-unit cost efficiency)",
+  "overheadAnalysis": "string (Feedback on their monthly fixed running costs)",
+  "acquisitionAnalysis": "string (Feedback on their customer acquisition budget)",
+  "potentialRisks": [
+    {
+      "id": "string",
+      "title": "string (Concise risk name)",
+      "description": "string (Clear explanation of the risk)",
+      "severity": "low" | "medium" | "high"
+    }
+  ],
+  "economiesOfScaleUpside": "string (How buying/producing in bigger quantities will lower their unit cost in future)"
+}`;
+
+    const response = await deepseek.chat.completions.create({
+      model: 'deepseek-chat',
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Analyze project costs:\n${JSON.stringify(projectData, null, 2)}` }
+      ]
+    });
+
+    const parsed = JSON.parse(response.choices[0].message.content || '{}');
+    const data: CostAnalysisOutput = {
+      summary: parsed.summary || "Your cost structure gives you a clear baseline of what it takes to produce orders and run monthly.",
+      unitCostAnalysis: parsed.unitCostAnalysis || "Your per-unit costs cover direct materials well.",
+      overheadAnalysis: parsed.overheadAnalysis || "Your monthly bills are lean and manageable for launch.",
+      acquisitionAnalysis: parsed.acquisitionAnalysis || "Your acquisition budget is a good starting point for initial testing.",
+      potentialRisks: parsed.potentialRisks || [
+        {
+          id: 'risk_1',
+          title: 'Unplanned Packaging or Delivery Surges',
+          description: 'Courier partner rates or fuel surcharges could eat into your per-unit profit.',
+          severity: 'medium'
+        },
+        {
+          id: 'risk_2',
+          title: 'Higher Ad Costs Per Sale Initially',
+          description: 'When starting ads, finding the right targeting takes experimentation before costs stabilize.',
+          severity: 'medium'
+        }
+      ],
+      economiesOfScaleUpside: parsed.economiesOfScaleUpside || "As order volume grows, ordering materials in bulk will lower your per-unit packaging and production cost significantly."
+    };
+
+    return { success: true, data };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Failed to generate cost analysis' };
   }
 }

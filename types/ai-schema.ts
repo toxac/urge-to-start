@@ -27,4 +27,29 @@ export interface ActionParams {
   additionalContext?: Record<string, any>;
 }
 
+export interface CostCompletenessCheckOutput {
+  hasGaps: boolean;
+  overallHealth: string;
+  missingItems: Array<{
+    taskToFix: 'unit_cost' | 'overhead' | 'acquisition';
+    taskTitle: string;
+    missingItemName: string;
+    reason: string;
+  }>;
+}
+
+export interface CostAnalysisOutput {
+  summary: string;
+  unitCostAnalysis: string;
+  overheadAnalysis: string;
+  acquisitionAnalysis: string;
+  potentialRisks: Array<{
+    id: string;
+    title: string;
+    description: string;
+    severity: 'low' | 'medium' | 'high';
+  }>;
+  economiesOfScaleUpside: string;
+}
+
 export type ObservationAnalysis = z.infer<typeof ObservationAnalysisContract>;
