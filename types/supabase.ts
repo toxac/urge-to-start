@@ -915,6 +915,66 @@ export type Database = {
           },
         ]
       }
+      user_budget_items: {
+        Row: {
+          category: string
+          created_at: string
+          currency: string
+          estimated_amount: number
+          frequency: Database["public"]["Enums"]["budget_frequency"]
+          id: string
+          kind: Database["public"]["Enums"]["budget_item_kind"]
+          notes: string | null
+          project_id: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          currency?: string
+          estimated_amount?: number
+          frequency?: Database["public"]["Enums"]["budget_frequency"]
+          id?: string
+          kind: Database["public"]["Enums"]["budget_item_kind"]
+          notes?: string | null
+          project_id?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          currency?: string
+          estimated_amount?: number
+          frequency?: Database["public"]["Enums"]["budget_frequency"]
+          id?: string
+          kind?: Database["public"]["Enums"]["budget_item_kind"]
+          notes?: string | null
+          project_id?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_budget_items_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "user_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_budget_items_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_contacts: {
         Row: {
           categories: Database["public"]["Enums"]["user_contact_category"][]
@@ -1000,6 +1060,155 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "user_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_ledger_entries: {
+        Row: {
+          amount: number
+          category: string | null
+          contact_id: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          entry_type: Database["public"]["Enums"]["ledger_entry_type"]
+          id: string
+          occurred_at: string
+          project_id: string | null
+          receipt_url: string | null
+          source: Database["public"]["Enums"]["ledger_source"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          category?: string | null
+          contact_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          entry_type: Database["public"]["Enums"]["ledger_entry_type"]
+          id?: string
+          occurred_at?: string
+          project_id?: string | null
+          receipt_url?: string | null
+          source?: Database["public"]["Enums"]["ledger_source"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category?: string | null
+          contact_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          entry_type?: Database["public"]["Enums"]["ledger_entry_type"]
+          id?: string
+          occurred_at?: string
+          project_id?: string | null
+          receipt_url?: string | null
+          source?: Database["public"]["Enums"]["ledger_source"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_ledger_entries_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "user_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_ledger_entries_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "user_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_ledger_entries_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_materials: {
+        Row: {
+          category: string | null
+          cost_structure: Database["public"]["Enums"]["resource_cost_structure"]
+          created_at: string
+          frequency: Database["public"]["Enums"]["budget_frequency"] | null
+          id: string
+          name: string
+          notes: string | null
+          project_id: string | null
+          quantity_needed: number
+          resource_type: Database["public"]["Enums"]["resource_type"]
+          supplier_contact_id: string | null
+          unit: string
+          unit_cost: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          cost_structure?: Database["public"]["Enums"]["resource_cost_structure"]
+          created_at?: string
+          frequency?: Database["public"]["Enums"]["budget_frequency"] | null
+          id?: string
+          name: string
+          notes?: string | null
+          project_id?: string | null
+          quantity_needed?: number
+          resource_type?: Database["public"]["Enums"]["resource_type"]
+          supplier_contact_id?: string | null
+          unit?: string
+          unit_cost?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          cost_structure?: Database["public"]["Enums"]["resource_cost_structure"]
+          created_at?: string
+          frequency?: Database["public"]["Enums"]["budget_frequency"] | null
+          id?: string
+          name?: string
+          notes?: string | null
+          project_id?: string | null
+          quantity_needed?: number
+          resource_type?: Database["public"]["Enums"]["resource_type"]
+          supplier_contact_id?: string | null
+          unit?: string
+          unit_cost?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_materials_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "user_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_materials_supplier_contact_id_fkey"
+            columns: ["supplier_contact_id"]
+            isOneToOne: false
+            referencedRelation: "user_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_materials_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1367,6 +1576,8 @@ export type Database = {
         | "contribution"
         | "engagement"
         | "launch_tier"
+      budget_frequency: "one_time" | "weekly" | "monthly" | "yearly"
+      budget_item_kind: "startup_cost" | "recurring_cost" | "revenue_projection"
       discount_type: "percentage" | "fixed_amount"
       education_level:
         | "high_school"
@@ -1408,6 +1619,8 @@ export type Database = {
         | "website_form"
         | "referral"
         | "other"
+      ledger_entry_type: "income" | "expense"
+      ledger_source: "manual" | "auto_from_order"
       marketplace_listing_type: "peer_service" | "provider_perk"
       marketplace_status:
         | "draft"
@@ -1471,6 +1684,8 @@ export type Database = {
         | "podcast"
         | "book"
         | "other"
+      resource_cost_structure: "per_unit" | "recurring" | "one_time"
+      resource_type: "physical" | "service"
       task_execution_type:
         | "form"
         | "simulator"
@@ -1654,6 +1869,12 @@ export const Constants = {
         "engagement",
         "launch_tier",
       ],
+      budget_frequency: ["one_time", "weekly", "monthly", "yearly"],
+      budget_item_kind: [
+        "startup_cost",
+        "recurring_cost",
+        "revenue_projection",
+      ],
       discount_type: ["percentage", "fixed_amount"],
       education_level: [
         "high_school",
@@ -1701,6 +1922,8 @@ export const Constants = {
         "referral",
         "other",
       ],
+      ledger_entry_type: ["income", "expense"],
+      ledger_source: ["manual", "auto_from_order"],
       marketplace_listing_type: ["peer_service", "provider_perk"],
       marketplace_status: [
         "draft",
@@ -1773,6 +1996,8 @@ export const Constants = {
         "book",
         "other",
       ],
+      resource_cost_structure: ["per_unit", "recurring", "one_time"],
+      resource_type: ["physical", "service"],
       task_execution_type: [
         "form",
         "simulator",
