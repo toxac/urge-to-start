@@ -44,6 +44,7 @@ import { CostAnalysisForm } from './mission4/CostAnalysisForm';
 import { PricingStrategyForm } from './mission4/PricingStrategyForm';
 import { PriceSimulatorForm } from './mission4/PriceSimulatorForm';
 import { PricingLockInForm } from './mission4/PricingLockInForm';
+import { DistributionChannelsForm } from './mission4/DistributionChannelsForm';
 
 
 export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskComponentProps>> = {
@@ -88,6 +89,8 @@ export const TaskComponentMap: Record<string, React.ComponentType<BaseTaskCompon
   PricingStrategyForm: PricingStrategyForm,
   PriceSimulatorForm: PriceSimulatorForm,
   PricingLockInForm: PricingLockInForm,
+  DistributionChannelsForm: DistributionChannelsForm,
+  
 
 
 
